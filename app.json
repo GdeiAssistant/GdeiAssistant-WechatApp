@@ -1,0 +1,17 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/index/index",
+    "pages/grade/grade",
+    "pages/schedule/schedule"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "广东二师助手",
+    "navigationBarTextStyle": "black"
+  },
+  "networkTimeout": {
+    "request": 15000
+  }
+}

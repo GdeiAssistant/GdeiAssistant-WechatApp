@@ -1,0 +1,30 @@
+<view class="container">
+
+  <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">导入我的微信资料</button>
+    <block wx:else>
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+
+  <view class="page-body">
+    <view class="page__bd">
+      <view class="weui-grids">
+        <navigator open-type="navigate" url="../grade/grade" class="weui-grid" hover-class="weui-grid_active">
+          <image class="weui-grid__icon" src="../../image/grade.png" />
+          <view class="weui-grid__label">期末成绩</view>
+        </navigator>
+        <navigator open-type="navigate" url="../schedule/schedule" class="weui-grid" hover-class="weui-grid_active">
+          <image class="weui-grid__icon" src="../../image/schedule.png" />
+          <view class="weui-grid__label">本周课表</view>
+        </navigator>
+        <view bindtap="logout" class="weui-grid" hover-class="weui-grid_active">
+          <image class="weui-grid__icon" src="../../image/exit.png" />
+          <view class="weui-grid__label">退出账号</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>

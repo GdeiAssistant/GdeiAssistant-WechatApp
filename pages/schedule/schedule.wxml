@@ -1,0 +1,32 @@
+<view class="page__bd">
+
+  <view class="weui-navbar">
+    <block wx:for="{{tabs}}" wx:key="*this">
+      <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
+        <view class="weui-navbar__title">{{item}}</view>
+      </view>
+    </block>
+  </view>
+
+  <view class="weui-tab__panel" block wx:if="{{scheduleList}}">
+
+    <view class="weui-tab__content" hidden="{{activeIndex != k}}" wx:for-index="k" wx:for="{{tabs}}" wx:key="k_key">
+      <block wx:for="{{scheduleList[k]}}" wx:for-item="i" wx:key="index">
+        <view class="weui-media-box weui-media-box_text">
+          <view style='font-size:13px' class="weui-media-box__title weui-media-box__title_in-text">
+            {{i.scheduleLesson}}
+          </view>
+          <view class="weui-media-box__info">
+            <block>
+              <text class="weui-media-box__bold" style='font-size:15px'>{{i.scheduleName}}\n</text>
+              <text style='float:left'>{{i.scheduleWeek}}\n{{i.scheduleTeacher}}</text>
+              <text style='float:right'>{{i.scheduleLocation}}</text>
+            </block>
+          </view>
+        </view>
+      </block>
+    </view>
+
+  </view>
+
+</view>
