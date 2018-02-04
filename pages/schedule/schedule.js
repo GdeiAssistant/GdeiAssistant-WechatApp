@@ -99,9 +99,17 @@ Page({
 	 */
   onLoad: function (options) {
     this.getDataList()
-    this.setData({
-      activeIndex: new Date().getDay() - 1
-    });
+    let day = new Date().getDay()
+    if (day == 0) {
+      this.setData({
+        activeIndex: 6
+      })
+    }
+    else {
+      this.setData({
+        activeIndex: day - 1
+      })
+    }
   },
 
 	/**
