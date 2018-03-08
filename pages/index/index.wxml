@@ -1,10 +1,9 @@
 <view class="container">
 
   <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">导入我的微信资料</button>
-    <block wx:else>
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    <block wx:if="{{avatar}}">
+      <image class="userinfo-avatar" src="{{avatar}}" background-size="cover"></image>
+      <text class="userinfo-nickname">{{realname}}</text>
     </block>
   </view>
 

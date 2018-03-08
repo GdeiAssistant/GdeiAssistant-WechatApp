@@ -4,9 +4,8 @@ const app = getApp()
 
 Page({
   data: {
-    userInfo: {},
-    hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    avatar: null,
+    realname: null
   },
   logout: function () {
     wx.showModal({
@@ -22,39 +21,48 @@ Page({
       }
     });
   },
-  onLoad: function () {
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
+  onLoad: function (options) {
+    const page = this
+    let username = wx.getStorageSync("username")
+    let xm = wx.getStorageSync("xm")
+    if (xm) {
+      page.setData({
+        realname: xm
       })
-    } else if (this.data.canIUse) {
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
+    }
+    else {
+      page.setData({
+        realname: "广东二师助手用户"
+      })
+    }
+    if (username) {
+      wx.request({
+        url: "https://www.gdeiassistant.cn/rest/avatar",
+        method: "GET",
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        data: {
+          username: username,
+        },
+        success: function (result) {
+          if (result.data.success && result.data.data != "") {
+            page.setData({
+              avatar: result.data.data
+            })
+          }
+          else {
+            page.setData({
+              avatar: "../../image/default.png"
+            })
+          }
+        },
+        fail: function () {
+          page.setData({
+            avatar: "../../image/default.png"
           })
         }
       })
     }
-  },
-  getUserInfo: function (e) {
-    app.globalData.userInfo = e.detail.userInfo
-    this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true
-    })
   }
 })

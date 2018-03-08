@@ -25,10 +25,12 @@ Page({
             let password = result.data.user.password
             let keycode = result.data.user.keycode
             let number = result.data.user.number
+            let xm = result.data.user.xm
             wx.setStorageSync("username", username)
             wx.setStorageSync("password", password)
             wx.setStorageSync("keycode", keycode)
             wx.setStorageSync("number", number)
+            wx.setStorageSync("xm", xm)
             wx.redirectTo({
               url: '../index/index',
             })
