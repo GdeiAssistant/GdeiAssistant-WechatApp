@@ -25,7 +25,7 @@ Page({
     const page = this
     let username = wx.getStorageSync("username")
     let xm = wx.getStorageSync("xm")
-    if (xm) {
+    if (xm && xm!="") {
       page.setData({
         realname: xm
       })
@@ -37,14 +37,8 @@ Page({
     }
     if (username) {
       wx.request({
-        url: "https://www.gdeiassistant.cn/rest/avatar",
+        url: "https://www.gdeiassistant.cn/rest/api/avatar/" + username,
         method: "GET",
-        header: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        data: {
-          username: username,
-        },
         success: function (result) {
           if (result.data.success && result.data.data != "") {
             page.setData({
