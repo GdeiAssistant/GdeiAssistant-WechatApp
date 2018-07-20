@@ -1,0 +1,43 @@
+<view block class="page__bd">
+  <view class="container" wx:if="{{card}}">
+    <view class="weui-cells__title">基本信息</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">姓名</view>
+        <view class="weui-cell__ft">{{card.name}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">学号</view>
+        <view class="weui-cell__ft">{{card.number}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">卡号</view>
+        <view class="weui-cell__ft">{{card.cardNumber}}</view>
+      </view>
+    </view>
+
+    <view class="weui-cells__title">余额信息</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">余额</view>
+        <view class="weui-cell__ft">{{card.cardBalance}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">过渡余额</view>
+        <view class="weui-cell__ft">{{card.cardInterimBalance}}</view>
+      </view>
+    </view>
+
+    <view class="weui-cells__title">状态信息</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">冻结状态</view>
+        <view class="weui-cell__ft">{{card.cardFreezeState}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">挂失状态</view>
+        <view class="weui-cell__ft">{{card.cardLostState}}</view>
+      </view>
+    </view>
+  </view>
+</view>

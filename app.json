@@ -3,7 +3,8 @@
     "pages/login/login",
     "pages/index/index",
     "pages/grade/grade",
-    "pages/schedule/schedule"
+    "pages/schedule/schedule",
+    "pages/card/card"
   ],
   "window": {
     "backgroundTextStyle": "light",
