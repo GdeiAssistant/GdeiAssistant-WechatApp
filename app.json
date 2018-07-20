@@ -4,7 +4,8 @@
     "pages/index/index",
     "pages/grade/grade",
     "pages/schedule/schedule",
-    "pages/card/card"
+    "pages/card/card",
+    "pages/bill/bill"
   ],
   "window": {
     "backgroundTextStyle": "light",
