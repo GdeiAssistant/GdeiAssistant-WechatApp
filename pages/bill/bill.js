@@ -9,12 +9,14 @@ Page({
     start: null,
     end: null,
     errorMessage: null,
-    result: null
+    result: null,
+    loading: false
   },
-  reset: function(){
+  reset: function() {
     this.setData({
-      date:null,
-      result:null
+      date: null,
+      result: null,
+      loading: false
     })
   },
   showTopTips: function(content) {
@@ -31,6 +33,10 @@ Page({
   submit: function() {
     const page = this
     if (this.data.date) {
+      wx.showNavigationBarLoading()
+      this.setData({
+        loading: true
+      })
       var dateStringArray = this.data.date.split("-")
       let username = wx.getStorageSync("username")
       let password = wx.getStorageSync("password")
@@ -54,6 +60,9 @@ Page({
           data: requestData,
           success: function(result) {
             wx.hideNavigationBarLoading()
+            page.setData({
+              loading: true
+            })
             if (result.data.success) {
               page.setData({
                 result: result.data.cardList
@@ -75,6 +84,9 @@ Page({
           },
           fail: function() {
             wx.hideNavigationBarLoading()
+            page.setData({
+              loading: true
+            })
             wx.showModal({
               title: '查询失败',
               content: '网络连接超时，请重试',

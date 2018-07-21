@@ -15,7 +15,7 @@
           </view>
           <view class="weui-cell__bd">
             <picker mode="date" value="{{date}}" start="{{start}}" end="{{end}}" bindchange="bindDateChange">
-              <view class="weui-input">{{date==null? "" : date}}</view>
+              <view class="weui-input">{{date==null? "未选择" : date}}</view>
             </picker>
           </view>
         </view>
@@ -23,7 +23,7 @@
       </view>
 
       <view class="weui-btn-area">
-        <button class="weui-btn" type="primary" bindtap="submit">查询</button>
+        <button class="weui-btn" disabled="{{loading}}" type="primary" bindtap="submit">查询</button>
       </view>
 
     </view>
