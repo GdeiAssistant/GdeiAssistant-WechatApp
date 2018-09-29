@@ -5,7 +5,8 @@
     "pages/grade/grade",
     "pages/schedule/schedule",
     "pages/card/card",
-    "pages/bill/bill"
+    "pages/bill/bill",
+    "pages/cet/cet"
   ],
   "window": {
     "backgroundTextStyle": "light",

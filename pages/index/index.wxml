@@ -18,6 +18,10 @@
           <image class="weui-grid__icon" src="../../image/schedule.png" />
           <view class="weui-grid__label">本周课表</view>
         </navigator>
+        <navigator open-type="navigate" url="../cet/cet" class="weui-grid" hover-class="weui-grid_active">
+          <image class="weui-grid__icon" src="../../image/cet.png" />
+          <view class="weui-grid__label">四六级查询</view>
+        </navigator>
         <navigator open-type="navigate" url="../bill/bill" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/bill.png" />
           <view class="weui-grid__label">消费查询</view>
