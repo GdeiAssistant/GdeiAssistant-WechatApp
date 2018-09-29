@@ -61,7 +61,7 @@ Page({
           success: function(result) {
             wx.hideNavigationBarLoading()
             page.setData({
-              loading: true
+              loading: false
             })
             if (result.data.success) {
               page.setData({
@@ -85,7 +85,7 @@ Page({
           fail: function() {
             wx.hideNavigationBarLoading()
             page.setData({
-              loading: true
+              loading: false
             })
             wx.showModal({
               title: '查询失败',
