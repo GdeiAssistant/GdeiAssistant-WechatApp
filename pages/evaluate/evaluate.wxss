@@ -1,0 +1,6 @@
+@import "../../common/lib/weui.wxss";
+
+.weui-navbar {
+  position: static;
+  background-color: #fff;
+}

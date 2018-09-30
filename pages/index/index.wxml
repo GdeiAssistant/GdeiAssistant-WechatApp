@@ -30,6 +30,10 @@
           <image class="weui-grid__icon" src="../../image/card.png" />
           <view class="weui-grid__label">我的校园卡</view>
         </navigator>
+        <navigator open-type="navigate" url="../evaluate/evaluate" class="weui-grid" hover-class="weui-grid_active">
+          <image class="weui-grid__icon" src="../../image/evaluate.png" />
+          <view class="weui-grid__label">一键评教</view>
+        </navigator>
         <view bindtap="logout" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/exit.png" />
           <view class="weui-grid__label">退出账号</view>

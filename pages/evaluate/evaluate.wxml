@@ -1,0 +1,23 @@
+<view block class="page__bd">
+
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <form catchsubmit="formSubmit">
+
+    <view class="weui-cells__title">自动提交</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_switch">
+        <view class="weui-cell__bd">直接提交评教信息</view>
+        <view class="weui-cell__ft">
+          <switch checked="{{checked}}" bindchange="changeSwitch" />
+        </view>
+      </view>
+    </view>
+
+    <view class="btn-area">
+      <button type="primary" disabled="{{loading}}" formType="submit">提交</button>
+    </view>
+
+  </form>
+
+</view>
