@@ -16,7 +16,7 @@
         </navigator>
         <navigator open-type="navigate" url="../schedule/schedule" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/schedule.png" />
-          <view class="weui-grid__label">本周课表</view>
+          <view class="weui-grid__label">我的课表</view>
         </navigator>
         <navigator open-type="navigate" url="../cet/cet" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/cet.png" />
@@ -29,6 +29,10 @@
         <navigator open-type="navigate" url="../card/card" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/card.png" />
           <view class="weui-grid__label">我的校园卡</view>
+        </navigator>
+        <navigator open-type="navigate" url="../cardLost/cardLost" class="weui-grid" hover-class="weui-grid_active">
+          <image class="weui-grid__icon" src="../../image/cardLost.png" />
+          <view class="weui-grid__label">校园卡挂失</view>
         </navigator>
         <navigator open-type="navigate" url="../evaluate/evaluate" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/evaluate.png" />

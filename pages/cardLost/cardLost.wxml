@@ -1,0 +1,32 @@
+<view block class="page__bd">
+
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <view class="container">
+
+    <form catchsubmit="setCardLost" style="margin-top:15px">
+
+      <view class='page-section'>
+        <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cell weui-cell_input weui-cell_vcode">
+            <view class="weui-cell__hd">
+              <view class="weui-label">密码</view>
+            </view>
+            <view class="weui-cell__bd">
+              <input name="password" class="weui-input" maxlength='6' password type="number" placeholder="请输入6位校园卡密码" />
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="btn-area">
+        <button type="primary" disabled="{{loading}}" formType="submit">挂失</button>
+      </view>
+
+    </form>
+
+    <text class='lost_warning'>注意：挂失后需要到办卡处进行补办校园卡</text>
+
+  </view>
+
+</view>

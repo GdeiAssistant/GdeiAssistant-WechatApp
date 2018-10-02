@@ -7,7 +7,8 @@
     "pages/card/card",
     "pages/bill/bill",
     "pages/cet/cet",
-    "pages/evaluate/evaluate"
+    "pages/evaluate/evaluate",
+    "pages/cardLost/cardLost"
   ],
   "window": {
     "backgroundTextStyle": "light",
