@@ -8,6 +8,14 @@
     </block>
   </view>
 
+  <view block wx:if="{{week}}">
+    <view class="weui-btn-area">
+      <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+        <button type="default">当前查询的周数：第{{week}}周</button>
+      </picker>
+    </view>
+  </view>
+
   <view class="weui-tab__panel" block wx:if="{{scheduleList}}">
 
     <view class="weui-tab__content" hidden="{{activeIndex != k}}" wx:for-index="k" wx:for="{{tabs}}" wx:key="k_key">
