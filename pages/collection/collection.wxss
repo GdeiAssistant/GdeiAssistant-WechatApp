@@ -1,0 +1,13 @@
+@import "../../common/lib/weui.wxss";
+
+.weui-navbar {
+  position: static;
+  background-color: #fff;
+}
+
+.loadmore {
+  margin-top: 20rpx;
+  margin-bottom: 20rpx;
+  text-align: center;
+  color: #aaa;
+}

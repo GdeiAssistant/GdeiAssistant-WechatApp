@@ -8,7 +8,9 @@
     "pages/bill/bill",
     "pages/cet/cet",
     "pages/evaluate/evaluate",
-    "pages/cardLost/cardLost"
+    "pages/cardLost/cardLost",
+    "pages/collection/collection",
+    "pages/collectionDetail/collectionDetail"
   ],
   "window": {
     "backgroundTextStyle": "light",

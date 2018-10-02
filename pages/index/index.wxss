@@ -1,5 +1,12 @@
 @import "../../common/lib/weui.wxss";
 
+.copyright_info {
+  margin-top: 35rpx;
+  margin-bottom: 35rpx;
+  text-align: center;
+  color: #aaa;
+}
+
 .userinfo {
   margin-top: 20rpx;
   display: flex;
@@ -7,7 +14,7 @@
   align-items: center;
 }
 
-.page-body{
+.page-body {
   margin-top: 25rpx;
 }
 

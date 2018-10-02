@@ -1,0 +1,106 @@
+<view block class="page__bd">
+
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <view class="container" wx:if="{{result}}">
+    <view class="weui-cells__title">基本信息</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view wx:if="{{result.bookname && result.bookname.length!=0}}" class="weui-cell">
+        <view class="weui-cell__bd">书名</view>
+        <view class="weui-cell__ft">{{result.bookname}}</view>
+      </view>
+      <view wx:if="{{result.author && result.author.length!=0}}" class="weui-cell">
+        <view class="weui-cell__bd">作者</view>
+        <view class="weui-cell__ft">{{result.author}}</view>
+      </view>
+      <block wx:if="{{result.principal && result.principal.length!=0 && result.principal.split(' ').length!=1}}">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">题名</view>
+          <view class="weui-cell__ft">{{result.autograph}}</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">负责者</view>
+          <view class="weui-cell__ft">{{result.director}}</view>
+        </view>
+      </block>
+      <view wx:if="{{result.principal && result.principal.length!=0 && result.principal.split(' ').length==1}}">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">题名/负责者</view>
+          <view class="weui-cell__ft">{{result.principal}}</view>
+        </view>
+      </view>
+      <block wx:if="{{result.publishingHouse && result.publishingHouse.length!=0 && result.publishingHouse.split(' ').length!=1}}">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">出版社</view>
+          <view class="weui-cell__ft">{{result.house}}</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">出版年</view>
+          <view class="weui-cell__ft">{{result.year}}</view>
+        </view>
+      </block>
+      <view wx:if="{{result.publishingHouse && result.publishingHouse.length!=0 && result.publishingHouse.split(' ').length==1}}">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">出版社/出版年</view>
+          <view class="weui-cell__ft">{{result.publishingHouse}}</view>
+        </view>
+      </view>
+      <block wx:if="{{result.price && result.price.length!=0 && result.price.split(' ').length!=1}}">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">ISBN</view>
+          <view class="weui-cell__ft">{{result.ISBN}}</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">定价</view>
+          <view class="weui-cell__ft">{{result.priceValue}}</view>
+        </view>
+      </block>
+      <view wx:if="{{result.price && result.price.length!=0 && result.price.split(' ').length==1}}">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">ISBN/定价</view>
+          <view class="weui-cell__ft">{{result.price}}</view>
+        </view>
+      </view>
+      <view wx:if="{{result.physicalDescriptionArea && result.physicalDescriptionArea.length!=0}}" class="weui-cell">
+        <view class="weui-cell__bd">载体形态项</view>
+        <view class="weui-cell__ft">{{result.physicalDescriptionArea}}</view>
+      </view>
+
+      <view wx:if="{{result.personalPrincipal && result.personalPrincipal.length!=0}}" class="weui-cell">
+        <view class="weui-cell__bd">个人责任者</view>
+        <view class="weui-cell__ft">{{result.personalPrincipal}}</view>
+      </view>
+      <view wx:if="{{result.subjectTheme && result.subjectTheme.length!=0}}" class="weui-cell">
+        <view class="weui-cell__bd">学科主题</view>
+        <view class="weui-cell__ft">{{result.subjectTheme}}</view>
+      </view>
+      <view wx:if="{{result.chineseLibraryClassification && result.chineseLibraryClassification.length!=0}}" class="weui-cell">
+        <view class="weui-cell__bd">中图法分类号</view>
+        <view class="weui-cell__ft">{{result.chineseLibraryClassification}}</view>
+      </view>
+    </view>
+
+    <view class="weui-cells__title">馆藏信息</view>
+    <view block wx:for="{{result.collectionDistributionList}}" wx:for-item="i" wx:key="collectionDistributionList">
+      <view style='margin-bottom:25rpx' class="weui-cells weui-cells_after-title">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">馆藏地</view>
+          <view class="weui-cell__ft">{{i.location}}</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">索取号</view>
+          <view class="weui-cell__ft">{{i.callNumber}}</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">条码号</view>
+          <view class="weui-cell__ft">{{i.barcode}}</view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">状态</view>
+          <view class="weui-cell__ft">{{i.state}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>

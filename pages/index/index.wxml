@@ -38,12 +38,21 @@
           <image class="weui-grid__icon" src="../../image/evaluate.png" />
           <view class="weui-grid__label">一键评教</view>
         </navigator>
+        <navigator open-type="navigate" url="../collection/collection" class="weui-grid" hover-class="weui-grid_active">
+          <image class="weui-grid__icon" src="../../image/collection.png" />
+          <view class="weui-grid__label">馆藏查询</view>
+        </navigator>
         <view bindtap="logout" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/exit.png" />
           <view class="weui-grid__label">退出账号</view>
         </view>
       </view>
     </view>
+  </view>
+
+  <view class="copyright_info">
+    <text>广东二师助手团队 林冠成 版权所有\n</text>
+    <text>All rights reserved © 2016 - 2018</text>
   </view>
 
 </view>

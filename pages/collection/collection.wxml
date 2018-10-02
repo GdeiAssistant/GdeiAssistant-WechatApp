@@ -1,0 +1,48 @@
+<view class="page__bd">
+
+  <view class="container">
+
+    <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+    <view block class="container" wx:if="{{list.length==0}}">
+
+      <form catchsubmit="formSubmit" style="margin-top:15px">
+
+        <view class='page-section'>
+          <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_input weui-cell_vcode">
+              <view class="weui-cell__hd">
+                <view class="weui-label">书名</view>
+              </view>
+              <view class="weui-cell__bd">
+                <input name="bookname" class="weui-input" maxlength='50' type="text" placeholder="请输入图书信息" />
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="weui-btn-area">
+          <button class="weui-btn" disabled="{{loading}}" type="primary" formType="submit">查询</button>
+        </view>
+
+      </form>
+
+    </view>
+
+  </view>
+
+  <view block class="container" wx:if="{{list.length!=0}}">
+    <view class="weui-cells__title">查询结果</view>
+    <view class="weui-cells weui-cells_after-title">
+      <block wx:for="{{list}}" wx:for-item="i" wx:key="collectionList">
+        <navigator url="../collectionDetail/collectionDetail?bookname={{i.bookname}}&{{i.detailURL}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+          <view class="weui-cell__bd">{{i.bookname}}</view>
+          <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+        </navigator>
+      </block>
+    </view>
+    <text wx:if="{{currentPage<sumPage}}" class="loadmore" bindtap="loadMore">点击加载更多信息</text>
+    <text wx:if="{{currentPage>=sumPage}}" disable="true" class="loadmore">没有更多图书信息</text>
+  </view>
+
+</view>
