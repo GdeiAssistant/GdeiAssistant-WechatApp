@@ -1,4 +1,4 @@
-// card.js
+// cardLost.js
 //获取应用实例
 const app = getApp()
 
