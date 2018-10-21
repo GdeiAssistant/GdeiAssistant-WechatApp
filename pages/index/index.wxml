@@ -1,5 +1,7 @@
 <view class="container">
 
+<official-account></official-account>
+
   <view class="userinfo">
     <block wx:if="{{avatar}}">
       <image class="userinfo-avatar" src="{{avatar}}" background-size="cover"></image>
@@ -51,7 +53,7 @@
   </view>
 
   <view class="copyright_info">
-    <text>广东二师助手团队 林冠成 版权所有\n</text>
+    <text>广东二师助手团队 版权所有\n</text>
     <text>All rights reserved © 2016 - 2018</text>
   </view>
 
