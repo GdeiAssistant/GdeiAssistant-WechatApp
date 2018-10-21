@@ -1,4 +1,4 @@
-<view class="container">
+<view class="container" wx:if="{{login}}">
 
   <view class="userinfo">
     <image class="userinfo-avatar" src="../../image/logo.png" background-size="cover"></image>
@@ -24,7 +24,7 @@
       </view>
 
       <view class="btn-area">
-        <button type="primary" formType="submit">绑定</button>
+        <button type="primary" formType="submit">登录</button>
       </view>
 
     </form>
