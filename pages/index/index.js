@@ -24,10 +24,10 @@ Page({
   onLoad: function (options) {
     const page = this
     let username = wx.getStorageSync("username")
-    let xm = wx.getStorageSync("xm")
-    if (xm && xm!="") {
+    let realname = wx.getStorageSync("realname")
+    if (realname && realname!="") {
       page.setData({
-        realname: xm
+        realname: realname
       })
     }
     else {

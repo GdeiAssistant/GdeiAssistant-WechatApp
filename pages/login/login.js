@@ -3,6 +3,9 @@
 const app = getApp()
 
 Page({
+  data: {
+    login: false
+  },
   formSubmit: function (e) {
     let username = e.detail.value.username
     let password = e.detail.value.password
@@ -23,14 +26,10 @@ Page({
           if (result.data.success) {
             let username = result.data.user.username
             let password = result.data.user.password
-            let keycode = result.data.user.keycode
-            let number = result.data.user.number
-            let xm = result.data.user.xm
+            let realname = result.data.user.realname
             wx.setStorageSync("username", username)
             wx.setStorageSync("password", password)
-            wx.setStorageSync("keycode", keycode)
-            wx.setStorageSync("number", number)
-            wx.setStorageSync("xm", xm)
+            wx.setStorageSync("realname", realname)
             wx.redirectTo({
               url: '../index/index',
             })
@@ -82,11 +81,17 @@ Page({
         else {
           let username = wx.getStorageSync("username")
           let password = wx.getStorageSync("password")
-          let keycode = wx.getStorageSync("keycode")
-          let number = wx.getStorageSync("number")
-          if (username && password && keycode && number) {
+          if (username && password) {
             wx.redirectTo({
               url: '../index/index',
+            })
+          }
+          else {
+            this.setData({
+              login: true
+            })
+            wx.setNavigationBarTitle({
+              title: "请登录"
             })
           }
         }

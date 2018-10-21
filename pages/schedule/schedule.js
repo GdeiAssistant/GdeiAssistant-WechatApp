@@ -30,24 +30,21 @@ Page({
     const page = this
     wx.showNavigationBarLoading()
     let username = wx.getStorageSync("username")
-    let keycode = wx.getStorageSync("keycode")
-    let number = wx.getStorageSync("number")
+    let password = wx.getStorageSync("password")
     let requestData
     if (this.data.week) {
       requestData = {
         username: username,
-        keycode: keycode,
-        number: number,
+        password: password,
         week: this.data.week
       }
     } else {
       requestData = {
         username: username,
-        keycode: keycode,
-        number: number,
+        password: password
       }
     }
-    if (username && keycode && number) {
+    if (username && password) {
       wx.request({
         url: "https://www.gdeiassistant.cn/rest/schedulequery",
         method: "POST",

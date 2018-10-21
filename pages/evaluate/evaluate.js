@@ -25,70 +25,84 @@ Page({
   formSubmit() {
     const page = this
     let username = wx.getStorageSync("username")
-    let keycode = wx.getStorageSync("keycode")
-    let number = wx.getStorageSync("number")
+    let password = wx.getStorageSync("password")
     let requestData = {
       username: username,
-      keycode: keycode,
-      number: number,
+      password: password,
       directlySubmit: page.data.checked
     }
     this.setData({
       loading: true
     })
     wx.showNavigationBarLoading()
-    wx.request({
-      url: "https://www.gdeiassistant.cn/rest/evaluate",
-      method: "POST",
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      data: requestData,
-      success: function(result) {
-        page.setData({
-          loading: false
-        })
-        wx.hideNavigationBarLoading()
-        if (result.data.success) {
-          if (page.data.checked) {
-            wx.showModal({
-              title: '一键评教成功',
-              content: '一键评教成功，评教信息已提交',
-              showCancel: false,
-              success: function(res) {
-                if (res.confirm) {
-                  wx.navigateBack({
-                    delta: 1
-                  })
+    if(username && password){
+      wx.request({
+        url: "https://www.gdeiassistant.cn/rest/evaluate",
+        method: "POST",
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        data: requestData,
+        success: function (result) {
+          page.setData({
+            loading: false
+          })
+          wx.hideNavigationBarLoading()
+          if (result.data.success) {
+            if (page.data.checked) {
+              wx.showModal({
+                title: '一键评教成功',
+                content: '一键评教成功，评教信息已提交',
+                showCancel: false,
+                success: function (res) {
+                  if (res.confirm) {
+                    wx.navigateBack({
+                      delta: 1
+                    })
+                  }
                 }
-              }
-            })
+              })
+            } else {
+              wx.showModal({
+                title: '一键评教成功',
+                content: '一键评教成功，请登录教务系统进行最终确认',
+                showCancel: false,
+                success: function (res) {
+                  if (res.confirm) {
+                    wx.navigateBack({
+                      delta: 1
+                    })
+                  }
+                }
+              })
+            }
           } else {
-            wx.showModal({
-              title: '一键评教成功',
-              content: '一键评教成功，请登录教务系统进行最终确认',
-              showCancel: false,
-              success: function(res) {
-                if (res.confirm) {
-                  wx.navigateBack({
-                    delta: 1
-                  })
-                }
-              }
+            page.showTopTips(result.data.errorMessage)
+          }
+        },
+        fail: function () {
+          page.setData({
+            loading: false
+          })
+          wx.hideNavigationBarLoading()
+          page.showTopTips("网络连接超时，请重试")
+        }
+      })
+    }
+    else {
+      wx.showModal({
+        title: '查询失败',
+        content: "登录凭证已过期，请重新登录",
+        showCancel: false,
+        success: function (res) {
+          if (res.confirm) {
+            wx.reLaunch({
+              url: '../login/login',
             })
           }
-        } else {
-          page.showTopTips(result.data.errorMessage)
         }
-      },
-      fail: function() {
-        page.setData({
-          loading: false
-        })
-        wx.hideNavigationBarLoading()
-        page.showTopTips("网络连接超时，请重试")
-      }
-    })
+      })
+    }
   },
   changeSwitch(e) {
     this.setData({

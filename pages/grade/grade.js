@@ -23,26 +23,23 @@ Page({
     const page = this
     wx.showNavigationBarLoading()
     let username = wx.getStorageSync("username")
-    let keycode = wx.getStorageSync("keycode")
-    let number = wx.getStorageSync("number")
+    let password = wx.getStorageSync("password")
     let queryYear = this.data.activeIndex
     let requestData;
     if (queryYear == -1) {
       requestData = {
         username: username,
-        keycode: keycode,
-        number: number,
+        password: password
       }
     }
     else {
       requestData = {
         username: username,
-        keycode: keycode,
-        number: number,
+        password: password,
         year: queryYear
       }
     }
-    if (username && keycode && number) {
+    if (username && password) {
       wx.request({
         url: "https://www.gdeiassistant.cn/rest/gradequery",
         method: "POST",
