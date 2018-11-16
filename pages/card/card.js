@@ -1,6 +1,7 @@
 // card.js
 //获取应用实例
 const app = getApp()
+let utils = require("../../utils/util.js")
 
 Page({
 
@@ -13,76 +14,44 @@ Page({
   getCardInfo: function() {
     const page = this
     wx.showNavigationBarLoading()
-    let username = wx.getStorageSync("username")
-    let password = wx.getStorageSync("password")
-    let requestData = {
-      username: username,
-      password: password
-    }
-    if (username && password) {
+    if (utils.validateRequestAccess()) {
+      let token = wx.getStorageSync("token")
       wx.request({
         url: "https://www.gdeiassistant.cn/rest/cardinfo",
         method: "POST",
         header: {
           "Content-Type": "application/x-www-form-urlencoded"
         },
-        data: requestData,
+        data: {
+          token: token
+        },
         success: function(result) {
           wx.hideNavigationBarLoading()
-          if (result.data.success) {
-            page.setData({
-              card: {
-                name: result.data.cardInfo.name,
-                number: result.data.cardInfo.number,
-                cardBalance: result.data.cardInfo.cardBalance,
-                cardInterimBalance: result.data.cardInfo.cardInterimBalance,
-                cardNumber: result.data.cardInfo.cardNumber,
-                cardLostState: result.data.cardInfo.cardLostState,
-                cardFreezeState: result.data.cardInfo.cardFreezeState
-              }
-            })
-          } else {
-            wx.showModal({
-              title: '查询失败',
-              content: result.data.errorMessage,
-              showCancel: false,
-              success: function(res) {
-                if (res.confirm) {
-                  wx.navigateBack({
-                    delta: 1
-                  })
+          if (result.statusCode == 200) {
+            if (result.data.success) {
+              page.setData({
+                card: {
+                  name: result.data.cardInfo.name,
+                  number: result.data.cardInfo.number,
+                  cardBalance: result.data.cardInfo.cardBalance,
+                  cardInterimBalance: result.data.cardInfo.cardInterimBalance,
+                  cardNumber: result.data.cardInfo.cardNumber,
+                  cardLostState: result.data.cardInfo.cardLostState,
+                  cardFreezeState: result.data.cardInfo.cardFreezeState
                 }
-              }
-            })
+              })
+            } else {
+              utils.showModal('查询失败', result.data.message)
+            }
+          } else if (result.statusCode == 401) {
+            utils.showModal('查询失败', result.data.message)
+          } else {
+            utils.showModal('查询失败', '服务暂不可用，请稍后再试')
           }
         },
         fail: function() {
           wx.hideNavigationBarLoading()
-          wx.showModal({
-            title: '查询失败',
-            content: '网络连接超时，请重试',
-            showCancel: false,
-            success: function(res) {
-              if (res.confirm) {
-                wx.navigateBack({
-                  delta: 1
-                })
-              }
-            }
-          });
-        }
-      })
-    } else {
-      wx.showModal({
-        title: '查询失败',
-        content: "登录凭证已过期，请重新登录",
-        showCancel: false,
-        success: function(res) {
-          if (res.confirm) {
-            wx.reLaunch({
-              url: '../login/login',
-            })
-          }
+          utils.showModal('查询失败', '网络连接超时，请重试')
         }
       })
     }

@@ -1,6 +1,9 @@
-// pages/bill/bill.js
-Page({
+// bill.js
+//获取应用实例
+const app = getApp()
+let utils = require("../../utils/util.js")
 
+Page({
   /**
    * 页面的初始数据
    */
@@ -8,9 +11,9 @@ Page({
     date: null,
     start: null,
     end: null,
-    errorMessage: null,
     result: null,
-    loading: false
+    loading: false,
+    errorMessage: null
   },
   reset: function() {
     this.setData({
@@ -38,48 +41,40 @@ Page({
         loading: true
       })
       var dateStringArray = this.data.date.split("-")
-      let username = wx.getStorageSync("username")
-      let password = wx.getStorageSync("password")
+      let token = wx.getStorageSync("accessToken")
       let year = dateStringArray[0]
       let month = dateStringArray[1]
       let date = dateStringArray[2]
-      let requestData = {
-        username: username,
-        password: password,
-        year: year,
-        month: month,
-        date: date
-      }
-      if (username && password) {
+      if (utils.validateRequestAccess()) {
         wx.request({
           url: "https://www.gdeiassistant.cn/rest/cardquery",
           method: "POST",
           header: {
             "Content-Type": "application/x-www-form-urlencoded"
           },
-          data: requestData,
+          data: {
+            token: token,
+            year: year,
+            month: month,
+            date: date
+          },
           success: function(result) {
             wx.hideNavigationBarLoading()
             page.setData({
               loading: false
             })
-            if (result.data.success) {
-              page.setData({
-                result: result.data.cardList
-              })
+            if (result.statusCode == 200) {
+              if (result.data.success) {
+                page.setData({
+                  result: result.data.cardList
+                })
+              } else {
+                utils.showModal('查询失败', result.data.message)
+              }
+            } else if (result.statusCode == 401) {
+              utils.showModal('查询失败', result.data.message)
             } else {
-              wx.showModal({
-                title: '查询失败',
-                content: result.data.errorMessage,
-                showCancel: false,
-                success: function(res) {
-                  if (res.confirm) {
-                    wx.navigateBack({
-                      delta: 1
-                    })
-                  }
-                }
-              })
+              utils.showModal('查询失败', '服务暂不可用，请稍后再试')
             }
           },
           fail: function() {
@@ -87,36 +82,12 @@ Page({
             page.setData({
               loading: false
             })
-            wx.showModal({
-              title: '查询失败',
-              content: '网络连接超时，请重试',
-              showCancel: false,
-              success: function(res) {
-                if (res.confirm) {
-                  wx.navigateBack({
-                    delta: 1
-                  })
-                }
-              }
-            });
-          }
-        })
-      } else {
-        wx.showModal({
-          title: '查询失败',
-          content: "登录凭证已过期，请重新登录",
-          showCancel: false,
-          success: function(res) {
-            if (res.confirm) {
-              wx.reLaunch({
-                url: '../login/login',
-              })
-            }
+            utils.showModal('查询失败', '网络连接超时，请重试')
           }
         })
       }
     } else {
-      this.showTopTips("请选择需要查询的日期")
+      this.showTopTips('请选择需要查询的日期')
     }
   },
   bindDateChange: function(event) {

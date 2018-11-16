@@ -1,12 +1,15 @@
 //login.js
 //获取应用实例
 const app = getApp()
+const utils = require('../../utils/util.js')
 
 Page({
   data: {
-    login: false
+    login: false,
+    unionid: null
   },
-  formSubmit: function (e) {
+  formSubmit: function(e) {
+    let page = this
     let username = e.detail.value.username
     let password = e.detail.value.password
     if (username && password) {
@@ -18,103 +21,119 @@ Page({
           "Content-Type": "application/x-www-form-urlencoded"
         },
         data: {
+          unionId: page.data.unionid,
           username: username,
           password: password
         },
-        success: function (result) {
+        success: function(result) {
           wx.hideNavigationBarLoading()
-          if (result.data.success) {
-            let username = result.data.user.username
-            let password = result.data.user.password
-            let realname = result.data.user.realname
-            wx.setStorageSync("username", username)
-            wx.setStorageSync("password", password)
-            wx.setStorageSync("realname", realname)
-            wx.redirectTo({
-              url: '../index/index',
-            })
-          }
-          else {
-            wx.showModal({
-              title: '登录失败',
-              content: result.data.errorMessage,
-              showCancel: false
-            })
+          if (result.statusCode == 200) {
+            if (result.data.success) {
+              let username = result.data.user.username
+              let realname = result.data.user.realname
+              let accessToken = result.data.accessToken
+              let refreshToken = result.data.refreshToken
+              wx.setStorageSync("accessToken", accessToken)
+              wx.setStorageSync("refreshToken", refreshToken)
+              wx.redirectTo({
+                url: '../index/index',
+              })
+            } else {
+              utils.showModal('登录失败', result.data.message)
+            }
+          } else {
+            utils.showModal('登录失败', '服务暂不可用，请稍后再试')
           }
         },
-        fail: function () {
-          wx.hideNavigationBarLoading()
-          wx.showModal({
-            title: '登录失败',
-            content: '网络连接超时，请重试',
-            showCancel: false
-          })
+        fail: function() {
+          utils.showModal('登录失败', '网络连接超时，请重试')
         }
       })
+    } else {
+      utils.showNoActionModal('请填写教务系统信息', '教务系统账号和密码不能为空')
     }
-    else {
-      wx.showModal({
-        title: '请填写教务系统信息',
-        content: '教务系统账号和密码不能为空',
-        showCancel: false
+  },
+  onLoad: function() {
+    let page = this
+    let accessToken = wx.getStorageSync("accessToken")
+    let refreshToken = wx.getStorageSync("refreshToken")
+    if (accessToken && refreshToken) {
+      //校验时间戳
+      if (utils.validateTokenTimestamp(accessToken.expireTime)) {
+        //权限令牌有效，进入功能主页
+        wx.redirectTo({
+          url: '../index/index',
+        })
+      } else {
+        if (utils.validateTokenTimestamp(refreshToken.expireTime)) {
+          //使用刷新令牌刷新令牌信息
+          wx.request({
+            url: "https://www.gdeiassistant.cn/rest/token/refresh",
+            method: "POST",
+            header: {
+              "Content-Type": "application/x-www-form-urlencoded"
+            },
+            data: {
+              token: refreshToken.signature
+            },
+            success: function(result) {
+              if (result.statusCode == 200) {
+                if (result.data.success) {
+                  wx.setStorageSync("accessToken", result.data.data.accessToken)
+                  wx.setStorageSync("refreshToken", result.data.data.refreshToken)
+                } else {
+                  utils.showModal('更新令牌失败', result.data.message)
+                }
+              } else {
+                utils.showModal('更新令牌失败', '服务暂不可用，请稍后再试')
+              }
+            },
+            fail: function() {
+              utils.showModal('网络异常', '请检查网络连接')
+            }
+          })
+        } else {
+          utils.showModal('身份凭证过期', '请重新登录')
+        }
+      }
+    } else {
+      // 微信登录
+      wx.login({
+        success: res => {
+          if (!res.code) {
+            utils.showModal('登录失败', '微信登录失败')
+          } else {
+            // 通过code值获取微信id
+            wx.request({
+              url: "https://www.gdeiassistant.cn/wechat/app/userid",
+              method: "POST",
+              header: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              },
+              data: {
+                code: res.code
+              },
+              success: function(result) {
+                if (result.statusCode == 200) {
+                  if (result.data.success) {
+                    let unionid = result.data.data.openid;
+                    page.setData({
+                      unionid: unionid
+                    })
+                  } else {
+                    utils.showModal('登录失败', result.data.message)
+                  }
+                } else {
+                  utils.showModal('登录失败', '服务暂不可用，请稍后重试')
+                }
+              },
+              fail: function() {
+                utils.showModal('网络异常', '请检查网络连接')
+              }
+            })
+          }
+        }
       })
     }
   },
-  onLoad: function () {
-    // 微信登录
-    wx.login({
-      success: res => {
-        if (!res.code) {
-          wx.showModal({
-            title: '登录失败',
-            content: '微信登录失败',
-            showCancel: false,
-            success: function (res) {
-              if (res.confirm) {
-                wx.navigateBack({
-                  delta: 1
-                })
-              }
-            }
-          })
-        }
-        else {
-          let username = wx.getStorageSync("username")
-          let password = wx.getStorageSync("password")
-          if (username && password) {
-            wx.redirectTo({
-              url: '../index/index',
-            })
-          }
-          else {
-            this.setData({
-              login: true
-            })
-            wx.setNavigationBarTitle({
-              title: "请登录"
-            })
-          }
-        }
-      }
-    })
-    // 获取用户信息
-    wx.getSetting({
-      success: res => {
-        if (res.authSetting['scope.userInfo']) {
-          // 已经授权，可以直接调用 getUserInfo 获取头像昵称，不会弹框
-          wx.getUserInfo({
-            success: res => {
-              // 可以将 res 发送给后台解码出 unionId
-              app.globalData.userInfo = res.userInfo
-              // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-              // 所以此处加入 callback 以防止这种情况
-              if (this.userInfoReadyCallback) {
-                this.userInfoReadyCallback(res)
-              }
-            }
-          })
-        }
-      }
-    })
-  }
 })

@@ -1,6 +1,7 @@
 // cardLost.js
 //获取应用实例
 const app = getApp()
+let utils = require("../../utils/util.js")
 
 Page({
 
@@ -8,7 +9,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    loading: false
+    loading: false,
+    errorMessage: null
   },
   showTopTips: function(content) {
     var that = this;
@@ -23,16 +25,10 @@ Page({
   },
   setCardLost: function(e) {
     const page = this
-    let username = wx.getStorageSync("username")
-    let password = wx.getStorageSync("password")
-    let cardPassword = e.detail.value.password
-    let requestData = {
-      username: username,
-      password: password,
-      cardPassword: cardPassword
-    }
-    if (cardPassword && cardPassword.length == 6 && /^\d+$/.test(cardPassword)) {
-      if (username && password) {
+    if (utils.validateRequestAccess()) {
+      let token = wx.getStorageSync("accessToken")
+      let cardPassword = e.detail.value.password
+      if (cardPassword && cardPassword.length == 6 && /^\d+$/.test(cardPassword)) {
         wx.showNavigationBarLoading()
         this.setData({
           loading: true
@@ -43,27 +39,23 @@ Page({
           header: {
             "Content-Type": "application/x-www-form-urlencoded"
           },
-          data: requestData,
+          data: {
+            token: token,
+            cardPassword: cardPassword
+          },
           success: function(result) {
             wx.hideNavigationBarLoading()
             page.setData({
               loading: false
             })
-            if (result.data.success) {
-              wx.showModal({
-                title: '挂失成功',
-                content: '请尽快前往办卡处进行校园卡补办',
-                showCancel: false,
-                success: function(res) {
-                  if (res.confirm) {
-                    wx.navigateBack({
-                      delta: 1
-                    })
-                  }
-                }
-              })
+            if (result.statusCode == 200) {
+              if (result.data.success) {
+                utils.showModal('挂失成功', '请尽快前往办卡处进行校园卡补办')
+              } else {
+                page.showTopTips(result.data.message)
+              }
             } else {
-              page.showTopTips(result.data.errorMessage)
+              page.showTopTips('服务暂不可用，请稍后再试')
             }
           },
           fail: function() {
@@ -71,33 +63,19 @@ Page({
             page.setData({
               loading: false
             })
-            page.showTopTips("网络连接超时，请重试")
+            page.showTopTips('网络连接超时，请重试')
           }
         })
       } else {
-        wx.showModal({
-          title: '挂失失败',
-          content: "登录凭证已过期，请重新登录",
-          showCancel: false,
-          success: function(res) {
-            if (res.confirm) {
-              wx.reLaunch({
-                url: '../login/login',
-              })
-            }
-          }
-        })
+        this.showTopTips('请输入正确的校园卡查询密码')
       }
-    } else {
-      this.showTopTips("请输入正确的校园卡查询密码")
     }
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
-  },
+  onLoad: function(options) {},
 
   /**
    * 生命周期函数--监听页面初次渲染完成

@@ -1,6 +1,7 @@
 // pages/schedule/schedule.js
 //获取应用实例
 const app = getApp()
+let utils = require("../../utils/util.js")
 
 Page({
 
@@ -29,22 +30,19 @@ Page({
   getDataList: function() {
     const page = this
     wx.showNavigationBarLoading()
-    let username = wx.getStorageSync("username")
-    let password = wx.getStorageSync("password")
-    let requestData
-    if (this.data.week) {
-      requestData = {
-        username: username,
-        password: password,
-        week: this.data.week
+    if (utils.validateRequestAccess()) {
+      let accessToken = wx.getStorageSync("accessToken")
+      let requestData
+      if (this.data.week) {
+        requestData = {
+          token: accessToken.signature,
+          week: this.data.week
+        }
+      } else {
+        requestData = {
+          token: accessToken.signature
+        }
       }
-    } else {
-      requestData = {
-        username: username,
-        password: password
-      }
-    }
-    if (username && password) {
       wx.request({
         url: "https://www.gdeiassistant.cn/rest/schedulequery",
         method: "POST",
@@ -54,70 +52,41 @@ Page({
         data: requestData,
         success: function(result) {
           wx.hideNavigationBarLoading()
-          if (result.data.success) {
-            var list = [
-              [],
-              [],
-              [],
-              [],
-              [],
-              [],
-              []
-            ]
-            result.data.scheduleList.forEach(function(e) {
-              list[e.column].push(e)
-            })
-            if(!page.data.week){
-              page.setData({
-                index: parseInt(result.data.selectedWeek) - 1,
+          if (result.statusCode == 200) {
+            if (result.data.success) {
+              var list = [
+                [],
+                [],
+                [],
+                [],
+                [],
+                [],
+                []
+              ]
+              result.data.scheduleList.forEach(function(e) {
+                list[e.column].push(e)
               })
-            }
-            page.setData({
-              scheduleList: list,
-              week: result.data.selectedWeek
-            })
-          } else {
-            wx.showModal({
-              title: '查询失败',
-              content: result.data.errorMessage,
-              showCancel: false,
-              success: function(res) {
-                if (res.confirm) {
-                  wx.navigateBack({
-                    delta: 1
-                  })
-                }
+              if (!page.data.week) {
+                page.setData({
+                  index: parseInt(result.data.week) - 1,
+                })
               }
-            });
+              page.setData({
+                scheduleList: list,
+                week: result.data.week
+              })
+            } else {
+              utils.showModal('查询失败',result.data.message)
+            }
+          } else if (result.statusCode == 401) {
+            utils.showModal('查询失败', result.data.message)
+          } else {
+            utils.showModal('查询失败', '服务暂不可用，请稍后再试')
           }
         },
         fail: function() {
           wx.hideNavigationBarLoading()
-          wx.showModal({
-            title: '查询失败',
-            content: '网络连接超时，请重试',
-            showCancel: false,
-            success: function(res) {
-              if (res.confirm) {
-                wx.navigateBack({
-                  delta: 1
-                })
-              }
-            }
-          })
-        }
-      })
-    } else {
-      wx.showModal({
-        title: '查询失败',
-        content: "登录凭证已过期，请重新登录",
-        showCancel: false,
-        success: function(res) {
-          if (res.confirm) {
-            wx.reLaunch({
-              url: '../login/login',
-            })
-          }
+          utils.showModal('查询失败', '网络连接超时，请重试')
         }
       })
     }
