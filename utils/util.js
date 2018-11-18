@@ -19,8 +19,8 @@ const formatNumber = n => {
  * 若权限令牌过期或无则默认使用刷新令牌进行刷新
  * 若刷新令牌过期或无则要求用户重新验证身份
  */
-function validateRequestAccess(){
-  if(!validateAccessToken()){
+function validateRequestAccess() {
+  if (!validateAccessToken()) {
     return refreshAccessToken()
   }
   return true;
@@ -83,7 +83,7 @@ function refreshAccessToken() {
  * 校验令牌时间戳
  */
 function validateTokenTimestamp(expireTime) {
-  return Math.floor(((new Date().getTime - expireTime) % (3600 * 1000))) <= 1
+  return Math.floor((expireTime - new Date().getTime()) / (3600 * 1000)) >= 1
 }
 
 /**
