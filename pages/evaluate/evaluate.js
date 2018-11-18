@@ -27,11 +27,7 @@ Page({
   formSubmit() {
     const page = this
     if (utils.validateRequestAccess()) {
-      let requestData = {
-        username: username,
-        password: password,
-        directlySubmit: page.data.checked
-      }
+      let token = wx.getStorageSync("accessToken")
       this.setData({
         loading: true
       })
@@ -42,7 +38,10 @@ Page({
         header: {
           "Content-Type": "application/x-www-form-urlencoded"
         },
-        data: requestData,
+        data: {
+          token: token.signature,
+          directlySubmit: page.data.checked
+        },
         success: function(result) {
           page.setData({
             loading: false

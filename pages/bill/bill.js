@@ -53,7 +53,7 @@ Page({
             "Content-Type": "application/x-www-form-urlencoded"
           },
           data: {
-            token: token,
+            token: token.signature,
             year: year,
             month: month,
             date: date

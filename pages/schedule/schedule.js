@@ -31,16 +31,16 @@ Page({
     const page = this
     wx.showNavigationBarLoading()
     if (utils.validateRequestAccess()) {
-      let accessToken = wx.getStorageSync("accessToken")
+      let token = wx.getStorageSync("accessToken")
       let requestData
       if (this.data.week) {
         requestData = {
-          token: accessToken.signature,
+          token: token.signature,
           week: this.data.week
         }
       } else {
         requestData = {
-          token: accessToken.signature
+          token: token.signature
         }
       }
       wx.request({

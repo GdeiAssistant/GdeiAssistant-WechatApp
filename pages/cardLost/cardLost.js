@@ -40,7 +40,7 @@ Page({
             "Content-Type": "application/x-www-form-urlencoded"
           },
           data: {
-            token: token,
+            token: token.signature,
             cardPassword: cardPassword
           },
           success: function(result) {

@@ -15,7 +15,7 @@ Page({
     const page = this
     wx.showNavigationBarLoading()
     if (utils.validateRequestAccess()) {
-      let token = wx.getStorageSync("token")
+      let token = wx.getStorageSync("accessToken")
       wx.request({
         url: "https://www.gdeiassistant.cn/rest/cardinfo",
         method: "POST",
@@ -23,7 +23,7 @@ Page({
           "Content-Type": "application/x-www-form-urlencoded"
         },
         data: {
-          token: token
+          token: token.signature
         },
         success: function(result) {
           wx.hideNavigationBarLoading()

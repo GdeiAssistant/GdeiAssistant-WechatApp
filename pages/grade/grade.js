@@ -29,11 +29,11 @@ Page({
       let requestData;
       if (year == -1) {
         requestData = {
-          token: token
+          token: token.signature
         }
       } else {
         requestData = {
-          token: token,
+          token: token.signature,
           year: year
         }
       }
