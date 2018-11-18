@@ -37,7 +37,7 @@ Page({
     }
     if (username) {
       wx.request({
-        url: "https://www.gdeiassistant.cn/rest/api/avatar/" + username,
+        url: "https://www.gdeiassistant.cn/rest/avatar/" + username,
         method: "GET",
         success: function (result) {
           if (result.data.success && result.data.data != "") {
