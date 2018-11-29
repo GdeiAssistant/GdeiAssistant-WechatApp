@@ -13,6 +13,32 @@ Page({
       content: '你确定要退出当前账号吗？',
       success: function (res) {
         if (res.confirm) {
+          let accessToken = wx.getStorageSync("accessToken")
+          let refreshToken = wx.getStorageSync("refreshToken")
+          if (accessToken) {
+            wx.request({
+              url: "https://www.gdeiassistant.cn/rest/token/expire",
+              method: "POST",
+              header: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              },
+              data: {
+                token: accessToken.signature
+              }
+            })
+          }
+          if (refreshToken) {
+            wx.request({
+              url: "https://www.gdeiassistant.cn/rest/token/expire",
+              method: "POST",
+              header: {
+                "Content-Type": "application/x-www-form-urlencoded"
+              },
+              data: {
+                token: refreshToken.signature
+              }
+            })
+          }
           wx.clearStorageSync()
           wx.reLaunch({
             url: '../login/login'
