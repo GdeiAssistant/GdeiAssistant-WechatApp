@@ -83,11 +83,20 @@ Page({
                 if (result.data.success) {
                   wx.setStorageSync("accessToken", result.data.data.accessToken)
                   wx.setStorageSync("refreshToken", result.data.data.refreshToken)
+                  wx.redirectTo({
+                    url: '../index/index',
+                  })
                 } else {
-                  utils.showModal('更新令牌失败', result.data.message)
+                  utils.showModal('更新令牌失败，请尝试重新登录', result.data.message)
+                  page.setData({
+                    login: true
+                  })
                 }
               } else {
-                utils.showModal('更新令牌失败', '服务暂不可用，请稍后再试')
+                utils.showModal('更新令牌失败，请尝试重新登录', '服务暂不可用，请稍后再试')
+                page.setData({
+                  login: true
+                })
               }
             },
             fail: function() {
@@ -95,7 +104,10 @@ Page({
             }
           })
         } else {
-          utils.showModal('身份凭证过期', '请重新登录')
+          utils.showModal('登录凭证过期', '请重新登录')
+          page.setData({
+            login: true
+          })
         }
       }
     } else {
@@ -120,7 +132,6 @@ Page({
                   if (result.data.success) {
                     let unionid = result.data.data.openid;
                     page.setData({
-                      unionid: unionid,
                       login: true
                     })
                   } else {
