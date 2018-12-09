@@ -5,7 +5,7 @@
   <view class="userinfo">
     <block wx:if="{{avatar}}">
       <image class="userinfo-avatar" src="{{avatar}}" background-size="cover"></image>
-      <text class="userinfo-nickname">{{realname}}</text>
+      <text class="userinfo-nickname">{{kickname}}</text>
     </block>
   </view>
 
@@ -53,8 +53,8 @@
   </view>
 
   <view class="copyright_info">
-    <text>广东二师助手团队 版权所有\n</text>
-    <text>All rights reserved © 2016 - 2018</text>
+    <text>Copyright © 2016 - 2019 GdeiAssistant\n</text>
+    <text>All rights reserved</text>
   </view>
 
 </view>
