@@ -30,11 +30,9 @@ Page({
           if (result.statusCode == 200) {
             if (result.data.success) {
               let username = result.data.user.username
-              let realname = result.data.user.realname
               let accessToken = result.data.accessToken
               let refreshToken = result.data.refreshToken
               wx.setStorageSync("username", username)
-              wx.setStorageSync("realname", realname)
               wx.setStorageSync("accessToken", accessToken)
               wx.setStorageSync("refreshToken", refreshToken)
               wx.redirectTo({

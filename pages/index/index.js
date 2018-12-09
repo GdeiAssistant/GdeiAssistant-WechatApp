@@ -5,13 +5,13 @@ const app = getApp()
 Page({
   data: {
     avatar: null,
-    realname: null
+    kickname: null
   },
-  logout: function () {
+  logout: function() {
     wx.showModal({
       title: '退出账号',
       content: '你确定要退出当前账号吗？',
-      success: function (res) {
+      success: function(res) {
         if (res.confirm) {
           let accessToken = wx.getStorageSync("accessToken")
           let refreshToken = wx.getStorageSync("refreshToken")
@@ -47,39 +47,56 @@ Page({
       }
     });
   },
-  onLoad: function (options) {
+  onLoad: function(options) {
     const page = this
+    let accessToken = wx.getStorageSync("accessToken")
     let username = wx.getStorageSync("username")
-    let realname = wx.getStorageSync("realname")
-    if (realname && realname!="") {
-      page.setData({
-        realname: realname
-      })
-    }
-    else {
-      page.setData({
-        realname: "广东二师助手用户"
-      })
-    }
     if (username) {
+      //获取头像信息
       wx.request({
         url: "https://www.gdeiassistant.cn/rest/avatar/" + username,
         method: "GET",
-        success: function (result) {
+        success: function(result) {
           if (result.data.success && result.data.data != "") {
             page.setData({
               avatar: result.data.data
             })
-          }
-          else {
+          } else {
             page.setData({
               avatar: "../../image/default.png"
             })
           }
         },
-        fail: function () {
+        fail: function() {
           page.setData({
             avatar: "../../image/default.png"
+          })
+        }
+      })
+      //获取资料信息
+      wx.request({
+        url: "https://www.gdeiassistant.cn/rest/profile",
+        method: "POST",
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        data: {
+          token: accessToken.signature
+        },
+        success: function(result) {
+          if (result.data.success && result.data.data && result.data.data.kickname) {
+            page.setData({
+              kickname: result.data.data.kickname
+            })
+          } else {
+            page.setData({
+              kickname: "广东二师助手用户"
+            })
+          }
+        },
+        fail: function() {
+          page.setData({
+            kickname: "广东二师助手用户"
           })
         }
       })
