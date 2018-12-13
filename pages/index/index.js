@@ -90,13 +90,13 @@ Page({
             })
           } else {
             page.setData({
-              kickname: "广东二师助手用户"
+              kickname: "易小助用户"
             })
           }
         },
         fail: function() {
           page.setData({
-            kickname: "广东二师助手用户"
+            kickname: "易小助用户"
           })
         }
       })

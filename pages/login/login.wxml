@@ -2,7 +2,7 @@
 
   <view class="userinfo">
     <image class="userinfo-avatar" src="../../image/logo.png" background-size="cover"></image>
-    <text class="userinfo-nickname">广东二师助手</text>
+    <text class="userinfo-nickname">易小助</text>
   </view>
 
   <view class="page-body">
