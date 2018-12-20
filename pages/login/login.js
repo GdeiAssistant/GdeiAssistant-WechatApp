@@ -2,6 +2,7 @@
 //获取应用实例
 const app = getApp()
 const utils = require('../../utils/util.js')
+const globalData = require('../../common/data/data.js')
 
 Page({
   data: {
@@ -13,6 +14,13 @@ Page({
     let username = e.detail.value.username
     let password = e.detail.value.password
     if (username && password) {
+      //生成时间戳和随机值
+      let nonce = Math.random().toString(36).substr(2, 15)
+      let timestamp = new Date().getTime()
+      //进行字典排序
+    
+      //进行摘要签名
+      let signature = utils.sha1Hex(timestamp + nonce + globalData.requestValidateToken)
       wx.showNavigationBarLoading()
       wx.request({
         url: "https://www.gdeiassistant.cn/rest/userlogin",
@@ -21,9 +29,12 @@ Page({
           "Content-Type": "application/x-www-form-urlencoded"
         },
         data: {
-          unionId: page.data.unionid,
+          unionid: page.data.unionid,
           username: username,
-          password: password
+          password: password,
+          nonce: nonce,
+          timestamp: timestamp,
+          signature: signature
         },
         success: function(result) {
           wx.hideNavigationBarLoading()
@@ -130,6 +141,7 @@ Page({
                   if (result.data.success) {
                     let unionid = result.data.data.openid;
                     page.setData({
+                      unionid: unionid,
                       login: true
                     })
                   } else {
