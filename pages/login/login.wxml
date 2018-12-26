@@ -29,4 +29,9 @@
 
     </form>
   </view>
+
+  <view class="version_info">
+    <text>{{versionCode}}</text>
+  </view>
+
 </view>

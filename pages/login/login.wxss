@@ -29,3 +29,10 @@ form {
 .userinfo-nickname {
   color: #aaa;
 }
+
+.version_info {
+  margin-top: 35rpx;
+  margin-bottom: 35rpx;
+  text-align: center;
+  color: #aaa;
+}
