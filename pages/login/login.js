@@ -7,7 +7,8 @@ const globalData = require('../../common/data/data.js')
 Page({
   data: {
     login: false,
-    unionid: null
+    unionid: null,
+    versionCode: null
   },
   formSubmit: function(e) {
     let page = this
@@ -17,8 +18,6 @@ Page({
       //生成时间戳和随机值
       let nonce = Math.random().toString(36).substr(2, 15)
       let timestamp = new Date().getTime()
-      //进行字典排序
-    
       //进行摘要签名
       let signature = utils.sha1Hex(timestamp + nonce + globalData.requestValidateToken)
       wx.showNavigationBarLoading()
@@ -53,7 +52,7 @@ Page({
               utils.showModal('登录失败', result.data.message)
             }
           } else {
-            utils.showModal('登录失败', '服务暂不可用，请稍后再试')
+            utils.showModal('登录失败', '服务暂不可用，请稍后再试，错误信息为：' + result.data.message)
           }
         },
         fail: function() {
@@ -66,6 +65,10 @@ Page({
   },
   onLoad: function() {
     let page = this
+    //加载版本号
+    this.setData({
+      versionCode: "V" + globalData.versionCode
+    })
     let accessToken = wx.getStorageSync("accessToken")
     let refreshToken = wx.getStorageSync("refreshToken")
     if (accessToken && refreshToken) {
@@ -102,7 +105,7 @@ Page({
                   })
                 }
               } else {
-                utils.showModal('更新令牌失败，请尝试重新登录', '服务暂不可用，请稍后再试')
+                utils.showModal('更新令牌失败，请尝试重新登录', "服务暂不可用，请稍后再试，错误信息为：" + result.data.message)
                 page.setData({
                   login: true
                 })
