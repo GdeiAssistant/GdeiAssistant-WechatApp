@@ -12,15 +12,15 @@
     <view class="weui-cells__title">第一学期</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell" wx:for="{{firstTermGradeList}}" wx:for-item="item" wx:key="item-key">
-        <view class="weui-cell__bd">{{item.grade_name}}</view>
-        <view class="weui-cell__ft">{{item.grade_score}}</view>
+        <view class="weui-cell__bd">{{item.gradeName}}</view>
+        <view class="weui-cell__ft">{{item.gradeScore}}</view>
       </view>
     </view>
     <view class="weui-cells__title">第二学期</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell" wx:for="{{secondTermGradeList}}" wx:for-item="item" wx:key="item-key">
-        <view class="weui-cell__bd">{{item.grade_name}}</view>
-        <view class="weui-cell__ft">{{item.grade_score}}</view>
+        <view class="weui-cell__bd">{{item.gradeName}}</view>
+        <view class="weui-cell__ft">{{item.gradeScore}}</view>
       </view>
     </view>
   </view>
