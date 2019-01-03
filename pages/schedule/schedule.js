@@ -63,17 +63,17 @@ Page({
                 [],
                 []
               ]
-              result.data.scheduleList.forEach(function(e) {
+              result.data.data.scheduleList.forEach(function(e) {
                 list[e.column].push(e)
               })
               if (!page.data.week) {
                 page.setData({
-                  index: parseInt(result.data.week) - 1,
+                  index: parseInt(result.data.data.week) - 1,
                 })
               }
               page.setData({
                 scheduleList: list,
-                week: result.data.week
+                week: result.data.data.week
               })
             } else {
               utils.showModal('查询失败',result.data.message)

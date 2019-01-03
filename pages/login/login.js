@@ -39,9 +39,9 @@ Page({
           wx.hideNavigationBarLoading()
           if (result.statusCode == 200) {
             if (result.data.success) {
-              let username = result.data.user.username
-              let accessToken = result.data.accessToken
-              let refreshToken = result.data.refreshToken
+              let username = result.data.data.user.username
+              let accessToken = result.data.data.accessToken
+              let refreshToken = result.data.data.refreshToken
               wx.setStorageSync("username", username)
               wx.setStorageSync("accessToken", accessToken)
               wx.setStorageSync("refreshToken", refreshToken)

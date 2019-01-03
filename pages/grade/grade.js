@@ -49,9 +49,9 @@ Page({
           if (result.statusCode == 200) {
             if (result.data.success) {
               page.setData({
-                firstTermGradeList: result.data.firstTermGradeList,
-                secondTermGradeList: result.data.secondTermGradeList,
-                activeIndex: result.data.year
+                firstTermGradeList: result.data.data.firstTermGradeList,
+                secondTermGradeList: result.data.data.secondTermGradeList,
+                activeIndex: result.data.data.year
               })
             } else {
               utils.showModal('查询失败', result.data.message)
