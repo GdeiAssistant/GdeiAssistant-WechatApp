@@ -31,13 +31,13 @@ Page({
             if (result.data.success) {
               page.setData({
                 card: {
-                  name: result.data.cardInfo.name,
-                  number: result.data.cardInfo.number,
-                  cardBalance: result.data.cardInfo.cardBalance,
-                  cardInterimBalance: result.data.cardInfo.cardInterimBalance,
-                  cardNumber: result.data.cardInfo.cardNumber,
-                  cardLostState: result.data.cardInfo.cardLostState,
-                  cardFreezeState: result.data.cardInfo.cardFreezeState
+                  name: result.data.data.name,
+                  number: result.data.data.number,
+                  cardBalance: result.data.data.cardBalance,
+                  cardInterimBalance: result.data.data.cardInterimBalance,
+                  cardNumber: result.data.data.cardNumber,
+                  cardLostState: result.data.data.cardLostState,
+                  cardFreezeState: result.data.data.cardFreezeState
                 }
               })
             } else {

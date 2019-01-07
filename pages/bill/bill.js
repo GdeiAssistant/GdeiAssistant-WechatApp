@@ -66,7 +66,7 @@ Page({
             if (result.statusCode == 200) {
               if (result.data.success) {
                 page.setData({
-                  result: result.data.cardList
+                  result: result.data.data.cardList
                 })
               } else {
                 utils.showModal('查询失败', result.data.message)

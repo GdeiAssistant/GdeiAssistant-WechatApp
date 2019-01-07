@@ -97,14 +97,14 @@ Page({
           if (result.data.success) {
             page.setData({
               cet: {
-                name: result.data.cet.name,
-                school: result.data.cet.school,
-                type: result.data.cet.type,
-                admissionCard: result.data.cet.admissionCard,
-                totalScore: result.data.cet.totalScore,
-                listeningScore: result.data.cet.listeningScore,
-                readingScore: result.data.cet.readingScore,
-                writingAndTranslatingScore: result.data.cet.writingAndTranslatingScore
+                name: result.data.data.name,
+                school: result.data.data.school,
+                type: result.data.data.type,
+                admissionCard: result.data.data.admissionCard,
+                totalScore: result.data.data.totalScore,
+                listeningScore: result.data.data.listeningScore,
+                readingScore: result.data.data.readingScore,
+                writingAndTranslatingScore: result.data.data.writingAndTranslatingScore
               }
             })
           } else {
