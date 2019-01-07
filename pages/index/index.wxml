@@ -20,7 +20,8 @@
           <image class="weui-grid__icon" src="../../image/schedule.png" />
           <view class="weui-grid__label">我的课表</view>
         </navigator>
-        <navigator open-type="navigate" url="../cet/cet" class="weui-grid" hover-class="weui-grid_active">
+        <!-- 根据微信公众平台相关政策，个人主体小程序未开放四六级成绩查询的教育信息查询功能类目，在1.7.8版本中将移除该功能 -->
+        <navigator style='display:none' open-type="navigate" url="../cet/cet" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/cet.png" />
           <view class="weui-grid__label">四六级查询</view>
         </navigator>
