@@ -1,11 +1,23 @@
 //index.js
 //获取应用实例
 const app = getApp()
+const utils = require('../../utils/util.js')
 
 Page({
   data: {
     avatar: null,
-    kickname: null
+    kickname: null,
+    access: {
+      grade: null,
+      schedule: null,
+      cet: null,
+      evaluate: null,
+      card: null,
+      bill: null,
+      lost: null,
+      charge: null,
+      collection: null
+    }
   },
   logout: function() {
     wx.showModal({
@@ -73,33 +85,68 @@ Page({
           })
         }
       })
-      //获取资料信息
-      wx.request({
-        url: "https://www.gdeiassistant.cn/rest/profile",
-        method: "POST",
-        header: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        data: {
-          token: accessToken.signature
-        },
-        success: function(result) {
-          if (result.data.success && result.data.data && result.data.data.kickname) {
-            page.setData({
-              kickname: result.data.data.kickname
-            })
-          } else {
+      if (accessToken) {
+        //获取资料信息
+        wx.request({
+          url: "https://www.gdeiassistant.cn/rest/profile",
+          method: "POST",
+          header: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          data: {
+            token: accessToken.signature
+          },
+          success: function(result) {
+            if (result.data.success && result.data.data && result.data.data.kickname) {
+              page.setData({
+                kickname: result.data.data.kickname
+              })
+            } else {
+              page.setData({
+                kickname: "易小助用户"
+              })
+            }
+          },
+          fail: function() {
             page.setData({
               kickname: "易小助用户"
             })
           }
-        },
-        fail: function() {
-          page.setData({
-            kickname: "易小助用户"
-          })
-        }
-      })
+        })
+        //获取功能菜单权限列表
+        wx.request({
+          url: "https://www.gdeiassistant.cn/rest/access/wechat",
+          method: "POST",
+          header: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          data: {
+            token: accessToken.signature
+          },
+          success: function(result) {
+            if (result.data.success) {
+              page.setData({
+                access: {
+                  grade: result.data.data.grade,
+                  schedule: result.data.data.schedule,
+                  cet: result.data.data.cet,
+                  evaluate: result.data.data.evaluate,
+                  card: result.data.data.card,
+                  bill: result.data.data.bill,
+                  lost: result.data.data.lost,
+                  charge: result.data.data.charge,
+                  collection: result.data.data.collection
+                }
+              })
+            } else {
+              utils.showNoActionModal('获取功能菜单失败', result.data.message)
+            }
+          },
+          fail: function() {
+            utils.showNoActionModal('网络异常', '请检查网络连接')
+          }
+        })
+      }
     }
   }
 })

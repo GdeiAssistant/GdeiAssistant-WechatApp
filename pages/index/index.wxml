@@ -12,36 +12,35 @@
   <view class="page-body">
     <view class="page__bd">
       <view class="weui-grids">
-        <navigator open-type="navigate" url="../grade/grade" class="weui-grid" hover-class="weui-grid_active">
+        <navigator wx:if="{{access.grade}}" open-type="navigate" url="../grade/grade" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/grade.png" />
           <view class="weui-grid__label">期末成绩</view>
         </navigator>
-        <navigator open-type="navigate" url="../schedule/schedule" class="weui-grid" hover-class="weui-grid_active">
+        <navigator wx:if="{{access.schedule}}" open-type="navigate" url="../schedule/schedule" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/schedule.png" />
           <view class="weui-grid__label">我的课表</view>
         </navigator>
-        <!-- 根据微信公众平台相关政策，个人主体小程序未开放四六级成绩查询的教育信息查询功能类目，在1.7.8版本中将移除该功能 -->
-        <navigator style='display:none' open-type="navigate" url="../cet/cet" class="weui-grid" hover-class="weui-grid_active">
+        <navigator wx:if="{{access.cet}}" open-type="navigate" url="../cet/cet" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/cet.png" />
           <view class="weui-grid__label">四六级查询</view>
         </navigator>
-        <navigator open-type="navigate" url="../bill/bill" class="weui-grid" hover-class="weui-grid_active">
+        <navigator wx:if="{{access.bill}}"  open-type="navigate" url="../bill/bill" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/bill.png" />
           <view class="weui-grid__label">消费查询</view>
         </navigator>
-        <navigator open-type="navigate" url="../card/card" class="weui-grid" hover-class="weui-grid_active">
+        <navigator wx:if="{{access.card}}" open-type="navigate" url="../card/card" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/card.png" />
           <view class="weui-grid__label">我的校园卡</view>
         </navigator>
-        <navigator open-type="navigate" url="../cardLost/cardLost" class="weui-grid" hover-class="weui-grid_active">
+        <navigator wx:if="{{access.lost}}" open-type="navigate" url="../cardLost/cardLost" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/cardLost.png" />
           <view class="weui-grid__label">校园卡挂失</view>
         </navigator>
-        <navigator open-type="navigate" url="../evaluate/evaluate" class="weui-grid" hover-class="weui-grid_active">
+        <navigator wx:if="{{access.evaluate}}"  open-type="navigate" url="../evaluate/evaluate" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/evaluate.png" />
           <view class="weui-grid__label">一键评教</view>
         </navigator>
-        <navigator open-type="navigate" url="../collection/collection" class="weui-grid" hover-class="weui-grid_active">
+        <navigator wx:if="{{access.collection}}"  open-type="navigate" url="../collection/collection" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/collection.png" />
           <view class="weui-grid__label">馆藏查询</view>
         </navigator>
