@@ -43,9 +43,7 @@ Page({
             } else {
               utils.showModal('查询失败', result.data.message)
             }
-          } else if (result.statusCode == 401) {
-            utils.showModal('查询失败', result.data.message)
-          } else {
+          }else {
             utils.showModal('查询失败', '服务暂不可用，请稍后再试')
           }
         },

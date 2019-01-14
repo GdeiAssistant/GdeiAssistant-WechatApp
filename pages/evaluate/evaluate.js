@@ -57,8 +57,6 @@ Page({
             } else {
               page.showTopTips(result.data.message)
             }
-          } else if (result.statusCode == 401) {
-            utils.showModal('评教失败', result.data.message)
           } else {
             utils.showModal('评教失败', '服务暂不可用，请稍后再试')
           }
