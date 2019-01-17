@@ -15,7 +15,8 @@
           </view>
           <view class="weui-cell__bd">
             <picker mode="date" value="{{date}}" start="{{start}}" end="{{end}}" bindchange="bindDateChange">
-              <view class="weui-input">{{date==null? "未选择" : date}}</view>
+              <view class="weui-input" wx:if="{{date}}">{{date}}</view>
+              <view class="weui-input" wx:if="{{!date}}">未选择</view>
             </picker>
           </view>
         </view>
@@ -29,12 +30,13 @@
     </view>
 
     <view block class="page__bd" wx:if="{{result}}">
-      <view class="weui-cells__title">{{result.length==0 ? "没有消费记录" : "查询结果"}}</view>
+      <view class="weui-cells__title" wx:if="{{result.length==0}}">没有消费记录</view>
+      <view class="weui-cells__title" wx:if="{{result.length!=0}}">消费记录</view>
       <view class="weui-cells weui-cells_after-title">
         <view class="weui-cell" wx:for="{{result}}" wx:for-item="item" wx:key="item-key">
-          <view class="weui-cell__bd">{{item.merchantName}}-{{item.tradeName}}</view>
-          <view class="weui-cell__ft">{{item.tradePrice
-            <0? item.tradePrice : "+" + item.tradePrice}}元</view>
+          <view class="weui-cell__bd">{{item.merchantName}}{{item.tradeName}}</view>
+          <view class="weui-cell__ft" wx:if="{{item.tradePrice <  0}}">{{item.tradePrice}}元</view>
+          <view class="weui-cell__ft" wx:if="{{item.tradePrice >= 0}}">+{{item.tradePrice}}元</view>
           </view>
         </view>
 
