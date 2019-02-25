@@ -27,7 +27,7 @@
           <view class="weui-media-box__info">
             <block>
               <text class="weui-media-box__bold" style='font-size:15px'>{{i.scheduleName}}\n</text>
-              <text style='float:left'>{{i.scheduleWeek}}\n{{i.scheduleTeacher}}</text>
+              <text style='float:left'>第{{i.minScheduleWeek}}周至第{{i.maxScheduleWeek}}周\n{{i.scheduleTeacher}}</text>
               <text style='float:right'>{{i.scheduleLocation}}</text>
             </block>
           </view>
