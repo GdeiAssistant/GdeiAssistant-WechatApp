@@ -57,7 +57,7 @@ Page({
               })
             }
           } else {
-            page.showTopTips(result.data.errorMessage)
+            page.showTopTips(result.data.message)
           }
         },
         fail: function() {
@@ -104,7 +104,7 @@ Page({
             wx.hideLoading()
           }
         } else {
-          page.showTopTips(result.data.errorMessage)
+          page.showTopTips(result.data.message)
           wx.hideLoading()
         }
       },

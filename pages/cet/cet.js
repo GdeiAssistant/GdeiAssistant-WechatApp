@@ -38,7 +38,7 @@ Page({
         } else {
           wx.showModal({
             title: '加载验证码图片失败',
-            content: result.data.errorMessage,
+            content: result.data.message,
             showCancel: false,
             success: function(res) {
               if (res.confirm) {
@@ -110,7 +110,7 @@ Page({
           } else {
             wx.showModal({
               title: '查询失败',
-              content: result.data.errorMessage,
+              content: result.data.message,
               showCancel: false
             })
           }

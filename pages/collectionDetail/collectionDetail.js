@@ -55,7 +55,7 @@ Page({
             result: detail
           })
         } else {
-          page.showTopTips(result.data.errorMessage)
+          page.showTopTips(result.data.message)
         }
       },
       fail: function () {
