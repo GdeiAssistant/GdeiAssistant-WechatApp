@@ -6,7 +6,6 @@
     "pages/schedule/schedule",
     "pages/card/card",
     "pages/bill/bill",
-    "pages/cet/cet",
     "pages/evaluate/evaluate",
     "pages/cardLost/cardLost",
     "pages/collection/collection",
@@ -20,5 +19,6 @@
   },
   "networkTimeout": {
     "request": 15000
-  }
+  },
+  "sitemapLocation": "sitemap.json"
 }

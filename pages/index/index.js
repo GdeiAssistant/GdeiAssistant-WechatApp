@@ -10,7 +10,6 @@ Page({
     access: {
       grade: null,
       schedule: null,
-      cet: null,
       evaluate: null,
       card: null,
       bill: null,
@@ -129,7 +128,6 @@ Page({
                 access: {
                   grade: result.data.data.grade,
                   schedule: result.data.data.schedule,
-                  cet: result.data.data.cet,
                   evaluate: result.data.data.evaluate,
                   card: result.data.data.card,
                   bill: result.data.data.bill,

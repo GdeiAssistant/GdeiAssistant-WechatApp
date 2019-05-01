@@ -1,4 +1,5 @@
-<view block class="page__bd">
+<!-- 因微信小程序相关政策法规，四六级查询功能已暂停服务 -->
+<!-- <view block class="page__bd">
 
   <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
 
@@ -94,4 +95,4 @@
     </view>
   </view>
 
-</view>
+</view> -->

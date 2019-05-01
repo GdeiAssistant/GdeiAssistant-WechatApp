@@ -20,10 +20,11 @@
           <image class="weui-grid__icon" src="../../image/schedule.png" />
           <view class="weui-grid__label">我的课表</view>
         </navigator>
-        <navigator wx:if="{{access.cet}}" open-type="navigate" url="../cet/cet" class="weui-grid" hover-class="weui-grid_active">
+        <!-- 因微信小程序相关政策法规，四六级查询功能已暂停服务 -->
+        <!-- <navigator wx:if="{{access.cet}}" open-type="navigate" url="../cet/cet" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/cet.png" />
           <view class="weui-grid__label">四六级查询</view>
-        </navigator>
+        </navigator> -->
         <navigator wx:if="{{access.bill}}"  open-type="navigate" url="../bill/bill" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/bill.png" />
           <view class="weui-grid__label">消费查询</view>
