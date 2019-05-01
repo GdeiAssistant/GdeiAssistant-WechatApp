@@ -5,12 +5,15 @@
 		"es6": true,
 		"postcss": true,
 		"minified": true,
-		"newFeature": true
+		"newFeature": true,
+		"autoAudits": false
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.3.0",
 	"appid": "wx9ca00bb349b7238c",
 	"projectname": "%E6%98%93%E5%B0%8F%E5%8A%A9",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
