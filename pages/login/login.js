@@ -67,7 +67,7 @@ Page({
     let page = this
     //加载版本号
     this.setData({
-      versionCode: "V" + globalData.versionCode
+      versionCode: globalData.versionCode
     })
     let accessToken = wx.getStorageSync("accessToken")
     let refreshToken = wx.getStorageSync("refreshToken")
