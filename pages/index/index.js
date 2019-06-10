@@ -7,16 +7,7 @@ Page({
   data: {
     avatar: null,
     kickname: null,
-    access: {
-      grade: null,
-      schedule: null,
-      evaluate: null,
-      card: null,
-      bill: null,
-      lost: null,
-      charge: null,
-      collection: null
-    }
+    access: null
   },
   logout: function() {
     wx.showModal({
@@ -125,16 +116,7 @@ Page({
           success: function(result) {
             if (result.data.success) {
               page.setData({
-                access: {
-                  grade: result.data.data.grade,
-                  schedule: result.data.data.schedule,
-                  evaluate: result.data.data.evaluate,
-                  card: result.data.data.card,
-                  bill: result.data.data.bill,
-                  lost: result.data.data.lost,
-                  charge: result.data.data.charge,
-                  collection: result.data.data.collection
-                }
+                access: result.data.data
               })
             } else {
               utils.showNoActionModal('获取功能菜单失败', result.data.message)
