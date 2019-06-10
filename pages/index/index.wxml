@@ -45,6 +45,10 @@
           <image class="weui-grid__icon" src="../../image/collection.png" />
           <view class="weui-grid__label">馆藏查询</view>
         </navigator>
+        <navigator wx:if="{{access.book}}"  open-type="navigate" url="../book/book" class="weui-grid" hover-class="weui-grid_active">
+          <image class="weui-grid__icon" src="../../image/book.png" />
+          <view class="weui-grid__label">借阅查询</view>
+        </navigator>
         <view bindtap="logout" class="weui-grid" hover-class="weui-grid_active">
           <image class="weui-grid__icon" src="../../image/exit.png" />
           <view class="weui-grid__label">退出账号</view>

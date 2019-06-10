@@ -1,0 +1,72 @@
+<view block class="page__bd">
+
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <view class="container">
+
+    <form catchsubmit="submit" wx:if="{{!result}}" style="margin-top:15px">
+
+      <view class='page-section'>
+        <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cell weui-cell_input weui-cell_vcode">
+            <view class="weui-cell__hd">
+              <view class="weui-label">密码</view>
+            </view>
+            <view class="weui-cell__bd">
+              <input name="password" class="weui-input" password placeholder="请输入借阅证密码" />
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="btn-area">
+        <button type="primary" formType="submit" disabled="{{loading}}">查询</button>
+      </view>
+
+    </form>
+
+    <view block class="page__bd" wx:if="{{result}}">
+      <view class="weui-cells__title" style='margin-bottom:-10px'>借阅列表</view>
+      <block wx:for="{{result}}" wx:for-item="item" wx:key="item-key">
+        <view class="weui-form-preview" style='margin-top:15px'>
+          <view class="weui-form-preview__hd">
+            <view class="weui-form-preview__item">
+              <view class="weui-form-preview__value_in-hd">{{item.name}}</view>
+            </view>
+          </view>
+          <view class="weui-form-preview__bd">
+            <view class="weui-form-preview__item">
+              <view class="weui-form-preview__label">条形码</view>
+              <view class="weui-form-preview__value">{{item.id}}</view>
+            </view>
+            <view class="weui-form-preview__item">
+              <view class="weui-form-preview__label">SN号</view>
+              <view class="weui-form-preview__value">{{item.sn}}</view>
+            </view>
+            <view class="weui-form-preview__item">
+              <view class="weui-form-preview__label">作者</view>
+              <view class="weui-form-preview__value">{{item.author}}</view>
+            </view>
+            <view class="weui-form-preview__item">
+              <view class="weui-form-preview__label">借阅时间</view>
+              <view class="weui-form-preview__value">{{item.borrowDate}}</view>
+            </view>
+            <view class="weui-form-preview__item">
+              <view class="weui-form-preview__label">应还时间</view>
+              <view class="weui-form-preview__value">{{item.returnDate}}</view>
+            </view>
+            <view class="weui-form-preview__item">
+              <view class="weui-form-preview__label">续借次数</view>
+              <view class="weui-form-preview__value">{{item.renewTime}}</view>
+            </view>
+          </view>
+          <view class="weui-form-preview__ft">
+            <view data-index="{{index}}" data-id="{{item.id}}" data-sn="{{item.sn}}" bindtap="renewBook" class="weui-form-preview__btn weui-form-preview__btn_primary" hover-class="weui-form-preview__btn_active">续借</view>
+          </view>
+        </view>
+      </block>
+    </view>
+
+  </view>
+
+</view>

@@ -9,7 +9,8 @@
     "pages/evaluate/evaluate",
     "pages/cardLost/cardLost",
     "pages/collection/collection",
-    "pages/collectionDetail/collectionDetail"
+    "pages/collectionDetail/collectionDetail",
+    "pages/book/book"
   ],
   "window": {
     "backgroundTextStyle": "light",
