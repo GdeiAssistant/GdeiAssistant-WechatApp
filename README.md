@@ -84,6 +84,12 @@ Copyright (c) 2016 - 2019 GdeiAssistant
 
 - 社区违法和不良信息举报邮箱：[report@gdeiassistant.cn](mailto:report@gdeiassistant.cn)
 
+## 特别鸣谢
+
+感谢以下框架的开发者为本应用作出的巨大贡献
+
+- [WeUI](https://github.com/Tencent/weui-wxss)
+
 ## 声明
 
 本项目只用作个人学习研究，如因使用本项目导致任何损失，本人概不负责。
