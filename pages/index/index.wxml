@@ -5,7 +5,7 @@
   <view class="userinfo">
     <block wx:if="{{avatar}}">
       <image class="userinfo-avatar" src="{{avatar}}" background-size="cover"></image>
-      <text class="userinfo-nickname">{{kickname}}</text>
+      <text class="userinfo-nickname">{{nickname}}</text>
     </block>
   </view>
 

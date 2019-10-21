@@ -6,7 +6,7 @@ const utils = require('../../utils/util.js')
 Page({
   data: {
     avatar: null,
-    kickname: null,
+    nickname: null,
     access: null
   },
   logout: function() {
@@ -87,25 +87,25 @@ Page({
             token: accessToken.signature
           },
           success: function(result) {
-            if (result.data.success && result.data.data && result.data.data.kickname) {
+            if (result.data.success && result.data.data && result.data.data.nickname) {
               page.setData({
-                kickname: result.data.data.kickname
+                nickname: result.data.data.nickname
               })
             } else {
               page.setData({
-                kickname: "易小助用户"
+                nickname: "易小助用户"
               })
             }
           },
           fail: function() {
             page.setData({
-              kickname: "易小助用户"
+              nickname: "易小助用户"
             })
           }
         })
         //获取功能菜单权限列表
         wx.request({
-          url: "https://www.gdeiassistant.cn/rest/access/wechat",
+          url: "https://www.gdeiassistant.cn/rest/access",
           method: "POST",
           header: {
             "Content-Type": "application/x-www-form-urlencoded"
