@@ -60,6 +60,12 @@ $ git clone https://github.com/GdeiAssistant/GdeiAssistant-WechatApp.git
 
 数据接口API文档说明请查阅[广东第二师范学院校园助手系统数据接口API文档](https://github.com/GdeiAssistant/GdeiAssistant/wiki)
 
+## 兼容性
+
+目前，QQ小程序兼容和支持微信小程序大部分的语法和API，详情请参阅 [QQ小程序文档](https://q.qq.com/wiki/FAQ/#三-开发接入)
+
+本应用已进行兼容性处理和测试，可以同时支持QQ小程序和微信小程序平台。
+
 ## 协议
 
 [MIT License](http://opensource.org/licenses/MIT)
