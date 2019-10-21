@@ -10,7 +10,7 @@ Page({
     unionid: null,
     versionCode: null
   },
-  formSubmit: function(e) {
+  formSubmit: function (e) {
     let page = this
     let username = e.detail.value.username
     let password = e.detail.value.password
@@ -35,7 +35,7 @@ Page({
           timestamp: timestamp,
           signature: signature
         },
-        success: function(result) {
+        success: function (result) {
           wx.hideNavigationBarLoading()
           if (result.statusCode == 200) {
             if (result.data.success) {
@@ -55,7 +55,7 @@ Page({
             utils.showModal('登录失败', '服务暂不可用，请稍后再试，错误信息为：' + result.data.message)
           }
         },
-        fail: function() {
+        fail: function () {
           utils.showModal('登录失败', '网络连接超时，请重试')
         }
       })
@@ -63,7 +63,7 @@ Page({
       utils.showNoActionModal('请填写教务系统信息', '教务系统账号和密码不能为空')
     }
   },
-  onLoad: function() {
+  onLoad: function () {
     let page = this
     //加载版本号
     this.setData({
@@ -90,7 +90,7 @@ Page({
             data: {
               token: refreshToken.signature
             },
-            success: function(result) {
+            success: function (result) {
               if (result.statusCode == 200) {
                 if (result.data.success) {
                   wx.setStorageSync("accessToken", result.data.data.accessToken)
@@ -111,7 +111,7 @@ Page({
                 })
               }
             },
-            fail: function() {
+            fail: function () {
               utils.showModal('网络异常', '请检查网络连接')
             }
           })
@@ -123,7 +123,16 @@ Page({
         }
       }
     } else {
-      // 微信登录
+      let apiUrl;
+      let res = qq.getSystemInfoSync()
+      if (res.AppPlatform == 'qq') {
+        // QQ登录
+        apiUrl = 'https://www.gdeiassistant.cn/qq/app/userid'
+      }
+      else {
+        // 微信登录
+        apiUrl = 'https://www.gdeiassistant.cn/wechat/app/userid'
+      }
       wx.login({
         success: res => {
           if (!res.code) {
@@ -131,7 +140,7 @@ Page({
           } else {
             // 通过code值获取微信id
             wx.request({
-              url: "https://www.gdeiassistant.cn/wechat/app/userid",
+              url: apiUrl,
               method: "POST",
               header: {
                 "Content-Type": "application/x-www-form-urlencoded"
@@ -139,7 +148,7 @@ Page({
               data: {
                 code: res.code
               },
-              success: function(result) {
+              success: function (result) {
                 if (result.statusCode == 200) {
                   if (result.data.success) {
                     let unionid = result.data.data.openid;
@@ -148,13 +157,17 @@ Page({
                       login: true
                     })
                   } else {
+                    page.setData({
+                      unionid: unionid,
+                      login: true
+                    })
                     utils.showModal('登录失败', result.data.message)
                   }
                 } else {
                   utils.showModal('登录失败', '服务暂不可用，请稍后重试')
                 }
               },
-              fail: function() {
+              fail: function () {
                 utils.showModal('网络异常', '请检查网络连接')
               }
             })
