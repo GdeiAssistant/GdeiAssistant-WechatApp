@@ -124,7 +124,7 @@ Page({
       }
     } else {
       let apiUrl;
-      let res = qq.getSystemInfoSync()
+      let res = wx.getSystemInfoSync()
       if (res.AppPlatform == 'qq') {
         // QQ登录
         apiUrl = 'https://www.gdeiassistant.cn/qq/app/userid'
