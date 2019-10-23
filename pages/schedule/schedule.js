@@ -148,11 +148,14 @@ Page({
   onReachBottom: function() {
 
   },
-
+  
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {
-
+  onShareAppMessage: function () {
+    //显示当前页面的转发按钮
+    wx.showShareMenu({
+      showShareItems: ['qq', 'qzone', 'wechatFriends', 'wechatMoment']
+    })
   }
 })
