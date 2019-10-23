@@ -14,6 +14,7 @@
 	"projectname": "%E6%98%93%E5%B0%8F%E5%8A%A9",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
+	"qqappid": "1109891757",
 	"condition": {
 		"search": {
 			"current": -1,
