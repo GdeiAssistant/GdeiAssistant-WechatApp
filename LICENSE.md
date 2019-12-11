@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) [2016-2019] [GdeiAssistant]
+Copyright (c) [2016-2020] [GdeiAssistant]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -10,7 +10,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 Anti 996 License Version 1.0 (Draft)
 
-Copyright (c) [2016-2019] [GdeiAssistant]
+Copyright (c) [2016-2020] [GdeiAssistant]
 
 Permission is hereby granted to any individual or legal entity
 obtaining a copy of this licensed work (including the source code,

@@ -72,7 +72,7 @@ $ git clone https://github.com/GdeiAssistant/GdeiAssistant-WechatApp.git
 
 [Anti 996 License](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 
-Copyright (c) 2016 - 2019 GdeiAssistant
+Copyright (c) 2016 - 2020 GdeiAssistant
 
 ## 贡献
 
