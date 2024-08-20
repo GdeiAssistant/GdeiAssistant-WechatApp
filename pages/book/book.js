@@ -37,7 +37,7 @@ Page({
     })
     if (utils.validateRequestAccess()) {
       wx.request({
-        url: "https://www.gdeiassistant.cn/rest/bookquery",
+        url: globalData.resourceDomain + "rest/bookquery",
         method: "POST",
         header: {
           "Content-Type": "application/x-www-form-urlencoded"
@@ -86,7 +86,7 @@ Page({
     let password = this.data.password
     if (utils.validateRequestAccess()) {
       wx.request({
-        url: "https://www.gdeiassistant.cn/rest/bookrenew",
+        url: globalData.resourceDomain + "rest/bookrenew",
         method: "POST",
         header: {
           "Content-Type": "application/x-www-form-urlencoded"

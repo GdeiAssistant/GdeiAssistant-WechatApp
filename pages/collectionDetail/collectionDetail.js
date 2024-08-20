@@ -29,7 +29,7 @@ Page({
     })
     wx.showNavigationBarLoading()
     wx.request({
-      url: "https://www.gdeiassistant.cn/rest/collectiondetail",
+      url: globalData.resourceDomain + "rest/collectiondetail",
       method: "POST",
       data: this.data.query,
       header: {

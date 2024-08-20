@@ -27,7 +27,7 @@
 //    loadCheckCodeImage() {
 //      const page = this
 //      wx.request({
-//        url: "https://www.gdeiassistant.cn/rest/cet/checkcode",
+//        url: globalData.resourceDomain + "rest/cet/checkcode",
 //        method: "GET",
 //        success: function(result) {
 //          if (result.data.success) {
@@ -82,7 +82,7 @@
 //          checkcode: checkcode
 //        }
 //        wx.request({
-//          url: "https://www.gdeiassistant.cn/rest/cetquery",
+//          url: globalData.resourceDomain + "rest/cetquery",
 //          method: "POST",
 //          header: {
 //            "Content-Type": "application/x-www-form-urlencoded",

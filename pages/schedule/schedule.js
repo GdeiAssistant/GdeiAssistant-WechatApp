@@ -44,7 +44,7 @@ Page({
         }
       }
       wx.request({
-        url: "https://www.gdeiassistant.cn/rest/schedulequery",
+        url: globalData.resourceDomain + "rest/schedulequery",
         method: "POST",
         header: {
           "Content-Type": "application/x-www-form-urlencoded"

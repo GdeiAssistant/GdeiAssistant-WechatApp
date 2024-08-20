@@ -2,7 +2,7 @@
 
   <view class="userinfo">
     <image class="userinfo-avatar" src="../../image/logo.png" background-size="cover"></image>
-    <text class="userinfo-nickname">易小助</text>
+    <text class="userinfo-nickname">广东二师助手</text>
   </view>
 
   <view class="page-body">
@@ -10,7 +10,7 @@
       <view class='page-section'>
         <view class="weui-cells weui-cells_after-title">
           <view class="weui-cell weui-cell_input">
-            <input name="username" class="weui-input" maxlength='25' type="text" placeholder="请输入教务系统账号" />
+            <input name="username" class="weui-input" maxlength='25' type="text" placeholder="请输入校园网账号" />
           </view>
         </view>
       </view>
@@ -18,7 +18,7 @@
       <view class="page-section">
         <view class="weui-cells weui-cells_after-title">
           <view class="weui-cell weui-cell_input">
-            <input name="password" class="weui-input" maxlength='30' password type="text" placeholder="请输入教务系统密码" />
+            <input name="password" class="weui-input" maxlength='30' password type="text" placeholder="请输入校园网密码" />
           </view>
         </view>
       </view>

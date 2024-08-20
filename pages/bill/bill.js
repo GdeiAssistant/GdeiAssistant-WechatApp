@@ -47,7 +47,7 @@ Page({
       let date = dateStringArray[2]
       if (utils.validateRequestAccess()) {
         wx.request({
-          url: "https://www.gdeiassistant.cn/rest/cardquery",
+          url: globalData.resourceDomain + "rest/cardquery",
           method: "POST",
           header: {
             "Content-Type": "application/x-www-form-urlencoded"

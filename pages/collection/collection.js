@@ -30,7 +30,7 @@ Page({
       })
       wx.showNavigationBarLoading()
       wx.request({
-        url: "https://www.gdeiassistant.cn/rest/collectionquery",
+        url: globalData.resourceDomain + "rest/collectionquery",
         method: "POST",
         header: {
           "Content-Type": "application/x-www-form-urlencoded"
@@ -81,7 +81,7 @@ Page({
       page: this.data.currentPage + 1
     }
     wx.request({
-      url: "https://www.gdeiassistant.cn/rest/collectionquery",
+      url: globalData.resourceDomain + "rest/collectionquery",
       method: "POST",
       header: {
         "Content-Type": "application/x-www-form-urlencoded"

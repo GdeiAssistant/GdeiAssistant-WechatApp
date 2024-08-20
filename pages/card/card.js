@@ -17,7 +17,7 @@ Page({
     if (utils.validateRequestAccess()) {
       let token = wx.getStorageSync("accessToken")
       wx.request({
-        url: "https://www.gdeiassistant.cn/rest/cardinfo",
+        url: globalData.resourceDomain + "rest/cardinfo",
         method: "POST",
         header: {
           "Content-Type": "application/x-www-form-urlencoded"

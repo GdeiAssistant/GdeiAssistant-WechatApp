@@ -47,7 +47,7 @@ function refreshAccessToken() {
   if (refreshToken) {
     if (validateTokenTimestamp(refreshToken.expireTime)) {
       wx.request({
-        url: "https://www.gdeiassistant.cn/rest/token/refresh",
+        url: globalData.resourceDomain + "rest/token/refresh",
         method: "POST",
         data: {
           token: refreshToken.signature

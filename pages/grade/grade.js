@@ -38,7 +38,7 @@ Page({
         }
       }
       wx.request({
-        url: "https://www.gdeiassistant.cn/rest/gradequery",
+        url: globalData.resourceDomain + "rest/gradequery",
         method: "POST",
         header: {
           "Content-Type": "application/x-www-form-urlencoded"

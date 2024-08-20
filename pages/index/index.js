@@ -19,7 +19,7 @@ Page({
           let refreshToken = wx.getStorageSync("refreshToken")
           if (accessToken) {
             wx.request({
-              url: "https://www.gdeiassistant.cn/rest/token/expire",
+              url: globalData.resourceDomain + "rest/token/expire",
               method: "POST",
               header: {
                 "Content-Type": "application/x-www-form-urlencoded"
@@ -31,7 +31,7 @@ Page({
           }
           if (refreshToken) {
             wx.request({
-              url: "https://www.gdeiassistant.cn/rest/token/expire",
+              url: globalData.resourceDomain + "rest/token/expire",
               method: "POST",
               header: {
                 "Content-Type": "application/x-www-form-urlencoded"
@@ -56,7 +56,7 @@ Page({
     if (username) {
       //获取头像信息
       wx.request({
-        url: "https://www.gdeiassistant.cn/rest/avatar/" + username,
+        url: globalData.resourceDomain + "rest/avatar/" + username,
         method: "GET",
         success: function(result) {
           if (result.data.success && result.data.data != "") {
@@ -78,7 +78,7 @@ Page({
       if (accessToken) {
         //获取资料信息
         wx.request({
-          url: "https://www.gdeiassistant.cn/rest/profile",
+          url: globalData.resourceDomain + "rest/profile",
           method: "POST",
           header: {
             "Content-Type": "application/x-www-form-urlencoded"
@@ -93,19 +93,19 @@ Page({
               })
             } else {
               page.setData({
-                nickname: "易小助用户"
+                nickname: "广东二师助手用户"
               })
             }
           },
           fail: function() {
             page.setData({
-              nickname: "易小助用户"
+              nickname: "广东二师助手用户"
             })
           }
         })
         //获取功能菜单权限列表
         wx.request({
-          url: "https://www.gdeiassistant.cn/rest/access",
+          url: globalData.resourceDomain + "rest/access",
           method: "POST",
           header: {
             "Content-Type": "application/x-www-form-urlencoded"

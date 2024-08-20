@@ -22,7 +22,7 @@ Page({
       let signature = utils.sha1Hex(timestamp + nonce + globalData.requestValidateToken)
       wx.showNavigationBarLoading()
       wx.request({
-        url: "https://www.gdeiassistant.cn/rest/userlogin",
+        url: globalData.resourceDomain + "rest/userlogin",
         method: "POST",
         header: {
           "Content-Type": "application/x-www-form-urlencoded"
@@ -60,14 +60,14 @@ Page({
         }
       })
     } else {
-      utils.showNoActionModal('请填写教务系统信息', '教务系统账号和密码不能为空')
+      utils.showNoActionModal('请填写校园网账号信息', '校园网账号和密码不能为空')
     }
   },
   onLoad: function () {
     let page = this
     //加载版本号
     this.setData({
-      versionCode: globalData.versionCode
+      versionCode: wx.getAccountInfoSync().miniProgram.version
     })
     let accessToken = wx.getStorageSync("accessToken")
     let refreshToken = wx.getStorageSync("refreshToken")
@@ -82,7 +82,7 @@ Page({
         if (utils.validateTokenTimestamp(refreshToken.expireTime)) {
           //使用刷新令牌刷新令牌信息
           wx.request({
-            url: "https://www.gdeiassistant.cn/rest/token/refresh",
+            url: globalData.resourceDomain + "rest/token/refresh",
             method: "POST",
             header: {
               "Content-Type": "application/x-www-form-urlencoded"
@@ -127,11 +127,11 @@ Page({
       let res = wx.getSystemInfoSync()
       if (res.AppPlatform == 'qq') {
         // QQ登录
-        apiUrl = 'https://www.gdeiassistant.cn/qq/app/userid'
+        apiUrl = globalData.resourceDomain + 'qq/app/userid'
       }
       else {
         // 微信登录
-        apiUrl = 'https://www.gdeiassistant.cn/wechat/app/userid'
+        apiUrl = globalData.resourceDomain + 'wechat/app/userid'
       }
       wx.login({
         success: res => {
@@ -155,10 +155,10 @@ Page({
                     page.setData({
                       unionid: unionid,
                       login: true
-                    })
+                    }) 
                   } else {
                     page.setData({
-                      unionid: unionid,
+                      unionid: null,
                       login: true
                     })
                     utils.showModal('登录失败', result.data.message)

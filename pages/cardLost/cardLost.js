@@ -34,7 +34,7 @@ Page({
           loading: true
         })
         wx.request({
-          url: "https://www.gdeiassistant.cn/rest/cardlost",
+          url: globalData.resourceDomain + "rest/cardlost",
           method: "POST",
           header: {
             "Content-Type": "application/x-www-form-urlencoded"

@@ -33,7 +33,7 @@ Page({
       })
       wx.showNavigationBarLoading()
       wx.request({
-        url: "https://www.gdeiassistant.cn/rest/evaluate",
+        url: globalData.resourceDomain + "rest/evaluate",
         method: "POST",
         header: {
           "Content-Type": "application/x-www-form-urlencoded"
