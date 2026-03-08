@@ -1,5 +1,6 @@
 const config = require('../config/index.js')
 const auth = require('./auth.js')
+const { normalizePayload, pickMessage } = require('./response.js')
 
 function request(options) {
   const {
@@ -31,9 +32,9 @@ function request(options) {
       data: finalData,
       success: function(res) {
         if (res.statusCode === 200) {
-          resolve(res.data)
+          resolve(normalizePayload(res.data))
         } else {
-          reject(new Error((res.data && res.data.message) || '服务暂不可用，请稍后再试'))
+          reject(new Error(pickMessage(res.data)))
         }
       },
       fail: function() {

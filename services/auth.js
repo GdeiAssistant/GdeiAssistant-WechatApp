@@ -1,5 +1,6 @@
 const config = require('../config/index.js')
 const endpoints = require('./endpoints.js')
+const { normalizePayload, pickMessage } = require('./response.js')
 
 let refreshingPromise = null
 
@@ -66,17 +67,23 @@ function refreshAccessToken(interactive) {
         token: refreshToken.signature
       },
       success: function(result) {
-        if (result.statusCode === 200 && result.data && result.data.success && result.data.data) {
-          setTokens(result.data.data.accessToken, result.data.data.refreshToken)
-          resolve(result.data.data.accessToken.signature)
+        if (result.statusCode !== 200) {
+          reject(new Error(pickMessage(result.data)))
+          return
+        }
+
+        const payload = normalizePayload(result.data)
+        if (payload.success && payload.data && payload.data.accessToken && payload.data.refreshToken) {
+          setTokens(payload.data.accessToken, payload.data.refreshToken)
+          resolve(payload.data.accessToken.signature)
           return
         }
 
         if (interactive) {
           clearSession()
-          reLaunchToLogin('更新令牌失败', (result.data && result.data.message) || '请重新登录')
+          reLaunchToLogin('更新令牌失败', payload.message || '请重新登录')
         }
-        reject(new Error((result.data && result.data.message) || '刷新令牌失败'))
+        reject(new Error(payload.message || '刷新令牌失败'))
       },
       fail: function() {
         reject(new Error('网络异常，请稍后重试'))
