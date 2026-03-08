@@ -1,12 +1,12 @@
 <p align="center">
-  <img width="300" src="./github/logo.png">
+  <img width="300" src="./assets/logo.png" alt="GdeiAssistant Logo">
 </p>
 
 # 广东二师助手微信小程序
 
-**广东第二师范学院校园助手系统微信小程序客户端**，线上最低基础库为2.3.0版本。小程序利用微信提供的API接口和框架组件，简单实现了校园查询基础服务。UI页面设计使用WeUI基础样式库。应用的后端API数据接口由广东第二师范学院校园助手系统提供。
+广东第二师范学院校园助手系统微信小程序客户端。项目基于微信小程序框架开发，UI 样式采用 WeUI，支持微信与 QQ 小程序双端运行。
 
-## 功能
+## 功能列表
 
 - 成绩查询
 - 课表查询
@@ -18,76 +18,86 @@
 - 校园卡查询
 - 校园卡挂失
 
-## 预览
+## 页面预览
 
 <p>
-  <img width="250" src="./github/screenshot_01.jpg">
-  <img width="250" src="./github/screenshot_02.jpg">
-  <img width="250" src="./github/screenshot_03.jpg">
+  <img width="250" src="./assets/screenshot_01.jpg" alt="截图1">
+  <img width="250" src="./assets/screenshot_02.jpg" alt="截图2">
+  <img width="250" src="./assets/screenshot_03.jpg" alt="截图3">
 </p>
 
-## 体验
+## 运行环境
 
-### 体验用户账号
+- 微信小程序基础库：`>= 2.3.0`
+- QQ 小程序：兼容微信小程序大部分语法与 API
 
-为便于非在校师生用户体验和测试应用，应用提供了体验用户账号。详情请查阅 [广东二师助手体验用户账号说明](https://github.com/GdeiAssistant/GdeiAssistant#%E4%BD%93%E9%AA%8C)
+## 快速开始
 
-### 体验二维码
-
-<p align="center">
-  <img width="300" src="./github/qrcode.jpg">
-</p>
-
-## 初始化
-
-### 克隆仓库
+### 1. 克隆仓库
 
 ```bash
-$ git clone https://github.com/GdeiAssistant/GdeiAssistant-WechatApp.git
+git clone https://github.com/GdeiAssistant/GdeiAssistant-WechatApp.git
 ```
 
-## 数据接口
+### 2. 导入开发工具
 
-广东二师助手微信小程序的后端API数据接口由[广东第二师范学院校园助手系统](https://github.com/GdeiAssistant/GdeiAssistant)提供
+使用微信开发者工具或 QQ 小程序开发工具导入项目根目录。
 
-数据接口API文档说明请查阅[广东第二师范学院校园助手系统数据接口API文档](https://github.com/GdeiAssistant/GdeiAssistant/wiki)
+### 3. 配置后端域名
 
-## 兼容性
+默认资源域名与签名相关配置位于：
 
-目前，QQ小程序兼容和支持微信小程序大部分的语法和API，详情请参阅 [QQ小程序文档](https://q.qq.com/wiki/FAQ/#三-开发接入)
+- `config/index.js`
 
-本应用已进行兼容性处理和测试，可以同时支持QQ小程序和微信小程序平台。
+如需切换环境（测试/预发布/生产），可在该文件中维护环境配置并按需切换。
 
-## 协议
+## 项目结构
 
-[MIT License](http://opensource.org/licenses/MIT)
+```text
+.
+├─ pages/                # 页面目录
+├─ services/             # 请求、鉴权、API 领域服务
+│  ├─ request.js         # 统一请求入口
+│  ├─ auth.js            # 令牌管理与刷新
+│  ├─ endpoints.js       # 接口路径集中定义
+│  └─ apis/              # 业务 API 分层
+├─ config/               # 运行配置
+├─ utils/                # 通用工具函数
+└─ common/lib/weui.wxss  # WeUI 样式库
+```
 
-[Anti 996 License](https://github.com/996icu/996.ICU/blob/master/LICENSE)
+## 后端接口
 
-Copyright (c) 2016 - 2023 GdeiAssistant
+本项目依赖广东第二师范学院校园助手系统后端：
+
+- 后端仓库：<https://github.com/GdeiAssistant/GdeiAssistant>
+- API 文档：<https://github.com/GdeiAssistant/GdeiAssistant/wiki>
+
+## 兼容性说明
+
+项目已包含微信/QQ 平台差异处理逻辑，可同时支持微信小程序与 QQ 小程序。
 
 ## 贡献
 
-- 若你喜欢本项目，欢迎Star本项目
+- 欢迎提交 Issue 反馈问题与建议。
+- 欢迎 Fork 后发起 Pull Request 参与改进。
 
-- 要贡献代码，欢迎Fork之后再提交[Pull Request](https://github.com/GdeiAssistant/GdeiAssistant-WechatApp/pulls)
+## 协议
 
-- 如果你有好的意见或建议，欢迎给我们提交[Issue](https://github.com/GdeiAssistant/GdeiAssistant-WechatApp/issues)
+- [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
-## 联系
+Copyright (c) 2016 - 2026 GdeiAssistant
 
-- 技术支持和意见建议反馈：[gdeiassistant@gmail.com](mailto:gdeiassistant@gmail.com)
+## 联系方式
 
-- 用户客服和系统故障工单提交：[support@gdeiassistant.cn](mailto:support@gdeiassistant.cn)
+- 技术支持与建议反馈：<gdeiassistant@gmail.com>
+- 客服与系统故障工单：<support@gdeiassistant.cn>
+- 社区违法和不良信息举报：<report@gdeiassistant.cn>
 
-- 社区违法和不良信息举报邮箱：[report@gdeiassistant.cn](mailto:report@gdeiassistant.cn)
-
-## 特别鸣谢
-
-感谢以下框架的开发者为本应用作出的巨大贡献
+## 致谢
 
 - [WeUI](https://github.com/Tencent/weui-wxss)
 
 ## 声明
 
-本项目只用作个人学习研究，如因使用本项目导致任何损失，本人概不负责。
+本项目仅用于学习与研究用途。使用本项目造成的任何损失，开发者不承担责任。
