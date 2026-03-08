@@ -1,4 +1,5 @@
 const libraryApi = require('../../services/apis/library.js')
+const pageUtils = require('../../utils/page.js')
 
 Page({
   data: {
@@ -14,7 +15,7 @@ Page({
   formSubmit: function(e) {
     const bookname = e.detail.value.bookname
     if (!bookname) {
-      this.showTopTips('请填写要查询的书名')
+      pageUtils.showTopTips(this, '请填写要查询的书名')
       return
     }
 
@@ -25,18 +26,16 @@ Page({
       currentPage: 0,
       sumPage: 0
     })
-    wx.showNavigationBarLoading()
-
-    libraryApi.queryCollection(bookname, 1).then((result) => {
-      this.setData({ loading: false })
-      wx.hideNavigationBarLoading()
+    pageUtils.runWithNavigationLoading(this, () => {
+      return libraryApi.queryCollection(bookname, 1)
+    }).then((result) => {
       if (!result.success) {
-        this.showTopTips(result.message)
+        pageUtils.showTopTips(this, result.message)
         return
       }
 
       if (!result.collectionList || result.collectionList.length === 0) {
-        this.showTopTips('没有找到对应的图书信息')
+        pageUtils.showTopTips(this, '没有找到对应的图书信息')
         return
       }
 
@@ -47,15 +46,13 @@ Page({
         hasMore: 1 < result.sumPage
       })
     }).catch((error) => {
-      this.setData({ loading: false })
-      wx.hideNavigationBarLoading()
-      this.showTopTips(error.message)
+      pageUtils.showTopTips(this, error.message)
     })
   },
 
   loadMore: function() {
     if (!this.data.bookname || this.data.currentPage >= this.data.sumPage) {
-      this.showTopTips('没有更多图书信息')
+      pageUtils.showTopTips(this, '没有更多图书信息')
       return
     }
 
@@ -65,12 +62,12 @@ Page({
     libraryApi.queryCollection(this.data.bookname, nextPage).then((result) => {
       wx.hideLoading()
       if (!result.success) {
-        this.showTopTips(result.message)
+        pageUtils.showTopTips(this, result.message)
         return
       }
 
       if (!result.collectionList || result.collectionList.length === 0) {
-        this.showTopTips('没有更多图书信息')
+        pageUtils.showTopTips(this, '没有更多图书信息')
         return
       }
 
@@ -81,16 +78,8 @@ Page({
       })
     }).catch((error) => {
       wx.hideLoading()
-      this.showTopTips(error.message)
+      pageUtils.showTopTips(this, error.message)
     })
-  },
-
-  showTopTips: function(content) {
-    const that = this
-    this.setData({ errorMessage: content })
-    setTimeout(function() {
-      that.setData({ errorMessage: null })
-    }, 3000)
   },
 
   onShareAppMessage: function() {

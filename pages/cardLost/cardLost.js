@@ -1,4 +1,5 @@
 const campusApi = require('../../services/apis/campus.js')
+const pageUtils = require('../../utils/page.js')
 
 Page({
   data: {
@@ -6,27 +7,16 @@ Page({
     errorMessage: null
   },
 
-  showTopTips: function(content) {
-    const that = this
-    this.setData({ errorMessage: content })
-    setTimeout(function() {
-      that.setData({ errorMessage: null })
-    }, 3000)
-  },
-
   setCardLost: function(e) {
     const cardPassword = e.detail.value.password
     if (!(cardPassword && cardPassword.length === 6 && /^\d+$/.test(cardPassword))) {
-      this.showTopTips('请输入正确的校园卡查询密码')
+      pageUtils.showTopTips(this, '请输入正确的校园卡查询密码')
       return
     }
 
-    wx.showNavigationBarLoading()
-    this.setData({ loading: true })
-
-    campusApi.setCardLost(cardPassword).then((result) => {
-      wx.hideNavigationBarLoading()
-      this.setData({ loading: false })
+    pageUtils.runWithNavigationLoading(this, () => {
+      return campusApi.setCardLost(cardPassword)
+    }).then((result) => {
       if (result.success) {
         wx.showModal({
           title: '挂失成功',
@@ -34,12 +24,10 @@ Page({
           showCancel: false
         })
       } else {
-        this.showTopTips(result.message)
+        pageUtils.showTopTips(this, result.message)
       }
     }).catch((error) => {
-      wx.hideNavigationBarLoading()
-      this.setData({ loading: false })
-      this.showTopTips(error.message)
+      pageUtils.showTopTips(this, error.message)
     })
   },
 

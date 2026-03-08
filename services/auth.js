@@ -2,6 +2,7 @@ const config = require('../config/index.js')
 const endpoints = require('./endpoints.js')
 const { normalizePayload } = require('./response.js')
 let reLaunching = false
+const SESSION_STORAGE_KEYS = ['sessionToken', 'username', 'accessToken', 'refreshToken']
 
 function getSessionToken() {
   return wx.getStorageSync('sessionToken')
@@ -12,7 +13,13 @@ function setSessionToken(token) {
 }
 
 function clearSession() {
-  wx.clearStorageSync()
+  SESSION_STORAGE_KEYS.forEach(function(key) {
+    try {
+      wx.removeStorageSync(key)
+    } catch (error) {
+      // Ignore storage cleanup failures.
+    }
+  })
 }
 
 function reLaunchToLogin(title, content) {

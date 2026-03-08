@@ -1,5 +1,6 @@
 const utils = require('../../utils/util.js')
 const libraryApi = require('../../services/apis/library.js')
+const pageUtils = require('../../utils/page.js')
 
 Page({
   data: {
@@ -9,30 +10,19 @@ Page({
     loading: false
   },
 
-  showTopTips: function(content) {
-    const that = this
-    this.setData({ errorMessage: content })
-    setTimeout(function() {
-      that.setData({ errorMessage: null })
-    }, 3000)
-  },
-
   submit: function(e) {
     const password = e.detail.value.password
-    this.setData({ password, loading: true })
-    wx.showNavigationBarLoading()
+    this.setData({ password })
 
-    libraryApi.queryBook(password).then((result) => {
-      wx.hideNavigationBarLoading()
-      this.setData({ loading: false })
+    pageUtils.runWithNavigationLoading(this, () => {
+      return libraryApi.queryBook(password)
+    }).then((result) => {
       if (result.success) {
         this.setData({ result: result.data })
       } else {
         utils.showModal('查询失败', result.message)
       }
     }).catch((error) => {
-      wx.hideNavigationBarLoading()
-      this.setData({ loading: false })
       utils.showModal('查询失败', error.message)
     })
   },
@@ -43,12 +33,9 @@ Page({
     const sn = event.currentTarget.dataset.sn
     const password = this.data.password
 
-    wx.showNavigationBarLoading()
-    this.setData({ loading: true })
-
-    libraryApi.renewBook(code, sn, password).then((result) => {
-      wx.hideNavigationBarLoading()
-      this.setData({ loading: false })
+    pageUtils.runWithNavigationLoading(this, () => {
+      return libraryApi.renewBook(code, sn, password)
+    }).then((result) => {
       if (result.success) {
         utils.showNoActionModal('续借成功', '已成功续借图书')
         const list = this.data.result
@@ -58,8 +45,6 @@ Page({
         utils.showNoActionModal('续借失败', result.message)
       }
     }).catch((error) => {
-      wx.hideNavigationBarLoading()
-      this.setData({ loading: false })
       utils.showNoActionModal('续借失败', error.message)
     })
   },

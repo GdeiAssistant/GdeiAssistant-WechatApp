@@ -1,5 +1,6 @@
 const utils = require('../../utils/util.js')
 const campusApi = require('../../services/apis/campus.js')
+const pageUtils = require('../../utils/page.js')
 
 Page({
   data: {
@@ -8,21 +9,10 @@ Page({
     errorMessage: null
   },
 
-  showTopTips: function(content) {
-    const that = this
-    this.setData({ errorMessage: content })
-    setTimeout(function() {
-      that.setData({ errorMessage: null })
-    }, 3000)
-  },
-
   formSubmit: function() {
-    this.setData({ loading: true })
-    wx.showNavigationBarLoading()
-
-    campusApi.evaluate(this.data.checked).then((result) => {
-      this.setData({ loading: false })
-      wx.hideNavigationBarLoading()
+    pageUtils.runWithNavigationLoading(this, () => {
+      return campusApi.evaluate(this.data.checked)
+    }).then((result) => {
       if (result.success) {
         if (this.data.checked) {
           utils.showModal('一键评教成功', '一键评教成功，评教信息已提交')
@@ -30,12 +20,10 @@ Page({
           utils.showModal('一键评教成功', '一键评教成功，请登录教务系统进行最终确认')
         }
       } else {
-        this.showTopTips(result.message)
+        pageUtils.showTopTips(this, result.message)
       }
     }).catch((error) => {
-      this.setData({ loading: false })
-      wx.hideNavigationBarLoading()
-      this.showTopTips(error.message)
+      pageUtils.showTopTips(this, error.message)
     })
   },
 

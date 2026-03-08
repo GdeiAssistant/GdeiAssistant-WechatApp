@@ -11,6 +11,37 @@ const ENV_CONFIG = {
   }
 }
 
+function normalizeDomain(domain) {
+  if (!domain || typeof domain !== 'string') {
+    return ''
+  }
+  return domain.endsWith('/') ? domain : `${domain}/`
+}
+
+function getRuntimeDomainOverride() {
+  if (typeof process !== 'undefined' && process.env) {
+    if (process.env.GDEI_RESOURCE_DOMAIN) {
+      return normalizeDomain(process.env.GDEI_RESOURCE_DOMAIN)
+    }
+    if (process.env.RESOURCE_DOMAIN) {
+      return normalizeDomain(process.env.RESOURCE_DOMAIN)
+    }
+  }
+
+  try {
+    if (typeof wx !== 'undefined' && wx.getStorageSync) {
+      const value = wx.getStorageSync('resourceDomainOverride')
+      if (value) {
+        return normalizeDomain(value)
+      }
+    }
+  } catch (error) {
+    // Ignore runtime override read failures.
+  }
+
+  return ''
+}
+
 function resolveCurrentEnv() {
   try {
     if (typeof wx !== 'undefined' && wx.getAccountInfoSync) {
@@ -34,9 +65,40 @@ function resolveCurrentEnv() {
   return 'prod'
 }
 
+function isDevtoolsRuntime() {
+  try {
+    if (typeof wx !== 'undefined' && wx.getSystemInfoSync) {
+      const systemInfo = wx.getSystemInfoSync()
+      return systemInfo && systemInfo.platform === 'devtools'
+    }
+  } catch (error) {
+    // Ignore runtime platform detection failures.
+  }
+  return false
+}
+
+function resolveResourceDomain(currentEnv) {
+  const override = getRuntimeDomainOverride()
+  if (override) {
+    return override
+  }
+
+  if (currentEnv === 'dev') {
+    if (isDevtoolsRuntime()) {
+      return normalizeDomain(ENV_CONFIG.dev.resourceDomain)
+    }
+    // Real-device develop builds usually cannot access localhost.
+    return normalizeDomain(ENV_CONFIG.prod.resourceDomain)
+  }
+
+  return normalizeDomain(ENV_CONFIG.prod.resourceDomain)
+}
+
 const currentEnv = resolveCurrentEnv()
+const envConfig = ENV_CONFIG[currentEnv] || ENV_CONFIG.prod
 
 module.exports = {
-  ...ENV_CONFIG[currentEnv],
+  ...envConfig,
+  resourceDomain: resolveResourceDomain(currentEnv),
   currentEnv
 }

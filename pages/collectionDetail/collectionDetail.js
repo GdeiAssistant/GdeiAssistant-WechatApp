@@ -1,4 +1,5 @@
 const libraryApi = require('../../services/apis/library.js')
+const pageUtils = require('../../utils/page.js')
 
 Page({
   data: {
@@ -24,12 +25,11 @@ Page({
     }
 
     this.setData({ query })
-    wx.showNavigationBarLoading()
-
-    libraryApi.queryCollectionDetail(query).then((result) => {
-      wx.hideNavigationBarLoading()
+    pageUtils.runWithNavigationLoading(this, () => {
+      return libraryApi.queryCollectionDetail(query)
+    }, { loadingKey: null }).then((result) => {
       if (!result.success) {
-        this.showTopTips(result.message)
+        pageUtils.showTopTips(this, result.message)
         return
       }
 
@@ -48,17 +48,8 @@ Page({
       }
       this.setData({ result: detail })
     }).catch((error) => {
-      wx.hideNavigationBarLoading()
-      this.showTopTips(error.message)
+      pageUtils.showTopTips(this, error.message)
     })
-  },
-
-  showTopTips: function(content) {
-    const that = this
-    this.setData({ errorMessage: content })
-    setTimeout(function() {
-      that.setData({ errorMessage: null })
-    }, 3000)
   },
 
   onShareAppMessage: function() {

@@ -45,11 +45,12 @@ git clone https://github.com/GdeiAssistant/GdeiAssistant-WechatApp.git
 
 ### 3. 配置后端域名
 
-默认资源域名与签名相关配置位于：
+默认资源域名与请求配置位于：
 
 - `config/index.js`
 
-如需切换环境（测试/预发布/生产），可在该文件中维护环境配置并按需切换。
+运行环境会根据小程序构建环境自动匹配（`develop -> dev`，`trial/release -> prod`）。
+如需自定义后端域名，可直接修改该文件中的环境配置。
 
 ## 项目结构
 
@@ -58,7 +59,7 @@ git clone https://github.com/GdeiAssistant/GdeiAssistant-WechatApp.git
 ├─ pages/                # 页面目录
 ├─ services/             # 请求、鉴权、API 领域服务
 │  ├─ request.js         # 统一请求入口
-│  ├─ auth.js            # 令牌管理与刷新
+│  ├─ auth.js            # 会话令牌管理
 │  ├─ endpoints.js       # 接口路径集中定义
 │  └─ apis/              # 业务 API 分层
 ├─ config/               # 运行配置

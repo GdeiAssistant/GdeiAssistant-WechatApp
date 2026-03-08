@@ -1,5 +1,6 @@
 const utils = require('../../utils/util.js')
 const campusApi = require('../../services/apis/campus.js')
+const pageUtils = require('../../utils/page.js')
 
 Page({
   data: {
@@ -19,35 +20,23 @@ Page({
     })
   },
 
-  showTopTips: function(content) {
-    const that = this
-    this.setData({ errorMessage: content })
-    setTimeout(function() {
-      that.setData({ errorMessage: null })
-    }, 3000)
-  },
-
   submit: function() {
     if (!this.data.date) {
-      this.showTopTips('请选择需要查询的日期')
+      pageUtils.showTopTips(this, '请选择需要查询的日期')
       return
     }
 
     const dateStringArray = this.data.date.split('-')
-    wx.showNavigationBarLoading()
-    this.setData({ loading: true })
 
-    campusApi.getCardBill(dateStringArray[0], dateStringArray[1], dateStringArray[2]).then((result) => {
-      wx.hideNavigationBarLoading()
-      this.setData({ loading: false })
+    pageUtils.runWithNavigationLoading(this, () => {
+      return campusApi.getCardBill(dateStringArray[0], dateStringArray[1], dateStringArray[2])
+    }).then((result) => {
       if (result.success) {
         this.setData({ result: result.data.cardList })
       } else {
         utils.showModal('查询失败', result.message)
       }
     }).catch((error) => {
-      wx.hideNavigationBarLoading()
-      this.setData({ loading: false })
       utils.showModal('查询失败', error.message)
     })
   },

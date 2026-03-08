@@ -7,11 +7,29 @@ function pickMessage(payload) {
 }
 
 function normalizePayload(rawPayload) {
-  if (!rawPayload || typeof rawPayload !== 'object') {
+  if (!rawPayload) {
     return {
       success: false,
       message: '服务暂不可用，请稍后再试',
       data: null
+    }
+  }
+
+  if (Array.isArray(rawPayload)) {
+    return {
+      success: true,
+      message: '',
+      data: rawPayload,
+      raw: rawPayload
+    }
+  }
+
+  if (typeof rawPayload !== 'object') {
+    return {
+      success: false,
+      message: '服务暂不可用，请稍后再试',
+      data: null,
+      raw: rawPayload
     }
   }
 
@@ -40,9 +58,9 @@ function normalizePayload(rawPayload) {
   }
 
   return {
-    success: true,
+    success: false,
     message: pickMessage(rawPayload),
-    data: rawPayload,
+    data: null,
     raw: rawPayload
   }
 }
