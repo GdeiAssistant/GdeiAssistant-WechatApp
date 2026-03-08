@@ -1,29 +1,23 @@
 const endpoints = require('../endpoints.js')
 const { request } = require('../request.js')
 
-function getAvatar(username) {
+function getAvatar() {
   return request({
-    url: `${endpoints.user.avatar}${username}`,
-    method: 'GET'
+    url: endpoints.user.avatar,
+    method: 'GET',
+    authRequired: true
   })
 }
 
 function getProfile() {
   return request({
     url: endpoints.user.profile,
-    authRequired: true
-  })
-}
-
-function getAccessList() {
-  return request({
-    url: endpoints.user.access,
+    method: 'GET',
     authRequired: true
   })
 }
 
 module.exports = {
   getAvatar,
-  getProfile,
-  getAccessList
+  getProfile
 }

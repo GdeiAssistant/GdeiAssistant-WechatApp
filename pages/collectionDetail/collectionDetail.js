@@ -12,7 +12,9 @@ Page({
       title: options.bookname
     })
 
-    const query = {
+    const query = options.detailURL ? {
+      detailURL: options.detailURL
+    } : {
       opacUrl: options.opacUrl,
       page: options.page,
       schoolId: options.schoolId,

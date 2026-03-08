@@ -5,19 +5,23 @@ const { normalizePayload, pickMessage } = require('./response.js')
 function request(options) {
   const {
     url,
-    method = 'POST',
+    method = 'GET',
     data = {},
     authRequired = false,
+    contentType = 'application/json',
     showLoading = false,
     loadingTitle = '加载中'
   } = options
 
-  const execute = (tokenSignature) => new Promise((resolve, reject) => {
-    const header = {
-      'Content-Type': 'application/x-www-form-urlencoded'
+  const execute = (sessionToken) => new Promise((resolve, reject) => {
+    const header = {}
+    if (contentType) {
+      header['Content-Type'] = contentType
     }
-
-    const finalData = tokenSignature ? { ...data, token: tokenSignature } : data
+    if (sessionToken) {
+      header.Authorization = `Bearer ${sessionToken}`
+      header.token = sessionToken
+    }
 
     if (showLoading) {
       wx.showNavigationBarLoading()
@@ -29,10 +33,14 @@ function request(options) {
       method,
       header,
       timeout: config.requestTimeout,
-      data: finalData,
+      data,
       success: function(res) {
         if (res.statusCode === 200) {
           resolve(normalizePayload(res.data))
+        } else if (res.statusCode === 401) {
+          auth.clearSession()
+          auth.reLaunchToLogin('登录过期', '登录凭证已过期，请重新登录')
+          reject(new Error('登录凭证已过期，请重新登录'))
         } else {
           reject(new Error(pickMessage(res.data)))
         }
@@ -53,7 +61,7 @@ function request(options) {
     return execute()
   }
 
-  return auth.ensureAccessTokenSignature().then((signature) => execute(signature))
+  return auth.ensureSessionToken().then((token) => execute(token))
 }
 
 module.exports = {

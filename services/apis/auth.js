@@ -1,4 +1,3 @@
-const config = require('../../config/index.js')
 const endpoints = require('../endpoints.js')
 const { request } = require('../request.js')
 
@@ -6,17 +5,19 @@ function loginWithCampus(payload) {
   return request({
     url: endpoints.auth.login,
     method: 'POST',
-    data: payload
+    data: {
+      username: payload.username,
+      password: payload.password
+    }
   })
 }
 
 function getOpenIdByCode(code) {
-  const systemInfo = wx.getSystemInfoSync()
-  const endpoint = systemInfo.AppPlatform === 'qq' ? endpoints.auth.qqOpenId : endpoints.auth.wechatOpenId
   return request({
-    url: endpoint,
+    url: endpoints.auth.wechatOpenId,
     method: 'POST',
-    data: { code }
+    data: { code },
+    contentType: 'application/x-www-form-urlencoded'
   })
 }
 
@@ -27,16 +28,8 @@ function extractOpenId(result) {
   return result.data.openid || result.data.unionid || result.data.userId || null
 }
 
-function buildLoginSignature(utils) {
-  const nonce = Math.random().toString(36).substr(2, 15)
-  const timestamp = Date.now()
-  const signature = utils.sha1Hex(timestamp + nonce + config.requestValidateToken)
-  return { nonce, timestamp, signature }
-}
-
 module.exports = {
   loginWithCampus,
   getOpenIdByCode,
-  extractOpenId,
-  buildLoginSignature
+  extractOpenId
 }

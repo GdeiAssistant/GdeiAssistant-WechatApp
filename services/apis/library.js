@@ -4,16 +4,18 @@ const { request } = require('../request.js')
 function queryBook(password) {
   return request({
     url: endpoints.library.bookQuery,
+    method: 'GET',
     authRequired: true,
     data: { password }
   })
 }
 
-function renewBook(id, sn, password) {
+function renewBook(code, sn, password) {
   return request({
     url: endpoints.library.bookRenew,
+    method: 'POST',
     authRequired: true,
-    data: { id, sn, password }
+    data: { code, sn, password }
   })
 }
 
@@ -32,14 +34,34 @@ function normalizeCollectionResult(result) {
 function queryCollection(bookname, page) {
   return request({
     url: endpoints.library.collectionQuery,
-    data: { bookname, page }
+    method: 'GET',
+    data: { keyword: bookname, page }
   }).then(normalizeCollectionResult)
 }
 
+function buildDetailURL(payload) {
+  if (!payload) {
+    return ''
+  }
+
+  if (payload.detailURL) {
+    return payload.detailURL
+  }
+
+  const keys = ['opacUrl', 'page', 'schoolId', 'search', 'searchtype', 'xc']
+  const query = keys
+    .filter((key) => payload[key] !== undefined && payload[key] !== null && payload[key] !== '')
+    .map((key) => `${key}=${payload[key]}`)
+    .join('&')
+  return query
+}
+
 function queryCollectionDetail(payload) {
+  const detailURL = buildDetailURL(payload)
   return request({
     url: endpoints.library.collectionDetail,
-    data: payload
+    method: 'GET',
+    data: { detailURL }
   }).then((result) => {
     return {
       success: !!result.success,

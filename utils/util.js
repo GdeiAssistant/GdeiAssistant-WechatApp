@@ -17,11 +17,11 @@ const formatNumber = n => {
 }
 
 function validateRequestAccess() {
-  return auth.ensureAccessTokenSignature().then(() => true).catch(() => false)
+  return auth.validateSessionToken().then((valid) => !!valid).catch(() => false)
 }
 
-function validateTokenTimestamp(expireTime) {
-  return auth.validateTokenTimestamp(expireTime)
+function validateTokenTimestamp() {
+  return !!auth.getSessionToken()
 }
 
 function showReLaunchModal(title, content) {

@@ -4,6 +4,7 @@ const { request } = require('../request.js')
 function getGrade(year) {
   return request({
     url: endpoints.campus.grade,
+    method: 'GET',
     authRequired: true,
     data: typeof year === 'number' && year >= 0 ? { year } : {}
   })
@@ -12,6 +13,7 @@ function getGrade(year) {
 function getSchedule(week) {
   return request({
     url: endpoints.campus.schedule,
+    method: 'GET',
     authRequired: true,
     data: week ? { week } : {}
   })
@@ -20,6 +22,7 @@ function getSchedule(week) {
 function getCardInfo() {
   return request({
     url: endpoints.campus.cardInfo,
+    method: 'GET',
     authRequired: true
   })
 }
@@ -27,6 +30,7 @@ function getCardInfo() {
 function getCardBill(year, month, date) {
   return request({
     url: endpoints.campus.cardBill,
+    method: 'POST',
     authRequired: true,
     data: { year, month, date }
   })
@@ -35,16 +39,18 @@ function getCardBill(year, month, date) {
 function evaluate(directlySubmit) {
   return request({
     url: endpoints.campus.evaluate,
+    method: 'POST',
     authRequired: true,
-    data: { directlySubmit }
+    data: { directSubmit: directlySubmit }
   })
 }
 
 function setCardLost(cardPassword) {
   return request({
-    url: endpoints.campus.cardLost,
+    url: `${endpoints.campus.cardLost}?cardPassword=${encodeURIComponent(cardPassword)}`,
+    method: 'POST',
     authRequired: true,
-    data: { cardPassword }
+    data: {}
   })
 }
 

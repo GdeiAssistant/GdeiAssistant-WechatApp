@@ -1,28 +1,26 @@
 module.exports = {
   auth: {
-    login: 'rest/userlogin',
-    refreshToken: 'rest/token/refresh',
-    expireToken: 'rest/token/expire',
-    wechatOpenId: 'wechat/app/userid',
-    qqOpenId: 'qq/app/userid'
+    login: '/api/auth/login',
+    logout: '/api/auth/logout',
+    wechatOpenId: '/api/wechat/app/userid',
+    qqOpenId: '/qq/app/userid'
   },
   user: {
-    avatar: 'rest/avatar/',
-    profile: 'rest/profile',
-    access: 'rest/access'
+    avatar: '/api/profile/avatar',
+    profile: '/api/user/profile'
   },
   campus: {
-    grade: 'rest/gradequery',
-    schedule: 'rest/schedulequery',
-    cardInfo: 'rest/cardinfo',
-    cardBill: 'rest/cardquery',
-    evaluate: 'rest/evaluate',
-    cardLost: 'rest/cardlost'
+    grade: '/api/grade',
+    schedule: '/api/schedule',
+    cardInfo: '/api/card/info',
+    cardBill: '/api/card/query',
+    evaluate: '/api/evaluate/submit',
+    cardLost: '/api/card/lost'
   },
   library: {
-    bookQuery: 'rest/bookquery',
-    bookRenew: 'rest/bookrenew',
-    collectionQuery: 'rest/collectionquery',
-    collectionDetail: 'rest/collectiondetail'
+    bookQuery: '/api/book/borrow',
+    bookRenew: '/api/book/renew',
+    collectionQuery: '/api/collection/search',
+    collectionDetail: '/api/collection/detail'
   }
 }

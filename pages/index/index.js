@@ -1,4 +1,3 @@
-const utils = require('../../utils/util.js')
 const auth = require('../../services/auth.js')
 const userApi = require('../../services/apis/user.js')
 
@@ -6,7 +5,16 @@ Page({
   data: {
     avatar: null,
     nickname: null,
-    access: null
+    access: {
+      grade: true,
+      schedule: true,
+      bill: true,
+      card: true,
+      lost: true,
+      evaluate: true,
+      collection: true,
+      book: true
+    }
   },
 
   logout: function() {
@@ -18,13 +26,7 @@ Page({
           return
         }
 
-        const accessToken = auth.getAccessToken()
-        const refreshToken = auth.getRefreshToken()
-
-        Promise.all([
-          auth.expireToken(accessToken && accessToken.signature),
-          auth.expireToken(refreshToken && refreshToken.signature)
-        ]).finally(() => {
+        auth.logout().finally(() => {
           auth.clearSession()
           wx.reLaunch({
             url: '/pages/login/login'
@@ -36,13 +38,8 @@ Page({
 
   onLoad: function() {
     const page = this
-    const username = wx.getStorageSync('username')
 
-    if (!username) {
-      return
-    }
-
-    userApi.getAvatar(username).then((result) => {
+    userApi.getAvatar().then((result) => {
       if (result.success && result.data !== '') {
         page.setData({
           avatar: result.data
@@ -74,17 +71,6 @@ Page({
       })
     })
 
-    userApi.getAccessList().then((result) => {
-      if (result.success) {
-        page.setData({
-          access: result.data
-        })
-      } else {
-        utils.showNoActionModal('获取功能菜单失败', result.message)
-      }
-    }).catch(() => {
-      utils.showNoActionModal('网络异常', '请检查网络连接')
-    })
   },
 
   onShareAppMessage: function() {

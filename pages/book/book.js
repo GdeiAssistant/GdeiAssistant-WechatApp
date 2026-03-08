@@ -39,14 +39,14 @@ Page({
 
   renewBook: function(event) {
     const index = event.currentTarget.dataset.index
-    const id = event.currentTarget.dataset.id
+    const code = event.currentTarget.dataset.code
     const sn = event.currentTarget.dataset.sn
     const password = this.data.password
 
     wx.showNavigationBarLoading()
     this.setData({ loading: true })
 
-    libraryApi.renewBook(id, sn, password).then((result) => {
+    libraryApi.renewBook(code, sn, password).then((result) => {
       wx.hideNavigationBarLoading()
       this.setData({ loading: false })
       if (result.success) {

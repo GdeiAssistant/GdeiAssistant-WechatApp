@@ -61,7 +61,7 @@
             </view>
           </view>
           <view class="weui-form-preview__ft">
-            <view data-index="{{index}}" data-id="{{item.id}}" data-sn="{{item.sn}}" bindtap="renewBook" class="weui-form-preview__btn weui-form-preview__btn_primary" hover-class="weui-form-preview__btn_active">续借</view>
+            <view data-index="{{index}}" data-code="{{item.code}}" data-sn="{{item.sn}}" bindtap="renewBook" class="weui-form-preview__btn weui-form-preview__btn_primary" hover-class="weui-form-preview__btn_active">续借</view>
           </view>
         </view>
       </block>

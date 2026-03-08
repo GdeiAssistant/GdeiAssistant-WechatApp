@@ -1,27 +1,14 @@
 const config = require('../config/index.js')
 const endpoints = require('./endpoints.js')
-const { normalizePayload, pickMessage } = require('./response.js')
+const { normalizePayload } = require('./response.js')
+let reLaunching = false
 
-let refreshingPromise = null
-
-function validateTokenTimestamp(expireTime) {
-  if (!expireTime) {
-    return false
-  }
-  return Math.floor((expireTime - Date.now()) / (3600 * 1000)) >= 1
+function getSessionToken() {
+  return wx.getStorageSync('sessionToken')
 }
 
-function getAccessToken() {
-  return wx.getStorageSync('accessToken')
-}
-
-function getRefreshToken() {
-  return wx.getStorageSync('refreshToken')
-}
-
-function setTokens(accessToken, refreshToken) {
-  wx.setStorageSync('accessToken', accessToken)
-  wx.setStorageSync('refreshToken', refreshToken)
+function setSessionToken(token) {
+  wx.setStorageSync('sessionToken', token)
 }
 
 function clearSession() {
@@ -29,98 +16,59 @@ function clearSession() {
 }
 
 function reLaunchToLogin(title, content) {
+  if (reLaunching) {
+    return
+  }
+  reLaunching = true
+
   wx.showModal({
     title,
     content,
     showCancel: false,
     success: function(res) {
+      reLaunching = false
       if (res.confirm) {
         wx.reLaunch({ url: '/pages/login/login' })
       }
+    },
+    fail: function() {
+      reLaunching = false
     }
   })
 }
 
-function refreshAccessToken(interactive) {
-  if (refreshingPromise) {
-    return refreshingPromise
-  }
-
-  const refreshToken = getRefreshToken()
-  if (!refreshToken || !validateTokenTimestamp(refreshToken.expireTime)) {
-    if (interactive) {
-      clearSession()
-      reLaunchToLogin('令牌过期', '用户登录凭证已过期，请重新登录')
-    }
-    return Promise.reject(new Error('登录凭证过期'))
-  }
-
-  refreshingPromise = new Promise((resolve, reject) => {
-    wx.request({
-      url: config.resourceDomain + endpoints.auth.refreshToken,
-      method: 'POST',
-      header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      timeout: config.requestTimeout,
-      data: {
-        token: refreshToken.signature
-      },
-      success: function(result) {
-        if (result.statusCode !== 200) {
-          reject(new Error(pickMessage(result.data)))
-          return
-        }
-
-        const payload = normalizePayload(result.data)
-        if (payload.success && payload.data && payload.data.accessToken && payload.data.refreshToken) {
-          setTokens(payload.data.accessToken, payload.data.refreshToken)
-          resolve(payload.data.accessToken.signature)
-          return
-        }
-
-        if (interactive) {
-          clearSession()
-          reLaunchToLogin('更新令牌失败', payload.message || '请重新登录')
-        }
-        reject(new Error(payload.message || '刷新令牌失败'))
-      },
-      fail: function() {
-        reject(new Error('网络异常，请稍后重试'))
-      },
-      complete: function() {
-        refreshingPromise = null
-      }
-    })
-  })
-
-  return refreshingPromise
-}
-
-function ensureAccessTokenSignature(options) {
+function ensureSessionToken(options) {
   const interactive = !options || options.interactive !== false
-  const accessToken = getAccessToken()
-  if (accessToken && validateTokenTimestamp(accessToken.expireTime)) {
-    return Promise.resolve(accessToken.signature)
+  const token = getSessionToken()
+
+  if (token) {
+    return Promise.resolve(token)
   }
 
-  return refreshAccessToken(interactive)
+  if (interactive) {
+    clearSession()
+    reLaunchToLogin('登录失效', '未检测到登录凭证，请重新登录')
+  }
+
+  return Promise.reject(new Error('未检测到登录凭证'))
 }
 
-function expireToken(signature) {
-  if (!signature) {
+function logout() {
+  const token = getSessionToken()
+  if (!token) {
     return Promise.resolve()
   }
 
   return new Promise((resolve) => {
     wx.request({
-      url: config.resourceDomain + endpoints.auth.expireToken,
+      url: config.resourceDomain + endpoints.auth.logout,
       method: 'POST',
       header: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        Authorization: `Bearer ${token}`,
+        token,
+        'Content-Type': 'application/json'
       },
       timeout: config.requestTimeout,
-      data: { token: signature },
       complete: function() {
         resolve()
       }
@@ -128,14 +76,43 @@ function expireToken(signature) {
   })
 }
 
+function validateSessionToken() {
+  const token = getSessionToken()
+  if (!token) {
+    return Promise.resolve(false)
+  }
+
+  return new Promise((resolve) => {
+    wx.request({
+      url: config.resourceDomain + endpoints.user.profile,
+      method: 'GET',
+      header: {
+        Authorization: `Bearer ${token}`,
+        token
+      },
+      timeout: config.requestTimeout,
+      success: function(result) {
+        if (result.statusCode === 200) {
+          const payload = normalizePayload(result.data)
+          resolve(!!payload.success)
+          return
+        }
+
+        resolve(false)
+      },
+      fail: function() {
+        resolve(false)
+      }
+    })
+  })
+}
+
 module.exports = {
-  validateTokenTimestamp,
-  getAccessToken,
-  getRefreshToken,
-  setTokens,
+  getSessionToken,
+  setSessionToken,
   clearSession,
   reLaunchToLogin,
-  refreshAccessToken,
-  ensureAccessTokenSignature,
-  expireToken
+  ensureSessionToken,
+  logout,
+  validateSessionToken
 }
