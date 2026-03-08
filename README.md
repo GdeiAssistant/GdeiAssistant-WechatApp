@@ -73,20 +73,6 @@ git clone https://github.com/GdeiAssistant/GdeiAssistant-WechatApp.git
 - 后端仓库：<https://github.com/GdeiAssistant/GdeiAssistant>
 - API 文档：<https://github.com/GdeiAssistant/GdeiAssistant/wiki>
 
-## 体验
-
-### 体验账号
-
-为便于非在校师生进行体验与测试，可参考体验账号说明：
-
-- <https://github.com/GdeiAssistant/GdeiAssistant#体验>
-
-### 体验二维码
-
-<p align="center">
-  <img width="300" src="./assets/qrcode.jpg" alt="体验二维码">
-</p>
-
 ## 兼容性说明
 
 项目已包含微信/QQ 平台差异处理逻辑，可同时支持微信小程序与 QQ 小程序。
