@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="300" src="./github/logo.png" alt="GdeiAssistant Logo">
+  <img width="300" src="./assets/logo.png" alt="GdeiAssistant Logo">
 </p>
 
 # 广东二师助手微信小程序
@@ -21,9 +21,9 @@
 ## 页面预览
 
 <p>
-  <img width="250" src="./github/screenshot_01.jpg" alt="截图1">
-  <img width="250" src="./github/screenshot_02.jpg" alt="截图2">
-  <img width="250" src="./github/screenshot_03.jpg" alt="截图3">
+  <img width="250" src="./assets/screenshot_01.jpg" alt="截图1">
+  <img width="250" src="./assets/screenshot_02.jpg" alt="截图2">
+  <img width="250" src="./assets/screenshot_03.jpg" alt="截图3">
 </p>
 
 ## 运行环境
@@ -84,7 +84,7 @@ git clone https://github.com/GdeiAssistant/GdeiAssistant-WechatApp.git
 ### 体验二维码
 
 <p align="center">
-  <img width="300" src="./github/qrcode.jpg" alt="体验二维码">
+  <img width="300" src="./assets/qrcode.jpg" alt="体验二维码">
 </p>
 
 ## 兼容性说明
@@ -98,10 +98,9 @@ git clone https://github.com/GdeiAssistant/GdeiAssistant-WechatApp.git
 
 ## 协议
 
-- [MIT License](http://opensource.org/licenses/MIT)
-- [Anti 996 License](https://github.com/996icu/996.ICU/blob/master/LICENSE)
+- [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
-Copyright (c) 2016 - 2023 GdeiAssistant
+Copyright (c) 2016 - 2026 GdeiAssistant
 
 ## 联系方式
 
