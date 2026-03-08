@@ -74,6 +74,17 @@ Copyright (c) 2016 - 2023 GdeiAssistant
 
 - 如果你有好的意见或建议，欢迎给我们提交[Issue](https://github.com/GdeiAssistant/GdeiAssistant-WechatApp/issues)
 
+## 重构建议
+
+- 若你希望在保持 WeUI 视觉风格不变的前提下进行现代化改造，可参考文档：[重构优化分析（保留 WeUI）](./docs/project-modernization-analysis.md)
+
+## 架构更新（重构后）
+
+- 新增 `config/index.js` 统一管理资源域名、请求超时和签名校验常量。
+- 新增 `services/request.js` + `services/auth.js` 作为统一请求层与令牌续期层。
+- 新增 `services/apis/*` 按业务域拆分接口调用：`auth`、`user`、`campus`、`library`。
+- `pages/*/*.js` 已迁移为调用 API 层，避免页面重复写 `wx.request` 逻辑。
+
 ## 联系
 
 - 技术支持和意见建议反馈：[gdeiassistant@gmail.com](mailto:gdeiassistant@gmail.com)
