@@ -102,7 +102,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '空课室查询',
+      title: '空教室',
       path: '/pages/spare/spare'
     }
   }

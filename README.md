@@ -4,36 +4,99 @@
 
 # 广东二师助手微信小程序
 
-广东第二师范学院校园助手系统微信小程序客户端。项目基于微信小程序框架开发，UI 样式采用 WeUI，支持微信与 QQ 小程序双端运行。
+广东二师助手微信小程序客户端，面向广东第二师范学院校园场景，覆盖教务查询、校园生活与资讯通知等核心能力。
 
-## 功能列表
+## 功能概览
+
+### 校园服务
 
 - 成绩查询
 - 课表查询
 - 四六级查询
 - 考研查询
-- 空课室查询
-- 一键评教
-- 消费查询
-- 校园卡信息查询
-- 借阅查询
-- 馆藏查询
-- 校园卡挂失
-- 电费查询
-- 黄页查询
-- 新闻通知
-- 专题阅读
+- 教室查询
+- 图书馆
+- 校园卡
+- 数据查询
+- 教学评价
+
+### 校园生活
+
 - 二手交易
+- 全民快递
 - 失物招领
 - 校园树洞
+- 卖室友
 - 表白墙
 - 校园话题
-- 全民快递
-- 卖室友
 - 拍好校园
-- Mock 模拟数据联调
 
-## 页面预览
+### 资讯信息
+
+- 新闻通知
+- 阅读
+
+## 技术栈
+
+- 微信小程序
+- WeUI
+- Promise 风格服务层
+- `mock` / `remote` 双数据源
+
+## 工程结构
+
+```text
+GdeiAssistant-WechatApp/
+├── pages/
+├── services/
+│   ├── apis/
+│   ├── auth.js
+│   ├── endpoints.js
+│   ├── request.js
+│   └── upload.js
+├── mock/
+├── constants/
+├── config/
+├── utils/
+└── common/lib/weui.wxss
+```
+
+## 数据源模式
+
+- `remote`：请求真实后端接口
+- `mock`：使用本地模拟数据
+
+## 运行环境
+
+- 微信开发者工具
+- 微信小程序基础库 `>= 2.3.0`
+
+## 快速开始
+
+### 1. 导入项目
+
+使用微信开发者工具导入项目根目录。
+
+### 2. 配置环境
+
+按需修改 `config/index.js` 中的请求域名与资源域名配置。
+
+### 3. 编译运行
+
+在微信开发者工具中编译并预览页面。
+
+## Mock 模式说明
+
+- 登录页或设置页可切换 `mock` 数据源
+- 用户名：`gdeiassistant`
+- 密码：`gdeiassistant`
+
+## 后端接口位置
+
+- GitHub：`https://github.com/GdeiAssistant/GdeiAssistant`
+- Wiki：`https://github.com/GdeiAssistant/GdeiAssistant/wiki`
+
+## 应用截图
 
 <p>
   <img width="250" src="./assets/screenshot_01.jpg" alt="截图1">
@@ -41,92 +104,10 @@
   <img width="250" src="./assets/screenshot_03.jpg" alt="截图3">
 </p>
 
-## 运行环境
+## 开源协议
 
-- 微信小程序基础库：`>= 2.3.0`
-- QQ 小程序：兼容微信小程序大部分语法与 API
+本项目采用 [Apache License 2.0](LICENSE.md) 开源协议。
 
-## 快速开始
+## 免责声明
 
-### 1. 克隆仓库
-
-```bash
-git clone https://github.com/GdeiAssistant/GdeiAssistant-WechatApp.git
-```
-
-### 2. 导入开发工具
-
-使用微信开发者工具或 QQ 小程序开发工具导入项目根目录。
-
-### 3. 配置后端域名
-
-默认资源域名与请求配置位于：
-
-- `config/index.js`
-
-运行环境会根据小程序构建环境自动匹配（`develop -> dev`，`trial/release -> prod`）。
-如需自定义后端域名，可直接修改该文件中的环境配置。
-
-### 4. 使用 Mock 模式
-
-项目已内置本地 Mock 数据源，适合在未连通后端或联调 UI 时使用：
-
-- 登录页可直接切换 `使用模拟测试数据`
-- 首页进入 `功能设置` 也可切换数据源并管理首页模块展示
-- Mock 账号：`gdeiassistant`
-- Mock 密码：`gdeiassistant`
-- Mock 模式下支持社区模块的发布、点赞、评论、接单、撩一下等本地状态联动
-
-## 项目结构
-
-```text
-.
-├─ pages/                # 页面目录
-├─ services/             # 请求、鉴权、API 领域服务
-│  ├─ request.js         # 统一请求入口
-│  ├─ auth.js            # 会话令牌管理
-│  ├─ upload.js          # 直传对象存储的本地文件上传
-│  ├─ endpoints.js       # 接口路径集中定义
-│  └─ apis/              # 业务 API 分层
-├─ mock/                 # 本地 Mock 数据与社区状态模拟
-├─ constants/            # 功能与社区模块配置
-├─ config/               # 运行配置
-├─ utils/                # 通用工具函数
-└─ common/lib/weui.wxss  # WeUI 样式库
-```
-
-## 后端接口
-
-本项目依赖广东第二师范学院校园助手系统后端：
-
-- 后端仓库：<https://github.com/GdeiAssistant/GdeiAssistant>
-- API 文档：<https://github.com/GdeiAssistant/GdeiAssistant/wiki>
-
-## 兼容性说明
-
-项目已包含微信/QQ 平台差异处理逻辑，可同时支持微信小程序与 QQ 小程序。
-
-## 贡献
-
-- 欢迎提交 Issue 反馈问题与建议。
-- 欢迎 Fork 后发起 Pull Request 参与改进。
-
-## 协议
-
-- [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
-
-Copyright (c) 2016 - 2026 GdeiAssistant
-
-## 联系方式
-
-- 技术支持与建议反馈：<gdeiassistant@gmail.com>
-- 客服与系统故障工单：<support@gdeiassistant.cn>
-- 社区违法和不良信息举报：<report@gdeiassistant.cn>
-
-## 致谢
-
-- [WeUI](https://github.com/Tencent/weui-wxss)
-
-## 声明
-
-本项目仅用于学习与研究用途。使用本项目造成的任何损失，开发者不承担责任。
+本项目仅用于学习与研究用途。

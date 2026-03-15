@@ -1,5 +1,6 @@
 const {
   getCommunityModule,
+  getCommunityPageTitle,
   LOST_FOUND_ITEM_OPTIONS,
   DATING_GRADE_OPTIONS,
   DELIVERY_PLACEHOLDER_PICKUP_CODE
@@ -526,7 +527,7 @@ Page({
     }
 
     wx.setNavigationBarTitle({
-      title: moduleConfig.title
+      title: getCommunityPageTitle(moduleId, 'detail', moduleConfig.title)
     })
 
     this.setData({

@@ -1,5 +1,6 @@
 const {
   getCommunityModule,
+  getCommunityPageTitle,
   SECONDHAND_CATEGORY_OPTIONS,
   LOST_FOUND_MODE_OPTIONS,
   LOST_FOUND_ITEM_OPTIONS,
@@ -639,7 +640,7 @@ Page({
     const isEditMode = options && options.mode === 'edit' && !!options.id && isEditSupported(moduleId)
 
     wx.setNavigationBarTitle({
-      title: isEditMode ? `编辑${moduleConfig.title}` : `发布${moduleConfig.title}`
+      title: getCommunityPageTitle(moduleId, isEditMode ? 'edit' : 'publish', moduleConfig.title)
     })
 
     this.setData({

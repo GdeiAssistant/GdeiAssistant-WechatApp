@@ -1,4 +1,4 @@
-const { getCommunityModule } = require('../../constants/community.js')
+const { getCommunityModule, getCommunityPageTitle } = require('../../constants/community.js')
 const communityApi = require('../../services/apis/community.js')
 const userApi = require('../../services/apis/user.js')
 const pageUtils = require('../../utils/page.js')
@@ -53,13 +53,6 @@ function formatSecretPublishText(publishTime, timer) {
     return baseText ? `${baseText} · 24 小时后自动删除` : '24 小时后自动删除'
   }
   return baseText
-}
-
-function buildCenterNavigationTitle(moduleId, moduleTitle) {
-  if (moduleId === 'delivery') {
-    return '我的跑腿'
-  }
-  return `我的${moduleTitle}`
 }
 
 Page({
@@ -459,7 +452,7 @@ Page({
     const tabs = buildTabs(moduleId)
 
     wx.setNavigationBarTitle({
-      title: buildCenterNavigationTitle(moduleId, moduleConfig.title)
+      title: getCommunityPageTitle(moduleId, 'center', moduleConfig.title)
     })
 
     this.setData({

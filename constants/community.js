@@ -87,6 +87,51 @@ const PHOTOGRAPH_TAB_OPTIONS = [
 const DELIVERY_DEFAULT_ORDER_NAME = '代收'
 const DELIVERY_PLACEHOLDER_PICKUP_CODE = '00000000000'
 
+const COMMUNITY_PAGE_TITLES = {
+  ershou: {
+    center: '个人中心',
+    detail: '商品详情',
+    publish: '发布商品',
+    edit: '编辑商品'
+  },
+  lostandfound: {
+    center: '个人中心',
+    detail: '详情',
+    publish: '发布信息',
+    edit: '编辑信息'
+  },
+  secret: {
+    center: '我的树洞',
+    detail: '匿名详情',
+    publish: '发布树洞'
+  },
+  express: {
+    center: '我的',
+    detail: '详情',
+    publish: '发布表白'
+  },
+  topic: {
+    center: '我的',
+    detail: '话题详情',
+    publish: '发布话题'
+  },
+  delivery: {
+    center: '我的跑腿',
+    detail: '任务详情',
+    publish: '发布全民快递'
+  },
+  dating: {
+    center: '互动中心',
+    detail: '卖室友',
+    publish: '出卖室友'
+  },
+  photograph: {
+    center: '我的作品',
+    detail: '作品详情',
+    publish: '发布作品'
+  }
+}
+
 const COMMUNITY_MODULES = [
   {
     id: 'ershou',
@@ -171,9 +216,37 @@ function getCommunityModule(moduleId) {
   return COMMUNITY_MODULE_MAP[moduleId] || null
 }
 
+function getCommunityPageTitle(moduleId, pageType, fallbackTitle) {
+  const moduleTitleConfig = COMMUNITY_PAGE_TITLES[moduleId] || {}
+  const pageTitle = moduleTitleConfig[pageType]
+
+  if (pageTitle) {
+    return pageTitle
+  }
+
+  const moduleTitle = fallbackTitle || (COMMUNITY_MODULE_MAP[moduleId] ? COMMUNITY_MODULE_MAP[moduleId].title : '')
+
+  if (!moduleTitle) {
+    return ''
+  }
+
+  switch (pageType) {
+    case 'edit':
+      return `编辑${moduleTitle}`
+    case 'publish':
+      return `发布${moduleTitle}`
+    case 'center':
+    case 'detail':
+    case 'list':
+    default:
+      return moduleTitle
+  }
+}
+
 module.exports = {
   COMMUNITY_MODULES,
   COMMUNITY_MODULE_MAP,
+  COMMUNITY_PAGE_TITLES,
   SECONDHAND_CATEGORY_OPTIONS,
   LOST_FOUND_MODE_OPTIONS,
   LOST_FOUND_ITEM_OPTIONS,
@@ -186,5 +259,6 @@ module.exports = {
   PHOTOGRAPH_TAB_OPTIONS,
   DELIVERY_DEFAULT_ORDER_NAME,
   DELIVERY_PLACEHOLDER_PICKUP_CODE,
-  getCommunityModule
+  getCommunityModule,
+  getCommunityPageTitle
 }

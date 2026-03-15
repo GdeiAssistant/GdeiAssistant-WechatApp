@@ -35,8 +35,8 @@ const FEATURE_LIST = [
   },
   {
     id: 'spare',
-    title: '空课室查询',
-    description: '查询当前空闲课室',
+    title: '教室查询',
+    description: '查询当前空闲教室',
     icon: '/image/spare.png',
     page: '/pages/spare/spare',
     section: 'campus'
@@ -51,7 +51,7 @@ const FEATURE_LIST = [
   },
   {
     id: 'card',
-    title: '我的校园卡',
+    title: '校园卡',
     description: '查看校园卡信息与余额',
     icon: '/image/card.png',
     page: '/pages/card/card',
@@ -107,7 +107,7 @@ const FEATURE_LIST = [
   },
   {
     id: 'reading',
-    title: '专题阅读',
+    title: '阅读',
     description: '查看专题阅读内容',
     icon: '/image/book.png',
     page: '/pages/reading/reading',
