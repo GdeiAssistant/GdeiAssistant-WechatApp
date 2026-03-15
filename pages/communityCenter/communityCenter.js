@@ -55,6 +55,13 @@ function formatSecretPublishText(publishTime, timer) {
   return baseText
 }
 
+function buildCenterNavigationTitle(moduleId, moduleTitle) {
+  if (moduleId === 'delivery') {
+    return '我的跑腿'
+  }
+  return `我的${moduleTitle}`
+}
+
 Page({
   data: {
     moduleId: '',
@@ -452,7 +459,7 @@ Page({
     const tabs = buildTabs(moduleId)
 
     wx.setNavigationBarTitle({
-      title: `${moduleConfig.title}我的`
+      title: buildCenterNavigationTitle(moduleId, moduleConfig.title)
     })
 
     this.setData({

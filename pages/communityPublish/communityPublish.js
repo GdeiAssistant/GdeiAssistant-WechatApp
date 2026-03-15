@@ -639,7 +639,7 @@ Page({
     const isEditMode = options && options.mode === 'edit' && !!options.id && isEditSupported(moduleId)
 
     wx.setNavigationBarTitle({
-      title: isEditMode ? `编辑${moduleConfig.title}` : `${moduleConfig.title}发布`
+      title: isEditMode ? `编辑${moduleConfig.title}` : `发布${moduleConfig.title}`
     })
 
     this.setData({
