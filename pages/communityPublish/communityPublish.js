@@ -22,6 +22,49 @@ const EDITABLE_MODULE_IDS = ['ershou', 'lostandfound']
 let recorderManager = null
 let secretAudioPlayer = null
 
+const SECONDHAND_NAME_MAX_LENGTH = 25
+const SECONDHAND_DESCRIPTION_MAX_LENGTH = 100
+const SECONDHAND_LOCATION_MAX_LENGTH = 30
+const SECONDHAND_QQ_MAX_LENGTH = 20
+const CONTACT_PHONE_MAX_LENGTH = 11
+const LOST_FOUND_NAME_MAX_LENGTH = 25
+const LOST_FOUND_DESCRIPTION_MAX_LENGTH = 100
+const LOST_FOUND_LOCATION_MAX_LENGTH = 30
+const LOST_FOUND_QQ_MAX_LENGTH = 20
+const LOST_FOUND_WECHAT_MAX_LENGTH = 20
+const SECRET_CONTENT_MAX_LENGTH = 100
+const EXPRESS_NAME_MAX_LENGTH = 10
+const EXPRESS_CONTENT_MAX_LENGTH = 250
+const TOPIC_KEYWORD_MAX_LENGTH = 15
+const TOPIC_CONTENT_MAX_LENGTH = 250
+const DELIVERY_COMPANY_MAX_LENGTH = 10
+const DELIVERY_ADDRESS_MAX_LENGTH = 50
+const DELIVERY_REMARKS_MAX_LENGTH = 100
+const DATING_NICKNAME_MAX_LENGTH = 15
+const DATING_FACULTY_MAX_LENGTH = 12
+const DATING_HOMETOWN_MAX_LENGTH = 10
+const DATING_QQ_MAX_LENGTH = 15
+const DATING_WECHAT_MAX_LENGTH = 20
+const DATING_CONTENT_MAX_LENGTH = 100
+const PHOTOGRAPH_TITLE_MAX_LENGTH = 25
+const PHOTOGRAPH_CONTENT_MAX_LENGTH = 50
+
+function trimValue(value) {
+  return String(value || '').trim()
+}
+
+function getMaxLengthMessage(value, maxLength, message) {
+  return trimValue(value).length > maxLength ? message : ''
+}
+
+function getExactLengthMessage(value, expectedLength, message) {
+  const normalizedValue = trimValue(value)
+  if (!normalizedValue) {
+    return ''
+  }
+  return normalizedValue.length !== expectedLength ? message : ''
+}
+
 function pickTempFileName(filePath, fallbackName) {
   if (!filePath) {
     return fallbackName
@@ -305,59 +348,137 @@ Page({
     const form = this.data.form || {}
 
     switch (moduleId) {
-      case 'ershou':
-        if (!String(form.name || '').trim()) return '请输入商品名称'
-        if (!String(form.description || '').trim()) return '请输入商品描述'
+      case 'ershou': {
+        const name = trimValue(form.name)
+        const description = trimValue(form.description)
+        const location = trimValue(form.location)
+        const qq = trimValue(form.qq)
+        const phone = trimValue(form.phone)
+
+        if (!name) return '请输入商品名称'
+        if (getMaxLengthMessage(name, SECONDHAND_NAME_MAX_LENGTH, `商品名称不能超过${SECONDHAND_NAME_MAX_LENGTH}个字符`)) return getMaxLengthMessage(name, SECONDHAND_NAME_MAX_LENGTH, `商品名称不能超过${SECONDHAND_NAME_MAX_LENGTH}个字符`)
+        if (!description) return '请输入商品描述'
+        if (getMaxLengthMessage(description, SECONDHAND_DESCRIPTION_MAX_LENGTH, `商品描述不能超过${SECONDHAND_DESCRIPTION_MAX_LENGTH}个字符`)) return getMaxLengthMessage(description, SECONDHAND_DESCRIPTION_MAX_LENGTH, `商品描述不能超过${SECONDHAND_DESCRIPTION_MAX_LENGTH}个字符`)
         if (!(Number(form.price || 0) > 0)) return '请输入正确的商品价格'
-        if (!String(form.location || '').trim()) return '请输入交易地点'
-        if (!String(form.qq || '').trim()) return '请输入 QQ 号'
+        if (!location) return '请输入交易地点'
+        if (getMaxLengthMessage(location, SECONDHAND_LOCATION_MAX_LENGTH, `交易地点不能超过${SECONDHAND_LOCATION_MAX_LENGTH}个字符`)) return getMaxLengthMessage(location, SECONDHAND_LOCATION_MAX_LENGTH, `交易地点不能超过${SECONDHAND_LOCATION_MAX_LENGTH}个字符`)
+        if (!qq) return '请输入 QQ 号'
+        if (getMaxLengthMessage(qq, SECONDHAND_QQ_MAX_LENGTH, `QQ 号不能超过${SECONDHAND_QQ_MAX_LENGTH}个字符`)) return getMaxLengthMessage(qq, SECONDHAND_QQ_MAX_LENGTH, `QQ 号不能超过${SECONDHAND_QQ_MAX_LENGTH}个字符`)
+        if (getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, `手机号不能超过${CONTACT_PHONE_MAX_LENGTH}个字符`)) return getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, `手机号不能超过${CONTACT_PHONE_MAX_LENGTH}个字符`)
         if (!this.data.isEditMode && !this.data.images.length) return '请至少上传一张图片'
         return ''
-      case 'lostandfound':
-        if (!String(form.name || '').trim()) return '请输入物品名称'
-        if (!String(form.description || '').trim()) return '请输入物品描述'
-        if (!String(form.location || '').trim()) return '请输入地点'
-        if (!String(form.qq || '').trim() && !String(form.wechat || '').trim() && !String(form.phone || '').trim()) {
+      }
+      case 'lostandfound': {
+        const name = trimValue(form.name)
+        const description = trimValue(form.description)
+        const location = trimValue(form.location)
+        const qq = trimValue(form.qq)
+        const wechat = trimValue(form.wechat)
+        const phone = trimValue(form.phone)
+
+        if (!name) return '请输入物品名称'
+        if (getMaxLengthMessage(name, LOST_FOUND_NAME_MAX_LENGTH, `物品名称不能超过${LOST_FOUND_NAME_MAX_LENGTH}个字符`)) return getMaxLengthMessage(name, LOST_FOUND_NAME_MAX_LENGTH, `物品名称不能超过${LOST_FOUND_NAME_MAX_LENGTH}个字符`)
+        if (!description) return '请输入物品描述'
+        if (getMaxLengthMessage(description, LOST_FOUND_DESCRIPTION_MAX_LENGTH, `物品描述不能超过${LOST_FOUND_DESCRIPTION_MAX_LENGTH}个字符`)) return getMaxLengthMessage(description, LOST_FOUND_DESCRIPTION_MAX_LENGTH, `物品描述不能超过${LOST_FOUND_DESCRIPTION_MAX_LENGTH}个字符`)
+        if (!location) return '请输入地点'
+        if (getMaxLengthMessage(location, LOST_FOUND_LOCATION_MAX_LENGTH, `地点不能超过${LOST_FOUND_LOCATION_MAX_LENGTH}个字符`)) return getMaxLengthMessage(location, LOST_FOUND_LOCATION_MAX_LENGTH, `地点不能超过${LOST_FOUND_LOCATION_MAX_LENGTH}个字符`)
+        if (getMaxLengthMessage(qq, LOST_FOUND_QQ_MAX_LENGTH, `QQ 不能超过${LOST_FOUND_QQ_MAX_LENGTH}个字符`)) return getMaxLengthMessage(qq, LOST_FOUND_QQ_MAX_LENGTH, `QQ 不能超过${LOST_FOUND_QQ_MAX_LENGTH}个字符`)
+        if (getMaxLengthMessage(wechat, LOST_FOUND_WECHAT_MAX_LENGTH, `微信不能超过${LOST_FOUND_WECHAT_MAX_LENGTH}个字符`)) return getMaxLengthMessage(wechat, LOST_FOUND_WECHAT_MAX_LENGTH, `微信不能超过${LOST_FOUND_WECHAT_MAX_LENGTH}个字符`)
+        if (getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, `电话不能超过${CONTACT_PHONE_MAX_LENGTH}个字符`)) return getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, `电话不能超过${CONTACT_PHONE_MAX_LENGTH}个字符`)
+        if (!qq && !wechat && !phone) {
           return '请至少填写一种联系方式'
         }
         if (!this.data.isEditMode && !this.data.images.length) return '请至少上传一张图片'
         return ''
-      case 'secret':
-        if (Number(this.data.secretTypeIndex) === 0 && !String(form.content || '').trim()) {
+      }
+      case 'secret': {
+        const content = trimValue(form.content)
+
+        if (Number(this.data.secretTypeIndex) === 0 && !content) {
           return '请输入树洞内容'
         }
+        if (getMaxLengthMessage(content, SECRET_CONTENT_MAX_LENGTH, `树洞内容不能超过${SECRET_CONTENT_MAX_LENGTH}个字符`)) return getMaxLengthMessage(content, SECRET_CONTENT_MAX_LENGTH, `树洞内容不能超过${SECRET_CONTENT_MAX_LENGTH}个字符`)
         if (Number(this.data.secretTypeIndex) === 1 && !this.data.voiceFile) {
           return '请先录制语音'
         }
         return ''
-      case 'express':
-        if (!String(form.nickname || '').trim()) return '请输入昵称'
-        if (!String(form.targetName || '').trim()) return '请输入 TA 的名字'
-        if (!String(form.content || '').trim()) return '请输入表白内容'
+      }
+      case 'express': {
+        const nickname = trimValue(form.nickname)
+        const realname = trimValue(form.realname)
+        const targetName = trimValue(form.targetName)
+        const content = trimValue(form.content)
+
+        if (!nickname) return '请输入昵称'
+        if (getMaxLengthMessage(nickname, EXPRESS_NAME_MAX_LENGTH, `昵称不能超过${EXPRESS_NAME_MAX_LENGTH}个字符`)) return getMaxLengthMessage(nickname, EXPRESS_NAME_MAX_LENGTH, `昵称不能超过${EXPRESS_NAME_MAX_LENGTH}个字符`)
+        if (getMaxLengthMessage(realname, EXPRESS_NAME_MAX_LENGTH, `真名不能超过${EXPRESS_NAME_MAX_LENGTH}个字符`)) return getMaxLengthMessage(realname, EXPRESS_NAME_MAX_LENGTH, `真名不能超过${EXPRESS_NAME_MAX_LENGTH}个字符`)
+        if (!targetName) return '请输入 TA 的名字'
+        if (getMaxLengthMessage(targetName, EXPRESS_NAME_MAX_LENGTH, `TA 的名字不能超过${EXPRESS_NAME_MAX_LENGTH}个字符`)) return getMaxLengthMessage(targetName, EXPRESS_NAME_MAX_LENGTH, `TA 的名字不能超过${EXPRESS_NAME_MAX_LENGTH}个字符`)
+        if (!content) return '请输入表白内容'
+        if (getMaxLengthMessage(content, EXPRESS_CONTENT_MAX_LENGTH, `表白内容不能超过${EXPRESS_CONTENT_MAX_LENGTH}个字符`)) return getMaxLengthMessage(content, EXPRESS_CONTENT_MAX_LENGTH, `表白内容不能超过${EXPRESS_CONTENT_MAX_LENGTH}个字符`)
         return ''
-      case 'topic':
-        if (!String(form.topic || '').trim()) return '请输入话题关键词'
-        if (!String(form.content || '').trim()) return '请输入话题内容'
+      }
+      case 'topic': {
+        const topic = trimValue(form.topic)
+        const content = trimValue(form.content)
+
+        if (!topic) return '请输入话题关键词'
+        if (getMaxLengthMessage(topic, TOPIC_KEYWORD_MAX_LENGTH, `话题关键词不能超过${TOPIC_KEYWORD_MAX_LENGTH}个字符`)) return getMaxLengthMessage(topic, TOPIC_KEYWORD_MAX_LENGTH, `话题关键词不能超过${TOPIC_KEYWORD_MAX_LENGTH}个字符`)
+        if (!content) return '请输入话题内容'
+        if (getMaxLengthMessage(content, TOPIC_CONTENT_MAX_LENGTH, `话题内容不能超过${TOPIC_CONTENT_MAX_LENGTH}个字符`)) return getMaxLengthMessage(content, TOPIC_CONTENT_MAX_LENGTH, `话题内容不能超过${TOPIC_CONTENT_MAX_LENGTH}个字符`)
         return ''
-      case 'delivery':
-        if (!String(form.pickupAddress || '').trim()) return '请输入取件地点'
-        if (!String(form.deliveryAddress || '').trim()) return '请输入送达地址'
-        if (!String(form.contactPhone || '').trim()) return '请输入联系人电话'
+      }
+      case 'delivery': {
+        const pickupAddress = trimValue(form.pickupAddress)
+        const pickupCode = trimValue(form.pickupCode)
+        const deliveryAddress = trimValue(form.deliveryAddress)
+        const contactPhone = trimValue(form.contactPhone)
+        const description = trimValue(form.description)
+
+        if (!pickupAddress) return '请输入取件地点'
+        if (getMaxLengthMessage(pickupAddress, DELIVERY_COMPANY_MAX_LENGTH, `取件地点不能超过${DELIVERY_COMPANY_MAX_LENGTH}个字符`)) return getMaxLengthMessage(pickupAddress, DELIVERY_COMPANY_MAX_LENGTH, `取件地点不能超过${DELIVERY_COMPANY_MAX_LENGTH}个字符`)
+        if (getExactLengthMessage(pickupCode, 11, '取件码长度必须为11个字符')) return getExactLengthMessage(pickupCode, 11, '取件码长度必须为11个字符')
+        if (!deliveryAddress) return '请输入送达地址'
+        if (getMaxLengthMessage(deliveryAddress, DELIVERY_ADDRESS_MAX_LENGTH, `送达地址不能超过${DELIVERY_ADDRESS_MAX_LENGTH}个字符`)) return getMaxLengthMessage(deliveryAddress, DELIVERY_ADDRESS_MAX_LENGTH, `送达地址不能超过${DELIVERY_ADDRESS_MAX_LENGTH}个字符`)
+        if (!contactPhone) return '请输入联系人电话'
+        if (getMaxLengthMessage(contactPhone, CONTACT_PHONE_MAX_LENGTH, `联系人电话不能超过${CONTACT_PHONE_MAX_LENGTH}个字符`)) return getMaxLengthMessage(contactPhone, CONTACT_PHONE_MAX_LENGTH, `联系人电话不能超过${CONTACT_PHONE_MAX_LENGTH}个字符`)
+        if (getMaxLengthMessage(description, DELIVERY_REMARKS_MAX_LENGTH, `备注说明不能超过${DELIVERY_REMARKS_MAX_LENGTH}个字符`)) return getMaxLengthMessage(description, DELIVERY_REMARKS_MAX_LENGTH, `备注说明不能超过${DELIVERY_REMARKS_MAX_LENGTH}个字符`)
         if (!(Number(form.reward || 0) > 0)) return '请输入有效的跑腿费'
         return ''
-      case 'dating':
-        if (!String(form.nickname || '').trim()) return '请输入昵称'
-        if (!String(form.faculty || '').trim()) return '请输入专业'
-        if (!String(form.hometown || '').trim()) return '请输入家乡'
-        if (!String(form.qq || '').trim() && !String(form.wechat || '').trim()) {
+      }
+      case 'dating': {
+        const nickname = trimValue(form.nickname)
+        const faculty = trimValue(form.faculty)
+        const hometown = trimValue(form.hometown)
+        const qq = trimValue(form.qq)
+        const wechat = trimValue(form.wechat)
+        const content = trimValue(form.content)
+
+        if (!nickname) return '请输入昵称'
+        if (getMaxLengthMessage(nickname, DATING_NICKNAME_MAX_LENGTH, `昵称不能超过${DATING_NICKNAME_MAX_LENGTH}个字符`)) return getMaxLengthMessage(nickname, DATING_NICKNAME_MAX_LENGTH, `昵称不能超过${DATING_NICKNAME_MAX_LENGTH}个字符`)
+        if (!faculty) return '请输入专业'
+        if (getMaxLengthMessage(faculty, DATING_FACULTY_MAX_LENGTH, `专业不能超过${DATING_FACULTY_MAX_LENGTH}个字符`)) return getMaxLengthMessage(faculty, DATING_FACULTY_MAX_LENGTH, `专业不能超过${DATING_FACULTY_MAX_LENGTH}个字符`)
+        if (!hometown) return '请输入家乡'
+        if (getMaxLengthMessage(hometown, DATING_HOMETOWN_MAX_LENGTH, `家乡不能超过${DATING_HOMETOWN_MAX_LENGTH}个字符`)) return getMaxLengthMessage(hometown, DATING_HOMETOWN_MAX_LENGTH, `家乡不能超过${DATING_HOMETOWN_MAX_LENGTH}个字符`)
+        if (getMaxLengthMessage(qq, DATING_QQ_MAX_LENGTH, `QQ 不能超过${DATING_QQ_MAX_LENGTH}个字符`)) return getMaxLengthMessage(qq, DATING_QQ_MAX_LENGTH, `QQ 不能超过${DATING_QQ_MAX_LENGTH}个字符`)
+        if (getMaxLengthMessage(wechat, DATING_WECHAT_MAX_LENGTH, `微信不能超过${DATING_WECHAT_MAX_LENGTH}个字符`)) return getMaxLengthMessage(wechat, DATING_WECHAT_MAX_LENGTH, `微信不能超过${DATING_WECHAT_MAX_LENGTH}个字符`)
+        if (!qq && !wechat) {
           return 'QQ 和微信至少填写一个'
         }
-        if (!String(form.content || '').trim()) return '请输入介绍内容'
+        if (!content) return '请输入介绍内容'
+        if (getMaxLengthMessage(content, DATING_CONTENT_MAX_LENGTH, `介绍内容不能超过${DATING_CONTENT_MAX_LENGTH}个字符`)) return getMaxLengthMessage(content, DATING_CONTENT_MAX_LENGTH, `介绍内容不能超过${DATING_CONTENT_MAX_LENGTH}个字符`)
         return ''
-      case 'photograph':
-        if (!String(form.title || '').trim()) return '请输入作品标题'
+      }
+      case 'photograph': {
+        const title = trimValue(form.title)
+        const content = trimValue(form.content)
+
+        if (!title) return '请输入作品标题'
+        if (getMaxLengthMessage(title, PHOTOGRAPH_TITLE_MAX_LENGTH, `作品标题不能超过${PHOTOGRAPH_TITLE_MAX_LENGTH}个字符`)) return getMaxLengthMessage(title, PHOTOGRAPH_TITLE_MAX_LENGTH, `作品标题不能超过${PHOTOGRAPH_TITLE_MAX_LENGTH}个字符`)
+        if (getMaxLengthMessage(content, PHOTOGRAPH_CONTENT_MAX_LENGTH, `拍摄说明不能超过${PHOTOGRAPH_CONTENT_MAX_LENGTH}个字符`)) return getMaxLengthMessage(content, PHOTOGRAPH_CONTENT_MAX_LENGTH, `拍摄说明不能超过${PHOTOGRAPH_CONTENT_MAX_LENGTH}个字符`)
         if (!this.data.images.length) return '请至少上传一张图片'
         return ''
+      }
       default:
         return '暂不支持当前模块'
     }

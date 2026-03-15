@@ -95,7 +95,7 @@
           <textarea
             class="profile_textarea"
             value="{{form.introduction}}"
-            maxlength="120"
+            maxlength="80"
             data-field="introduction"
             bindinput="handleTextInput"
             bindblur="handleTextBlur"

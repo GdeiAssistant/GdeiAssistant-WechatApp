@@ -15,11 +15,16 @@ Page({
   },
 
   formSubmit: function(e) {
-    const username = e.detail.value.username
-    const password = e.detail.value.password
+    const username = String(e.detail.value.username || '').trim()
+    const password = String(e.detail.value.password || '').trim()
 
-    if (!username || !password) {
-      utils.showNoActionModal('请填写校园网账号信息', '校园网账号和密码不能为空')
+    if (!username) {
+      utils.showNoActionModal('请填写校园网账号信息', '用户名不能为空')
+      return
+    }
+
+    if (!password) {
+      utils.showNoActionModal('请填写校园网账号信息', '密码不能为空')
       return
     }
 

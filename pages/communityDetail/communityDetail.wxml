@@ -70,7 +70,7 @@
       <view class="weui-cells weui-cells_form" wx:if="{{detail.canGuess}}">
         <view class="weui-cell">
           <view class="weui-cell__bd">
-            <input class="weui-input" placeholder="输入你猜的名字" value="{{guessInput}}" data-field="guessInput" bindinput="setFieldValue" />
+            <input class="weui-input" placeholder="输入你猜的名字" maxlength="10" value="{{guessInput}}" data-field="guessInput" bindinput="setFieldValue" />
           </view>
           <view class="weui-cell__ft">
             <button size="mini" type="primary" bindtap="submitGuess">提交</button>
@@ -114,7 +114,7 @@
       <view class="weui-cells weui-cells_form" wx:if="{{detail.canSubmitPick}}">
         <view class="weui-cell">
           <view class="weui-cell__bd">
-            <textarea class="weui-textarea" placeholder="说点什么吧，不超过 50 字" value="{{pickInput}}" data-field="pickInput" bindinput="setFieldValue"></textarea>
+            <textarea class="weui-textarea" placeholder="说点什么吧，不超过 50 字" maxlength="50" value="{{pickInput}}" data-field="pickInput" bindinput="setFieldValue"></textarea>
           </view>
         </view>
       </view>
@@ -142,7 +142,7 @@
       <view class="weui-cells weui-cells_form">
         <view class="weui-cell">
           <view class="weui-cell__bd">
-            <textarea class="weui-textarea" placeholder="写下你的评论" value="{{commentInput}}" data-field="commentInput" bindinput="setFieldValue"></textarea>
+            <textarea class="weui-textarea" placeholder="写下你的评论，不超过 50 字" maxlength="50" value="{{commentInput}}" data-field="commentInput" bindinput="setFieldValue"></textarea>
           </view>
         </view>
       </view>

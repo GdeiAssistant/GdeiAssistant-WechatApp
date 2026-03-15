@@ -10,6 +10,9 @@ const {
   formatLocationDisplay
 } = require('../../constants/profile.js')
 
+const NICKNAME_MAX_LENGTH = 32
+const INTRODUCTION_MAX_LENGTH = 80
+
 function getLocationNodeName(node) {
   if (!node || typeof node !== 'object') {
     return ''
@@ -442,6 +445,25 @@ function buildAvatarFileName(filePath, prefix) {
   return `${prefix}-${Date.now()}${extension}`
 }
 
+function validateNickname(nickname) {
+  const normalizedNickname = String(nickname || '').trim()
+  if (!normalizedNickname) {
+    return '昵称不能为空'
+  }
+  if (normalizedNickname.length > NICKNAME_MAX_LENGTH) {
+    return `昵称长度不能超过${NICKNAME_MAX_LENGTH}个字符`
+  }
+  return ''
+}
+
+function validateIntroduction(introduction) {
+  const normalizedIntroduction = String(introduction || '').trim()
+  if (normalizedIntroduction.length > INTRODUCTION_MAX_LENGTH) {
+    return `个人简介长度不能超过${INTRODUCTION_MAX_LENGTH}个字符`
+  }
+  return ''
+}
+
 Page({
   data: {
     loading: true,
@@ -722,6 +744,15 @@ Page({
     }
 
     const introduction = String(this.data.form.introduction || '').trim()
+    const introductionErrorMessage = validateIntroduction(introduction)
+    if (introductionErrorMessage) {
+      this.setData({
+        'form.introduction': this.data.profile.introduction || ''
+      })
+      pageUtils.showTopTips(this, introductionErrorMessage)
+      return
+    }
+
     if (introduction === String(this.data.profile.introduction || '').trim()) {
       this.setData({
         'form.introduction': this.data.profile.introduction || ''
@@ -745,16 +776,20 @@ Page({
     wx.showModal({
       title: '修改昵称',
       editable: true,
-      placeholderText: currentNickname || '请输入昵称',
-      content: '请输入新的昵称',
+      placeholderText: '请输入新的昵称',
+      content: '',
       success: (result) => {
         if (!result.confirm) {
           return
         }
 
         const nickname = String(result.content || '').trim()
-        if (!nickname) {
-          pageUtils.showTopTips(this, '请输入昵称')
+        const nicknameErrorMessage = validateNickname(nickname)
+        if (nicknameErrorMessage) {
+          this.setData({
+            'form.nickname': currentNickname
+          })
+          pageUtils.showTopTips(this, nicknameErrorMessage)
           return
         }
 

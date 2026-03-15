@@ -16,7 +16,7 @@
     <view wx:if="{{moduleId === 'ershou'}}">
       <view class="weui-cells weui-cells_form">
         <view class="weui-cell">
-          <view class="weui-cell__bd"><input class="weui-input" placeholder="商品名称" value="{{form.name}}" data-field="name" bindinput="setFieldValue" /></view>
+          <view class="weui-cell__bd"><input class="weui-input" placeholder="商品名称" maxlength="25" value="{{form.name}}" data-field="name" bindinput="setFieldValue" /></view>
         </view>
         <view class="weui-cell">
           <view class="weui-cell__bd"><input class="weui-input" placeholder="商品价格" type="digit" value="{{form.price}}" data-field="price" bindinput="setFieldValue" /></view>
@@ -29,16 +29,16 @@
           </view>
         </view>
         <view class="weui-cell">
-          <view class="weui-cell__bd"><input class="weui-input" placeholder="交易地点" value="{{form.location}}" data-field="location" bindinput="setFieldValue" /></view>
+          <view class="weui-cell__bd"><input class="weui-input" placeholder="交易地点" maxlength="30" value="{{form.location}}" data-field="location" bindinput="setFieldValue" /></view>
         </view>
         <view class="weui-cell">
-          <view class="weui-cell__bd"><input class="weui-input" placeholder="QQ 号" value="{{form.qq}}" data-field="qq" bindinput="setFieldValue" /></view>
+          <view class="weui-cell__bd"><input class="weui-input" placeholder="QQ 号" maxlength="20" value="{{form.qq}}" data-field="qq" bindinput="setFieldValue" /></view>
         </view>
         <view class="weui-cell">
-          <view class="weui-cell__bd"><input class="weui-input" placeholder="手机号（可选）" value="{{form.phone}}" data-field="phone" bindinput="setFieldValue" /></view>
+          <view class="weui-cell__bd"><input class="weui-input" placeholder="手机号（可选）" maxlength="11" value="{{form.phone}}" data-field="phone" bindinput="setFieldValue" /></view>
         </view>
         <view class="weui-cell">
-          <view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="商品描述" value="{{form.description}}" data-field="description" bindinput="setFieldValue"></textarea></view>
+          <view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="商品描述" maxlength="100" value="{{form.description}}" data-field="description" bindinput="setFieldValue"></textarea></view>
         </view>
       </view>
     </view>
@@ -59,12 +59,12 @@
             </picker>
           </view>
         </view>
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="物品名称" value="{{form.name}}" data-field="name" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="地点" value="{{form.location}}" data-field="location" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="QQ（可选）" value="{{form.qq}}" data-field="qq" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="微信（可选）" value="{{form.wechat}}" data-field="wechat" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="电话（可选）" value="{{form.phone}}" data-field="phone" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="物品描述" value="{{form.description}}" data-field="description" bindinput="setFieldValue"></textarea></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="物品名称" maxlength="25" value="{{form.name}}" data-field="name" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="地点" maxlength="30" value="{{form.location}}" data-field="location" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="QQ（可选）" maxlength="20" value="{{form.qq}}" data-field="qq" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="微信（可选）" maxlength="20" value="{{form.wechat}}" data-field="wechat" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="电话（可选）" maxlength="11" value="{{form.phone}}" data-field="phone" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="物品描述" maxlength="100" value="{{form.description}}" data-field="description" bindinput="setFieldValue"></textarea></view></view>
       </view>
     </view>
 
@@ -91,7 +91,7 @@
           </view>
         </view>
         <view class="weui-cell" wx:if="{{secretTypeIndex === 0}}">
-          <view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="说点心里话吧" value="{{form.content}}" data-field="content" bindinput="setFieldValue"></textarea></view>
+          <view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="说点心里话吧" maxlength="100" value="{{form.content}}" data-field="content" bindinput="setFieldValue"></textarea></view>
         </view>
       </view>
 
@@ -105,8 +105,8 @@
 
     <view wx:if="{{moduleId === 'express'}}">
       <view class="weui-cells weui-cells_form">
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="你的昵称" value="{{form.nickname}}" data-field="nickname" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="你的真名（可选）" value="{{form.realname}}" data-field="realname" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="你的昵称" maxlength="10" value="{{form.nickname}}" data-field="nickname" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="你的真名（可选）" maxlength="10" value="{{form.realname}}" data-field="realname" bindinput="setFieldValue" /></view></view>
         <view class="weui-cell">
           <view class="weui-cell__bd">
             <picker range="{{expressGenderOptions}}" range-key="label" value="{{expressSelfGenderIndex}}" data-field="expressSelfGenderIndex" bindchange="handlePickerChange">
@@ -114,7 +114,7 @@
             </picker>
           </view>
         </view>
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="TA 的名字" value="{{form.targetName}}" data-field="targetName" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="TA 的名字" maxlength="10" value="{{form.targetName}}" data-field="targetName" bindinput="setFieldValue" /></view></view>
         <view class="weui-cell">
           <view class="weui-cell__bd">
             <picker range="{{expressGenderOptions}}" range-key="label" value="{{expressTargetGenderIndex}}" data-field="expressTargetGenderIndex" bindchange="handlePickerChange">
@@ -122,31 +122,31 @@
             </picker>
           </view>
         </view>
-        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="表白内容" value="{{form.content}}" data-field="content" bindinput="setFieldValue"></textarea></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="表白内容" maxlength="250" value="{{form.content}}" data-field="content" bindinput="setFieldValue"></textarea></view></view>
       </view>
     </view>
 
     <view wx:if="{{moduleId === 'topic'}}">
       <view class="weui-cells weui-cells_form">
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="话题关键词" value="{{form.topic}}" data-field="topic" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="聊聊你的想法" value="{{form.content}}" data-field="content" bindinput="setFieldValue"></textarea></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="话题关键词" maxlength="15" value="{{form.topic}}" data-field="topic" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="聊聊你的想法" maxlength="250" value="{{form.content}}" data-field="content" bindinput="setFieldValue"></textarea></view></view>
       </view>
     </view>
 
     <view wx:if="{{moduleId === 'delivery'}}">
       <view class="weui-cells weui-cells_form">
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="取件地点" value="{{form.pickupAddress}}" data-field="pickupAddress" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="取件码（可选）" value="{{form.pickupCode}}" data-field="pickupCode" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="送达地址" value="{{form.deliveryAddress}}" data-field="deliveryAddress" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="联系电话" value="{{form.contactPhone}}" data-field="contactPhone" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="取件地点" maxlength="10" value="{{form.pickupAddress}}" data-field="pickupAddress" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="取件码（可选）" maxlength="11" value="{{form.pickupCode}}" data-field="pickupCode" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="送达地址" maxlength="50" value="{{form.deliveryAddress}}" data-field="deliveryAddress" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="联系电话" maxlength="11" value="{{form.contactPhone}}" data-field="contactPhone" bindinput="setFieldValue" /></view></view>
         <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="跑腿费" type="digit" value="{{form.reward}}" data-field="reward" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="备注说明（可选）" value="{{form.description}}" data-field="description" bindinput="setFieldValue"></textarea></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="备注说明（可选）" maxlength="100" value="{{form.description}}" data-field="description" bindinput="setFieldValue"></textarea></view></view>
       </view>
     </view>
 
     <view wx:if="{{moduleId === 'dating'}}">
       <view class="weui-cells weui-cells_form">
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="昵称" value="{{form.nickname}}" data-field="nickname" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="昵称" maxlength="15" value="{{form.nickname}}" data-field="nickname" bindinput="setFieldValue" /></view></view>
         <view class="weui-cell">
           <view class="weui-cell__bd">
             <picker range="{{datingGradeOptions}}" range-key="label" value="{{datingGradeIndex}}" data-field="datingGradeIndex" bindchange="handlePickerChange">
@@ -161,17 +161,17 @@
             </picker>
           </view>
         </view>
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="专业" value="{{form.faculty}}" data-field="faculty" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="家乡" value="{{form.hometown}}" data-field="hometown" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="QQ（可选）" value="{{form.qq}}" data-field="qq" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="微信（可选）" value="{{form.wechat}}" data-field="wechat" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="介绍一下你想推荐的室友" value="{{form.content}}" data-field="content" bindinput="setFieldValue"></textarea></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="专业" maxlength="12" value="{{form.faculty}}" data-field="faculty" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="家乡" maxlength="10" value="{{form.hometown}}" data-field="hometown" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="QQ（可选）" maxlength="15" value="{{form.qq}}" data-field="qq" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="微信（可选）" maxlength="20" value="{{form.wechat}}" data-field="wechat" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="介绍一下你想推荐的室友" maxlength="100" value="{{form.content}}" data-field="content" bindinput="setFieldValue"></textarea></view></view>
       </view>
     </view>
 
     <view wx:if="{{moduleId === 'photograph'}}">
       <view class="weui-cells weui-cells_form">
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="作品标题" value="{{form.title}}" data-field="title" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="作品标题" maxlength="25" value="{{form.title}}" data-field="title" bindinput="setFieldValue" /></view></view>
         <view class="weui-cell">
           <view class="weui-cell__bd">
             <picker range="{{photographTypeOptions}}" range-key="label" value="{{photographTypeIndex}}" data-field="photographTypeIndex" bindchange="handlePickerChange">
@@ -179,7 +179,7 @@
             </picker>
           </view>
         </view>
-        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="拍摄说明（可选）" value="{{form.content}}" data-field="content" bindinput="setFieldValue"></textarea></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="拍摄说明（可选）" maxlength="50" value="{{form.content}}" data-field="content" bindinput="setFieldValue"></textarea></view></view>
       </view>
     </view>
   </view>

@@ -10,6 +10,10 @@ const pageUtils = require('../../utils/page.js')
 
 let secretVoicePlayer = null
 
+const COMMENT_MAX_LENGTH = 50
+const EXPRESS_GUESS_MAX_LENGTH = 10
+const DATING_PICK_MAX_LENGTH = 50
+
 function findLabel(options, value, fallback) {
   const item = (options || []).filter(function(optionItem) {
     return Number(optionItem.value) === Number(value)
@@ -354,6 +358,10 @@ Page({
       pageUtils.showTopTips(this, '评论内容不能为空')
       return
     }
+    if (comment.length > COMMENT_MAX_LENGTH) {
+      pageUtils.showTopTips(this, `评论内容不能超过${COMMENT_MAX_LENGTH}个字符`)
+      return
+    }
 
     communityApi.submitComment(this.data.moduleId, this.data.detailId, comment).then((result) => {
       if (!result.success) {
@@ -380,6 +388,10 @@ Page({
     const guessedName = String(this.data.guessInput || '').trim()
     if (!guessedName) {
       pageUtils.showTopTips(this, '请输入你猜的名字')
+      return
+    }
+    if (guessedName.length > EXPRESS_GUESS_MAX_LENGTH) {
+      pageUtils.showTopTips(this, `名字长度不能超过${EXPRESS_GUESS_MAX_LENGTH}个字符`)
       return
     }
 
@@ -452,6 +464,10 @@ Page({
     const content = String(this.data.pickInput || '').trim()
     if (!content) {
       pageUtils.showTopTips(this, '请输入撩一下内容')
+      return
+    }
+    if (content.length > DATING_PICK_MAX_LENGTH) {
+      pageUtils.showTopTips(this, `撩一下内容不能超过${DATING_PICK_MAX_LENGTH}个字符`)
       return
     }
 
