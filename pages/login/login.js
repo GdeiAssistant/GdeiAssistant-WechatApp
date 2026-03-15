@@ -1,11 +1,17 @@
+const storageKeys = require('../../constants/storage.js')
+const { MOCK_CREDENTIALS_HINT } = require('../../constants/features.js')
 const utils = require('../../utils/util.js')
 const auth = require('../../services/auth.js')
 const authApi = require('../../services/apis/auth.js')
+const dataSource = require('../../services/data-source.js')
 
 Page({
   data: {
-    login: false,
-    versionCode: null
+    ready: false,
+    versionCode: '',
+    useMockData: false,
+    dataSourceLabel: '真实接口',
+    mockCredentialsHint: MOCK_CREDENTIALS_HINT
   },
 
   formSubmit: function(e) {
@@ -24,7 +30,7 @@ Page({
     }).then((result) => {
       wx.hideNavigationBarLoading()
       if (result.success && result.data && result.data.token) {
-        wx.setStorageSync('username', username)
+        wx.setStorageSync(storageKeys.username, username)
         auth.setSessionToken(result.data.token)
         wx.redirectTo({
           url: '../index/index'
@@ -38,10 +44,30 @@ Page({
     })
   },
 
-  onLoad: function() {
+  refreshRuntimeState: function() {
     this.setData({
-      versionCode: wx.getAccountInfoSync().miniProgram.version
+      useMockData: dataSource.isMockMode(),
+      dataSourceLabel: dataSource.getDataSourceLabel()
     })
+  },
+
+  handleDataSourceChange: function(event) {
+    const useMockData = !!event.detail.value
+    dataSource.setDataSourceMode(useMockData ? dataSource.DATA_SOURCE_MODES.mock : dataSource.DATA_SOURCE_MODES.remote)
+    auth.clearSession()
+    this.refreshRuntimeState()
+  },
+
+  onLoad: function() {
+    let versionCode = ''
+    try {
+      versionCode = wx.getAccountInfoSync().miniProgram.version || ''
+    } catch (error) {
+      versionCode = ''
+    }
+
+    this.setData({ versionCode: versionCode })
+    this.refreshRuntimeState()
 
     auth.validateSessionToken().then((valid) => {
       if (valid) {
@@ -53,8 +79,17 @@ Page({
 
       auth.clearSession()
       this.setData({
-        login: true
+        ready: true
+      })
+    }).catch(() => {
+      auth.clearSession()
+      this.setData({
+        ready: true
       })
     })
+  },
+
+  onShow: function() {
+    this.refreshRuntimeState()
   }
 })

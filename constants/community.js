@@ -1,0 +1,190 @@
+const SECONDHAND_CATEGORY_OPTIONS = [
+  { label: '全部', value: -1 },
+  { label: '校园代步', value: 0 },
+  { label: '手机', value: 1 },
+  { label: '电脑', value: 2 },
+  { label: '数码配件', value: 3 },
+  { label: '数码', value: 4 },
+  { label: '电器', value: 5 },
+  { label: '运动健身', value: 6 },
+  { label: '衣物伞帽', value: 7 },
+  { label: '图书教材', value: 8 },
+  { label: '租赁', value: 9 },
+  { label: '生活娱乐', value: 10 },
+  { label: '其他', value: 11 }
+]
+
+const LOST_FOUND_MODE_OPTIONS = [
+  { label: '寻物启事', value: 0 },
+  { label: '失物招领', value: 1 }
+]
+
+const LOST_FOUND_ITEM_OPTIONS = [
+  { label: '手机', value: 0 },
+  { label: '校园卡', value: 1 },
+  { label: '身份证', value: 2 },
+  { label: '银行卡', value: 3 },
+  { label: '书', value: 4 },
+  { label: '钥匙', value: 5 },
+  { label: '包包', value: 6 },
+  { label: '衣帽', value: 7 },
+  { label: '校园代步', value: 8 },
+  { label: '运动健身', value: 9 },
+  { label: '数码配件', value: 10 },
+  { label: '其他', value: 11 }
+]
+
+const SECRET_THEME_OPTIONS = [
+  { label: '主题 1', value: 1 },
+  { label: '主题 2', value: 2 },
+  { label: '主题 3', value: 3 },
+  { label: '主题 4', value: 4 },
+  { label: '主题 5', value: 5 },
+  { label: '主题 6', value: 6 },
+  { label: '主题 7', value: 7 },
+  { label: '主题 8', value: 8 },
+  { label: '主题 9', value: 9 },
+  { label: '主题 10', value: 10 },
+  { label: '主题 11', value: 11 },
+  { label: '主题 12', value: 12 }
+]
+
+const SECRET_TYPE_OPTIONS = [
+  { label: '文字', value: 0 },
+  { label: '语音', value: 1 }
+]
+
+const EXPRESS_GENDER_OPTIONS = [
+  { label: '男', value: 0 },
+  { label: '女', value: 1 },
+  { label: '保密', value: 2 }
+]
+
+const DELIVERY_STATUS_OPTIONS = [
+  { label: '全部', value: -1 },
+  { label: '待接单', value: 0 },
+  { label: '配送中', value: 1 },
+  { label: '已完成', value: 2 }
+]
+
+const DATING_AREA_OPTIONS = [
+  { label: '小姐姐', value: 0 },
+  { label: '小哥哥', value: 1 }
+]
+
+const DATING_GRADE_OPTIONS = [
+  { label: '大一', value: 1 },
+  { label: '大二', value: 2 },
+  { label: '大三', value: 3 },
+  { label: '大四', value: 4 }
+]
+
+const PHOTOGRAPH_TAB_OPTIONS = [
+  { label: '生活照', feedValue: 1, publishValue: 1 },
+  { label: '校园照', feedValue: 0, publishValue: 2 }
+]
+
+const DELIVERY_DEFAULT_ORDER_NAME = '代取快递'
+const DELIVERY_PLACEHOLDER_PICKUP_CODE = '000000'
+
+const COMMUNITY_MODULES = [
+  {
+    id: 'ershou',
+    title: '二手交易',
+    icon: '/image/ershou.png',
+    page: '/pages/communityList/communityList?module=ershou',
+    supportsSearch: true,
+    searchPlaceholder: '搜索商品名称或关键词',
+    centerEnabled: true,
+    publishEnabled: true
+  },
+  {
+    id: 'lostandfound',
+    title: '失物招领',
+    icon: '/image/lostandfound.png',
+    page: '/pages/communityList/communityList?module=lostandfound',
+    supportsSearch: true,
+    searchPlaceholder: '搜索失物关键词',
+    centerEnabled: true,
+    publishEnabled: true
+  },
+  {
+    id: 'secret',
+    title: '校园树洞',
+    icon: '/image/secret.png',
+    page: '/pages/communityList/communityList?module=secret',
+    centerEnabled: true,
+    publishEnabled: true
+  },
+  {
+    id: 'express',
+    title: '表白墙',
+    icon: '/image/express.png',
+    page: '/pages/communityList/communityList?module=express',
+    supportsSearch: true,
+    searchPlaceholder: '搜索名字或内容',
+    centerEnabled: true,
+    publishEnabled: true
+  },
+  {
+    id: 'topic',
+    title: '校园话题',
+    icon: '/image/topic.png',
+    page: '/pages/communityList/communityList?module=topic',
+    supportsSearch: true,
+    searchPlaceholder: '搜索话题关键词',
+    centerEnabled: true,
+    publishEnabled: true
+  },
+  {
+    id: 'delivery',
+    title: '全民快递',
+    icon: '/image/delivery.png',
+    page: '/pages/communityList/communityList?module=delivery',
+    centerEnabled: true,
+    publishEnabled: true
+  },
+  {
+    id: 'dating',
+    title: '卖室友',
+    icon: '/image/dating.png',
+    page: '/pages/communityList/communityList?module=dating',
+    centerEnabled: true,
+    publishEnabled: true
+  },
+  {
+    id: 'photograph',
+    title: '拍好校园',
+    icon: '/image/photograph.png',
+    page: '/pages/communityList/communityList?module=photograph',
+    centerEnabled: true,
+    publishEnabled: true
+  }
+]
+
+const COMMUNITY_MODULE_MAP = COMMUNITY_MODULES.reduce(function(result, moduleItem) {
+  result[moduleItem.id] = moduleItem
+  return result
+}, {})
+
+function getCommunityModule(moduleId) {
+  return COMMUNITY_MODULE_MAP[moduleId] || null
+}
+
+module.exports = {
+  COMMUNITY_MODULES,
+  COMMUNITY_MODULE_MAP,
+  SECONDHAND_CATEGORY_OPTIONS,
+  LOST_FOUND_MODE_OPTIONS,
+  LOST_FOUND_ITEM_OPTIONS,
+  SECRET_THEME_OPTIONS,
+  SECRET_TYPE_OPTIONS,
+  EXPRESS_GENDER_OPTIONS,
+  DELIVERY_STATUS_OPTIONS,
+  DATING_AREA_OPTIONS,
+  DATING_GRADE_OPTIONS,
+  PHOTOGRAPH_TAB_OPTIONS,
+  DELIVERY_DEFAULT_ORDER_NAME,
+  DELIVERY_PLACEHOLDER_PICKUP_CODE,
+  getCommunityModule
+}

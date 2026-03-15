@@ -64,8 +64,9 @@ Page({
   },
 
   onShareAppMessage: function() {
-    wx.showShareMenu({
-      showShareItems: ['qq', 'qzone', 'wechatFriends', 'wechatMoment']
-    })
+    return {
+      title: '课表查询',
+      path: '/pages/schedule/schedule'
+    }
   }
 })

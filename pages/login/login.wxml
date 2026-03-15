@@ -1,8 +1,9 @@
-<view class="container" wx:if="{{login}}">
+<view class="container" wx:if="{{ready}}">
 
   <view class="userinfo">
     <image class="userinfo-avatar" src="../../image/logo.png" background-size="cover"></image>
     <text class="userinfo-nickname">广东二师助手</text>
+    <text class="userinfo-source">当前数据源：{{dataSourceLabel}}</text>
   </view>
 
   <view class="page-body">
@@ -28,6 +29,21 @@
       </view>
 
     </form>
+
+    <view class="weui-cells__title">调试设置</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_switch">
+        <view class="weui-cell__bd">使用模拟测试数据</view>
+        <view class="weui-cell__ft">
+          <switch checked="{{useMockData}}" bindchange="handleDataSourceChange" />
+        </view>
+      </view>
+    </view>
+
+    <text wx:if="{{useMockData}}" class="mock_hint">{{mockCredentialsHint}}</text>
+    <navigator url="/pages/settings/settings" class="settings_link" hover-class="none">
+      更多功能设置
+    </navigator>
   </view>
 
   <view class="version_info">

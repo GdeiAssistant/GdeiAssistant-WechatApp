@@ -1,0 +1,112 @@
+<view class="page__bd">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <view class="container" wx:if="{{result == null}}">
+    <view class="weui-cells__title">查询条件</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">校区</view>
+        <view class="weui-cell__ft">
+          <picker range="{{campusOptions}}" range-key="label" value="{{campusIndex}}" data-field="campusIndex" bindchange="handlePickerChange">
+            <view>{{campusOptions[campusIndex].label}}</view>
+          </picker>
+        </view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">课室类型</view>
+        <view class="weui-cell__ft">
+          <picker range="{{roomTypeOptions}}" range-key="label" value="{{roomTypeIndex}}" data-field="roomTypeIndex" bindchange="handlePickerChange">
+            <view>{{roomTypeOptions[roomTypeIndex].label}}</view>
+          </picker>
+        </view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">星期</view>
+        <view class="weui-cell__ft">
+          <picker range="{{weekDayOptions}}" range-key="label" value="{{weekDayIndex}}" data-field="weekDayIndex" bindchange="handlePickerChange">
+            <view>{{weekDayOptions[weekDayIndex].label}}</view>
+          </picker>
+        </view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">单双周</view>
+        <view class="weui-cell__ft">
+          <picker range="{{weekTypeOptions}}" range-key="label" value="{{weekTypeIndex}}" data-field="weekTypeIndex" bindchange="handlePickerChange">
+            <view>{{weekTypeOptions[weekTypeIndex].label}}</view>
+          </picker>
+        </view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">节次</view>
+        <view class="weui-cell__ft">
+          <picker range="{{classPeriodOptions}}" range-key="label" value="{{classPeriodIndex}}" data-field="classPeriodIndex" bindchange="handlePickerChange">
+            <view>{{classPeriodOptions[classPeriodIndex].label}}</view>
+          </picker>
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">最少座位</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input value="{{minSeating}}" data-field="minSeating" bindinput="setFieldValue" class="weui-input" type="number" placeholder="可选" />
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">最多座位</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input value="{{maxSeating}}" data-field="maxSeating" bindinput="setFieldValue" class="weui-input" type="number" placeholder="可选" />
+        </view>
+      </view>
+    </view>
+
+    <view class="btn-area">
+      <button type="primary" disabled="{{loading}}" bindtap="submitQuery">查询</button>
+    </view>
+  </view>
+
+  <view class="container" wx:if="{{result != null}}">
+    <view class="weui-cells__title">{{result.length ? '查询结果' : '没有符合条件的空课室'}}</view>
+    <block wx:for="{{result}}" wx:key="number" wx:for-item="room">
+      <view class="weui-form-preview spare_preview">
+        <view class="weui-form-preview__hd">
+          <view class="weui-form-preview__item">
+            <view class="weui-form-preview__value_in-hd">{{room.name}}</view>
+          </view>
+        </view>
+        <view class="weui-form-preview__bd">
+          <view class="weui-form-preview__item">
+            <view class="weui-form-preview__label">课室编号</view>
+            <view class="weui-form-preview__value">{{room.number}}</view>
+          </view>
+          <view class="weui-form-preview__item">
+            <view class="weui-form-preview__label">课室类型</view>
+            <view class="weui-form-preview__value">{{room.type}}</view>
+          </view>
+          <view class="weui-form-preview__item">
+            <view class="weui-form-preview__label">校区</view>
+            <view class="weui-form-preview__value">{{room.zone}}</view>
+          </view>
+          <view class="weui-form-preview__item">
+            <view class="weui-form-preview__label">节次</view>
+            <view class="weui-form-preview__value">{{room.section}}</view>
+          </view>
+          <view class="weui-form-preview__item">
+            <view class="weui-form-preview__label">上课容量</view>
+            <view class="weui-form-preview__value">{{room.classSeating}}</view>
+          </view>
+          <view class="weui-form-preview__item">
+            <view class="weui-form-preview__label">考试容量</view>
+            <view class="weui-form-preview__value">{{room.examSeating}}</view>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <view class="btn-area">
+      <button type="primary" bindtap="resetQuery">重新查询</button>
+    </view>
+  </view>
+</view>

@@ -31,11 +31,11 @@ function normalizeCollectionResult(result) {
   }
 }
 
-function queryCollection(bookname, page) {
+function queryCollection(keyword, page) {
   return request({
     url: endpoints.library.collectionQuery,
     method: 'GET',
-    data: { keyword: bookname, page }
+    data: { keyword: keyword, page }
   }).then(normalizeCollectionResult)
 }
 

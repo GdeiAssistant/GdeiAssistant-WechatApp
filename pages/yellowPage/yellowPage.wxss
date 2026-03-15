@@ -1,0 +1,6 @@
+@import "../../common/lib/weui.wxss";
+
+.item_meta {
+  color: #888;
+  font-size: 24rpx;
+}

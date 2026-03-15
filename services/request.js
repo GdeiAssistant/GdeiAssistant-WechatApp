@@ -1,5 +1,7 @@
 const config = require('../config/index.js')
 const auth = require('./auth.js')
+const dataSource = require('./data-source.js')
+const mock = require('../mock/index.js')
 const { normalizePayload, pickMessage } = require('./response.js')
 
 function request(options) {
@@ -28,6 +30,40 @@ function request(options) {
       wx.showLoading({ title: loadingTitle, mask: true })
     }
 
+    const finishLoading = function() {
+      if (showLoading) {
+        wx.hideNavigationBarLoading()
+        wx.hideLoading()
+      }
+    }
+
+    const resolvePayload = function(payload) {
+      resolve(normalizePayload(payload))
+    }
+
+    const rejectPayload = function(error) {
+      if (error && error.statusCode === 401) {
+        auth.clearSession()
+        auth.reLaunchToLogin('登录过期', '登录凭证已过期，请重新登录')
+        reject(new Error('登录凭证已过期，请重新登录'))
+        return
+      }
+
+      reject(new Error(error && error.message ? error.message : '服务暂不可用，请稍后再试'))
+    }
+
+    if (dataSource.isMockMode()) {
+      mock.handleRequest({
+        url,
+        path: url,
+        method,
+        data,
+        header,
+        sessionToken
+      }).then(resolvePayload).catch(rejectPayload).finally(finishLoading)
+      return
+    }
+
     wx.request({
       url: /^https?:\/\//.test(url) ? url : config.resourceDomain + url,
       method,
@@ -36,7 +72,7 @@ function request(options) {
       data,
       success: function(res) {
         if (res.statusCode === 200) {
-          resolve(normalizePayload(res.data))
+          resolvePayload(res.data)
         } else if (res.statusCode === 401) {
           auth.clearSession()
           auth.reLaunchToLogin('登录过期', '登录凭证已过期，请重新登录')
@@ -48,12 +84,7 @@ function request(options) {
       fail: function() {
         reject(new Error('网络连接超时，请重试'))
       },
-      complete: function() {
-        if (showLoading) {
-          wx.hideNavigationBarLoading()
-          wx.hideLoading()
-        }
-      }
+      complete: finishLoading
     })
   })
 

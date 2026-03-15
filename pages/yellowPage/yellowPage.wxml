@@ -1,0 +1,17 @@
+<view class="page__bd">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <block wx:for="{{groupedYellowPages}}" wx:key="typeCode" wx:for-item="group">
+    <view class="weui-cells__title">{{group.typeName}}</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view wx:for="{{group.items}}" wx:key="section" wx:for-item="item" data-phone="{{item.majorPhone}}" bindtap="handleItemTap" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+        <view class="weui-cell__bd">
+          <view>{{item.section}}</view>
+          <view class="item_meta">{{item.address}}</view>
+          <view class="item_meta" wx:if="{{item.majorPhone}}">{{item.majorPhone}}</view>
+        </view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </view>
+    </view>
+  </block>
+</view>

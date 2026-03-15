@@ -1,0 +1,195 @@
+<view class="page__bd publish_page">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <view class="publish_card">
+    <view class="section_title">基础信息</view>
+    <view class="page_hint" wx:if="{{pageLoading}}">正在加载已有内容...</view>
+
+    <view wx:if="{{moduleId === 'ershou'}}">
+      <view class="weui-cells weui-cells_form">
+        <view class="weui-cell">
+          <view class="weui-cell__bd"><input class="weui-input" placeholder="商品名称" value="{{form.name}}" data-field="name" bindinput="setFieldValue" /></view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd"><input class="weui-input" placeholder="商品价格" type="digit" value="{{form.price}}" data-field="price" bindinput="setFieldValue" /></view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <picker range="{{secondhandTypeOptions}}" range-key="label" value="{{secondhandTypeIndex}}" data-field="secondhandTypeIndex" bindchange="handlePickerChange">
+              <view class="picker_value">商品分类：{{secondhandTypeOptions[secondhandTypeIndex].label}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd"><input class="weui-input" placeholder="交易地点" value="{{form.location}}" data-field="location" bindinput="setFieldValue" /></view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd"><input class="weui-input" placeholder="QQ 号" value="{{form.qq}}" data-field="qq" bindinput="setFieldValue" /></view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd"><input class="weui-input" placeholder="手机号（可选）" value="{{form.phone}}" data-field="phone" bindinput="setFieldValue" /></view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="商品描述" value="{{form.description}}" data-field="description" bindinput="setFieldValue"></textarea></view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{moduleId === 'lostandfound'}}">
+      <view class="weui-cells weui-cells_form">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <picker range="{{lostFoundModeOptions}}" range-key="label" value="{{lostFoundModeIndex}}" data-field="lostFoundModeIndex" bindchange="handlePickerChange">
+              <view class="picker_value">信息类型：{{lostFoundModeOptions[lostFoundModeIndex].label}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <picker range="{{lostFoundItemOptions}}" range-key="label" value="{{lostFoundItemIndex}}" data-field="lostFoundItemIndex" bindchange="handlePickerChange">
+              <view class="picker_value">物品分类：{{lostFoundItemOptions[lostFoundItemIndex].label}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="物品名称" value="{{form.name}}" data-field="name" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="地点" value="{{form.location}}" data-field="location" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="QQ（可选）" value="{{form.qq}}" data-field="qq" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="微信（可选）" value="{{form.wechat}}" data-field="wechat" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="电话（可选）" value="{{form.phone}}" data-field="phone" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="物品描述" value="{{form.description}}" data-field="description" bindinput="setFieldValue"></textarea></view></view>
+      </view>
+    </view>
+
+    <view wx:if="{{moduleId === 'secret'}}">
+      <view class="weui-cells weui-cells_form">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <picker range="{{secretThemeOptions}}" range-key="label" value="{{secretThemeIndex}}" data-field="secretThemeIndex" bindchange="handlePickerChange">
+              <view class="picker_value">主题：{{secretThemeOptions[secretThemeIndex].label}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <picker range="{{secretTypeOptions}}" range-key="label" value="{{secretTypeIndex}}" data-field="secretTypeIndex" bindchange="handlePickerChange">
+              <view class="picker_value">内容类型：{{secretTypeOptions[secretTypeIndex].label}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_switch">
+          <view class="weui-cell__bd">24 小时后自动删除</view>
+          <view class="weui-cell__ft">
+            <switch checked="{{secretDeleteAfter24Hours}}" color="#3cb395" bindchange="handleSecretTimerChange" />
+          </view>
+        </view>
+        <view class="weui-cell" wx:if="{{secretTypeIndex === 0}}">
+          <view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="说点心里话吧" value="{{form.content}}" data-field="content" bindinput="setFieldValue"></textarea></view>
+        </view>
+      </view>
+
+      <view class="voice_panel" wx:if="{{secretTypeIndex === 1}}">
+        <button type="primary" wx:if="{{!recording}}" bindtap="startSecretRecord">开始录音</button>
+        <button type="warn" wx:if="{{recording}}" bindtap="stopSecretRecord">结束录音</button>
+        <view class="voice_hint" wx:if="{{voiceFile}}">已录制 {{voiceDuration}} 秒语音</view>
+        <button wx:if="{{voiceFile}}" bindtap="toggleSecretVoicePreview">{{voicePlaying ? '停止试听' : '试听语音'}}</button>
+      </view>
+    </view>
+
+    <view wx:if="{{moduleId === 'express'}}">
+      <view class="weui-cells weui-cells_form">
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="你的昵称" value="{{form.nickname}}" data-field="nickname" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="你的真名（可选）" value="{{form.realname}}" data-field="realname" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <picker range="{{expressGenderOptions}}" range-key="label" value="{{expressSelfGenderIndex}}" data-field="expressSelfGenderIndex" bindchange="handlePickerChange">
+              <view class="picker_value">你的性别：{{expressGenderOptions[expressSelfGenderIndex].label}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="TA 的名字" value="{{form.targetName}}" data-field="targetName" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <picker range="{{expressGenderOptions}}" range-key="label" value="{{expressTargetGenderIndex}}" data-field="expressTargetGenderIndex" bindchange="handlePickerChange">
+              <view class="picker_value">TA 的性别：{{expressGenderOptions[expressTargetGenderIndex].label}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="表白内容" value="{{form.content}}" data-field="content" bindinput="setFieldValue"></textarea></view></view>
+      </view>
+    </view>
+
+    <view wx:if="{{moduleId === 'topic'}}">
+      <view class="weui-cells weui-cells_form">
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="话题关键词" value="{{form.topic}}" data-field="topic" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="聊聊你的想法" value="{{form.content}}" data-field="content" bindinput="setFieldValue"></textarea></view></view>
+      </view>
+    </view>
+
+    <view wx:if="{{moduleId === 'delivery'}}">
+      <view class="weui-cells weui-cells_form">
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="取件地点" value="{{form.pickupAddress}}" data-field="pickupAddress" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="取件码（可选）" value="{{form.pickupCode}}" data-field="pickupCode" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="送达地址" value="{{form.deliveryAddress}}" data-field="deliveryAddress" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="联系电话" value="{{form.contactPhone}}" data-field="contactPhone" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="跑腿费" type="digit" value="{{form.reward}}" data-field="reward" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="备注说明（可选）" value="{{form.description}}" data-field="description" bindinput="setFieldValue"></textarea></view></view>
+      </view>
+    </view>
+
+    <view wx:if="{{moduleId === 'dating'}}">
+      <view class="weui-cells weui-cells_form">
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="昵称" value="{{form.nickname}}" data-field="nickname" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <picker range="{{datingGradeOptions}}" range-key="label" value="{{datingGradeIndex}}" data-field="datingGradeIndex" bindchange="handlePickerChange">
+              <view class="picker_value">年级：{{datingGradeOptions[datingGradeIndex].label}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <picker range="{{datingAreaOptions}}" range-key="label" value="{{datingAreaIndex}}" data-field="datingAreaIndex" bindchange="handlePickerChange">
+              <view class="picker_value">展示区：{{datingAreaOptions[datingAreaIndex].label}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="专业" value="{{form.faculty}}" data-field="faculty" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="家乡" value="{{form.hometown}}" data-field="hometown" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="QQ（可选）" value="{{form.qq}}" data-field="qq" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="微信（可选）" value="{{form.wechat}}" data-field="wechat" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="介绍一下你想推荐的室友" value="{{form.content}}" data-field="content" bindinput="setFieldValue"></textarea></view></view>
+      </view>
+    </view>
+
+    <view wx:if="{{moduleId === 'photograph'}}">
+      <view class="weui-cells weui-cells_form">
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="作品标题" value="{{form.title}}" data-field="title" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <picker range="{{photographTypeOptions}}" range-key="label" value="{{photographTypeIndex}}" data-field="photographTypeIndex" bindchange="handlePickerChange">
+              <view class="picker_value">作品类型：{{photographTypeOptions[photographTypeIndex].label}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="weui-cell"><view class="weui-cell__bd"><textarea class="weui-textarea" placeholder="拍摄说明（可选）" value="{{form.content}}" data-field="content" bindinput="setFieldValue"></textarea></view></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="publish_card" wx:if="{{moduleId === 'ershou' || moduleId === 'lostandfound' || moduleId === 'topic' || moduleId === 'dating' || moduleId === 'photograph'}}">
+    <view class="section_title">图片上传</view>
+    <view class="image_list">
+      <view wx:for="{{images}}" wx:key="path" wx:for-item="imageItem" class="image_item">
+        <image class="image_preview" src="{{imageItem.path}}" mode="aspectFill"></image>
+        <text class="image_remove" wx:if="{{!isEditMode}}" data-index="{{index}}" bindtap="removeImage">x</text>
+      </view>
+      <view class="image_add" wx:if="{{!isEditMode && images.length < imageLimit}}" bindtap="chooseImages">+</view>
+    </view>
+    <view class="upload_hint" wx:if="{{isEditMode && (moduleId === 'ershou' || moduleId === 'lostandfound')}}">编辑模式暂不支持修改图片</view>
+    <view class="upload_hint" wx:elif="{{moduleId === 'dating'}}">卖室友仅展示第一张图片</view>
+  </view>
+
+  <view class="submit_area">
+    <button type="primary" loading="{{submitting}}" disabled="{{pageLoading}}" bindtap="submitPublish">{{isEditMode ? '保存修改' : '提交发布'}}</button>
+  </view>
+</view>

@@ -4,7 +4,7 @@ const pageUtils = require('../../utils/page.js')
 Page({
   data: {
     list: [],
-    bookname: null,
+    keyword: null,
     currentPage: 0,
     sumPage: 0,
     hasMore: false,
@@ -13,8 +13,8 @@ Page({
   },
 
   formSubmit: function(e) {
-    const bookname = e.detail.value.bookname
-    if (!bookname) {
+    const keyword = e.detail.value.keyword
+    if (!keyword) {
       pageUtils.showTopTips(this, '请填写要查询的书名')
       return
     }
@@ -22,12 +22,12 @@ Page({
     this.setData({
       loading: true,
       list: [],
-      bookname,
+      keyword,
       currentPage: 0,
       sumPage: 0
     })
     pageUtils.runWithNavigationLoading(this, () => {
-      return libraryApi.queryCollection(bookname, 1)
+      return libraryApi.queryCollection(keyword, 1)
     }).then((result) => {
       if (!result.success) {
         pageUtils.showTopTips(this, result.message)
@@ -51,7 +51,7 @@ Page({
   },
 
   loadMore: function() {
-    if (!this.data.bookname || this.data.currentPage >= this.data.sumPage) {
+    if (!this.data.keyword || this.data.currentPage >= this.data.sumPage) {
       pageUtils.showTopTips(this, '没有更多图书信息')
       return
     }
@@ -59,7 +59,7 @@ Page({
     wx.showLoading({ title: '数据加载中', mask: true })
     const nextPage = this.data.currentPage + 1
 
-    libraryApi.queryCollection(this.data.bookname, nextPage).then((result) => {
+    libraryApi.queryCollection(this.data.keyword, nextPage).then((result) => {
       wx.hideLoading()
       if (!result.success) {
         pageUtils.showTopTips(this, result.message)
@@ -83,8 +83,9 @@ Page({
   },
 
   onShareAppMessage: function() {
-    wx.showShareMenu({
-      showShareItems: ['qq', 'qzone', 'wechatFriends', 'wechatMoment']
-    })
+    return {
+      title: '馆藏查询',
+      path: '/pages/collection/collection'
+    }
   }
 })

@@ -1,0 +1,157 @@
+<view class="page__bd community-page">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <view class="stats_panel" wx:if="{{moduleId === 'photograph' && stats}}">
+    <view class="stat_item">
+      <text class="stat_value">{{stats.photos}}</text>
+      <text class="stat_label">作品</text>
+    </view>
+    <view class="stat_item">
+      <text class="stat_value">{{stats.comments}}</text>
+      <text class="stat_label">评论</text>
+    </view>
+    <view class="stat_item">
+      <text class="stat_value">{{stats.likes}}</text>
+      <text class="stat_label">点赞</text>
+    </view>
+  </view>
+
+  <view class="search_bar" wx:if="{{moduleConfig && moduleConfig.supportsSearch}}">
+    <input
+      class="search_input"
+      value="{{inputKeyword}}"
+      placeholder="{{moduleConfig.searchPlaceholder}}"
+      confirm-type="search"
+      bindinput="handleSearchInput"
+      bindconfirm="submitSearch"
+    />
+    <button size="mini" type="primary" bindtap="submitSearch">搜索</button>
+    <button size="mini" wx:if="{{searchKeyword}}" bindtap="clearSearch">清空</button>
+  </view>
+
+  <scroll-view wx:if="{{tabs.length}}" scroll-x class="tab_scroll" enable-flex>
+    <view class="tab_row">
+      <view
+        wx:for="{{tabs}}"
+        wx:key="label"
+        wx:for-item="tab"
+        data-index="{{index}}"
+        bindtap="switchTab"
+        class="tab_item {{activeTabIndex === index ? 'tab_item_active' : ''}}"
+      >
+        {{tab.label}}
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="list_section" wx:if="{{moduleId === 'ershou'}}">
+    <view wx:for="{{items}}" wx:key="id" wx:for-item="item" data-index="{{index}}" bindtap="openDetail" class="market_card">
+      <image class="market_cover" src="{{item.cover}}" mode="aspectFill"></image>
+      <view class="market_content">
+        <view class="card_title">{{item.title}}</view>
+        <view class="card_summary">{{item.summary}}</view>
+        <view class="card_meta_row">
+          <text class="card_badge">{{item.badgeText}}</text>
+          <text class="card_meta">{{item.metaText}}</text>
+        </view>
+        <view class="card_footer">
+          <text class="price_text">￥{{item.priceText}}</text>
+          <text class="time_text">{{item.timeText}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="list_section lost_grid" wx:if="{{moduleId === 'lostandfound'}}">
+    <view wx:for="{{items}}" wx:key="id" wx:for-item="item" data-index="{{index}}" bindtap="openDetail" class="lost_card">
+      <image class="lost_cover" src="{{item.cover}}" mode="aspectFill"></image>
+      <view class="lost_badges">
+        <text class="card_badge">{{item.badgeText}}</text>
+        <text class="card_sub_badge">{{item.subBadgeText}}</text>
+      </view>
+      <view class="card_title">{{item.title}}</view>
+      <view class="card_summary">{{item.summary}}</view>
+      <view class="card_meta">{{item.metaText}}</view>
+      <view class="time_text">{{item.timeText}}</view>
+    </view>
+  </view>
+
+  <view class="list_section" wx:if="{{moduleId === 'secret'}}">
+    <view wx:for="{{items}}" wx:key="id" wx:for-item="item" data-index="{{index}}" bindtap="openDetail" class="post_card secret_card">
+      <view class="card_title">{{item.title}}</view>
+      <view class="card_summary">{{item.summary}}</view>
+      <view class="post_footer">
+        <text class="time_text">{{item.timeText}}</text>
+        <text class="metric_text">点赞 {{item.likeCount}}</text>
+        <text class="metric_text">评论 {{item.commentCount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="list_section" wx:if="{{moduleId === 'express' || moduleId === 'topic'}}">
+    <view wx:for="{{items}}" wx:key="id" wx:for-item="item" data-index="{{index}}" bindtap="openDetail" class="post_card">
+      <image wx:if="{{item.cover}}" class="topic_cover" src="{{item.cover}}" mode="aspectFill"></image>
+      <view class="card_title">{{item.title}}</view>
+      <view class="card_summary">{{item.summary}}</view>
+      <view class="post_footer">
+        <text class="time_text">{{item.timeText}}</text>
+        <text class="metric_text" wx:if="{{item.likeCount !== undefined}}">点赞 {{item.likeCount}}</text>
+        <text class="metric_text" wx:if="{{item.commentCount !== undefined}}">评论 {{item.commentCount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="list_section" wx:if="{{moduleId === 'delivery'}}">
+    <view wx:for="{{items}}" wx:key="id" wx:for-item="item" data-index="{{index}}" bindtap="openDetail" class="delivery_card">
+      <view class="delivery_header">
+        <text class="card_title">{{item.title}}</text>
+        <text class="price_text">￥{{item.priceText}}</text>
+      </view>
+      <view class="card_summary">{{item.summary}}</view>
+      <view class="card_meta_row">
+        <text class="card_badge delivery_badge">{{item.badgeText}}</text>
+        <text class="card_meta">{{item.metaText}}</text>
+      </view>
+      <view class="time_text">{{item.timeText}}</view>
+    </view>
+  </view>
+
+  <view class="list_section dating_grid" wx:if="{{moduleId === 'dating'}}">
+    <view wx:for="{{items}}" wx:key="id" wx:for-item="item" data-index="{{index}}" bindtap="openDetail" class="dating_card">
+      <image class="dating_cover" src="{{item.cover}}" mode="aspectFill"></image>
+      <view class="card_title">{{item.title}}</view>
+      <view class="card_meta">{{item.badgeText}} · {{item.metaText}}</view>
+      <view class="card_summary">{{item.summary}}</view>
+      <view class="time_text">{{item.timeText}}</view>
+    </view>
+  </view>
+
+  <view class="list_section" wx:if="{{moduleId === 'photograph'}}">
+    <view wx:for="{{items}}" wx:key="id" wx:for-item="item" data-index="{{index}}" bindtap="openDetail" class="photo_card">
+      <image class="photo_cover" src="{{item.cover}}" mode="aspectFill"></image>
+      <view class="card_title">{{item.title}}</view>
+      <view class="card_summary">{{item.summary}}</view>
+      <view class="post_footer">
+        <text class="time_text">{{item.timeText}}</text>
+        <text class="metric_text">点赞 {{item.likeCount}}</text>
+        <text class="metric_text">评论 {{item.commentCount}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="weui-loadmore" wx:if="{{loading}}">
+    <i class="weui-loading"></i>
+    <view class="weui-loadmore__tips">正在加载</view>
+  </view>
+  <view class="weui-loadmore" wx:if="{{!loading && finished && items.length}}">
+    <view class="weui-loadmore__tips">没有更多数据了</view>
+  </view>
+  <view class="weui-loadmore" wx:if="{{!loading && finished && !items.length}}">
+    <view class="weui-loadmore__tips">暂无内容</view>
+  </view>
+
+  <view class="bottom_bar" wx:if="{{moduleConfig}}">
+    <button class="bottom_button" type="primary" bindtap="openPublish">发布</button>
+    <button class="bottom_button bottom_button_secondary" wx:if="{{moduleConfig.centerEnabled}}" bindtap="openCenter">我的</button>
+  </view>
+</view>

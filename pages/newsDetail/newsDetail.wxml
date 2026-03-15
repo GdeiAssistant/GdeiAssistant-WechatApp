@@ -1,0 +1,7 @@
+<view class="page__bd">
+  <view class="container" wx:if="{{newsItem}}">
+    <view class="detail_title">{{newsItem.title}}</view>
+    <view class="detail_date">{{newsItem.publishDate}}</view>
+    <view class="detail_content">{{newsItem.content}}</view>
+  </view>
+</view>

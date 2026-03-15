@@ -1,20 +1,17 @@
+const { SYSTEM_ACTIONS } = require('../../constants/features.js')
 const auth = require('../../services/auth.js')
 const userApi = require('../../services/apis/user.js')
+const featureConfig = require('../../services/feature-config.js')
+const dataSource = require('../../services/data-source.js')
 
 Page({
   data: {
     avatar: null,
     nickname: null,
-    access: {
-      grade: true,
-      schedule: true,
-      bill: true,
-      card: true,
-      lost: true,
-      evaluate: true,
-      collection: true,
-      book: true
-    }
+    homeSections: [],
+    systemActions: SYSTEM_ACTIONS,
+    dataSourceLabel: '',
+    hiddenFeatureIds: []
   },
 
   logout: function() {
@@ -36,46 +33,72 @@ Page({
     })
   },
 
-  onLoad: function() {
-    const page = this
+  handleActionTap: function(event) {
+    const action = event.currentTarget.dataset.action
+    if (action === 'logout') {
+      this.logout()
+    }
+  },
 
-    userApi.getAvatar().then((result) => {
-      if (result.success && result.data !== '') {
-        page.setData({
-          avatar: result.data
-        })
-      } else {
-        page.setData({
-          avatar: '../../image/default.png'
+  loadHomeSections: function() {
+    const hiddenFeatureIds = this.data.hiddenFeatureIds || []
+    const homeSections = featureConfig.getHomeSections().map(function(section) {
+      return {
+        id: section.id,
+        title: section.title,
+        features: section.features.filter(function(feature) {
+          return hiddenFeatureIds.indexOf(feature.id) === -1
         })
       }
-    }).catch(() => {
+    }).filter(function(section) {
+      return section.features.length > 0
+    })
+
+    this.setData({
+      homeSections: homeSections,
+      dataSourceLabel: dataSource.getDataSourceLabel()
+    })
+  },
+
+  loadProfile: function() {
+    const page = this
+
+    userApi.getAvatar().then(function(result) {
+      page.setData({
+        avatar: result.success && result.data ? result.data : '../../image/default.png'
+      })
+    }).catch(function() {
       page.setData({
         avatar: '../../image/default.png'
       })
     })
 
-    userApi.getProfile().then((result) => {
-      if (result.success && result.data && result.data.nickname) {
-        page.setData({
-          nickname: result.data.nickname
-        })
-      } else {
-        page.setData({
-          nickname: '广东二师助手用户'
-        })
-      }
-    }).catch(() => {
+    userApi.getProfile().then(function(result) {
+      page.setData({
+        nickname: result.success && result.data && result.data.nickname ? result.data.nickname : '广东二师助手用户'
+      })
+    }).catch(function() {
       page.setData({
         nickname: '广东二师助手用户'
       })
     })
+  },
 
+  onLoad: function() {
+    this.loadProfile()
+    this.setData({ hiddenFeatureIds: [] })
+    this.loadHomeSections()
+  },
+
+  onShow: function() {
+    this.loadProfile()
+    this.loadHomeSections()
   },
 
   onShareAppMessage: function() {
-    wx.showShareMenu({
-      showShareItems: ['qq', 'qzone', 'wechatFriends', 'wechatMoment']
-    })
+    return {
+      title: '广东二师助手',
+      path: '/pages/login/login'
+    }
   }
 })

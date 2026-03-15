@@ -11,12 +11,27 @@
 - 成绩查询
 - 课表查询
 - 四六级查询
+- 考研查询
+- 空课室查询
 - 一键评教
 - 消费查询
+- 校园卡信息查询
 - 借阅查询
 - 馆藏查询
-- 校园卡查询
 - 校园卡挂失
+- 电费查询
+- 黄页查询
+- 新闻通知
+- 专题阅读
+- 二手交易
+- 失物招领
+- 校园树洞
+- 表白墙
+- 校园话题
+- 全民快递
+- 卖室友
+- 拍好校园
+- Mock 模拟数据联调
 
 ## 页面预览
 
@@ -52,6 +67,16 @@ git clone https://github.com/GdeiAssistant/GdeiAssistant-WechatApp.git
 运行环境会根据小程序构建环境自动匹配（`develop -> dev`，`trial/release -> prod`）。
 如需自定义后端域名，可直接修改该文件中的环境配置。
 
+### 4. 使用 Mock 模式
+
+项目已内置本地 Mock 数据源，适合在未连通后端或联调 UI 时使用：
+
+- 登录页可直接切换 `使用模拟测试数据`
+- 首页进入 `功能设置` 也可切换数据源并管理首页模块展示
+- Mock 账号：`gdeiassistant`
+- Mock 密码：`gdeiassistant`
+- Mock 模式下支持社区模块的发布、点赞、评论、接单、撩一下等本地状态联动
+
 ## 项目结构
 
 ```text
@@ -60,8 +85,11 @@ git clone https://github.com/GdeiAssistant/GdeiAssistant-WechatApp.git
 ├─ services/             # 请求、鉴权、API 领域服务
 │  ├─ request.js         # 统一请求入口
 │  ├─ auth.js            # 会话令牌管理
+│  ├─ upload.js          # 直传对象存储的本地文件上传
 │  ├─ endpoints.js       # 接口路径集中定义
 │  └─ apis/              # 业务 API 分层
+├─ mock/                 # 本地 Mock 数据与社区状态模拟
+├─ constants/            # 功能与社区模块配置
 ├─ config/               # 运行配置
 ├─ utils/                # 通用工具函数
 └─ common/lib/weui.wxss  # WeUI 样式库

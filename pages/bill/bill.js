@@ -55,8 +55,9 @@ Page({
   },
 
   onShareAppMessage: function() {
-    wx.showShareMenu({
-      showShareItems: ['qq', 'qzone', 'wechatFriends', 'wechatMoment']
-    })
+    return {
+      title: '消费查询',
+      path: '/pages/bill/bill'
+    }
   }
 })

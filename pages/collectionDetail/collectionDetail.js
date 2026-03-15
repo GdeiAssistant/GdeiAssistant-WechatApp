@@ -53,8 +53,9 @@ Page({
   },
 
   onShareAppMessage: function() {
-    wx.showShareMenu({
-      showShareItems: ['qq', 'qzone', 'wechatFriends', 'wechatMoment']
-    })
+    return {
+      title: '馆藏详情',
+      path: '/pages/collection/collection'
+    }
   }
 })

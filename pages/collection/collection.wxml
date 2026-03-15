@@ -15,7 +15,7 @@
                 <view class="weui-label">书名</view>
               </view>
               <view class="weui-cell__bd">
-                <input name="bookname" class="weui-input" maxlength='50' type="text" placeholder="请输入图书信息" />
+                <input name="keyword" class="weui-input" maxlength='50' type="text" placeholder="请输入图书信息" />
               </view>
             </view>
           </view>

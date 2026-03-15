@@ -32,8 +32,9 @@ Page({
   },
 
   onShareAppMessage: function() {
-    wx.showShareMenu({
-      showShareItems: ['qq', 'qzone', 'wechatFriends', 'wechatMoment']
-    })
+    return {
+      title: '校园卡挂失',
+      path: '/pages/cardLost/cardLost'
+    }
   }
 })

@@ -50,8 +50,9 @@ Page({
   },
 
   onShareAppMessage: function() {
-    wx.showShareMenu({
-      showShareItems: ['qq', 'qzone', 'wechatFriends', 'wechatMoment']
-    })
+    return {
+      title: '借阅查询',
+      path: '/pages/book/book'
+    }
   }
 })

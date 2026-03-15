@@ -32,8 +32,9 @@ Page({
   },
 
   onShareAppMessage: function() {
-    wx.showShareMenu({
-      showShareItems: ['qq', 'qzone', 'wechatFriends', 'wechatMoment']
-    })
+    return {
+      title: '教学评价',
+      path: '/pages/evaluate/evaluate'
+    }
   }
 })

@@ -1,0 +1,149 @@
+<view class="page__bd detail_page">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <view class="loading_box" wx:if="{{loading}}">
+    <i class="weui-loading"></i>
+    <text>正在加载</text>
+  </view>
+
+  <view wx:if="{{!loading && detail}}">
+    <swiper wx:if="{{detail.images && detail.images.length}}" class="detail_swiper" indicator-dots autoplay="{{false}}">
+      <block wx:for="{{detail.images}}" wx:key="*this" wx:for-item="imageItem">
+        <swiper-item data-index="{{index}}" bindtap="previewImages">
+          <image class="detail_swiper_image" src="{{imageItem}}" mode="aspectFill"></image>
+        </swiper-item>
+      </block>
+    </swiper>
+
+    <view class="detail_card">
+      <view class="detail_title">{{detail.title}}</view>
+      <view class="detail_subtitle" wx:if="{{detail.subtitle}}">{{detail.subtitle}}</view>
+      <view class="detail_price" wx:if="{{detail.priceText}}">￥{{detail.priceText}}</view>
+      <view class="detail_badges" wx:if="{{detail.badgeText || detail.typeLabel}}">
+        <text class="detail_badge" wx:if="{{detail.badgeText}}">{{detail.badgeText}}</text>
+        <text class="detail_badge detail_badge_secondary" wx:if="{{detail.typeLabel}}">{{detail.typeLabel}}</text>
+      </view>
+      <view class="detail_desc">{{detail.description}}</view>
+      <view class="detail_time" wx:if="{{detail.publishTime}}">发布时间：{{detail.publishTime}}</view>
+    </view>
+
+    <view class="detail_card" wx:if="{{moduleId === 'ershou' || moduleId === 'lostandfound'}}">
+      <view class="section_title">联系信息</view>
+      <view class="contact_row" wx:if="{{detail.qq}}">
+        <text>QQ：{{detail.qq}}</text>
+        <button size="mini" bindtap="copyValue" data-value="{{detail.qq}}">复制</button>
+      </view>
+      <view class="contact_row" wx:if="{{detail.wechat}}">
+        <text>微信：{{detail.wechat}}</text>
+        <button size="mini" bindtap="copyValue" data-value="{{detail.wechat}}">复制</button>
+      </view>
+      <view class="contact_row" wx:if="{{detail.phone}}">
+        <text>电话：{{detail.phone}}</text>
+        <button size="mini" type="primary" bindtap="callPhone">拨打</button>
+      </view>
+      <view class="seller_box">
+        <image class="seller_avatar" src="{{detail.sellerAvatar}}" mode="aspectFill"></image>
+        <view class="seller_text">发布者：{{detail.sellerName}}</view>
+      </view>
+    </view>
+
+    <view class="detail_card" wx:if="{{moduleId === 'secret'}}">
+      <view class="section_title">树洞互动</view>
+      <button type="primary" wx:if="{{detail.type === 1 && detail.voiceURL}}" bindtap="toggleSecretVoice">
+        {{playingVoice ? '停止播放语音' : '播放语音'}}
+      </button>
+      <view class="action_row">
+        <button size="mini" bindtap="toggleLike">{{detail.liked ? '取消点赞' : '点赞'}} {{detail.likeCount}}</button>
+        <text class="detail_metric">评论 {{detail.commentCount}}</text>
+      </view>
+    </view>
+
+    <view class="detail_card" wx:if="{{moduleId === 'express'}}">
+      <view class="section_title">互动数据</view>
+      <view class="action_row">
+        <button size="mini" bindtap="toggleLike">{{detail.liked ? '已点赞' : '点赞'}} {{detail.likeCount}}</button>
+        <text class="detail_metric">评论 {{detail.commentCount}}</text>
+      </view>
+      <view class="weui-cells weui-cells_form" wx:if="{{detail.canGuess}}">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <input class="weui-input" placeholder="输入你猜的名字" value="{{guessInput}}" data-field="guessInput" bindinput="setFieldValue" />
+          </view>
+          <view class="weui-cell__ft">
+            <button size="mini" type="primary" bindtap="submitGuess">提交</button>
+          </view>
+        </view>
+        <view class="guess_hint">已猜 {{detail.guessCount}} 次，猜中 {{detail.correctCount}} 次</view>
+      </view>
+    </view>
+
+    <view class="detail_card" wx:if="{{moduleId === 'topic'}}">
+      <view class="action_row">
+        <button size="mini" bindtap="toggleLike">{{detail.liked ? '已点赞' : '点赞'}} {{detail.likeCount}}</button>
+      </view>
+    </view>
+
+    <view class="detail_card" wx:if="{{moduleId === 'delivery'}}">
+      <view class="section_title">任务信息</view>
+      <view class="detail_row" wx:if="{{detail.userRoleTitle}}">我的角色：{{detail.userRoleTitle}}</view>
+      <view class="detail_row">取件点：{{detail.pickupAddress}}</view>
+      <view class="detail_row">送达地址：{{detail.deliveryAddress}}</view>
+      <view class="detail_row" wx:if="{{detail.pickupCodeText}}">取件码：{{detail.pickupCodeText}}</view>
+      <view class="contact_row" wx:if="{{detail.phoneText}}">
+        <text>联系电话：{{detail.phoneText}}</text>
+        <button size="mini" type="primary" wx:if="{{detail.canViewSensitiveInfo && detail.phone}}" bindtap="callPhone">拨打</button>
+      </view>
+      <view class="detail_row">跑腿费：￥{{detail.priceText}}</view>
+      <view class="detail_hint" wx:if="{{detail.statusDescription}}">{{detail.statusDescription}}</view>
+      <view class="detail_hint" wx:if="{{detail.sensitiveHint}}">{{detail.sensitiveHint}}</view>
+      <view class="detail_actions">
+        <button type="primary" wx:if="{{detail.canAccept}}" bindtap="acceptDelivery">立即接单</button>
+        <button type="primary" wx:if="{{detail.canFinish}}" bindtap="finishDelivery">确认完成</button>
+      </view>
+    </view>
+
+    <view class="detail_card" wx:if="{{moduleId === 'dating'}}">
+      <view class="section_title">联系信息</view>
+      <view class="detail_row">家乡：{{detail.hometown}}</view>
+      <view class="detail_row" wx:if="{{detail.contactVisible && detail.qq}}">QQ：{{detail.qq}}</view>
+      <view class="detail_row" wx:if="{{detail.contactVisible && detail.wechat}}">微信：{{detail.wechat}}</view>
+      <view class="detail_row" wx:if="{{!detail.contactVisible}}">对方同意后才会显示联系方式</view>
+      <view class="weui-cells weui-cells_form" wx:if="{{detail.canSubmitPick}}">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <textarea class="weui-textarea" placeholder="说点什么吧，不超过 50 字" value="{{pickInput}}" data-field="pickInput" bindinput="setFieldValue"></textarea>
+          </view>
+        </view>
+      </view>
+      <button type="primary" wx:if="{{detail.canSubmitPick}}" bindtap="submitPick">发送撩一下</button>
+    </view>
+
+    <view class="detail_card" wx:if="{{moduleId === 'photograph'}}">
+      <view class="action_row">
+        <button size="mini" bindtap="toggleLike">{{detail.liked ? '已点赞' : '点赞'}} {{detail.likeCount}}</button>
+        <text class="detail_metric">评论 {{detail.commentCount}}</text>
+      </view>
+    </view>
+
+    <view class="detail_card" wx:if="{{comments.length}}">
+      <view class="section_title">评论区</view>
+      <view wx:for="{{comments}}" wx:key="id" wx:for-item="commentItem" class="comment_item">
+        <view class="comment_name">{{commentItem.nickname || '匿名同学'}}</view>
+        <view class="comment_text">{{commentItem.comment}}</view>
+        <view class="comment_time">{{commentItem.publishTime || commentItem.createTime}}</view>
+      </view>
+    </view>
+
+    <view class="detail_card" wx:if="{{moduleId === 'secret' || moduleId === 'express' || moduleId === 'photograph'}}">
+      <view class="section_title">发表评论</view>
+      <view class="weui-cells weui-cells_form">
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <textarea class="weui-textarea" placeholder="写下你的评论" value="{{commentInput}}" data-field="commentInput" bindinput="setFieldValue"></textarea>
+          </view>
+        </view>
+      </view>
+      <button type="primary" bindtap="submitComment">提交评论</button>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,79 @@
+<view class="page__bd">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <view class="container" wx:if="{{!result}}">
+    <view class="weui-cells__title">查询信息</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">姓名</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input value="{{name}}" data-field="name" bindinput="setFieldValue" class="weui-input" placeholder="请输入姓名" />
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">考号</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input value="{{examNumber}}" data-field="examNumber" bindinput="setFieldValue" class="weui-input" placeholder="请输入准考证号" />
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_input">
+        <view class="weui-cell__hd">
+          <view class="weui-label">证件号</view>
+        </view>
+        <view class="weui-cell__bd">
+          <input value="{{idNumber}}" data-field="idNumber" bindinput="setFieldValue" class="weui-input" placeholder="请输入证件号" />
+        </view>
+      </view>
+    </view>
+
+    <view class="btn-area">
+      <button type="primary" disabled="{{loading}}" bindtap="submitQuery">查询</button>
+    </view>
+  </view>
+
+  <view class="container" wx:if="{{result}}">
+    <view class="weui-cells__title">考研成绩</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell">
+        <view class="weui-cell__bd">姓名</view>
+        <view class="weui-cell__ft">{{result.name}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">报名号</view>
+        <view class="weui-cell__ft">{{result.signUpNumber}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">准考证号</view>
+        <view class="weui-cell__ft">{{result.examNumber}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">总分</view>
+        <view class="weui-cell__ft">{{result.totalScore}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">科目一</view>
+        <view class="weui-cell__ft">{{result.firstScore}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">科目二</view>
+        <view class="weui-cell__ft">{{result.secondScore}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">科目三</view>
+        <view class="weui-cell__ft">{{result.thirdScore}}</view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">科目四</view>
+        <view class="weui-cell__ft">{{result.fourthScore}}</view>
+      </view>
+    </view>
+
+    <view class="btn-area">
+      <button type="primary" bindtap="resetQuery">重新查询</button>
+    </view>
+  </view>
+</view>

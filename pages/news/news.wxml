@@ -1,0 +1,29 @@
+<view class="page__bd">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <view class="weui-navbar">
+    <view wx:for="{{tabs}}" wx:key="type" wx:for-item="tab" data-type="{{tab.type}}" bindtap="switchTab" class="weui-navbar__item {{activeType == tab.type ? 'weui-bar__item_on' : ''}}">
+      <view class="weui-navbar__title">{{tab.label}}</view>
+    </view>
+  </view>
+
+  <view class="weui-cells weui-cells_after-title">
+    <view wx:for="{{newsList}}" wx:key="id" wx:for-item="newsItem" data-index="{{index}}" bindtap="openNewsDetail" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+      <view class="weui-cell__bd">
+        <view class="news_title">{{newsItem.title}}</view>
+      </view>
+      <view class="weui-cell__ft news_date">{{newsItem.publishDate}}</view>
+    </view>
+  </view>
+
+  <view class="weui-loadmore" wx:if="{{loading}}">
+    <i class="weui-loading"></i>
+    <view class="weui-loadmore__tips">正在加载</view>
+  </view>
+  <view class="weui-loadmore" wx:if="{{!loading && finished && newsList.length}}">
+    <view class="weui-loadmore__tips">没有更多数据了</view>
+  </view>
+  <view class="weui-loadmore" wx:if="{{!loading && finished && !newsList.length}}">
+    <view class="weui-loadmore__tips">暂无新闻通知</view>
+  </view>
+</view>

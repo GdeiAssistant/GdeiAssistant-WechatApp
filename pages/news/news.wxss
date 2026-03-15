@@ -1,0 +1,17 @@
+@import "../../common/lib/weui.wxss";
+
+.weui-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: #fff;
+}
+
+.news_title {
+  padding-right: 20rpx;
+  word-break: break-all;
+}
+
+.news_date {
+  font-size: 24rpx;
+}

@@ -1,0 +1,5 @@
+@import "../../common/lib/weui.wxss";
+
+.spare_preview {
+  margin-top: 20rpx;
+}

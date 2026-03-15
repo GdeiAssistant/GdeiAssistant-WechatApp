@@ -41,8 +41,9 @@ Page({
   },
 
   onShareAppMessage: function() {
-    wx.showShareMenu({
-      showShareItems: ['qq', 'qzone', 'wechatFriends', 'wechatMoment']
-    })
+    return {
+      title: '成绩查询',
+      path: '/pages/grade/grade'
+    }
   }
 })

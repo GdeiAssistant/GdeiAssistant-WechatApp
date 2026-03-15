@@ -37,8 +37,9 @@ Page({
   },
 
   onShareAppMessage: function() {
-    wx.showShareMenu({
-      showShareItems: ['qq', 'qzone', 'wechatFriends', 'wechatMoment']
-    })
+    return {
+      title: '我的校园卡',
+      path: '/pages/card/card'
+    }
   }
 })

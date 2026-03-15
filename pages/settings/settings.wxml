@@ -1,0 +1,34 @@
+<view class="page__bd">
+  <view class="weui-cells__title">数据源</view>
+  <view class="weui-cells weui-cells_after-title">
+    <view class="weui-cell weui-cell_switch">
+      <view class="weui-cell__bd">使用模拟测试数据</view>
+      <view class="weui-cell__ft">
+        <switch checked="{{useMockData}}" bindchange="handleDataSourceChange" />
+      </view>
+    </view>
+    <view class="weui-cell">
+      <view class="weui-cell__bd">当前模式</view>
+      <view class="weui-cell__ft">{{dataSourceLabel}}</view>
+    </view>
+    <view class="weui-cell">
+      <view class="weui-cell__bd">接口域名</view>
+      <view class="weui-cell__ft domain_value">{{resourceDomain}}</view>
+    </view>
+  </view>
+
+  <text wx:if="{{useMockData}}" class="mock_hint">{{mockCredentialsHint}}</text>
+
+  <view class="weui-cells__title">首页模块展示设置</view>
+  <block wx:for="{{featureSections}}" wx:key="id" wx:for-item="section">
+    <view class="section_title">{{section.title}}</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view wx:for="{{section.features}}" wx:key="id" wx:for-item="feature" class="weui-cell weui-cell_switch">
+        <view class="weui-cell__bd">{{feature.title}}</view>
+        <view class="weui-cell__ft">
+          <switch checked="{{feature.visible}}" data-feature-id="{{feature.id}}" bindchange="handleFeatureSwitch" />
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

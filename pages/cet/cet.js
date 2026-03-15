@@ -1,192 +1,130 @@
- // cet.js
- //获取应用实例
-//  const app = getApp()
+const cetApi = require('../../services/apis/cet.js')
+const dataSource = require('../../services/data-source.js')
+const pageUtils = require('../../utils/page.js')
 
-//  Page({
+Page({
+  data: {
+    ticketNumber: '',
+    name: '',
+    checkcode: '',
+    checkcodeImage: '',
+    mockCaptchaHint: '',
+    result: null,
+    loading: false,
+    errorMessage: null
+  },
 
-//    /**
-//     * 页面的初始数据
-//     */
-//    data: {
-//      cet: null,
-//      checkcodeImage: null,
-//      cookies: null,
-//      loading: false
-//    },
-//    showTopTips: function(content) {
-//      var that = this;
-//      this.setData({
-//        errorMessage: content
-//      });
-//      setTimeout(function() {
-//        that.setData({
-//          errorMessage: null
-//        });
-//      }, 3000);
-//    },
-//    loadCheckCodeImage() {
-//      const page = this
-//      wx.request({
-//        url: globalData.resourceDomain + "rest/cet/checkcode",
-//        method: "GET",
-//        success: function(result) {
-//          if (result.data.success) {
-//            page.setData({
-//              checkcodeImage: "data:image/jpg;base64," + result.data.data,
-//              cookies: result.header["Set-Cookie"]
-//            })
-//          } else {
-//            wx.showModal({
-//              title: '加载验证码图片失败',
-//              content: result.data.message,
-//              showCancel: false,
-//              success: function(res) {
-//                if (res.confirm) {
-//                  wx.navigateBack({
-//                    delta: 1
-//                  })
-//                }
-//              }
-//            })
-//          }
-//        },
-//        fail: function() {
-//          wx.showModal({
-//            title: '加载验证码图片失败',
-//            content: '网络连接超时，请重试',
-//            showCancel: false,
-//            success: function(res) {
-//              if (res.confirm) {
-//                wx.navigateBack({
-//                  delta: 1
-//                })
-//              }
-//            }
-//          });
-//        }
-//      })
-//    },
-//    formSubmit(e) {
-//      const page = this
-//      var name = e.detail.value.name
-//      var number = e.detail.value.number
-//      var checkcode = e.detail.value.checkcode
-//      if (name && number && checkcode) {
-//        wx.showNavigationBarLoading()
-//        this.setData({
-//          loading: true
-//        })
-//        var requestData = {
-//          name: name,
-//          number: number,
-//          checkcode: checkcode
-//        }
-//        wx.request({
-//          url: globalData.resourceDomain + "rest/cetquery",
-//          method: "POST",
-//          header: {
-//            "Content-Type": "application/x-www-form-urlencoded",
-//            "Cookie": page.data.cookies
-//          },
-//          data: requestData,
-//          success: function(result) {
-//            wx.hideNavigationBarLoading()
-//            page.setData({
-//              loading: false
-//            })
-//            if (result.data.success) {
-//              page.setData({
-//                cet: {
-//                  name: result.data.data.name,
-//                  school: result.data.data.school,
-//                  type: result.data.data.type,
-//                  admissionCard: result.data.data.admissionCard,
-//                  totalScore: result.data.data.totalScore,
-//                  listeningScore: result.data.data.listeningScore,
-//                  readingScore: result.data.data.readingScore,
-//                  writingAndTranslatingScore: result.data.data.writingAndTranslatingScore
-//                }
-//              })
-//            } else {
-//              wx.showModal({
-//                title: '查询失败',
-//                content: result.data.message,
-//                showCancel: false
-//              })
-//            }
-//          },
-//          fail: function() {
-//            wx.hideNavigationBarLoading()
-//            this.setData({
-//              loading: false
-//            })
-//            wx.showModal({
-//              title: '查询失败',
-//              content: '网络连接超时，请重试',
-//              showCancel: false
-//            });
-//          }
-//        });
-//      } else {
-//        this.showTopTips("请填写查询信息")
-//      }
-//    },
+  setFieldValue: function(event) {
+    const field = event.currentTarget.dataset.field
+    this.setData({ [field]: event.detail.value })
+  },
 
-//    /**
-//     * 生命周期函数--监听页面加载
-//     */
-//    onLoad: function(options) {
-//      this.loadCheckCodeImage()
-//    },
+  loadSavedNumber: function() {
+    cetApi.getCetNumber().then((result) => {
+      if (result.success && result.data) {
+        this.setData({
+          ticketNumber: result.data.number || '',
+          name: result.data.name || ''
+        })
+      }
+    }).catch(() => {})
+  },
 
-//    /**
-//     * 生命周期函数--监听页面初次渲染完成
-//     */
-//    onReady: function() {
+  loadCheckcodeImage: function() {
+    cetApi.getCetCheckcode().then((result) => {
+      const checkcodeImage = result.success && result.data ? `data:image/jpg;base64,${result.data}` : ''
+      this.setData({
+        checkcodeImage: checkcodeImage,
+        mockCaptchaHint: checkcodeImage ? '' : (dataSource.isMockMode() ? 'GD26' : '')
+      })
+    }).catch(() => {
+      this.setData({
+        checkcodeImage: '',
+        mockCaptchaHint: dataSource.isMockMode() ? 'GD26' : ''
+      })
+    })
+  },
 
-//    },
+  saveTicketNumber: function() {
+    const ticketNumber = String(this.data.ticketNumber || '').trim()
+    if (!/^\d{15}$/.test(ticketNumber)) {
+      pageUtils.showTopTips(this, '准考证号必须为 15 位数字')
+      return
+    }
 
-//    /**
-//     * 生命周期函数--监听页面显示
-//     */
-//    onShow: function() {
+    pageUtils.runWithNavigationLoading(this, () => {
+      return cetApi.saveCetNumber({
+        number: ticketNumber,
+        name: String(this.data.name || '').trim()
+      })
+    }).then((result) => {
+      if (result.success) {
+        wx.showToast({
+          title: '保存成功',
+          icon: 'success'
+        })
+      } else {
+        pageUtils.showTopTips(this, result.message)
+      }
+    }).catch((error) => {
+      pageUtils.showTopTips(this, error.message)
+    })
+  },
 
-//    },
+  submitQuery: function() {
+    const ticketNumber = String(this.data.ticketNumber || '').trim()
+    const name = String(this.data.name || '').trim()
+    const checkcode = String(this.data.checkcode || '').trim()
 
-//    /**
-//     * 生命周期函数--监听页面隐藏
-//     */
-//    onHide: function() {
+    if (!/^\d{15}$/.test(ticketNumber)) {
+      pageUtils.showTopTips(this, '请填写 15 位准考证号')
+      return
+    }
 
-//    },
+    if (!name) {
+      pageUtils.showTopTips(this, '请填写姓名')
+      return
+    }
 
-//    /**
-//     * 生命周期函数--监听页面卸载
-//     */
-//    onUnload: function() {
+    if (!checkcode) {
+      pageUtils.showTopTips(this, '请输入验证码')
+      return
+    }
 
-//    },
+    pageUtils.runWithNavigationLoading(this, () => {
+      return cetApi.queryCetScore(ticketNumber, name, checkcode)
+    }).then((result) => {
+      if (result.success) {
+        this.setData({
+          result: result.data
+        })
+        this.loadCheckcodeImage()
+      } else {
+        pageUtils.showTopTips(this, result.message)
+      }
+    }).catch((error) => {
+      this.loadCheckcodeImage()
+      pageUtils.showTopTips(this, error.message)
+    })
+  },
 
-//    /**
-//     * 页面相关事件处理函数--监听用户下拉动作
-//     */
-//    onPullDownRefresh: function() {
+  resetQuery: function() {
+    this.setData({
+      checkcode: '',
+      result: null
+    })
+    this.loadCheckcodeImage()
+  },
 
-//    },
+  onLoad: function() {
+    this.loadSavedNumber()
+    this.loadCheckcodeImage()
+  },
 
-//    /**
-//     * 页面上拉触底事件的处理函数
-//     */
-//    onReachBottom: function() {
-
-//    },
-
-//    /**
-//     * 用户点击右上角分享
-//     */
-//    onShareAppMessage: function() {
-//      wx.showShareMenu({
-//        showShareItems: ['qq', 'qzone', 'wechatFriends', 'wechatMoment']
-//      })
-//    }
-//  })
+  onShareAppMessage: function() {
+    return {
+      title: '四六级查询',
+      path: '/pages/cet/cet'
+    }
+  }
+})

@@ -1,0 +1,292 @@
+@import "../../common/lib/weui.wxss";
+
+.community-page {
+  padding-bottom: 130rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.stats_panel {
+  margin: 20rpx 24rpx 0;
+  padding: 24rpx;
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 20rpx;
+  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.04);
+}
+
+.stat_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.stat_value {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #222;
+}
+
+.stat_label {
+  font-size: 24rpx;
+  color: #888;
+}
+
+.search_bar {
+  margin: 20rpx 24rpx 0;
+  display: flex;
+  gap: 12rpx;
+  align-items: center;
+}
+
+.search_input {
+  flex: 1;
+  height: 76rpx;
+  padding: 0 24rpx;
+  background: #fff;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+}
+
+.tab_scroll {
+  white-space: nowrap;
+  margin-top: 20rpx;
+}
+
+.tab_row {
+  display: inline-flex;
+  padding: 0 24rpx;
+}
+
+.tab_item {
+  margin-right: 16rpx;
+  padding: 18rpx 28rpx;
+  border-radius: 999rpx;
+  background: #fff;
+  color: #666;
+  font-size: 26rpx;
+}
+
+.tab_item_active {
+  background: #3cb395;
+  color: #fff;
+}
+
+.list_section {
+  padding: 20rpx 24rpx 0;
+}
+
+.market_card,
+.post_card,
+.delivery_card,
+.photo_card {
+  margin-bottom: 20rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.04);
+}
+
+.market_card {
+  display: flex;
+}
+
+.market_cover {
+  width: 220rpx;
+  height: 220rpx;
+  flex-shrink: 0;
+  background: #eef2f3;
+}
+
+.market_content {
+  flex: 1;
+  padding: 24rpx;
+}
+
+.lost_grid,
+.dating_grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.lost_card,
+.dating_card {
+  width: 48.2%;
+  margin-bottom: 20rpx;
+  background: #fff;
+  border-radius: 18rpx;
+  overflow: hidden;
+  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.04);
+}
+
+.lost_cover,
+.dating_cover {
+  width: 100%;
+  height: 220rpx;
+  background: #eef2f3;
+}
+
+.lost_badges {
+  padding: 20rpx 20rpx 0;
+  display: flex;
+  gap: 8rpx;
+  align-items: center;
+}
+
+.photo_cover,
+.topic_cover {
+  width: 100%;
+  height: 320rpx;
+  background: #eef2f3;
+}
+
+.delivery_card {
+  padding: 24rpx;
+}
+
+.delivery_header,
+.card_footer,
+.card_meta_row,
+.post_footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12rpx;
+}
+
+.card_title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #222;
+  line-height: 1.5;
+}
+
+.card_summary {
+  margin-top: 14rpx;
+  color: #666;
+  font-size: 26rpx;
+  line-height: 1.7;
+  word-break: break-all;
+}
+
+.card_badge,
+.card_sub_badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rpx 14rpx;
+  border-radius: 999rpx;
+  background: #e8f7f3;
+  color: #3cb395;
+  font-size: 22rpx;
+}
+
+.card_sub_badge {
+  background: #f4f6f8;
+  color: #666;
+}
+
+.delivery_badge {
+  background: #fff3e6;
+  color: #f78b28;
+}
+
+.card_meta {
+  flex: 1;
+  color: #888;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.price_text {
+  color: #ea4335;
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.time_text,
+.metric_text {
+  color: #999;
+  font-size: 22rpx;
+}
+
+.secret_card {
+  padding: 24rpx;
+  border-left: 8rpx solid #3cb395;
+}
+
+.dating_card .card_title,
+.dating_card .card_meta,
+.dating_card .card_summary,
+.dating_card .time_text {
+  padding: 0 20rpx;
+}
+
+.dating_card .card_title {
+  margin-top: 18rpx;
+}
+
+.dating_card .card_summary {
+  min-height: 80rpx;
+}
+
+.dating_card .time_text {
+  display: block;
+  padding-bottom: 20rpx;
+}
+
+.photo_card .card_title,
+.photo_card .card_summary,
+.photo_card .post_footer,
+.post_card .card_title,
+.post_card .card_summary,
+.post_card .post_footer,
+.lost_card .card_title,
+.lost_card .card_summary,
+.lost_card .card_meta,
+.lost_card .time_text {
+  padding-left: 20rpx;
+  padding-right: 20rpx;
+}
+
+.photo_card .card_title,
+.post_card .card_title,
+.lost_card .card_title {
+  margin-top: 20rpx;
+}
+
+.photo_card .post_footer,
+.post_card .post_footer {
+  padding-top: 18rpx;
+  padding-bottom: 20rpx;
+}
+
+.lost_card .time_text {
+  display: block;
+  padding-top: 12rpx;
+  padding-bottom: 20rpx;
+}
+
+.bottom_bar {
+  position: fixed;
+  left: 24rpx;
+  right: 24rpx;
+  bottom: 20rpx;
+  display: flex;
+  gap: 16rpx;
+  z-index: 20;
+}
+
+.bottom_button {
+  flex: 1;
+  margin: 0;
+  border-radius: 999rpx;
+}
+
+.bottom_button_secondary {
+  background: #fff;
+  color: #3cb395;
+}

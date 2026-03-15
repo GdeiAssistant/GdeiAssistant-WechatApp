@@ -1,0 +1,13 @@
+@import "../../common/lib/weui.wxss";
+
+.reading_title {
+  color: #333;
+  margin-bottom: 8rpx;
+  word-break: break-all;
+}
+
+.reading_desc {
+  color: #888;
+  font-size: 24rpx;
+  line-height: 1.5;
+}

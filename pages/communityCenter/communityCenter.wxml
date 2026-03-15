@@ -1,0 +1,84 @@
+<view class="page__bd center_page">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <view class="summary_card" wx:if="{{summaryProfile}}">
+    <image class="summary_avatar" src="{{summaryProfile.avatar}}" mode="aspectFill"></image>
+    <view class="summary_content">
+      <view class="summary_name">{{summaryProfile.nickname}}</view>
+      <view class="summary_intro" wx:if="{{summaryProfile.introduction}}">{{summaryProfile.introduction}}</view>
+    </view>
+  </view>
+
+  <scroll-view wx:if="{{tabs.length}}" scroll-x class="tab_scroll" enable-flex>
+    <view class="tab_row">
+      <view
+        wx:for="{{tabs}}"
+        wx:key="key"
+        wx:for-item="tab"
+        data-key="{{tab.key}}"
+        bindtap="switchTab"
+        class="tab_item {{activeTabKey === tab.key ? 'tab_item_active' : ''}}"
+      >
+        {{tab.label}}
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="loading_box" wx:if="{{loading}}">
+    <i class="weui-loading"></i>
+    <text>正在加载</text>
+  </view>
+
+  <view wx:if="{{!loading && activeItems.length === 0}}" class="empty_box">暂无内容</view>
+
+  <view class="list_section" wx:if="{{!loading && activeItems.length}}">
+    <block wx:for="{{activeItems}}" wx:key="id" wx:for-item="item">
+      <view wx:if="{{moduleId === 'dating' && activeTabKey === 'received'}}" class="center_card interaction_card">
+        <view class="card_title">{{item.title}}</view>
+        <view class="card_summary">{{item.summary}}</view>
+        <view class="card_time">{{item.subtitle}}</view>
+        <view class="action_row" wx:if="{{item.actions.length}}">
+          <button wx:for="{{item.actions}}" wx:key="id" wx:for-item="actionItem" size="mini" data-id="{{item.id}}" data-action="{{actionItem.id}}" bindtap="handleAction">{{actionItem.label}}</button>
+        </view>
+      </view>
+
+      <view wx:elif="{{moduleId === 'dating' && activeTabKey === 'sent'}}" class="center_card interaction_card">
+        <view class="card_title">{{item.title}}</view>
+        <view class="card_summary">{{item.summary}}</view>
+        <view class="card_time">{{item.subtitle}}</view>
+        <view class="contact_hint" wx:if="{{item.qq}}">QQ：{{item.qq}}</view>
+        <view class="contact_hint" wx:if="{{item.wechat}}">微信：{{item.wechat}}</view>
+        <view class="contact_hint" wx:if="{{!item.qq && !item.wechat}}">等待对方处理后显示联系方式</view>
+      </view>
+
+      <view wx:else class="center_card standard_card" data-id="{{item.id}}" data-index="{{index}}" bindtap="openDetail">
+        <image wx:if="{{item.cover}}" class="center_cover" src="{{item.cover}}" mode="aspectFill"></image>
+        <view class="center_content">
+          <view class="card_header">
+            <view class="card_title">{{item.title}}</view>
+            <view class="price_text" wx:if="{{item.priceText}}">￥{{item.priceText}}</view>
+          </view>
+          <view class="card_summary">{{item.summary}}</view>
+          <view class="card_time">{{item.subtitle}}</view>
+          <view class="action_row" wx:if="{{item.actions.length}}">
+            <button
+              wx:for="{{item.actions}}"
+              wx:key="id"
+              wx:for-item="actionItem"
+              size="mini"
+              data-id="{{item.id}}"
+              data-action="{{actionItem.id}}"
+              catchtap="handleAction"
+            >
+              {{actionItem.label}}
+            </button>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="bottom_bar" wx:if="{{moduleConfig}}">
+    <button class="bottom_button" type="primary" bindtap="openPublish">继续发布</button>
+  </view>
+</view>

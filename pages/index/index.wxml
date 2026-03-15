@@ -6,53 +6,34 @@
     <block wx:if="{{avatar}}">
       <image class="userinfo-avatar" src="{{avatar}}" background-size="cover"></image>
       <text class="userinfo-nickname">{{nickname}}</text>
+      <text class="userinfo-source">当前数据源：{{dataSourceLabel}}</text>
     </block>
   </view>
 
   <view class="page-body">
-    <view class="page__bd">
-      <view class="weui-grids">
-        <navigator wx:if="{{access.grade}}" open-type="navigate" url="../grade/grade" class="weui-grid" hover-class="weui-grid_active">
-          <image class="weui-grid__icon" src="../../image/grade.png" />
-          <view class="weui-grid__label">期末成绩</view>
-        </navigator>
-        <navigator wx:if="{{access.schedule}}" open-type="navigate" url="../schedule/schedule" class="weui-grid" hover-class="weui-grid_active">
-          <image class="weui-grid__icon" src="../../image/schedule.png" />
-          <view class="weui-grid__label">我的课表</view>
-        </navigator>
-        <!-- 因微信小程序相关政策法规，四六级查询功能已暂停服务 -->
-        <!-- <navigator wx:if="{{access.cet}}" open-type="navigate" url="../cet/cet" class="weui-grid" hover-class="weui-grid_active">
-          <image class="weui-grid__icon" src="../../image/cet.png" />
-          <view class="weui-grid__label">四六级查询</view>
-        </navigator> -->
-        <navigator wx:if="{{access.bill}}"  open-type="navigate" url="../bill/bill" class="weui-grid" hover-class="weui-grid_active">
-          <image class="weui-grid__icon" src="../../image/bill.png" />
-          <view class="weui-grid__label">消费查询</view>
-        </navigator>
-        <navigator wx:if="{{access.card}}" open-type="navigate" url="../card/card" class="weui-grid" hover-class="weui-grid_active">
-          <image class="weui-grid__icon" src="../../image/card.png" />
-          <view class="weui-grid__label">我的校园卡</view>
-        </navigator>
-        <navigator wx:if="{{access.lost}}" open-type="navigate" url="../cardLost/cardLost" class="weui-grid" hover-class="weui-grid_active">
-          <image class="weui-grid__icon" src="../../image/cardLost.png" />
-          <view class="weui-grid__label">校园卡挂失</view>
-        </navigator>
-        <navigator wx:if="{{access.evaluate}}"  open-type="navigate" url="../evaluate/evaluate" class="weui-grid" hover-class="weui-grid_active">
-          <image class="weui-grid__icon" src="../../image/evaluate.png" />
-          <view class="weui-grid__label">一键评教</view>
-        </navigator>
-        <navigator wx:if="{{access.collection}}"  open-type="navigate" url="../collection/collection" class="weui-grid" hover-class="weui-grid_active">
-          <image class="weui-grid__icon" src="../../image/collection.png" />
-          <view class="weui-grid__label">馆藏查询</view>
-        </navigator>
-        <navigator wx:if="{{access.book}}"  open-type="navigate" url="../book/book" class="weui-grid" hover-class="weui-grid_active">
-          <image class="weui-grid__icon" src="../../image/book.png" />
-          <view class="weui-grid__label">借阅查询</view>
-        </navigator>
-        <view bindtap="logout" class="weui-grid" hover-class="weui-grid_active">
-          <image class="weui-grid__icon" src="../../image/exit.png" />
-          <view class="weui-grid__label">退出账号</view>
+    <view class="page__bd" wx:if="{{homeSections.length}}">
+      <block wx:for="{{homeSections}}" wx:key="id" wx:for-item="section">
+        <view class="section_title">{{section.title}}</view>
+        <view class="weui-grids">
+          <navigator wx:for="{{section.features}}" wx:key="id" wx:for-item="feature" open-type="navigate" url="{{feature.page}}" class="weui-grid" hover-class="weui-grid_active">
+            <image class="weui-grid__icon" src="{{feature.icon}}" />
+            <view class="weui-grid__label">{{feature.title}}</view>
+          </navigator>
         </view>
+      </block>
+
+      <view class="section_title">功能设置</view>
+      <view class="weui-grids">
+        <block wx:for="{{systemActions}}" wx:key="id" wx:for-item="actionItem">
+          <navigator wx:if="{{actionItem.page}}" open-type="navigate" url="{{actionItem.page}}" class="weui-grid" hover-class="weui-grid_active">
+            <image class="weui-grid__icon" src="{{actionItem.icon}}" />
+            <view class="weui-grid__label">{{actionItem.title}}</view>
+          </navigator>
+          <view wx:else data-action="{{actionItem.action}}" bindtap="handleActionTap" class="weui-grid" hover-class="weui-grid_active">
+            <image class="weui-grid__icon" src="{{actionItem.icon}}" />
+            <view class="weui-grid__label">{{actionItem.title}}</view>
+          </view>
+        </block>
       </view>
     </view>
   </view>

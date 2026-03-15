@@ -1,0 +1,135 @@
+@import "../../common/lib/weui.wxss";
+
+.detail_page {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding-bottom: 40rpx;
+}
+
+.loading_box {
+  padding: 100rpx 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  align-items: center;
+  color: #888;
+}
+
+.detail_swiper {
+  height: 440rpx;
+}
+
+.detail_swiper_image {
+  width: 100%;
+  height: 100%;
+  background: #eef2f3;
+}
+
+.detail_card {
+  margin: 20rpx 24rpx 0;
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.04);
+}
+
+.detail_title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #222;
+  line-height: 1.5;
+}
+
+.detail_subtitle,
+.detail_time,
+.detail_metric,
+.guess_hint,
+.comment_time,
+.detail_hint {
+  margin-top: 12rpx;
+  color: #999;
+  font-size: 24rpx;
+  line-height: 1.7;
+}
+
+.detail_price {
+  margin-top: 18rpx;
+  color: #ea4335;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.detail_badges {
+  margin-top: 18rpx;
+  display: flex;
+  gap: 12rpx;
+}
+
+.detail_badge {
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
+  background: #e8f7f3;
+  color: #3cb395;
+  font-size: 22rpx;
+}
+
+.detail_badge_secondary {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.detail_desc,
+.detail_row,
+.comment_text {
+  margin-top: 18rpx;
+  color: #444;
+  font-size: 28rpx;
+  line-height: 1.8;
+  word-break: break-all;
+}
+
+.section_title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #222;
+}
+
+.contact_row,
+.seller_box,
+.action_row {
+  margin-top: 18rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.seller_box {
+  justify-content: flex-start;
+}
+
+.seller_avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #eef2f3;
+}
+
+.seller_text,
+.comment_name {
+  font-size: 26rpx;
+  color: #555;
+}
+
+.detail_actions {
+  margin-top: 24rpx;
+}
+
+.comment_item {
+  padding: 18rpx 0;
+  border-bottom: 1rpx solid #f2f2f2;
+}
+
+.comment_item:last-child {
+  border-bottom: none;
+}

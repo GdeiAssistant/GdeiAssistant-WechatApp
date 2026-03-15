@@ -1,15 +1,18 @@
 const config = require('../config/index.js')
+const storageKeys = require('../constants/storage.js')
 const endpoints = require('./endpoints.js')
+const dataSource = require('./data-source.js')
+const mock = require('../mock/index.js')
 const { normalizePayload } = require('./response.js')
 let reLaunching = false
-const SESSION_STORAGE_KEYS = ['sessionToken', 'username', 'accessToken', 'refreshToken']
+const SESSION_STORAGE_KEYS = [storageKeys.sessionToken, storageKeys.username, 'accessToken', 'refreshToken']
 
 function getSessionToken() {
-  return wx.getStorageSync('sessionToken')
+  return wx.getStorageSync(storageKeys.sessionToken)
 }
 
 function setSessionToken(token) {
-  wx.setStorageSync('sessionToken', token)
+  wx.setStorageSync(storageKeys.sessionToken, token)
 }
 
 function clearSession() {
@@ -66,6 +69,10 @@ function logout() {
     return Promise.resolve()
   }
 
+  if (dataSource.isMockMode()) {
+    return mock.handleLogout(token)
+  }
+
   return new Promise((resolve) => {
     wx.request({
       url: config.resourceDomain + endpoints.auth.logout,
@@ -87,6 +94,10 @@ function validateSessionToken() {
   const token = getSessionToken()
   if (!token) {
     return Promise.resolve(false)
+  }
+
+  if (dataSource.isMockMode()) {
+    return Promise.resolve(mock.isSessionTokenValid(token))
   }
 
   return new Promise((resolve) => {
