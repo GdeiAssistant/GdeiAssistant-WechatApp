@@ -67,9 +67,16 @@ function resolveCurrentEnv() {
 
 function isDevtoolsRuntime() {
   try {
-    if (typeof wx !== 'undefined' && wx.getSystemInfoSync) {
-      const systemInfo = wx.getSystemInfoSync()
-      return systemInfo && systemInfo.platform === 'devtools'
+    if (typeof wx !== 'undefined') {
+      if (wx.getDeviceInfo) {
+        const deviceInfo = wx.getDeviceInfo()
+        return deviceInfo && deviceInfo.platform === 'devtools'
+      }
+
+      if (wx.getSystemInfoSync) {
+        const systemInfo = wx.getSystemInfoSync()
+        return systemInfo && systemInfo.platform === 'devtools'
+      }
     }
   } catch (error) {
     // Ignore runtime platform detection failures.

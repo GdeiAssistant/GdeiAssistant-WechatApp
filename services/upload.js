@@ -1,4 +1,3 @@
-const path = require('path')
 const dataSource = require('./data-source.js')
 const uploadApi = require('./apis/upload.js')
 
@@ -21,11 +20,17 @@ function resolveFileName(file, overrideFileName) {
   }
 
   if (file && file.path) {
-    return path.basename(file.path)
+    return getBaseName(file.path)
   }
 
   const extension = getExtensionByType(file && file.type)
   return `upload${extension}`
+}
+
+function getBaseName(filePath) {
+  const normalizedPath = String(filePath || '').replace(/[?#].*$/, '')
+  const segments = normalizedPath.split('/')
+  return segments[segments.length - 1] || 'upload'
 }
 
 function resolveContentType(file) {

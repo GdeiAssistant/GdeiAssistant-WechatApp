@@ -1,6 +1,14 @@
 <view class="page__bd center_page">
   <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
 
+  <view class="hero_card" wx:if="{{moduleConfig}}" style="{{moduleConfig.heroStyle}}">
+    <view class="hero_content">
+      <view class="hero_title">{{moduleConfig.title}}</view>
+      <view class="hero_summary">{{moduleConfig.summary}}</view>
+    </view>
+    <image class="hero_icon" src="{{moduleConfig.icon}}" mode="aspectFit"></image>
+  </view>
+
   <view class="summary_card" wx:if="{{summaryProfile}}">
     <image class="summary_avatar" src="{{summaryProfile.avatar}}" mode="aspectFill"></image>
     <view class="summary_content">
@@ -29,7 +37,10 @@
     <text>正在加载</text>
   </view>
 
-  <view wx:if="{{!loading && activeItems.length === 0}}" class="empty_box">暂无内容</view>
+  <view wx:if="{{!loading && activeItems.length === 0}}" class="empty_box">
+    <view class="empty_title">暂无内容</view>
+    <view class="empty_summary">你可以先去发布一条新的内容。</view>
+  </view>
 
   <view class="list_section" wx:if="{{!loading && activeItems.length}}">
     <block wx:for="{{activeItems}}" wx:key="id" wx:for-item="item">

@@ -1,0 +1,92 @@
+<view class="page__bd inbox_page">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <view class="weui-navbar inbox_tabs">
+    <view
+      wx:for="{{inboxTabs}}"
+      wx:key="key"
+      wx:for-item="tab"
+      data-key="{{tab.key}}"
+      bindtap="switchTab"
+      class="weui-navbar__item {{activeTab === tab.key ? 'weui-bar__item_on' : ''}}"
+    >
+      <view class="weui-navbar__title">{{tab.label}}</view>
+    </view>
+  </view>
+
+  <block wx:if="{{activeTab === 'announcement'}}">
+    <view class="section_card">
+      <view class="weui-cells" wx:if="{{announcementList.length}}">
+        <view
+          wx:for="{{announcementList}}"
+          wx:key="id"
+          wx:for-item="announcementItem"
+          data-index="{{index}}"
+          bindtap="openAnnouncementDetail"
+          class="weui-cell weui-cell_access"
+          hover-class="weui-cell_active"
+        >
+          <view class="weui-cell__bd">
+            <view class="item_title">{{announcementItem.title}}</view>
+            <view class="item_summary">{{announcementItem.content}}</view>
+          </view>
+          <view class="weui-cell__ft item_date">{{announcementItem.publishDate}}</view>
+        </view>
+      </view>
+
+      <view class="weui-loadmore" wx:if="{{announcementLoading}}">
+        <i class="weui-loading"></i>
+        <view class="weui-loadmore__tips">正在加载系统通知</view>
+      </view>
+      <view class="weui-loadmore" wx:if="{{!announcementLoading && announcementFinished && announcementList.length}}">
+        <view class="weui-loadmore__tips">没有更多系统通知了</view>
+      </view>
+      <view class="weui-loadmore" wx:if="{{!announcementLoading && announcementFinished && !announcementList.length}}">
+        <view class="weui-loadmore__tips">暂无系统通知</view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="section_card">
+      <view class="interaction_meta" wx:if="{{interactionUnreadCount}}">
+        <view class="meta_badge">{{interactionUnreadCount}} 条未读</view>
+        <view class="meta_action" bindtap="markAllInteractionRead">全部已读</view>
+      </view>
+
+      <view class="interaction_list" wx:if="{{interactionList.length}}">
+        <view
+          wx:for="{{interactionList}}"
+          wx:key="id"
+          wx:for-item="messageItem"
+          data-index="{{index}}"
+          bindtap="openInteractionItem"
+          class="interaction_card"
+          hover-class="interaction_card_active"
+        >
+          <view class="interaction_header">
+            <view class="interaction_title">{{messageItem.title}}</view>
+            <view class="interaction_read {{messageItem.isRead ? 'interaction_read_done' : 'interaction_read_pending'}}">{{messageItem.readLabel}}</view>
+          </view>
+          <view class="interaction_tags">
+            <text class="interaction_tag">{{messageItem.moduleLabel}}</text>
+            <text class="interaction_tag interaction_tag_secondary">{{messageItem.actionLabel}}</text>
+          </view>
+          <view class="interaction_content">{{messageItem.content}}</view>
+          <view class="interaction_time">{{messageItem.createdAt}}</view>
+        </view>
+      </view>
+
+      <view class="weui-loadmore" wx:if="{{interactionLoading}}">
+        <i class="weui-loading"></i>
+        <view class="weui-loadmore__tips">正在加载互动消息</view>
+      </view>
+      <view class="weui-loadmore" wx:if="{{!interactionLoading && interactionFinished && interactionList.length}}">
+        <view class="weui-loadmore__tips">没有更多互动消息了</view>
+      </view>
+      <view class="weui-loadmore" wx:if="{{!interactionLoading && interactionFinished && !interactionList.length}}">
+        <view class="weui-loadmore__tips">暂无互动消息</view>
+      </view>
+    </view>
+  </block>
+</view>

@@ -27,10 +27,34 @@
 
 .detail_card {
   margin: 20rpx 24rpx 0;
-  padding: 24rpx;
+  padding: 26rpx;
   background: #fff;
-  border-radius: 20rpx;
-  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.04);
+  border-radius: 24rpx;
+  box-shadow: 0 14rpx 34rpx rgba(0, 0, 0, 0.045);
+}
+
+.detail_head_meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+  margin-bottom: 14rpx;
+}
+
+.detail_module_tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8rpx 18rpx;
+  border-radius: 999rpx;
+  background: #f1f4f6;
+  color: #555;
+  font-size: 22rpx;
+}
+
+.detail_head_time {
+  color: #999;
+  font-size: 22rpx;
 }
 
 .detail_title {
@@ -85,7 +109,7 @@
   color: #444;
   font-size: 28rpx;
   line-height: 1.8;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 .section_title {
@@ -106,6 +130,7 @@
 
 .seller_box {
   justify-content: flex-start;
+  padding-top: 4rpx;
 }
 
 .seller_avatar {

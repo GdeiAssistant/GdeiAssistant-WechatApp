@@ -1,4 +1,59 @@
-//app.js
+if (!Promise.prototype.finally) {
+  Promise.prototype.finally = function(callback) {
+    const PromiseConstructor = this.constructor
+    return this.then(
+      function(value) {
+        return PromiseConstructor.resolve(callback()).then(function() {
+          return value
+        })
+      },
+      function(reason) {
+        return PromiseConstructor.resolve(callback()).then(function() {
+          throw reason
+        })
+      }
+    )
+  }
+}
+
+if (!Promise.allSettled) {
+  Promise.allSettled = function(promises) {
+    const list = Array.isArray(promises) ? promises : []
+    return Promise.all(list.map(function(item) {
+      return Promise.resolve(item).then(function(value) {
+        return {
+          status: 'fulfilled',
+          value: value
+        }
+      }).catch(function(reason) {
+        return {
+          status: 'rejected',
+          reason: reason
+        }
+      })
+    }))
+  }
+}
+
+if (!String.prototype.padStart) {
+  String.prototype.padStart = function(targetLength, padString) {
+    const source = String(this)
+    const length = Number(targetLength) || 0
+    const padding = String(padString === undefined ? ' ' : padString)
+
+    if (source.length >= length || !padding) {
+      return source
+    }
+
+    let prefix = ''
+    while (prefix.length + source.length < length) {
+      prefix += padding
+    }
+
+    return prefix.slice(0, length - source.length) + source
+  }
+}
+
 App({
   globalData: {
     userInfo: null

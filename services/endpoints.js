@@ -7,7 +7,16 @@ module.exports = {
   },
   user: {
     avatar: '/api/profile/avatar',
-    profile: '/api/user/profile'
+    profile: '/api/user/profile',
+    introduction: '/api/introduction',
+    birthday: '/api/profile/birthday',
+    faculty: '/api/profile/faculty',
+    location: '/api/profile/location',
+    hometown: '/api/profile/hometown',
+    major: '/api/profile/major',
+    enrollment: '/api/profile/enrollment',
+    nickname: '/api/profile/nickname',
+    locationList: '/api/locationList'
   },
   cet: {
     number: '/api/cet/number',
@@ -41,6 +50,19 @@ module.exports = {
     news: function(type, start, size) {
       return `/api/news/type/${type}/start/${start}/size/${size}`
     }
+  },
+  messages: {
+    announcements: function(start, size) {
+      return `/api/announcement/start/${start}/size/${size}`
+    },
+    interactionList: function(start, size) {
+      return `/api/message/interaction/start/${start}/size/${size}`
+    },
+    unreadCount: '/api/message/unread',
+    markRead: function(id) {
+      return `/api/message/id/${id}/read`
+    },
+    markAllRead: '/api/message/readall'
   },
   module: {
     stateDetail: '/api/module/state/detail'

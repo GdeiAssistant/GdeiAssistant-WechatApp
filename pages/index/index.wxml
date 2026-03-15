@@ -2,12 +2,20 @@
 
 <official-account></official-account>
 
-  <view class="userinfo">
-    <block wx:if="{{avatar}}">
+  <view class="userinfo_card" wx:if="{{avatar}}">
+    <view class="userinfo">
       <image class="userinfo-avatar" src="{{avatar}}" background-size="cover"></image>
-      <text class="userinfo-nickname">{{nickname}}</text>
-      <text class="userinfo-source">当前数据源：{{dataSourceLabel}}</text>
-    </block>
+      <view class="userinfo_meta">
+        <text class="userinfo-nickname">{{nickname}}</text>
+        <text class="userinfo-source">当前数据源：{{dataSourceLabel}}</text>
+        <text class="userinfo-entry" bindtap="openProfile">查看个人资料</text>
+      </view>
+    </view>
+
+    <view class="userinfo_notice" bindtap="openInbox">
+      <image class="userinfo_notice_icon" src="/image/mono/inbox.png" mode="aspectFit"></image>
+      <text class="userinfo_notice_badge" wx:if="{{inboxBadgeText}}">{{inboxBadgeText}}</text>
+    </view>
   </view>
 
   <view class="page-body">

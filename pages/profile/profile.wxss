@@ -1,0 +1,123 @@
+@import "../../common/lib/weui.wxss";
+
+.profile_page {
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+  background: #f5f5f5;
+}
+
+.loading_box {
+  padding: 80rpx 0;
+  text-align: center;
+  color: #999;
+}
+
+.loading_box text {
+  display: block;
+  margin-top: 16rpx;
+}
+
+.profile_card {
+  display: flex;
+  align-items: flex-start;
+  margin: 24rpx 24rpx 0;
+  padding: 30rpx;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
+  border-radius: 28rpx;
+  box-shadow: 0 16rpx 40rpx rgba(0, 0, 0, 0.05);
+}
+
+.profile_avatar_wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profile_avatar {
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 50%;
+  background: #f2f2f2;
+  border: 6rpx solid #fff;
+  box-shadow: 0 10rpx 26rpx rgba(0, 0, 0, 0.08);
+}
+
+.avatar_badge {
+  position: absolute;
+  left: 50%;
+  bottom: -10rpx;
+  transform: translateX(-50%);
+  min-width: 92rpx;
+  padding: 8rpx 14rpx;
+  border-radius: 999rpx;
+  background: rgba(51, 51, 51, 0.86);
+  color: #fff;
+  font-size: 20rpx;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.profile_meta {
+  flex: 1;
+  min-width: 0;
+  margin-left: 24rpx;
+  padding-top: 8rpx;
+}
+
+.profile_name {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+.profile_subtitle {
+  margin-top: 10rpx;
+  color: #909090;
+  font-size: 24rpx;
+}
+
+.profile_status {
+  margin-top: 12rpx;
+  color: #3cb395;
+  font-size: 24rpx;
+}
+
+.profile_intro {
+  margin-top: 18rpx;
+  color: #666;
+  font-size: 26rpx;
+  line-height: 1.7;
+}
+
+.profile_cells {
+  margin: 0 24rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 12rpx 32rpx rgba(0, 0, 0, 0.04);
+}
+
+.textarea_wrap {
+  width: 100%;
+  max-width: 460rpx;
+}
+
+.profile_textarea {
+  width: 100%;
+  box-sizing: border-box;
+  color: #333;
+}
+
+.profile_textarea {
+  min-height: 140rpx;
+  text-align: left;
+  line-height: 1.7;
+}
+
+.multi_line_value {
+  max-width: 420rpx;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.introduction_cell {
+  align-items: flex-start;
+}

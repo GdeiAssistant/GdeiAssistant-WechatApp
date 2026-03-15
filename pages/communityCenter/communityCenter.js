@@ -450,6 +450,10 @@ Page({
     }
 
     const tabs = buildTabs(moduleId)
+    const requestedTabKey = options && options.tab ? String(options.tab) : ''
+    const initialTabKey = tabs.filter(function(tab) {
+      return tab.key === requestedTabKey
+    })[0] ? requestedTabKey : (tabs.length ? tabs[0].key : 'default')
 
     wx.setNavigationBarTitle({
       title: getCommunityPageTitle(moduleId, 'center', moduleConfig.title)
@@ -459,7 +463,7 @@ Page({
       moduleId: moduleId,
       moduleConfig: moduleConfig,
       tabs: tabs,
-      activeTabKey: tabs.length ? tabs[0].key : 'default'
+      activeTabKey: initialTabKey
     })
     this.loadCenter()
   },

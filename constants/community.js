@@ -136,7 +136,9 @@ const COMMUNITY_MODULES = [
   {
     id: 'ershou',
     title: '二手交易',
+    summary: '浏览和发布校园闲置物品',
     icon: '/image/ershou.png',
+    heroStyle: 'background: linear-gradient(135deg, #e9fff7 0%, #f7fffc 100%);',
     page: '/pages/communityList/communityList?module=ershou',
     supportsSearch: true,
     searchPlaceholder: '搜索商品名称或关键词',
@@ -146,7 +148,9 @@ const COMMUNITY_MODULES = [
   {
     id: 'lostandfound',
     title: '失物招领',
+    summary: '发布寻物启事和失物招领信息',
     icon: '/image/lostandfound.png',
+    heroStyle: 'background: linear-gradient(135deg, #eef6ff 0%, #fafcff 100%);',
     page: '/pages/communityList/communityList?module=lostandfound',
     supportsSearch: true,
     searchPlaceholder: '搜索失物关键词',
@@ -156,7 +160,9 @@ const COMMUNITY_MODULES = [
   {
     id: 'secret',
     title: '校园树洞',
+    summary: '匿名记录心情，分享不想说出口的话',
     icon: '/image/secret.png',
+    heroStyle: 'background: linear-gradient(135deg, #fff0f5 0%, #fffafc 100%);',
     page: '/pages/communityList/communityList?module=secret',
     centerEnabled: true,
     publishEnabled: true
@@ -164,7 +170,9 @@ const COMMUNITY_MODULES = [
   {
     id: 'express',
     title: '表白墙',
+    summary: '给心动的人留下一句悄悄话',
     icon: '/image/express.png',
+    heroStyle: 'background: linear-gradient(135deg, #fff3ef 0%, #fffaf7 100%);',
     page: '/pages/communityList/communityList?module=express',
     supportsSearch: true,
     searchPlaceholder: '搜索名字或内容',
@@ -174,7 +182,9 @@ const COMMUNITY_MODULES = [
   {
     id: 'topic',
     title: '校园话题',
+    summary: '参与热门讨论，看看同学们在聊什么',
     icon: '/image/topic.png',
+    heroStyle: 'background: linear-gradient(135deg, #f1f5ff 0%, #fbfcff 100%);',
     page: '/pages/communityList/communityList?module=topic',
     supportsSearch: true,
     searchPlaceholder: '搜索话题关键词',
@@ -184,7 +194,9 @@ const COMMUNITY_MODULES = [
   {
     id: 'delivery',
     title: '全民快递',
+    summary: '代拿快递与校园跑腿互助',
     icon: '/image/delivery.png',
+    heroStyle: 'background: linear-gradient(135deg, #fff5e8 0%, #fffaf3 100%);',
     page: '/pages/communityList/communityList?module=delivery',
     centerEnabled: true,
     publishEnabled: true
@@ -192,7 +204,9 @@ const COMMUNITY_MODULES = [
   {
     id: 'dating',
     title: '卖室友',
+    summary: '查看和发布室友推荐信息',
     icon: '/image/dating.png',
+    heroStyle: 'background: linear-gradient(135deg, #fff2f0 0%, #fff9f8 100%);',
     page: '/pages/communityList/communityList?module=dating',
     centerEnabled: true,
     publishEnabled: true
@@ -200,7 +214,9 @@ const COMMUNITY_MODULES = [
   {
     id: 'photograph',
     title: '拍好校园',
+    summary: '分享镜头里的校园瞬间与作品',
     icon: '/image/photograph.png',
+    heroStyle: 'background: linear-gradient(135deg, #eefbf5 0%, #fbfffd 100%);',
     page: '/pages/communityList/communityList?module=photograph',
     centerEnabled: true,
     publishEnabled: true

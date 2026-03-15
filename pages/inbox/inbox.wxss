@@ -1,0 +1,138 @@
+@import "../../common/lib/weui.wxss";
+
+.inbox_page {
+  padding-bottom: 28rpx;
+  background: #f7f7f7;
+}
+
+.inbox_tabs {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: #fff;
+}
+
+.section_card {
+  margin: 24rpx 24rpx 0;
+  background: #fff;
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 12rpx 32rpx rgba(0, 0, 0, 0.04);
+}
+
+.item_title {
+  padding-right: 20rpx;
+  color: #333;
+  word-break: break-word;
+}
+
+.item_summary {
+  margin-top: 8rpx;
+  color: #999;
+  font-size: 24rpx;
+  line-height: 1.6;
+}
+
+.item_date {
+  font-size: 24rpx;
+}
+
+.interaction_meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 28rpx 4rpx;
+}
+
+.meta_badge {
+  color: #666;
+  font-size: 24rpx;
+}
+
+.meta_action {
+  color: #7a7a7a;
+  font-size: 24rpx;
+}
+
+.interaction_list {
+  padding: 12rpx 24rpx 20rpx;
+}
+
+.interaction_card {
+  margin-top: 16rpx;
+  padding: 24rpx;
+  border-radius: 18rpx;
+  background: #f8f8f8;
+}
+
+.interaction_card:first-child {
+  margin-top: 0;
+}
+
+.interaction_card_active {
+  background: #f1f1f1;
+}
+
+.interaction_header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.interaction_title {
+  flex: 1;
+  min-width: 0;
+  color: #333;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.interaction_read {
+  flex-shrink: 0;
+  padding: 4rpx 12rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+}
+
+.interaction_read_done {
+  background: #ececec;
+  color: #9a9a9a;
+}
+
+.interaction_read_pending {
+  background: #dfdfdf;
+  color: #555;
+}
+
+.interaction_tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.interaction_tag {
+  padding: 4rpx 12rpx;
+  border-radius: 999rpx;
+  background: #ebebeb;
+  color: #777;
+  font-size: 22rpx;
+}
+
+.interaction_tag_secondary {
+  background: #f0f0f0;
+}
+
+.interaction_content {
+  margin-top: 18rpx;
+  color: #666;
+  font-size: 26rpx;
+  line-height: 1.7;
+}
+
+.interaction_time {
+  margin-top: 18rpx;
+  color: #a1a1a1;
+  font-size: 22rpx;
+}

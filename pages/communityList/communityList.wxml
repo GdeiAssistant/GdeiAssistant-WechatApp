@@ -1,6 +1,14 @@
 <view class="page__bd community-page">
   <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
 
+  <view class="hero_card" wx:if="{{moduleConfig}}" style="{{moduleConfig.heroStyle}}">
+    <view class="hero_content">
+      <view class="hero_title">{{moduleConfig.title}}</view>
+      <view class="hero_summary">{{moduleConfig.summary}}</view>
+    </view>
+    <image class="hero_icon" src="{{moduleConfig.icon}}" mode="aspectFit"></image>
+  </view>
+
   <view class="stats_panel" wx:if="{{moduleId === 'photograph' && stats}}">
     <view class="stat_item">
       <text class="stat_value">{{stats.photos}}</text>
@@ -25,8 +33,8 @@
       bindinput="handleSearchInput"
       bindconfirm="submitSearch"
     />
-    <button size="mini" type="primary" bindtap="submitSearch">搜索</button>
-    <button size="mini" wx:if="{{searchKeyword}}" bindtap="clearSearch">清空</button>
+    <button size="mini" type="primary" class="search_button" bindtap="submitSearch">搜索</button>
+    <button size="mini" class="search_button search_button_secondary" wx:if="{{searchKeyword}}" bindtap="clearSearch">清空</button>
   </view>
 
   <scroll-view wx:if="{{tabs.length}}" scroll-x class="tab_scroll" enable-flex>
@@ -146,12 +154,13 @@
   <view class="weui-loadmore" wx:if="{{!loading && finished && items.length}}">
     <view class="weui-loadmore__tips">没有更多数据了</view>
   </view>
-  <view class="weui-loadmore" wx:if="{{!loading && finished && !items.length}}">
-    <view class="weui-loadmore__tips">暂无内容</view>
+  <view class="empty_panel" wx:if="{{!loading && finished && !items.length}}">
+    <view class="empty_title">暂无内容</view>
+    <view class="empty_summary">换个筛选条件试试，或者发布一条新的内容。</view>
   </view>
 
   <view class="bottom_bar" wx:if="{{moduleConfig}}">
-    <button class="bottom_button" type="primary" bindtap="openPublish">发布</button>
+    <button class="bottom_button" type="primary" bindtap="openPublish">发布{{moduleConfig.title}}</button>
     <button class="bottom_button bottom_button_secondary" wx:if="{{moduleConfig.centerEnabled}}" bindtap="openCenter">我的</button>
   </view>
 </view>

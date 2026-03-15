@@ -7,11 +7,22 @@
   color: #aaa;
 }
 
-.userinfo {
-  margin-top: 20rpx;
+.userinfo_card {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: space-between;
+  margin: 20rpx 24rpx 0;
+  padding: 28rpx 30rpx;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
+  border-radius: 26rpx;
+  box-shadow: 0 14rpx 34rpx rgba(0, 0, 0, 0.05);
+}
+
+.userinfo {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  flex: 1;
 }
 
 .page-body {
@@ -25,13 +36,62 @@
   border-radius: 50%;
 }
 
+.userinfo_meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .userinfo-nickname {
-  color: #aaa;
+  color: #333;
+  font-size: 34rpx;
+  font-weight: 600;
 }
 
 .userinfo-source {
-  color: #bbb;
-  font-size: 26rpx;
+  margin-top: 8rpx;
+  color: #999;
+  font-size: 24rpx;
+}
+
+.userinfo-entry {
+  margin-top: 14rpx;
+  color: #7b7b7b;
+  font-size: 24rpx;
+  text-decoration: underline;
+}
+
+.userinfo_notice {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 84rpx;
+  height: 84rpx;
+  margin-left: 24rpx;
+  border-radius: 24rpx;
+  background: #f2f2f2;
+  flex-shrink: 0;
+}
+
+.userinfo_notice_icon {
+  width: 42rpx;
+  height: 42rpx;
+}
+
+.userinfo_notice_badge {
+  position: absolute;
+  top: -10rpx;
+  right: -12rpx;
+  min-width: 36rpx;
+  padding: 4rpx 10rpx;
+  border-radius: 999rpx;
+  background: #e94747;
+  color: #fff;
+  font-size: 22rpx;
+  text-align: center;
+  line-height: 1.2;
+  box-shadow: 0 8rpx 18rpx rgba(233, 71, 71, 0.22);
 }
 
 .section_title {

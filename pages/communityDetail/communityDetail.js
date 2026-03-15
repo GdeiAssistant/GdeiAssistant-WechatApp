@@ -148,7 +148,7 @@ function buildDetail(moduleId, payload) {
         likeCount: Number(payload.likeCount || 0),
         liked: !!payload.liked,
         canLike: true
-    }
+      }
     case 'delivery': {
       const order = payload.order || {}
       const detailType = Number(payload.detailType)

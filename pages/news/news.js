@@ -2,6 +2,7 @@ const storageKeys = require('../../constants/storage.js')
 const infoApi = require('../../services/apis/info.js')
 const pageUtils = require('../../utils/page.js')
 
+const PAGE_SIZE = 10
 const NEWS_TABS = [
   { type: 1, label: '教学信息' },
   { type: 2, label: '考试信息' },
@@ -16,7 +17,6 @@ Page({
     activeType: 1,
     newsList: [],
     currentPage: 1,
-    pageSize: 10,
     finished: false,
     loading: false,
     errorMessage: null
@@ -28,29 +28,30 @@ Page({
     }
 
     return pageUtils.runWithNavigationLoading(this, () => {
-      return infoApi.getNewsList(this.data.activeType, (pageNumber - 1) * this.data.pageSize, this.data.pageSize)
+      return infoApi.getNewsList(this.data.activeType, (pageNumber - 1) * PAGE_SIZE, PAGE_SIZE)
+    }, {
+      loadingKey: 'loading'
     }).then((result) => {
-      wx.stopPullDownRefresh()
       if (!result.success) {
-        pageUtils.showTopTips(this, result.message)
-        return
+        throw new Error(result.message || '加载新闻通知失败')
       }
 
-      const list = Array.isArray(result.data) ? result.data : []
+      const nextList = Array.isArray(result.data) ? result.data : []
       this.setData({
-        newsList: reset ? list : this.data.newsList.concat(list),
+        newsList: reset ? nextList : this.data.newsList.concat(nextList),
         currentPage: pageNumber,
-        finished: list.length < this.data.pageSize
+        finished: nextList.length < PAGE_SIZE
       })
     }).catch((error) => {
-      wx.stopPullDownRefresh()
       pageUtils.showTopTips(this, error.message)
+    }).finally(() => {
+      wx.stopPullDownRefresh()
     })
   },
 
   switchTab: function(event) {
     const nextType = Number(event.currentTarget.dataset.type)
-    if (nextType === this.data.activeType) {
+    if (!nextType || nextType === this.data.activeType) {
       return
     }
 
@@ -70,7 +71,9 @@ Page({
       return
     }
 
-    wx.setStorageSync(storageKeys.newsDetailItem, item)
+    wx.setStorageSync(storageKeys.newsDetailItem, Object.assign({}, item, {
+      navigationTitle: '新闻通知'
+    }))
     wx.navigateTo({
       url: '/pages/newsDetail/newsDetail'
     })

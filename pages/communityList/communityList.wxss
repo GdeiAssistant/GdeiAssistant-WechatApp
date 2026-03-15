@@ -6,6 +6,42 @@
   min-height: 100vh;
 }
 
+.hero_card {
+  margin: 20rpx 24rpx 0;
+  padding: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+  border-radius: 28rpx;
+  box-shadow: 0 16rpx 38rpx rgba(0, 0, 0, 0.05);
+}
+
+.hero_content {
+  flex: 1;
+  min-width: 0;
+}
+
+.hero_title {
+  color: #222;
+  font-size: 38rpx;
+  font-weight: 700;
+}
+
+.hero_summary {
+  margin-top: 12rpx;
+  color: #777;
+  font-size: 24rpx;
+  line-height: 1.7;
+}
+
+.hero_icon {
+  width: 112rpx;
+  height: 112rpx;
+  opacity: 0.88;
+  flex-shrink: 0;
+}
+
 .stats_panel {
   margin: 20rpx 24rpx 0;
   padding: 24rpx;
@@ -39,15 +75,29 @@
   display: flex;
   gap: 12rpx;
   align-items: center;
+  padding: 14rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.04);
 }
 
 .search_input {
   flex: 1;
   height: 76rpx;
   padding: 0 24rpx;
-  background: #fff;
+  background: #f6f7f8;
   border-radius: 999rpx;
   font-size: 28rpx;
+}
+
+.search_button {
+  margin: 0;
+  border-radius: 999rpx;
+}
+
+.search_button_secondary {
+  background: #f1f1f1;
+  color: #666;
 }
 
 .tab_scroll {
@@ -62,15 +112,16 @@
 
 .tab_item {
   margin-right: 16rpx;
-  padding: 18rpx 28rpx;
+  padding: 16rpx 28rpx;
   border-radius: 999rpx;
   background: #fff;
   color: #666;
   font-size: 26rpx;
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.03);
 }
 
 .tab_item_active {
-  background: #3cb395;
+  background: #2f2f2f;
   color: #fff;
 }
 
@@ -84,9 +135,9 @@
 .photo_card {
   margin-bottom: 20rpx;
   background: #fff;
-  border-radius: 20rpx;
+  border-radius: 24rpx;
   overflow: hidden;
-  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.04);
+  box-shadow: 0 14rpx 34rpx rgba(0, 0, 0, 0.045);
 }
 
 .market_card {
@@ -117,9 +168,9 @@
   width: 48.2%;
   margin-bottom: 20rpx;
   background: #fff;
-  border-radius: 18rpx;
+  border-radius: 22rpx;
   overflow: hidden;
-  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.04);
+  box-shadow: 0 14rpx 34rpx rgba(0, 0, 0, 0.045);
 }
 
 .lost_cover,
@@ -144,7 +195,7 @@
 }
 
 .delivery_card {
-  padding: 24rpx;
+  padding: 26rpx;
 }
 
 .delivery_header,
@@ -169,7 +220,7 @@
   color: #666;
   font-size: 26rpx;
   line-height: 1.7;
-  word-break: break-all;
+  word-break: break-word;
 }
 
 .card_badge,
@@ -214,8 +265,8 @@
 }
 
 .secret_card {
-  padding: 24rpx;
-  border-left: 8rpx solid #3cb395;
+  padding: 26rpx;
+  border-left: 8rpx solid #2f2f2f;
 }
 
 .dating_card .card_title,
@@ -288,5 +339,27 @@
 
 .bottom_button_secondary {
   background: #fff;
-  color: #3cb395;
+  color: #2f2f2f;
+}
+
+.empty_panel {
+  margin: 24rpx;
+  padding: 52rpx 32rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  text-align: center;
+  box-shadow: 0 12rpx 30rpx rgba(0, 0, 0, 0.04);
+}
+
+.empty_title {
+  color: #333;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.empty_summary {
+  margin-top: 14rpx;
+  color: #999;
+  font-size: 24rpx;
+  line-height: 1.7;
 }

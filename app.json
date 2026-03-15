@@ -2,6 +2,7 @@
   "pages": [
     "pages/login/login",
     "pages/index/index",
+    "pages/profile/profile",
     "pages/settings/settings",
     "pages/grade/grade",
     "pages/schedule/schedule",
@@ -21,6 +22,7 @@
     "pages/news/news",
     "pages/newsDetail/newsDetail",
     "pages/reading/reading",
+    "pages/inbox/inbox",
     "pages/communityList/communityList",
     "pages/communityDetail/communityDetail",
     "pages/communityPublish/communityPublish",

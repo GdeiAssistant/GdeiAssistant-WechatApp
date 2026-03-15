@@ -5,7 +5,7 @@ const FEATURE_LIST = [
     id: 'grade',
     title: '成绩查询',
     description: '查看学年成绩与学期成绩',
-    icon: '/image/grade.png',
+    icon: '/image/mono/grade.png',
     page: '/pages/grade/grade',
     section: 'campus'
   },
@@ -13,7 +13,7 @@ const FEATURE_LIST = [
     id: 'schedule',
     title: '课表查询',
     description: '查看每周课表安排',
-    icon: '/image/schedule.png',
+    icon: '/image/mono/schedule.png',
     page: '/pages/schedule/schedule',
     section: 'campus'
   },
@@ -21,7 +21,7 @@ const FEATURE_LIST = [
     id: 'cet',
     title: '四六级查询',
     description: '查询四六级成绩并保存考号',
-    icon: '/image/cet.png',
+    icon: '/image/mono/cet.png',
     page: '/pages/cet/cet',
     section: 'campus'
   },
@@ -29,7 +29,7 @@ const FEATURE_LIST = [
     id: 'kaoyan',
     title: '考研查询',
     description: '查询研究生成绩',
-    icon: '/image/kaoyan.png',
+    icon: '/image/mono/kaoyan.png',
     page: '/pages/kaoyan/kaoyan',
     section: 'campus'
   },
@@ -37,7 +37,7 @@ const FEATURE_LIST = [
     id: 'spare',
     title: '教室查询',
     description: '查询当前空闲教室',
-    icon: '/image/spare.png',
+    icon: '/image/mono/spare.png',
     page: '/pages/spare/spare',
     section: 'campus'
   },
@@ -45,7 +45,7 @@ const FEATURE_LIST = [
     id: 'bill',
     title: '消费查询',
     description: '查询校园卡消费记录',
-    icon: '/image/bill.png',
+    icon: '/image/mono/bill.png',
     page: '/pages/bill/bill',
     section: 'campus'
   },
@@ -53,7 +53,7 @@ const FEATURE_LIST = [
     id: 'card',
     title: '校园卡',
     description: '查看校园卡信息与余额',
-    icon: '/image/card.png',
+    icon: '/image/mono/card.png',
     page: '/pages/card/card',
     section: 'campus'
   },
@@ -61,7 +61,7 @@ const FEATURE_LIST = [
     id: 'cardLost',
     title: '校园卡挂失',
     description: '挂失校园卡',
-    icon: '/image/cardLost.png',
+    icon: '/image/mono/cardLost.png',
     page: '/pages/cardLost/cardLost',
     section: 'campus'
   },
@@ -69,7 +69,7 @@ const FEATURE_LIST = [
     id: 'evaluate',
     title: '教学评价',
     description: '一键完成教学评价',
-    icon: '/image/evaluate.png',
+    icon: '/image/mono/evaluate.png',
     page: '/pages/evaluate/evaluate',
     section: 'campus'
   },
@@ -77,7 +77,7 @@ const FEATURE_LIST = [
     id: 'collection',
     title: '馆藏查询',
     description: '检索图书馆馆藏',
-    icon: '/image/collection.png',
+    icon: '/image/mono/collection.png',
     page: '/pages/collection/collection',
     section: 'campus'
   },
@@ -85,7 +85,7 @@ const FEATURE_LIST = [
     id: 'book',
     title: '借阅查询',
     description: '查看个人借阅并续借',
-    icon: '/image/book.png',
+    icon: '/image/mono/book.png',
     page: '/pages/book/book',
     section: 'campus'
   },
@@ -93,7 +93,7 @@ const FEATURE_LIST = [
     id: 'data',
     title: '数据查询',
     description: '电费与黄页信息查询',
-    icon: '/image/data.png',
+    icon: '/image/mono/data.png',
     page: '/pages/data/data',
     section: 'tooling'
   },
@@ -101,23 +101,23 @@ const FEATURE_LIST = [
     id: 'news',
     title: '新闻通知',
     description: '查看校园新闻和通知',
-    icon: '/image/news.png',
+    icon: '/image/mono/news.png',
     page: '/pages/news/news',
-    section: 'information'
+    section: 'tooling'
   },
   {
     id: 'reading',
     title: '阅读',
     description: '查看专题阅读内容',
-    icon: '/image/book.png',
+    icon: '/image/mono/book.png',
     page: '/pages/reading/reading',
-    section: 'information'
+    section: 'tooling'
   },
   {
     id: 'ershou',
     title: '二手交易',
     description: '浏览与发布校园闲置',
-    icon: '/image/ershou.png',
+    icon: '/image/mono/ershou.png',
     page: '/pages/communityList/communityList?module=ershou',
     section: 'community'
   },
@@ -125,7 +125,7 @@ const FEATURE_LIST = [
     id: 'lostandfound',
     title: '失物招领',
     description: '发布寻物与招领信息',
-    icon: '/image/lostandfound.png',
+    icon: '/image/mono/lostandfound.png',
     page: '/pages/communityList/communityList?module=lostandfound',
     section: 'community'
   },
@@ -133,7 +133,7 @@ const FEATURE_LIST = [
     id: 'secret',
     title: '校园树洞',
     description: '匿名说说心里话',
-    icon: '/image/secret.png',
+    icon: '/image/mono/secret.png',
     page: '/pages/communityList/communityList?module=secret',
     section: 'community'
   },
@@ -141,7 +141,7 @@ const FEATURE_LIST = [
     id: 'express',
     title: '表白墙',
     description: '查看与发布校园表白',
-    icon: '/image/express.png',
+    icon: '/image/mono/express.png',
     page: '/pages/communityList/communityList?module=express',
     section: 'community'
   },
@@ -149,7 +149,7 @@ const FEATURE_LIST = [
     id: 'topic',
     title: '校园话题',
     description: '参与热门校园讨论',
-    icon: '/image/topic.png',
+    icon: '/image/mono/topic.png',
     page: '/pages/communityList/communityList?module=topic',
     section: 'community'
   },
@@ -157,7 +157,7 @@ const FEATURE_LIST = [
     id: 'delivery',
     title: '全民快递',
     description: '发布与接取校园跑腿',
-    icon: '/image/delivery.png',
+    icon: '/image/mono/delivery.png',
     page: '/pages/communityList/communityList?module=delivery',
     section: 'community'
   },
@@ -165,7 +165,7 @@ const FEATURE_LIST = [
     id: 'dating',
     title: '卖室友',
     description: '查看校园交友信息',
-    icon: '/image/dating.png',
+    icon: '/image/mono/dating.png',
     page: '/pages/communityList/communityList?module=dating',
     section: 'community'
   },
@@ -173,7 +173,7 @@ const FEATURE_LIST = [
     id: 'photograph',
     title: '拍好校园',
     description: '查看与分享校园摄影',
-    icon: '/image/photograph.png',
+    icon: '/image/mono/photograph.png',
     page: '/pages/communityList/communityList?module=photograph',
     section: 'community'
   }
@@ -200,12 +200,7 @@ const FEATURE_SECTIONS = [
   {
     id: 'tooling',
     title: '信息查询',
-    featureIds: ['data']
-  },
-  {
-    id: 'information',
-    title: '资讯信息',
-    featureIds: ['news', 'reading']
+    featureIds: ['data', 'news', 'reading']
   },
   {
     id: 'community',
@@ -228,14 +223,14 @@ const SYSTEM_ACTIONS = [
     id: 'settings',
     title: '功能设置',
     description: '切换 mock 与管理首页模块',
-    icon: '/image/about.png',
+    icon: '/image/mono/about.png',
     page: '/pages/settings/settings'
   },
   {
     id: 'logout',
     title: '退出账号',
     description: '退出当前账号',
-    icon: '/image/exit.png',
+    icon: '/image/mono/exit.png',
     action: 'logout'
   }
 ]

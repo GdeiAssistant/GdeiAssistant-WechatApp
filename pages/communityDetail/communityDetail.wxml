@@ -16,6 +16,9 @@
     </swiper>
 
     <view class="detail_card">
+      <view class="detail_head_meta" wx:if="{{moduleConfig}}">
+        <text class="detail_module_tag">{{moduleConfig.title}}</text>
+      </view>
       <view class="detail_title">{{detail.title}}</view>
       <view class="detail_subtitle" wx:if="{{detail.subtitle}}">{{detail.subtitle}}</view>
       <view class="detail_price" wx:if="{{detail.priceText}}">￥{{detail.priceText}}</view>

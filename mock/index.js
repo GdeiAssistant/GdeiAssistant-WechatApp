@@ -1,5 +1,7 @@
 const storageKeys = require('../constants/storage.js')
 const { MOCK_ACCOUNT_USERNAME, MOCK_ACCOUNT_PASSWORD } = require('../constants/mock.js')
+const { FACULTY_OPTIONS, getMajorOptions, formatLocationDisplay } = require('../constants/profile.js')
+const LOCATION_REGIONS = require('../constants/location-regions.js')
 const communityMock = require('./community.js')
 
 const MOCK_ACCOUNT = {
@@ -12,11 +14,17 @@ const BASE_PROFILE = {
   nickname: '林知远',
   avatar: '',
   birthday: '2004-09-16',
-  faculty: '信息工程学院',
+  faculty: '计算机科学系',
   major: '软件工程',
   enrollment: '2023',
-  location: '中国广东省广州市',
-  hometown: '中国广东省汕头市',
+  location: formatLocationDisplay('中国', '广东', '广州'),
+  locationRegion: 'CN',
+  locationState: '44',
+  locationCity: '1',
+  hometown: formatLocationDisplay('中国', '广东', '汕头'),
+  hometownRegion: 'CN',
+  hometownState: '44',
+  hometownCity: '5',
   introduction: '喜欢做实用的小工具，也在准备移动端开发实习。',
   ipArea: '广东'
 }
@@ -276,6 +284,144 @@ const READING_LIST = [
   { id: 'reading_3', title: '四六级冲刺阶段的听力复习建议', description: '最后两周如何提高正确率，并避免时间分配失衡。', link: 'https://example.com/reading/cet', createTime: '2026-03-04' }
 ]
 
+const ANNOUNCEMENT_LIST = [
+  {
+    id: 'announcement_001',
+    title: '系统维护通知',
+    publishTime: '1小时前',
+    content: '为配合学期中服务器扩容，本周三 18:00 至 20:00 将进行例行维护。维护期间消息中心、校园社区和部分查询服务可能出现短暂不可用，建议提前保存正在编辑的内容。'
+  },
+  {
+    id: 'announcement_002',
+    title: '春季双选会入场安排',
+    publishTime: '今天 09:10',
+    content: '春季校园双选会将于本周五 14:30 在体育馆举行。请已报名同学提前准备校园卡，按学院分批入场，现场会同步开放企业岗位二维码与志愿者咨询台。'
+  },
+  {
+    id: 'announcement_003',
+    title: '图书馆夜间开放时段调整',
+    publishTime: '昨天',
+    content: '从下周起，图书馆一楼自习区开放时间延长至 23:00，二楼研讨室仍需预约。若遇到插座、座位预约或入馆设备异常，可直接在资讯页提交反馈。'
+  },
+  {
+    id: 'announcement_004',
+    title: '校医院门诊排班更新',
+    publishTime: '昨天 18:40',
+    content: '校医院本周起调整晚间门诊排班，工作日 18:30 后优先接待急诊与发热相关问诊，普通门诊请尽量在白天时段前往。'
+  },
+  {
+    id: 'announcement_005',
+    title: '宿舍门禁系统升级提醒',
+    publishTime: '前天',
+    content: '北区与中区宿舍门禁将于本周末夜间分批升级，升级期间刷卡开门可能存在短暂延迟，请提前留意楼栋群通知。'
+  },
+  {
+    id: 'announcement_006',
+    title: '就业指导中心咨询时段开放',
+    publishTime: '2026-03-01',
+    content: '就业指导中心新增春招一对一简历咨询时段，已开放线上预约。需要模拟面试或简历修改的同学可在工作日预约。'
+  }
+]
+
+const INTERACTION_MESSAGES = [
+  {
+    id: 'msg_interaction_001',
+    module: 'dating',
+    type: 'interaction',
+    targetType: 'sent',
+    targetId: '802',
+    targetSubId: '701',
+    title: '卖室友互动',
+    content: '你发出的卖室友申请已被对方查看，去看看最新状态。',
+    createdAt: '刚刚',
+    isRead: false
+  },
+  {
+    id: 'msg_interaction_002',
+    module: 'delivery',
+    type: 'interaction',
+    targetType: 'published',
+    targetId: '601',
+    targetSubId: '9001',
+    title: '全民快递提醒',
+    content: '你发布的订单已被接单，建议尽快和接单同学确认送达时间。',
+    createdAt: '6分钟前',
+    isRead: false
+  },
+  {
+    id: 'msg_interaction_003',
+    module: 'delivery',
+    type: 'interaction',
+    targetType: 'accepted',
+    targetId: '602',
+    targetSubId: '9001',
+    title: '全民快递提醒',
+    content: '你接的订单已完成，系统已同步为已完成状态。',
+    createdAt: '12分钟前',
+    isRead: false
+  },
+  {
+    id: 'msg_interaction_004',
+    module: 'secret',
+    type: 'comment',
+    targetType: 'comment',
+    targetId: '301',
+    targetSubId: '1',
+    title: '树洞互动',
+    content: '有人回复了你的树洞，打开详情即可查看最新评论。',
+    createdAt: '10分钟前',
+    isRead: false
+  },
+  {
+    id: 'msg_interaction_005',
+    module: 'express',
+    type: 'comment',
+    targetType: 'comment',
+    targetId: '401',
+    targetSubId: '1',
+    title: '表白墙互动',
+    content: '有人给你的表白留了言，打开详情即可查看最新评论。',
+    createdAt: '14分钟前',
+    isRead: false
+  },
+  {
+    id: 'msg_interaction_006',
+    module: 'express',
+    type: 'interaction',
+    targetType: 'guess',
+    targetId: '401',
+    targetSubId: '',
+    title: '表白墙互动',
+    content: '有人参与了你的猜名字互动，去看看最新猜测次数。',
+    createdAt: '18分钟前',
+    isRead: true
+  },
+  {
+    id: 'msg_interaction_007',
+    module: 'topic',
+    type: 'like',
+    targetType: 'like',
+    targetId: '501',
+    targetSubId: '',
+    title: '话题互动',
+    content: '你的话题收到了新的点赞。',
+    createdAt: '25分钟前',
+    isRead: true
+  },
+  {
+    id: 'msg_interaction_008',
+    module: 'photograph',
+    type: 'comment',
+    targetType: 'comment',
+    targetId: '901',
+    targetSubId: '1',
+    title: '拍好校园互动',
+    content: '有人评论了你的作品，打开详情即可查看最新评论。',
+    createdAt: '40分钟前',
+    isRead: false
+  }
+]
+
 const YELLOW_PAGE_RESULT = {
   type: [
     { typeCode: 1, typeName: '教务服务' },
@@ -305,6 +451,22 @@ function cloneValue(value) {
   return JSON.parse(JSON.stringify(value))
 }
 
+function getLocationNodeName(node) {
+  if (!node || typeof node !== 'object') {
+    return ''
+  }
+
+  return String(node.aliasesName || node.name || '').trim()
+}
+
+function buildLocationDisplay(region, state, city) {
+  return formatLocationDisplay(
+    getLocationNodeName(region),
+    getLocationNodeName(state),
+    getLocationNodeName(city)
+  )
+}
+
 function readState() {
   const defaultState = {
     token: '',
@@ -312,7 +474,8 @@ function readState() {
     savedCetName: '',
     cardLostState: '正常',
     renewedBookCodes: [],
-    profile: cloneValue(BASE_PROFILE)
+    profile: cloneValue(BASE_PROFILE),
+    interactionMessages: cloneValue(INTERACTION_MESSAGES)
   }
 
   try {
@@ -324,7 +487,8 @@ function readState() {
         savedCetName: state.savedCetName || '',
         cardLostState: state.cardLostState || '正常',
         renewedBookCodes: Array.isArray(state.renewedBookCodes) ? state.renewedBookCodes : [],
-        profile: Object.assign({}, cloneValue(BASE_PROFILE), state.profile || {})
+        profile: Object.assign({}, cloneValue(BASE_PROFILE), state.profile || {}),
+        interactionMessages: Array.isArray(state.interactionMessages) ? state.interactionMessages : cloneValue(INTERACTION_MESSAGES)
       }
     }
   } catch (error) {
@@ -441,6 +605,220 @@ function queryCollectionList(keyword) {
   })
 }
 
+function findLocationNodeByCodes(regionCode, stateCode, cityCode) {
+  const region = LOCATION_REGIONS.filter(function(item) {
+    return item.code === regionCode
+  })[0]
+  if (!region) {
+    return null
+  }
+
+  const states = Array.isArray(region.states) ? region.states : []
+  const state = states.filter(function(item) {
+    return item.code === stateCode
+  })[0] || states[0] || null
+  if (!state && states.length) {
+    return null
+  }
+
+  const cities = state && Array.isArray(state.cities) ? state.cities : []
+  const city = cities.filter(function(item) {
+    return item.code === cityCode
+  })[0] || cities[0] || null
+  if (!city && cities.length) {
+    return null
+  }
+
+  return {
+    region: region,
+    state: state,
+    city: city
+  }
+}
+
+function applyProfileUpdate(token, updater) {
+  const authError = ensureAuthorized(token)
+  if (authError) {
+    return authError
+  }
+
+  const nextState = readState()
+  updater(nextState.profile)
+  writeState(nextState)
+  return resolveWithDelay(buildSuccess(Object.assign({}, nextState.profile)))
+}
+
+function handleLocationList(token) {
+  const authError = ensureAuthorized(token)
+  if (authError) {
+    return authError
+  }
+
+  return resolveWithDelay(buildSuccess(cloneValue(LOCATION_REGIONS)))
+}
+
+function handleNicknameUpdate(token, payload) {
+  const nickname = String(payload.nickname || '').trim()
+  return applyProfileUpdate(token, function(profile) {
+    profile.nickname = nickname
+  })
+}
+
+function handleIntroductionUpdate(token, payload) {
+  return applyProfileUpdate(token, function(profile) {
+    profile.introduction = String(payload.introduction || '').trim()
+  })
+}
+
+function handleBirthdayUpdate(token, payload) {
+  const year = Number(payload.year)
+  const month = Number(payload.month)
+  const date = Number(payload.date)
+
+  return applyProfileUpdate(token, function(profile) {
+    if (!year || !month || !date) {
+      profile.birthday = ''
+      return
+    }
+
+    profile.birthday = [
+      String(year),
+      String(month).padStart(2, '0'),
+      String(date).padStart(2, '0')
+    ].join('-')
+  })
+}
+
+function handleFacultyUpdate(token, payload) {
+  const facultyIndex = Number(payload.faculty)
+  const faculty = FACULTY_OPTIONS[facultyIndex] || FACULTY_OPTIONS[0]
+
+  return applyProfileUpdate(token, function(profile) {
+    profile.faculty = faculty
+    if (getMajorOptions(faculty).indexOf(profile.major) === -1) {
+      profile.major = '未选择'
+    }
+  })
+}
+
+function handleMajorUpdate(token, payload) {
+  const major = String(payload.major || '').trim()
+
+  return applyProfileUpdate(token, function(profile) {
+    const majorOptions = getMajorOptions(profile.faculty)
+    profile.major = majorOptions.indexOf(major) !== -1 ? major : '未选择'
+  })
+}
+
+function handleEnrollmentUpdate(token, payload) {
+  const year = payload.year === null || payload.year === undefined || payload.year === '' ? '' : String(payload.year)
+
+  return applyProfileUpdate(token, function(profile) {
+    profile.enrollment = year
+  })
+}
+
+function handleLocationUpdate(token, payload, type) {
+  const regionCode = String(payload.region || '').trim()
+  const stateCode = String(payload.state || '').trim()
+  const cityCode = String(payload.city || '').trim()
+  const locationNode = findLocationNodeByCodes(regionCode, stateCode, cityCode)
+
+  if (!locationNode) {
+    return rejectWithMessage('未找到对应的地区信息')
+  }
+
+  return applyProfileUpdate(token, function(profile) {
+    const displayText = buildLocationDisplay(locationNode.region, locationNode.state, locationNode.city)
+    if (type === 'hometown') {
+      profile.hometownRegion = locationNode.region.code
+      profile.hometownState = locationNode.state ? locationNode.state.code : ''
+      profile.hometownCity = locationNode.city ? locationNode.city.code : ''
+      profile.hometown = displayText
+      return
+    }
+
+    profile.locationRegion = locationNode.region.code
+    profile.locationState = locationNode.state ? locationNode.state.code : ''
+    profile.locationCity = locationNode.city ? locationNode.city.code : ''
+    profile.location = displayText
+  })
+}
+
+function handleAnnouncementList(token, path) {
+  const authError = ensureAuthorized(token)
+  if (authError) {
+    return authError
+  }
+
+  const matched = /^\/api\/announcement\/start\/(\d+)\/size\/(\d+)$/.exec(path)
+  const start = matched ? Number(matched[1]) : 0
+  const size = matched ? Number(matched[2]) : 10
+  return resolveWithDelay(buildSuccess(ANNOUNCEMENT_LIST.slice(start, start + size)))
+}
+
+function handleInteractionList(token, path) {
+  const authError = ensureAuthorized(token)
+  if (authError) {
+    return authError
+  }
+
+  const matched = /^\/api\/message\/interaction\/start\/(\d+)\/size\/(\d+)$/.exec(path)
+  const start = matched ? Number(matched[1]) : 0
+  const size = matched ? Number(matched[2]) : 20
+  const state = readState()
+  return resolveWithDelay(buildSuccess(state.interactionMessages.slice(start, start + size)))
+}
+
+function handleUnreadCount(token) {
+  const authError = ensureAuthorized(token)
+  if (authError) {
+    return authError
+  }
+
+  const state = readState()
+  const unreadCount = state.interactionMessages.filter(function(item) {
+    return !item.isRead
+  }).length
+  return resolveWithDelay(buildSuccess(unreadCount))
+}
+
+function handleMessageRead(token, path) {
+  const authError = ensureAuthorized(token)
+  if (authError) {
+    return authError
+  }
+
+  const messageId = /^\/api\/message\/id\/(.+)\/read$/.exec(path)
+  if (!messageId) {
+    return rejectWithMessage('消息不存在')
+  }
+
+  const nextState = readState()
+  nextState.interactionMessages = nextState.interactionMessages.map(function(item) {
+    if (item.id === messageId[1]) {
+      return Object.assign({}, item, { isRead: true })
+    }
+    return item
+  })
+  writeState(nextState)
+  return resolveWithDelay(buildSuccess(null))
+}
+
+function handleMessageReadAll(token) {
+  const authError = ensureAuthorized(token)
+  if (authError) {
+    return authError
+  }
+
+  const nextState = readState()
+  nextState.interactionMessages = nextState.interactionMessages.map(function(item) {
+    return Object.assign({}, item, { isRead: true })
+  })
+  writeState(nextState)
+  return resolveWithDelay(buildSuccess(null))
+}
+
 function handleLogin(payload) {
   const username = String(payload.username || '').trim()
   const password = String(payload.password || '').trim()
@@ -477,6 +855,20 @@ function handleAvatar(token) {
 
   const state = readState()
   return resolveWithDelay(buildSuccess(state.profile.avatar || ''))
+}
+
+function handleAvatarUpdate(token, payload) {
+  const avatarKey = String(payload.avatarKey || payload.avatarHdKey || '').trim()
+
+  return applyProfileUpdate(token, function(profile) {
+    profile.avatar = avatarKey
+  })
+}
+
+function handleAvatarDelete(token) {
+  return applyProfileUpdate(token, function(profile) {
+    profile.avatar = ''
+  })
 }
 
 function handleGrade(token, query) {
@@ -811,8 +1203,52 @@ function handleRequest(options) {
     return handleAvatar(token)
   }
 
+  if (path === '/api/profile/avatar' && method === 'POST') {
+    return handleAvatarUpdate(token, payload)
+  }
+
+  if (path === '/api/profile/avatar' && method === 'DELETE') {
+    return handleAvatarDelete(token)
+  }
+
   if (path === '/api/user/profile' && method === 'GET') {
     return handleProfile(token)
+  }
+
+  if (path === '/api/locationList' && method === 'GET') {
+    return handleLocationList(token)
+  }
+
+  if (path === '/api/profile/nickname' && method === 'POST') {
+    return handleNicknameUpdate(token, payload)
+  }
+
+  if (path === '/api/introduction' && method === 'POST') {
+    return handleIntroductionUpdate(token, payload)
+  }
+
+  if (path === '/api/profile/birthday' && method === 'POST') {
+    return handleBirthdayUpdate(token, payload)
+  }
+
+  if (path === '/api/profile/faculty' && method === 'POST') {
+    return handleFacultyUpdate(token, payload)
+  }
+
+  if (path === '/api/profile/major' && method === 'POST') {
+    return handleMajorUpdate(token, payload)
+  }
+
+  if (path === '/api/profile/enrollment' && method === 'POST') {
+    return handleEnrollmentUpdate(token, payload)
+  }
+
+  if (path === '/api/profile/location' && method === 'POST') {
+    return handleLocationUpdate(token, payload, 'location')
+  }
+
+  if (path === '/api/profile/hometown' && method === 'POST') {
+    return handleLocationUpdate(token, payload, 'hometown')
   }
 
   if (path === '/api/grade' && method === 'GET') {
@@ -893,6 +1329,26 @@ function handleRequest(options) {
 
   if (path === '/api/reading' && method === 'GET') {
     return handleReading()
+  }
+
+  if (/^\/api\/announcement\/start\/\d+\/size\/\d+$/.test(path) && method === 'GET') {
+    return handleAnnouncementList(token, path)
+  }
+
+  if (/^\/api\/message\/interaction\/start\/\d+\/size\/\d+$/.test(path) && method === 'GET') {
+    return handleInteractionList(token, path)
+  }
+
+  if (path === '/api/message/unread' && method === 'GET') {
+    return handleUnreadCount(token)
+  }
+
+  if (/^\/api\/message\/id\/.+\/read$/.test(path) && method === 'POST') {
+    return handleMessageRead(token, path)
+  }
+
+  if (path === '/api/message/readall' && method === 'POST') {
+    return handleMessageReadAll(token)
   }
 
   if (path === '/api/data/electricfees' && method === 'POST') {

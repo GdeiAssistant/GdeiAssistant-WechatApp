@@ -1,0 +1,108 @@
+<view class="page__bd profile_page">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <view class="loading_box" wx:if="{{loading}}">
+    <i class="weui-loading"></i>
+    <text>正在加载个人资料</text>
+  </view>
+
+  <block wx:if="{{!loading && profile}}">
+    <view class="profile_card">
+      <view class="profile_avatar_wrap" bindtap="handleAvatarTap">
+        <image class="profile_avatar" src="{{profile.avatar}}" mode="aspectFill"></image>
+        <view class="avatar_badge">{{avatarUploading ? '上传中' : '更换头像'}}</view>
+      </view>
+
+      <view class="profile_meta">
+        <view class="profile_name">{{profile.nickname || '未填写'}}</view>
+        <view class="profile_subtitle">用户名：{{profile.username || '未填写'}}</view>
+        <view class="profile_subtitle">IP 属地：{{profile.ipArea || '空'}}</view>
+        <view class="profile_status" wx:if="{{avatarUploading || savingField || saveStatusText}}">
+          {{avatarUploading ? '正在更新头像...' : (savingField ? '正在保存资料...' : saveStatusText)}}
+        </view>
+        <view class="profile_intro">{{((form && form.introduction) || profile.introduction) || '未填写'}}</view>
+      </view>
+    </view>
+
+    <view class="weui-cells__title">账号资料</view>
+    <view class="weui-cells weui-cells_after-title profile_cells">
+      <view class="weui-cell weui-cell_access" bindtap="openNicknameEditor">
+        <view class="weui-cell__bd">昵称</view>
+        <view class="weui-cell__ft">{{profile.nickname || '未填写'}}</view>
+      </view>
+
+      <picker mode="date" value="{{form.birthday}}" end="{{todayDate}}" bindchange="handleBirthdayChange">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">生日</view>
+          <view class="weui-cell__ft">{{form.birthday || '未填写'}}</view>
+        </view>
+      </picker>
+
+      <picker mode="selector" range="{{facultyOptions}}" value="{{facultyIndex}}" bindchange="handleFacultyChange">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">院系</view>
+          <view class="weui-cell__ft">{{form.faculty || '未选择'}}</view>
+        </view>
+      </picker>
+
+      <picker mode="selector" range="{{majorOptions}}" value="{{majorIndex}}" disabled="{{majorDisabled}}" bindchange="handleMajorChange">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">专业</view>
+          <view class="weui-cell__ft">{{form.major || '未选择'}}</view>
+        </view>
+      </picker>
+
+      <picker mode="selector" range="{{enrollmentOptions}}" value="{{enrollmentIndex}}" bindchange="handleEnrollmentChange">
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">入学年份</view>
+          <view class="weui-cell__ft">{{form.enrollment || '未选择'}}</view>
+        </view>
+      </picker>
+
+      <picker
+        mode="multiSelector"
+        range="{{locationRanges}}"
+        value="{{locationPickerIndex}}"
+        disabled="{{locationPickerDisabled}}"
+        data-target="location"
+        bindchange="handleLocationChange"
+        bindcolumnchange="handleLocationColumnChange"
+      >
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">所在地</view>
+          <view class="weui-cell__ft multi_line_value">{{locationPickerDisabled ? '空' : (form.location || '未选择')}}</view>
+        </view>
+      </picker>
+
+      <picker
+        mode="multiSelector"
+        range="{{hometownRanges}}"
+        value="{{hometownPickerIndex}}"
+        disabled="{{hometownPickerDisabled}}"
+        data-target="hometown"
+        bindchange="handleLocationChange"
+        bindcolumnchange="handleLocationColumnChange"
+      >
+        <view class="weui-cell weui-cell_access">
+          <view class="weui-cell__bd">家乡</view>
+          <view class="weui-cell__ft multi_line_value">{{hometownPickerDisabled ? '空' : (form.hometown || '未选择')}}</view>
+        </view>
+      </picker>
+
+      <view class="weui-cell introduction_cell">
+        <view class="weui-cell__bd">个人简介</view>
+        <view class="weui-cell__ft textarea_wrap">
+          <textarea
+            class="profile_textarea"
+            value="{{form.introduction}}"
+            maxlength="120"
+            data-field="introduction"
+            bindinput="handleTextInput"
+            bindblur="handleTextBlur"
+            placeholder="一句话介绍自己"
+          ></textarea>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

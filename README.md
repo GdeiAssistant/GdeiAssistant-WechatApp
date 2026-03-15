@@ -1,10 +1,6 @@
-<p align="center">
-  <img width="300" src="./assets/logo.png" alt="GdeiAssistant Logo">
-</p>
-
 # 广东二师助手微信小程序
 
-广东二师助手微信小程序客户端，面向广东第二师范学院校园场景，覆盖教务查询、校园生活与资讯通知等核心能力。
+广东二师助手微信小程序客户端，基于微信小程序框架与 WeUI 构建，面向广东第二师范学院校园场景，覆盖教务查询、校园生活、信息通知与个人资料等核心校园服务。
 
 ## 功能概览
 
@@ -31,10 +27,18 @@
 - 校园话题
 - 拍好校园
 
-### 资讯信息
+### 信息通知
 
 - 新闻通知
 - 阅读
+- 收件通知
+
+### 个人中心
+
+- 个人资料
+- 头像管理
+- 设置
+- 退出登录
 
 ## 技术栈
 
@@ -61,15 +65,16 @@ GdeiAssistant-WechatApp/
 └── common/lib/weui.wxss
 ```
 
-## 数据源模式
+## 数据源与资料配置
 
 - `remote`：请求真实后端接口
 - `mock`：使用本地模拟数据
+- 个人资料地区数据同步自后端仓库 `location.xml`
 
 ## 运行环境
 
 - 微信开发者工具
-- 微信小程序基础库 `>= 2.3.0`
+- 微信小程序基础库 `>= 2.32.3`
 
 ## 快速开始
 
@@ -94,15 +99,6 @@ GdeiAssistant-WechatApp/
 ## 后端接口位置
 
 - GitHub：`https://github.com/GdeiAssistant/GdeiAssistant`
-- Wiki：`https://github.com/GdeiAssistant/GdeiAssistant/wiki`
-
-## 应用截图
-
-<p>
-  <img width="250" src="./assets/screenshot_01.jpg" alt="截图1">
-  <img width="250" src="./assets/screenshot_02.jpg" alt="截图2">
-  <img width="250" src="./assets/screenshot_03.jpg" alt="截图3">
-</p>
 
 ## 开源协议
 

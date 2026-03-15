@@ -1,6 +1,14 @@
 <view class="page__bd publish_page">
   <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
 
+  <view class="hero_card" wx:if="{{moduleConfig}}" style="{{moduleConfig.heroStyle}}">
+    <view class="hero_content">
+      <view class="hero_title">{{moduleConfig.title}}</view>
+      <view class="hero_summary">{{isEditMode ? '修改当前已发布内容' : moduleConfig.summary}}</view>
+    </view>
+    <image class="hero_icon" src="{{moduleConfig.icon}}" mode="aspectFit"></image>
+  </view>
+
   <view class="publish_card">
     <view class="section_title">基础信息</view>
     <view class="page_hint" wx:if="{{pageLoading}}">正在加载已有内容...</view>

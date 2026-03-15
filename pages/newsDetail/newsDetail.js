@@ -10,12 +10,19 @@ Page({
     this.setData({
       newsItem: newsItem || null
     })
+
+    if (newsItem && newsItem.navigationTitle) {
+      wx.setNavigationBarTitle({
+        title: newsItem.navigationTitle
+      })
+    }
   },
 
   onShareAppMessage: function() {
+    const navigationTitle = this.data.newsItem && this.data.newsItem.navigationTitle
     return {
       title: this.data.newsItem && this.data.newsItem.title ? this.data.newsItem.title : '新闻通知',
-      path: '/pages/news/news'
+      path: navigationTitle === '系统通知' ? '/pages/inbox/inbox' : '/pages/news/news'
     }
   }
 })
