@@ -11,10 +11,6 @@
       <view class="weui-cell__bd">当前模式</view>
       <view class="weui-cell__ft">{{dataSourceLabel}}</view>
     </view>
-    <view class="weui-cell">
-      <view class="weui-cell__bd">接口域名</view>
-      <view class="weui-cell__ft domain_value">{{resourceDomain}}</view>
-    </view>
   </view>
 
   <text wx:if="{{useMockData}}" class="mock_hint">{{mockCredentialsHint}}</text>

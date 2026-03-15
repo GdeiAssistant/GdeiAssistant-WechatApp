@@ -1,4 +1,3 @@
-const config = require('../../config/index.js')
 const { FEATURE_SECTIONS, FEATURE_MAP, MOCK_CREDENTIALS_HINT } = require('../../constants/features.js')
 const auth = require('../../services/auth.js')
 const dataSource = require('../../services/data-source.js')
@@ -26,7 +25,6 @@ Page({
   data: {
     useMockData: false,
     dataSourceLabel: '',
-    resourceDomain: config.resourceDomain,
     mockCredentialsHint: MOCK_CREDENTIALS_HINT,
     featureSections: []
   },

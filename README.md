@@ -31,7 +31,6 @@
 
 - 新闻通知
 - 阅读
-- 收件通知
 
 ### 个人中心
 
@@ -84,7 +83,7 @@ GdeiAssistant-WechatApp/
 
 ### 2. 配置环境
 
-按需修改 `config/index.js` 中的请求域名与资源域名配置。
+按需修改 `config/index.js` 中的接口域名配置。
 
 ### 3. 编译运行
 

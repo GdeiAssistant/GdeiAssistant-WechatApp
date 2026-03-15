@@ -1,12 +1,10 @@
 const ENV_CONFIG = {
   dev: {
     resourceDomain: 'http://localhost:8080/',
-    requestValidateToken: '',
     requestTimeout: 15000
   },
   prod: {
     resourceDomain: 'https://gdeiassistant.azurewebsites.net/',
-    requestValidateToken: '7UnEVKNng3XV/eBcsL1/lRIANRfXcoPT',
     requestTimeout: 15000
   }
 }
@@ -16,30 +14,6 @@ function normalizeDomain(domain) {
     return ''
   }
   return domain.endsWith('/') ? domain : `${domain}/`
-}
-
-function getRuntimeDomainOverride() {
-  if (typeof process !== 'undefined' && process.env) {
-    if (process.env.GDEI_RESOURCE_DOMAIN) {
-      return normalizeDomain(process.env.GDEI_RESOURCE_DOMAIN)
-    }
-    if (process.env.RESOURCE_DOMAIN) {
-      return normalizeDomain(process.env.RESOURCE_DOMAIN)
-    }
-  }
-
-  try {
-    if (typeof wx !== 'undefined' && wx.getStorageSync) {
-      const value = wx.getStorageSync('resourceDomainOverride')
-      if (value) {
-        return normalizeDomain(value)
-      }
-    }
-  } catch (error) {
-    // Ignore runtime override read failures.
-  }
-
-  return ''
 }
 
 function resolveCurrentEnv() {
@@ -85,11 +59,6 @@ function isDevtoolsRuntime() {
 }
 
 function resolveResourceDomain(currentEnv) {
-  const override = getRuntimeDomainOverride()
-  if (override) {
-    return override
-  }
-
   if (currentEnv === 'dev') {
     if (isDevtoolsRuntime()) {
       return normalizeDomain(ENV_CONFIG.dev.resourceDomain)
@@ -106,6 +75,5 @@ const envConfig = ENV_CONFIG[currentEnv] || ENV_CONFIG.prod
 
 module.exports = {
   ...envConfig,
-  resourceDomain: resolveResourceDomain(currentEnv),
-  currentEnv
+  resourceDomain: resolveResourceDomain(currentEnv)
 }
