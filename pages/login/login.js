@@ -4,6 +4,9 @@ const utils = require('../../utils/util.js')
 const auth = require('../../services/auth.js')
 const authApi = require('../../services/apis/auth.js')
 const dataSource = require('../../services/data-source.js')
+const { createSubmitGuard } = require('../../utils/debounce.js')
+
+const loginGuard = createSubmitGuard()
 
 Page({
   data: {
@@ -15,16 +18,20 @@ Page({
   },
 
   formSubmit: function(e) {
+    if (!loginGuard.acquire()) return
+
     const username = String(e.detail.value.username || '').trim()
     const password = String(e.detail.value.password || '').trim()
 
     if (!username) {
       utils.showNoActionModal('请填写校园网账号信息', '用户名不能为空')
+      loginGuard.release()
       return
     }
 
     if (!password) {
       utils.showNoActionModal('请填写校园网账号信息', '密码不能为空')
+      loginGuard.release()
       return
     }
 
@@ -46,6 +53,8 @@ Page({
     }).catch((error) => {
       wx.hideNavigationBarLoading()
       utils.showModal('登录失败', error.message)
+    }).finally(function () {
+      loginGuard.release()
     })
   },
 

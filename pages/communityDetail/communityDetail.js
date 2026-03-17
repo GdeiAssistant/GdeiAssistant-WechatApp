@@ -7,6 +7,11 @@ const {
 } = require('../../constants/community.js')
 const communityApi = require('../../services/apis/community.js')
 const pageUtils = require('../../utils/page.js')
+const { createSubmitGuard } = require('../../utils/debounce.js')
+
+const commentGuard = createSubmitGuard()
+const guessGuard = createSubmitGuard()
+const pickGuard = createSubmitGuard()
 
 let secretVoicePlayer = null
 
@@ -353,13 +358,17 @@ Page({
   },
 
   submitComment: function() {
+    if (!commentGuard.acquire()) return
+
     const comment = String(this.data.commentInput || '').trim()
     if (!comment) {
       pageUtils.showTopTips(this, '评论内容不能为空')
+      commentGuard.release()
       return
     }
     if (comment.length > COMMENT_MAX_LENGTH) {
       pageUtils.showTopTips(this, `评论内容不能超过${COMMENT_MAX_LENGTH}个字符`)
+      commentGuard.release()
       return
     }
 
@@ -381,17 +390,23 @@ Page({
       this.loadComments()
     }).catch((error) => {
       pageUtils.showTopTips(this, error.message)
+    }).finally(function () {
+      commentGuard.release()
     })
   },
 
   submitGuess: function() {
+    if (!guessGuard.acquire()) return
+
     const guessedName = String(this.data.guessInput || '').trim()
     if (!guessedName) {
       pageUtils.showTopTips(this, '请输入你猜的名字')
+      guessGuard.release()
       return
     }
     if (guessedName.length > EXPRESS_GUESS_MAX_LENGTH) {
       pageUtils.showTopTips(this, `名字长度不能超过${EXPRESS_GUESS_MAX_LENGTH}个字符`)
+      guessGuard.release()
       return
     }
 
@@ -421,6 +436,8 @@ Page({
       })
     }).catch((error) => {
       pageUtils.showTopTips(this, error.message)
+    }).finally(function () {
+      guessGuard.release()
     })
   },
 
@@ -461,13 +478,17 @@ Page({
   },
 
   submitPick: function() {
+    if (!pickGuard.acquire()) return
+
     const content = String(this.data.pickInput || '').trim()
     if (!content) {
       pageUtils.showTopTips(this, '请输入撩一下内容')
+      pickGuard.release()
       return
     }
     if (content.length > DATING_PICK_MAX_LENGTH) {
       pageUtils.showTopTips(this, `撩一下内容不能超过${DATING_PICK_MAX_LENGTH}个字符`)
+      pickGuard.release()
       return
     }
 
@@ -486,6 +507,8 @@ Page({
       this.loadDetail()
     }).catch((error) => {
       pageUtils.showTopTips(this, error.message)
+    }).finally(function () {
+      pickGuard.release()
     })
   },
 
