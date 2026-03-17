@@ -47,10 +47,10 @@ function evaluate(directlySubmit) {
 
 function setCardLost(cardPassword) {
   return request({
-    url: `${endpoints.campus.cardLost}?cardPassword=${encodeURIComponent(cardPassword)}`,
+    url: endpoints.campus.cardLost,
     method: 'POST',
     authRequired: true,
-    data: {}
+    data: { cardPassword }
   })
 }
 
