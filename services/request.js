@@ -22,7 +22,6 @@ function request(options) {
     }
     if (sessionToken) {
       header.Authorization = `Bearer ${sessionToken}`
-      header.token = sessionToken
     }
 
     if (showLoading) {
