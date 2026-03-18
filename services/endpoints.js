@@ -1,8 +1,7 @@
 module.exports = {
   auth: {
     login: '/api/auth/login',
-    logout: '/api/auth/logout',
-    wechatOpenId: '/api/wechat/app/userid'
+    logout: '/api/auth/logout'
   },
   user: {
     avatar: '/api/profile/avatar',

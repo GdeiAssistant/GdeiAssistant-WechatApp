@@ -69,15 +69,11 @@ function handleModuleStateDetail(utils) {
     extension: {
       EMAIL: true,
       ENCRYPTION: true,
-      ALIPAY_MINIPROGRAM: true,
-      QQ_MINIPROGRAM: true,
       ALIYUN_API: true,
       ALIYUN_SMS: true,
       JWT: true,
       NEWS: true,
-      REPLAY_ATTACKS_VALIDATE: true,
-      WECHAT_OFFICIAL_ACCOUNT: true,
-      WECHAT_MINI_PROGRAM: true
+      REPLAY_ATTACKS_VALIDATE: true
     },
     core: {
       MYSQL: true,

@@ -170,10 +170,6 @@ function handleRequest(options) {
     return authHandlers.handlePresignedUrl(query, utils)
   }
 
-  if (path === '/api/wechat/app/userid' && method === 'POST') {
-    return authHandlers.handleWechatOpenId(payload, utils)
-  }
-
   // --- Profile ---
   if (path === '/api/profile/avatar' && method === 'GET') {
     return profileHandlers.handleAvatar(token, utils)

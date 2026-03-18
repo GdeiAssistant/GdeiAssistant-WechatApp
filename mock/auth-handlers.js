@@ -28,18 +28,6 @@ function handlePresignedUrl(query, utils) {
   }))
 }
 
-function handleWechatOpenId(payload, utils) {
-  var code = payload.code || ''
-  if (!code) {
-    return utils.rejectWithMessage('微信授权码不能为空')
-  }
-  return utils.resolveWithDelay(utils.buildSuccess({
-    openid: 'mock_openid_' + code,
-    unionid: 'mock_unionid_' + code,
-    userId: 'mock_userid_' + code
-  }))
-}
-
 function handleLogout(token, utils) {
   if (!token) {
     return Promise.resolve()
@@ -56,6 +44,5 @@ function handleLogout(token, utils) {
 module.exports = {
   handleLogin: handleLogin,
   handlePresignedUrl: handlePresignedUrl,
-  handleWechatOpenId: handleWechatOpenId,
   handleLogout: handleLogout
 }
