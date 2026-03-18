@@ -247,6 +247,8 @@ function getCenter(moduleId, options) {
             received: resultList[2].data || []
           }
         }
+      }).catch(function() {
+        return { success: false, data: { profiles: [], sent: [], received: [] } }
       })
     case 'photograph':
       return request({
@@ -499,6 +501,8 @@ function getPhotographStats() {
         likes: resultList[2].data || 0
       }
     }
+  }).catch(function() {
+    return { success: false, data: { photos: 0, comments: 0, likes: 0 } }
   })
 }
 

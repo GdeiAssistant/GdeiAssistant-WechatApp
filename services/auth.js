@@ -79,7 +79,6 @@ function logout() {
       method: 'POST',
       header: {
         Authorization: `Bearer ${token}`,
-        token,
         'Content-Type': 'application/json'
       },
       timeout: config.requestTimeout,
@@ -105,8 +104,7 @@ function validateSessionToken() {
       url: config.resourceDomain + endpoints.user.profile,
       method: 'GET',
       header: {
-        Authorization: `Bearer ${token}`,
-        token
+        Authorization: `Bearer ${token}`
       },
       timeout: config.requestTimeout,
       success: function(result) {

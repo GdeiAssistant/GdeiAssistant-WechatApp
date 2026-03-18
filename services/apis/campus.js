@@ -36,12 +36,12 @@ function getCardBill(year, month, date) {
   })
 }
 
-function evaluate(directlySubmit) {
+function evaluate(directSubmit) {
   return request({
     url: endpoints.campus.evaluate,
     method: 'POST',
     authRequired: true,
-    data: { directSubmit: directlySubmit }
+    data: { directSubmit: directSubmit }
   })
 }
 
