@@ -2,8 +2,7 @@ module.exports = {
   auth: {
     login: '/api/auth/login',
     logout: '/api/auth/logout',
-    wechatOpenId: '/api/wechat/app/userid',
-    qqOpenId: '/qq/app/userid'
+    wechatOpenId: '/api/wechat/app/userid'
   },
   user: {
     avatar: '/api/profile/avatar',
