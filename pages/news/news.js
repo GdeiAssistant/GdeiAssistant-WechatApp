@@ -4,11 +4,10 @@ const pageUtils = require('../../utils/page.js')
 
 const PAGE_SIZE = 10
 const NEWS_TABS = [
-  { type: 1, label: '教学信息' },
-  { type: 2, label: '考试信息' },
-  { type: 3, label: '教务信息' },
-  { type: 4, label: '行政通知' },
-  { type: 5, label: '综合信息' }
+  { type: 1, label: '学校要闻' },
+  { type: 2, label: '院部通知' },
+  { type: 3, label: '通知公告' },
+  { type: 4, label: '学术动态' }
 ]
 
 Page({
