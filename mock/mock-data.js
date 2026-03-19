@@ -216,12 +216,6 @@ var NEWS_BY_TYPE = {
   ]
 }
 
-var READING_LIST = [
-  { id: 'reading_1', title: '春招简历如何写出项目亮点', description: '结合校园项目和实习经历，整理出适合开发岗的简历表达方式。', link: 'https://example.com/reading/resume', createTime: '2026-03-08' },
-  { id: 'reading_2', title: '图书馆高效自习方法整理', description: '从番茄钟、资料归档到错题复盘，建立稳定的学习节奏。', link: 'https://example.com/reading/library', createTime: '2026-03-06' },
-  { id: 'reading_3', title: '四六级冲刺阶段的听力复习建议', description: '最后两周如何提高正确率，并避免时间分配失衡。', link: 'https://example.com/reading/cet', createTime: '2026-03-04' }
-]
-
 var ANNOUNCEMENT_LIST = [
   { id: 'announcement_001', title: '系统维护通知', publishTime: '1小时前', content: '为配合学期中服务器扩容，本周三 18:00 至 20:00 将进行例行维护。维护期间消息中心、校园社区和部分查询服务可能出现短暂不可用，建议提前保存正在编辑的内容。' },
   { id: 'announcement_002', title: '春季双选会入场安排', publishTime: '今天 09:10', content: '春季校园双选会将于本周五 14:30 在体育馆举行。请已报名同学提前准备校园卡，按学院分批入场，现场会同步开放企业岗位二维码与志愿者咨询台。' },
@@ -277,7 +271,6 @@ module.exports = {
   COLLECTION_DETAILS: COLLECTION_DETAILS,
   DEFAULT_BORROWED_BOOKS: DEFAULT_BORROWED_BOOKS,
   NEWS_BY_TYPE: NEWS_BY_TYPE,
-  READING_LIST: READING_LIST,
   ANNOUNCEMENT_LIST: ANNOUNCEMENT_LIST,
   INTERACTION_MESSAGES: INTERACTION_MESSAGES,
   YELLOW_PAGE_RESULT: YELLOW_PAGE_RESULT,

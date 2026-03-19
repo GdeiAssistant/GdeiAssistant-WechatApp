@@ -44,7 +44,6 @@ module.exports = {
   info: {
     graduateExam: '/api/kaoyan/query',
     spareRoom: '/api/spare/query',
-    reading: '/api/reading',
     news: function(type, start, size) {
       return `/api/news/type/${type}/start/${start}/size/${size}`
     }

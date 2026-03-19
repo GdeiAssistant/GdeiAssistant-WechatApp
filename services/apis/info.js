@@ -1,13 +1,6 @@
 const endpoints = require('../endpoints.js')
 const { request } = require('../request.js')
 
-function getReadingList() {
-  return request({
-    url: endpoints.info.reading,
-    method: 'GET'
-  })
-}
-
 function getNewsList(type, start, size) {
   return request({
     url: endpoints.info.news(type, start, size),
@@ -33,7 +26,6 @@ function querySpareRoom(payload) {
 }
 
 module.exports = {
-  getReadingList,
   getNewsList,
   queryGraduateExam,
   querySpareRoom

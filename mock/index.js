@@ -301,9 +301,6 @@ function handleRequest(options) {
     return infoHandlers.handleNews(path, utils)
   }
 
-  if (path === '/api/reading' && method === 'GET') {
-    return infoHandlers.handleReading(utils)
-  }
 
   if (path === '/api/data/electricfees' && method === 'POST') {
     return infoHandlers.handleElectricFees(payload, utils)

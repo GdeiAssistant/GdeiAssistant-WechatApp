@@ -13,10 +13,6 @@ function handleNews(path, utils) {
   return utils.resolveWithDelay(utils.buildSuccess(list.slice(start, start + size)))
 }
 
-function handleReading(utils) {
-  return utils.resolveWithDelay(utils.buildSuccess(utils.cloneValue(data.READING_LIST)))
-}
-
 function handleElectricFees(payload, utils) {
   var name = String(payload.name || '').trim()
   var number = String(payload.number || '').trim()
@@ -85,7 +81,6 @@ function handleModuleStateDetail(utils) {
 
 module.exports = {
   handleNews: handleNews,
-  handleReading: handleReading,
   handleElectricFees: handleElectricFees,
   handleYellowPage: handleYellowPage,
   handleGraduateExam: handleGraduateExam,

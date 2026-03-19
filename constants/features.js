@@ -106,14 +106,6 @@ const FEATURE_LIST = [
     section: 'tooling'
   },
   {
-    id: 'reading',
-    title: '阅读',
-    description: '查看专题阅读内容',
-    icon: '/image/mono/book.png',
-    page: '/pages/reading/reading',
-    section: 'tooling'
-  },
-  {
     id: 'ershou',
     title: '二手交易',
     description: '浏览与发布校园闲置',
@@ -200,7 +192,7 @@ const FEATURE_SECTIONS = [
   {
     id: 'tooling',
     title: '信息查询',
-    featureIds: ['data', 'news', 'reading']
+    featureIds: ['data', 'news']
   },
   {
     id: 'community',
