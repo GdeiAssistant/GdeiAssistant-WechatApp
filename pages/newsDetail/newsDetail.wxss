@@ -1,5 +1,11 @@
 @import "../../common/lib/weui.wxss";
 
+.detail-loading {
+  padding: 80rpx 30rpx;
+  text-align: center;
+  color: #888;
+}
+
 .detail_title {
   padding: 40rpx 30rpx 20rpx;
   font-size: 36rpx;

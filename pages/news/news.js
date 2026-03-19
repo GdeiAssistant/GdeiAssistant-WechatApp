@@ -74,7 +74,7 @@ Page({
       navigationTitle: '新闻通知'
     }))
     wx.navigateTo({
-      url: '/pages/newsDetail/newsDetail'
+      url: `/pages/newsDetail/newsDetail?mode=news&id=${encodeURIComponent(item.id)}`
     })
   },
 

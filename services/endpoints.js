@@ -46,11 +46,17 @@ module.exports = {
     spareRoom: '/api/spare/query',
     news: function(type, start, size) {
       return `/api/news/type/${type}/start/${start}/size/${size}`
+    },
+    newsDetail: function(id) {
+      return `/api/news/id/${id}`
     }
   },
   messages: {
     announcements: function(start, size) {
       return `/api/announcement/start/${start}/size/${size}`
+    },
+    announcementDetail: function(id) {
+      return `/api/announcement/id/${id}`
     },
     interactionList: function(start, size) {
       return `/api/message/interaction/start/${start}/size/${size}`

@@ -9,6 +9,14 @@ function getAnnouncementList(start, size) {
   })
 }
 
+function getAnnouncementDetail(id) {
+  return request({
+    url: endpoints.messages.announcementDetail(id),
+    method: 'GET',
+    authRequired: true
+  })
+}
+
 function getInteractionList(start, size) {
   return request({
     url: endpoints.messages.interactionList(start, size),
@@ -43,6 +51,7 @@ function markAllMessagesRead() {
 
 module.exports = {
   getAnnouncementList,
+  getAnnouncementDetail,
   getInteractionList,
   getUnreadCount,
   markMessageRead,

@@ -8,6 +8,13 @@ function getNewsList(type, start, size) {
   })
 }
 
+function getNewsDetail(id) {
+  return request({
+    url: endpoints.info.newsDetail(id),
+    method: 'GET'
+  })
+}
+
 function queryGraduateExam(payload) {
   return request({
     url: endpoints.info.graduateExam,
@@ -27,6 +34,7 @@ function querySpareRoom(payload) {
 
 module.exports = {
   getNewsList,
+  getNewsDetail,
   queryGraduateExam,
   querySpareRoom
 }
