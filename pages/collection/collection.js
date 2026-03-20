@@ -84,7 +84,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '馆藏查询',
+      title: '图书馆',
       path: '/pages/collection/collection'
     }
   }

@@ -14,7 +14,8 @@ module.exports = {
     major: '/api/profile/major',
     enrollment: '/api/profile/enrollment',
     nickname: '/api/profile/nickname',
-    locationList: '/api/locationList'
+    locations: '/api/profile/locations',
+    options: '/api/profile/options'
   },
   cet: {
     number: '/api/cet/number',
@@ -30,12 +31,10 @@ module.exports = {
     cardLost: '/api/card/lost'
   },
   library: {
-    bookQuery: '/api/book/borrow',
-    bookRenew: '/api/book/renew',
-    collectionQuery: '/api/collection/search',
-    collectionDetail: '/api/collection/detail',
-    collectionBorrow: '/api/collection/borrow',
-    collectionRenew: '/api/collection/renew'
+    borrow: '/api/library/borrow',
+    renew: '/api/library/renew',
+    search: '/api/library/search',
+    detail: '/api/library/detail'
   },
   data: {
     electricFees: '/api/data/electricfees',
@@ -45,27 +44,27 @@ module.exports = {
     graduateExam: '/api/kaoyan/query',
     spareRoom: '/api/spare/query',
     news: function(type, start, size) {
-      return `/api/news/type/${type}/start/${start}/size/${size}`
+      return `/api/information/news/type/${type}/start/${start}/size/${size}`
     },
     newsDetail: function(id) {
-      return `/api/news/id/${id}`
+      return `/api/information/news/id/${id}`
     }
   },
   messages: {
     announcements: function(start, size) {
-      return `/api/announcement/start/${start}/size/${size}`
+      return `/api/information/announcement/start/${start}/size/${size}`
     },
     announcementDetail: function(id) {
-      return `/api/announcement/id/${id}`
+      return `/api/information/announcement/id/${id}`
     },
     interactionList: function(start, size) {
-      return `/api/message/interaction/start/${start}/size/${size}`
+      return `/api/information/message/interaction/start/${start}/size/${size}`
     },
-    unreadCount: '/api/message/unread',
+    unreadCount: '/api/information/message/unread',
     markRead: function(id) {
-      return `/api/message/id/${id}/read`
+      return `/api/information/message/id/${id}/read`
     },
-    markAllRead: '/api/message/readall'
+    markAllRead: '/api/information/message/readall'
   },
   module: {
     stateDetail: '/api/module/state/detail'

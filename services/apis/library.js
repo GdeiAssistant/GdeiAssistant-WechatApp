@@ -3,7 +3,7 @@ const { request } = require('../request.js')
 
 function queryBook(password) {
   return request({
-    url: endpoints.library.bookQuery,
+    url: endpoints.library.borrow,
     method: 'GET',
     authRequired: true,
     data: { password }
@@ -12,7 +12,7 @@ function queryBook(password) {
 
 function renewBook(code, sn, password) {
   return request({
-    url: endpoints.library.bookRenew,
+    url: endpoints.library.renew,
     method: 'POST',
     authRequired: true,
     data: { code, sn, password }
@@ -33,7 +33,7 @@ function normalizeCollectionResult(result) {
 
 function queryCollection(keyword, page) {
   return request({
-    url: endpoints.library.collectionQuery,
+    url: endpoints.library.search,
     method: 'GET',
     data: { keyword: keyword, page }
   }).then(normalizeCollectionResult)
@@ -59,7 +59,7 @@ function buildDetailURL(payload) {
 function queryCollectionDetail(payload) {
   const detailURL = buildDetailURL(payload)
   return request({
-    url: endpoints.library.collectionDetail,
+    url: endpoints.library.detail,
     method: 'GET',
     data: { detailURL }
   }).then((result) => {

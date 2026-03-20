@@ -106,7 +106,11 @@ function handleBookBorrow(token, query, utils) {
   }
 
   var password = String(query.password || '').trim()
-  if (password && password !== 'library123' && password !== '123456') {
+  if (!password) {
+    return utils.rejectWithMessage('请输入图书馆密码后再查询借阅')
+  }
+
+  if (password !== 'library123' && password !== '123456') {
     return utils.rejectWithMessage('图书馆密码不正确')
   }
 
@@ -124,7 +128,7 @@ function handleBookRenew(token, payload, utils) {
     return utils.rejectWithMessage('请输入图书馆密码')
   }
 
-  if (password !== 'library123') {
+  if (password !== 'library123' && password !== '123456') {
     return utils.rejectWithMessage('模拟续借失败：图书馆密码不正确')
   }
 

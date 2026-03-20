@@ -3,7 +3,9 @@ const uploadService = require('../../services/upload.js')
 const pageUtils = require('../../utils/page.js')
 const LOCATION_REGIONS = require('../../constants/location-regions.js')
 const {
-  FACULTY_OPTIONS,
+  fetchProfileOptions,
+  getFacultyCodeByLabel,
+  getFacultyOptions,
   getEnrollmentYearOptions,
   getMajorOptions,
   canSelectMajor,
@@ -344,6 +346,7 @@ function syncProfileLocationDisplay(profile, locationTree) {
 
 function buildEditableState(profile, locationTree) {
   const normalizedProfile = normalizeProfile(profile, profile.avatar)
+  const facultyOptions = getFacultyOptions()
   const majorOptions = getMajorOptions(normalizedProfile.faculty)
   const enrollmentOptions = getEnrollmentYearOptions()
   const locationIndices = findLocationIndices(locationTree, {
@@ -381,7 +384,8 @@ function buildEditableState(profile, locationTree) {
       introduction: normalizedProfile.introduction
     },
     majorOptions: majorOptions,
-    facultyIndex: getSafeIndex(FACULTY_OPTIONS, normalizedProfile.faculty),
+    facultyOptions: facultyOptions,
+    facultyIndex: getSafeIndex(facultyOptions, normalizedProfile.faculty),
     majorIndex: getSafeIndex(majorOptions, normalizedProfile.major),
     enrollmentOptions: enrollmentOptions,
     enrollmentIndex: getSafeIndex(enrollmentOptions, normalizedProfile.enrollment || '未选择'),
@@ -471,7 +475,7 @@ Page({
     todayDate: '',
     profile: null,
     form: null,
-    facultyOptions: FACULTY_OPTIONS,
+    facultyOptions: getFacultyOptions(),
     majorOptions: ['未选择'],
     enrollmentOptions: getEnrollmentYearOptions(),
     facultyIndex: 0,
@@ -561,11 +565,13 @@ Page({
     return pageUtils.runWithNavigationLoading(this, function() {
       return Promise.allSettled([
         userApi.getAvatar(),
-        userApi.getProfile()
+        userApi.getProfile(),
+        fetchProfileOptions()
       ])
     }).then((results) => {
       const avatarResult = results[0] && results[0].status === 'fulfilled' ? results[0].value : null
       const profileResult = results[1] && results[1].status === 'fulfilled' ? results[1].value : null
+      const profileOptionsResult = results[2] && results[2].status === 'fulfilled' ? results[2].value : null
 
       const locationTree = this.getLocationTree()
       const avatarValue = avatarResult && avatarResult.success ? avatarResult.data : ''
@@ -581,18 +587,24 @@ Page({
 
       this.setData({
         profile: normalizedProfile,
-        todayDate: buildTodayDate()
+        todayDate: buildTodayDate(),
+        facultyOptions: getFacultyOptions()
       })
       this.setEditableState(normalizedProfile)
 
       if (!profileResult || !profileResult.success) {
         pageUtils.showTopTips(this, profileErrorMessage)
       }
+
+      if (!profileOptionsResult) {
+        pageUtils.showTopTips(this, '资料字典加载失败，已使用本地兜底选项')
+      }
     }).catch((error) => {
       const fallbackProfile = syncProfileLocationDisplay(createEmptyProfile(''), this.getLocationTree())
       this.setData({
         profile: fallbackProfile,
-        todayDate: buildTodayDate()
+        todayDate: buildTodayDate(),
+        facultyOptions: getFacultyOptions()
       })
       this.setEditableState(fallbackProfile)
       pageUtils.showTopTips(this, error.message)
@@ -833,7 +845,9 @@ Page({
 
   handleFacultyChange: function(event) {
     const facultyIndex = Number(event.detail.value)
-    const faculty = FACULTY_OPTIONS[facultyIndex] || FACULTY_OPTIONS[0]
+    const facultyOptions = this.data.facultyOptions || getFacultyOptions()
+    const faculty = facultyOptions[facultyIndex] || facultyOptions[0] || '未选择'
+    const facultyCode = getFacultyCodeByLabel(faculty)
     const majorOptions = getMajorOptions(faculty)
     const profile = this.data.profile || {}
     const currentMajor = String((this.data.form && this.data.form.major) || profile.major || '')
@@ -850,13 +864,18 @@ Page({
       'form.major': nextMajor
     })
 
+    if (facultyCode === null) {
+      pageUtils.showTopTips(this, '院系选项无效，请刷新后重试')
+      return
+    }
+
     if (faculty === String(profile.faculty || '') && nextMajor === String(profile.major || '')) {
       return
     }
 
     this.queueProfileSave('faculty', function() {
       return buildInteractionPromise(function() {
-        return userApi.updateFaculty(facultyIndex)
+        return userApi.updateFaculty(facultyCode)
       }).then(function() {
         if (nextMajor && nextMajor !== '未选择') {
           return buildInteractionPromise(function() {

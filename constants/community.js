@@ -1,3 +1,9 @@
+const {
+  getMarketplaceItemOptions,
+  getLostFoundItemOptions,
+  getLostFoundModeOptions
+} = require('./profile.js')
+
 const SECONDHAND_CATEGORY_OPTIONS = [
   { label: '全部', value: -1 },
   { label: '校园代步', value: 0 },
@@ -228,6 +234,33 @@ const COMMUNITY_MODULE_MAP = COMMUNITY_MODULES.reduce(function(result, moduleIte
   return result
 }, {})
 
+function getSecondhandCategoryOptions() {
+  return [{ label: '全部', value: -1 }].concat(getMarketplaceItemOptions().map(function(option) {
+    return {
+      label: option.label,
+      value: option.code
+    }
+  }))
+}
+
+function getLostFoundModeDictionaryOptions() {
+  return getLostFoundModeOptions().map(function(option) {
+    return {
+      label: option.label,
+      value: option.code
+    }
+  })
+}
+
+function getLostFoundItemDictionaryOptions() {
+  return getLostFoundItemOptions().map(function(option) {
+    return {
+      label: option.label,
+      value: option.code
+    }
+  })
+}
+
 function getCommunityModule(moduleId) {
   return COMMUNITY_MODULE_MAP[moduleId] || null
 }
@@ -266,6 +299,9 @@ module.exports = {
   SECONDHAND_CATEGORY_OPTIONS,
   LOST_FOUND_MODE_OPTIONS,
   LOST_FOUND_ITEM_OPTIONS,
+  getSecondhandCategoryOptions,
+  getLostFoundModeDictionaryOptions,
+  getLostFoundItemDictionaryOptions,
   SECRET_THEME_OPTIONS,
   SECRET_TYPE_OPTIONS,
   EXPRESS_GENDER_OPTIONS,

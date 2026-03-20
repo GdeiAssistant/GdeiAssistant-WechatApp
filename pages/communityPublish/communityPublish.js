@@ -1,9 +1,9 @@
 const {
   getCommunityModule,
   getCommunityPageTitle,
-  SECONDHAND_CATEGORY_OPTIONS,
-  LOST_FOUND_MODE_OPTIONS,
-  LOST_FOUND_ITEM_OPTIONS,
+  getSecondhandCategoryOptions,
+  getLostFoundModeDictionaryOptions,
+  getLostFoundItemDictionaryOptions,
   SECRET_THEME_OPTIONS,
   SECRET_TYPE_OPTIONS,
   EXPRESS_GENDER_OPTIONS,
@@ -13,6 +13,7 @@ const {
   DELIVERY_DEFAULT_ORDER_NAME,
   DELIVERY_PLACEHOLDER_PICKUP_CODE
 } = require('../../constants/community.js')
+const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
 const { uploadLocalFileByPresignedUrl, uploadLocalFilesByPresignedUrl } = require('../../services/upload.js')
 const pageUtils = require('../../utils/page.js')
@@ -131,9 +132,9 @@ Page({
     isEditMode: false,
     editItemId: '',
     pageLoading: false,
-    secondhandTypeOptions: SECONDHAND_CATEGORY_OPTIONS.slice(1),
-    lostFoundModeOptions: LOST_FOUND_MODE_OPTIONS,
-    lostFoundItemOptions: LOST_FOUND_ITEM_OPTIONS,
+    secondhandTypeOptions: getSecondhandCategoryOptions().slice(1),
+    lostFoundModeOptions: getLostFoundModeDictionaryOptions(),
+    lostFoundItemOptions: getLostFoundItemDictionaryOptions(),
     secretThemeOptions: SECRET_THEME_OPTIONS,
     secretTypeOptions: SECRET_TYPE_OPTIONS,
     expressGenderOptions: EXPRESS_GENDER_OPTIONS,
@@ -713,6 +714,14 @@ Page({
     }
   },
 
+  refreshDictionaryOptions: function() {
+    this.setData({
+      secondhandTypeOptions: getSecondhandCategoryOptions().slice(1),
+      lostFoundModeOptions: getLostFoundModeDictionaryOptions(),
+      lostFoundItemOptions: getLostFoundItemDictionaryOptions()
+    })
+  },
+
   loadEditItem: function() {
     if (!this.data.isEditMode) {
       return Promise.resolve()
@@ -764,21 +773,27 @@ Page({
       title: getCommunityPageTitle(moduleId, isEditMode ? 'edit' : 'publish', moduleConfig.title)
     })
 
-    this.setData({
-      moduleId: moduleId,
-      moduleConfig: moduleConfig,
-      mode: isEditMode ? 'edit' : 'create',
-      isEditMode: isEditMode,
-      editItemId: isEditMode ? String(options.id) : '',
-      form: {},
-      images: [],
-      imageLimit: this.getImageLimit(moduleId),
-      secretDeleteAfter24Hours: false
-    })
+    fetchProfileOptions().catch(function() {
+      return null
+    }).finally(() => {
+      this.refreshDictionaryOptions()
 
-    if (isEditMode) {
-      this.loadEditItem()
-    }
+      this.setData({
+        moduleId: moduleId,
+        moduleConfig: moduleConfig,
+        mode: isEditMode ? 'edit' : 'create',
+        isEditMode: isEditMode,
+        editItemId: isEditMode ? String(options.id) : '',
+        form: {},
+        images: [],
+        imageLimit: this.getImageLimit(moduleId),
+        secretDeleteAfter24Hours: false
+      })
+
+      if (isEditMode) {
+        this.loadEditItem()
+      }
+    })
   },
 
   onUnload: function() {

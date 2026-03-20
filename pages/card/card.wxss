@@ -4,3 +4,39 @@
   position: static;
   background-color: #fff;
 }
+
+.module_shortcuts {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.shortcut_card {
+  display: block;
+  padding: 24rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(135deg, #eefaf4 0%, #fbfffd 100%);
+  border: 1rpx solid rgba(56, 120, 84, 0.12);
+}
+
+.shortcut_card_warn {
+  background: linear-gradient(135deg, #fff3ee 0%, #fffaf7 100%);
+  border-color: rgba(182, 94, 64, 0.12);
+}
+
+.shortcut_card_active {
+  opacity: 0.88;
+}
+
+.shortcut_title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #233445;
+}
+
+.shortcut_desc {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #61758b;
+}

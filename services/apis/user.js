@@ -101,7 +101,15 @@ function updateHometown(payload) {
 
 function getLocationList() {
   return request({
-    url: endpoints.user.locationList,
+    url: endpoints.user.locations,
+    method: 'GET',
+    authRequired: true
+  })
+}
+
+function getProfileOptions() {
+  return request({
+    url: endpoints.user.options,
     method: 'GET',
     authRequired: true
   })
@@ -139,6 +147,7 @@ module.exports = {
   updateLocation,
   updateHometown,
   getLocationList,
+  getProfileOptions,
   updateAvatar,
   deleteAvatar
 }

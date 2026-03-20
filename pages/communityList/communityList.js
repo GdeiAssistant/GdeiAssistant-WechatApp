@@ -1,13 +1,14 @@
 const {
   getCommunityModule,
-  SECONDHAND_CATEGORY_OPTIONS,
-  LOST_FOUND_MODE_OPTIONS,
-  LOST_FOUND_ITEM_OPTIONS,
+  getSecondhandCategoryOptions,
+  getLostFoundModeDictionaryOptions,
+  getLostFoundItemDictionaryOptions,
   DELIVERY_STATUS_OPTIONS,
   DATING_AREA_OPTIONS,
   DATING_GRADE_OPTIONS,
   PHOTOGRAPH_TAB_OPTIONS
 } = require('../../constants/community.js')
+const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
 const pageUtils = require('../../utils/page.js')
 
@@ -42,7 +43,7 @@ function normalizeItem(moduleId, item) {
         summary: rawItem.description || '',
         cover: rawItem.pictureURL && rawItem.pictureURL.length ? rawItem.pictureURL[0] : '/image/ershou.png',
         priceText: formatPrice(rawItem.price),
-        badgeText: findLabel(SECONDHAND_CATEGORY_OPTIONS, rawItem.type, '闲置'),
+        badgeText: findLabel(getSecondhandCategoryOptions(), rawItem.type, '闲置'),
         metaText: rawItem.location || '',
         timeText: rawItem.publishTime || '',
         raw: rawItem
@@ -54,7 +55,7 @@ function normalizeItem(moduleId, item) {
         summary: rawItem.description || '',
         cover: rawItem.pictureURL && rawItem.pictureURL.length ? rawItem.pictureURL[0] : '/image/lostandfound.png',
         badgeText: Number(rawItem.lostType) === 0 ? '寻物' : '招领',
-        subBadgeText: findLabel(LOST_FOUND_ITEM_OPTIONS, rawItem.itemType, '其他'),
+        subBadgeText: findLabel(getLostFoundItemDictionaryOptions(), rawItem.itemType, '其他'),
         metaText: rawItem.location || '',
         timeText: rawItem.publishTime || '',
         raw: rawItem
@@ -152,9 +153,9 @@ Page({
   buildTabs: function(moduleId) {
     switch (moduleId) {
       case 'ershou':
-        return SECONDHAND_CATEGORY_OPTIONS
+        return getSecondhandCategoryOptions()
       case 'lostandfound':
-        return LOST_FOUND_MODE_OPTIONS
+        return getLostFoundModeDictionaryOptions()
       case 'delivery':
         return DELIVERY_STATUS_OPTIONS
       case 'dating':
@@ -342,15 +343,19 @@ Page({
       title: moduleConfig.title
     })
 
-    this.setData({
-      moduleId: moduleId,
-      moduleConfig: moduleConfig,
-      tabs: this.buildTabs(moduleId),
-      activeTabIndex: 0
-    })
+    fetchProfileOptions().catch(function() {
+      return null
+    }).finally(() => {
+      this.setData({
+        moduleId: moduleId,
+        moduleConfig: moduleConfig,
+        tabs: this.buildTabs(moduleId),
+        activeTabIndex: 0
+      })
 
-    this.loadStatsIfNeeded()
-    this.loadFeed(1, true)
+      this.loadStatsIfNeeded()
+      this.loadFeed(1, true)
+    })
   },
 
   onShow: function() {

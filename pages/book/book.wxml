@@ -4,28 +4,38 @@
 
   <view class="container">
 
-    <form catchsubmit="submit" wx:if="{{!result}}" style="margin-top:15px">
+    <form catchsubmit="submit" style="margin-top:15px">
 
       <view class='page-section'>
         <view class="weui-cells weui-cells_after-title">
           <view class="weui-cell weui-cell_input weui-cell_vcode">
             <view class="weui-cell__hd">
-              <view class="weui-label">密码</view>
+              <view class="weui-label">图书馆密码</view>
             </view>
             <view class="weui-cell__bd">
-              <input name="password" class="weui-input" password placeholder="请输入借阅证密码" />
+              <input name="password" class="weui-input" password value="{{password}}" bindinput="onPasswordInput" placeholder="请输入图书馆密码" />
             </view>
           </view>
         </view>
       </view>
 
+      <view class="weui-cells__tips">我的借阅需要先输入图书馆密码查询，续借时会再次校验密码。</view>
+
       <view class="btn-area">
-        <button type="primary" formType="submit" disabled="{{loading}}">查询</button>
+        <button type="primary" formType="submit" loading="{{loading}}" disabled="{{loading}}">{{hasQueriedBorrow ? '刷新借阅' : '查询借阅'}}</button>
       </view>
 
     </form>
 
-    <view block class="page__bd" wx:if="{{result}}">
+    <view class="borrow-empty" wx:if="{{!hasQueriedBorrow && !loading}}">
+      输入图书馆密码后即可查看当前借阅记录。
+    </view>
+
+    <view class="borrow-empty" wx:elif="{{hasQueriedBorrow && (!result || result.length === 0)}}">
+      当前没有可展示的借阅记录。
+    </view>
+
+    <view block class="page__bd" wx:elif="{{result && result.length > 0}}">
       <view class="weui-cells__title" style='margin-bottom:-10px'>借阅列表</view>
       <block wx:for="{{result}}" wx:for-item="item" wx:key="item-key">
         <view class="weui-form-preview" style='margin-top:15px'>
@@ -61,10 +71,23 @@
             </view>
           </view>
           <view class="weui-form-preview__ft">
-            <view data-index="{{index}}" data-code="{{item.code}}" data-sn="{{item.sn}}" bindtap="renewBook" class="weui-form-preview__btn weui-form-preview__btn_primary" hover-class="weui-form-preview__btn_active">续借</view>
+            <view data-code="{{item.code}}" data-sn="{{item.sn}}" bindtap="openRenewDialog" class="weui-form-preview__btn weui-form-preview__btn_primary" hover-class="weui-form-preview__btn_active">续借</view>
           </view>
         </view>
       </block>
+    </view>
+
+    <view wx:if="{{renewDialogVisible}}" class="renew-mask" bindtap="closeRenewDialog">
+      <view class="renew-dialog" catchtap="noop">
+        <view class="renew-dialog__title">图书续借</view>
+        <view class="renew-dialog__message">请输入图书馆密码完成续借校验，密码只用于本次请求。</view>
+        <input class="renew-dialog__input" password value="{{renewPassword}}" bindinput="onRenewPasswordInput" placeholder="请输入图书馆密码" />
+        <view class="renew-dialog__error" wx:if="{{renewErrorMessage}}">{{renewErrorMessage}}</view>
+        <view class="renew-dialog__actions">
+          <button class="renew-dialog__button renew-dialog__button_secondary" bindtap="closeRenewDialog" disabled="{{renewSubmitting}}">取消</button>
+          <button class="renew-dialog__button" type="primary" bindtap="confirmRenew" loading="{{renewSubmitting}}" disabled="{{renewSubmitting}}">确认续借</button>
+        </view>
+      </view>
     </view>
 
   </view>

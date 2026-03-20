@@ -2,6 +2,13 @@
 
   <view class="container">
 
+    <view class="module_shortcuts">
+      <navigator url="/pages/book/book" class="shortcut_card" hover-class="shortcut_card_active">
+        <view class="shortcut_title">我的借阅</view>
+        <view class="shortcut_desc">查询借阅记录并完成续借</view>
+      </navigator>
+    </view>
+
     <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
 
     <view block class="container" wx:if="{{list.length==0}}">

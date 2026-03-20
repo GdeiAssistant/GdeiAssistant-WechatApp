@@ -187,7 +187,7 @@ function handleRequest(options) {
     return profileHandlers.handleProfile(token, utils)
   }
 
-  if (path === '/api/locationList' && method === 'GET') {
+  if (path === '/api/profile/locations' && method === 'GET') {
     return profileHandlers.handleLocationList(token, utils)
   }
 
@@ -248,28 +248,20 @@ function handleRequest(options) {
     return campusHandlers.handleCardLost(token, query, utils)
   }
 
-  if (path === '/api/collection/search' && method === 'GET') {
+  if (path === '/api/library/search' && method === 'GET') {
     return campusHandlers.handleCollectionSearch(query, utils)
   }
 
-  if (path === '/api/collection/detail' && method === 'GET') {
+  if (path === '/api/library/detail' && method === 'GET') {
     return campusHandlers.handleCollectionDetail(query, utils)
   }
 
-  if (path === '/api/book/borrow' && method === 'GET') {
+  if (path === '/api/library/borrow' && method === 'GET') {
     return campusHandlers.handleBookBorrow(token, query, utils)
   }
 
-  if (path === '/api/book/renew' && method === 'POST') {
+  if (path === '/api/library/renew' && method === 'POST') {
     return campusHandlers.handleBookRenew(token, payload, utils)
-  }
-
-  if (path === '/api/collection/borrow' && method === 'GET') {
-    return campusHandlers.handleCollectionBorrow(token, query, utils)
-  }
-
-  if (path === '/api/collection/renew' && method === 'POST') {
-    return campusHandlers.handleCollectionRenew(token, query, utils)
   }
 
   if (path === '/api/cet/number' && method === 'GET') {
@@ -297,8 +289,12 @@ function handleRequest(options) {
     return infoHandlers.handleGraduateExam(payload, utils)
   }
 
-  if (/^\/api\/news\/type\/\d+\/start\/\d+\/size\/\d+$/.test(path) && method === 'GET') {
+  if (/^\/api\/information\/news\/type\/\d+\/start\/\d+\/size\/\d+$/.test(path) && method === 'GET') {
     return infoHandlers.handleNews(path, utils)
+  }
+
+  if (/^\/api\/information\/news\/id\/.+$/.test(path) && method === 'GET') {
+    return infoHandlers.handleNewsDetail(path, utils)
   }
 
 
@@ -315,23 +311,27 @@ function handleRequest(options) {
   }
 
   // --- Messages ---
-  if (/^\/api\/announcement\/start\/\d+\/size\/\d+$/.test(path) && method === 'GET') {
+  if (/^\/api\/information\/announcement\/start\/\d+\/size\/\d+$/.test(path) && method === 'GET') {
     return messageHandlers.handleAnnouncementList(token, path, utils)
   }
 
-  if (/^\/api\/message\/interaction\/start\/\d+\/size\/\d+$/.test(path) && method === 'GET') {
+  if (/^\/api\/information\/announcement\/id\/.+$/.test(path) && method === 'GET') {
+    return messageHandlers.handleAnnouncementDetail(token, path, utils)
+  }
+
+  if (/^\/api\/information\/message\/interaction\/start\/\d+\/size\/\d+$/.test(path) && method === 'GET') {
     return messageHandlers.handleInteractionList(token, path, utils)
   }
 
-  if (path === '/api/message/unread' && method === 'GET') {
+  if (path === '/api/information/message/unread' && method === 'GET') {
     return messageHandlers.handleUnreadCount(token, utils)
   }
 
-  if (/^\/api\/message\/id\/.+\/read$/.test(path) && method === 'POST') {
+  if (/^\/api\/information\/message\/id\/.+\/read$/.test(path) && method === 'POST') {
     return messageHandlers.handleMessageRead(token, path, utils)
   }
 
-  if (path === '/api/message/readall' && method === 'POST') {
+  if (path === '/api/information/message/readall' && method === 'POST') {
     return messageHandlers.handleMessageReadAll(token, utils)
   }
 

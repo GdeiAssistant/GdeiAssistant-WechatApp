@@ -3,6 +3,10 @@ const ENV_CONFIG = {
     resourceDomain: 'http://localhost:8080/',
     requestTimeout: 15000
   },
+  staging: {
+    resourceDomain: 'https://gdeiassistant.azurewebsites.net/',
+    requestTimeout: 15000
+  },
   prod: {
     resourceDomain: 'https://gdeiassistant.azurewebsites.net/',
     requestTimeout: 15000
@@ -24,7 +28,10 @@ function resolveCurrentEnv() {
       if (envVersion === 'develop') {
         return 'dev'
       }
-      if (envVersion === 'trial' || envVersion === 'release') {
+      if (envVersion === 'trial') {
+        return 'staging'
+      }
+      if (envVersion === 'release') {
         return 'prod'
       }
     }
@@ -33,7 +40,13 @@ function resolveCurrentEnv() {
   }
 
   if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV) {
-    return process.env.NODE_ENV === 'development' ? 'dev' : 'prod'
+    if (process.env.NODE_ENV === 'development') {
+      return 'dev'
+    }
+    if (process.env.NODE_ENV === 'staging') {
+      return 'staging'
+    }
+    return 'prod'
   }
 
   return 'prod'
@@ -64,7 +77,11 @@ function resolveResourceDomain(currentEnv) {
       return normalizeDomain(ENV_CONFIG.dev.resourceDomain)
     }
     // Real-device develop builds usually cannot access localhost.
-    return normalizeDomain(ENV_CONFIG.prod.resourceDomain)
+    return normalizeDomain(ENV_CONFIG.staging.resourceDomain)
+  }
+
+  if (currentEnv === 'staging') {
+    return normalizeDomain(ENV_CONFIG.staging.resourceDomain)
   }
 
   return normalizeDomain(ENV_CONFIG.prod.resourceDomain)
@@ -74,6 +91,7 @@ const currentEnv = resolveCurrentEnv()
 const envConfig = ENV_CONFIG[currentEnv] || ENV_CONFIG.prod
 
 module.exports = {
+  currentEnv,
   ...envConfig,
   resourceDomain: resolveResourceDomain(currentEnv)
 }

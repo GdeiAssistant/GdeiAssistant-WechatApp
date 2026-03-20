@@ -6,10 +6,29 @@ function handleAnnouncementList(token, path, utils) {
     return authError
   }
 
-  var matched = /^\/api\/announcement\/start\/(\d+)\/size\/(\d+)$/.exec(path)
+  var matched = /^\/api\/information\/announcement\/start\/(\d+)\/size\/(\d+)$/.exec(path)
   var start = matched ? Number(matched[1]) : 0
   var size = matched ? Number(matched[2]) : 10
   return utils.resolveWithDelay(utils.buildSuccess(data.ANNOUNCEMENT_LIST.slice(start, start + size)))
+}
+
+function handleAnnouncementDetail(token, path, utils) {
+  var authError = utils.ensureAuthorized(token)
+  if (authError) {
+    return authError
+  }
+
+  var matched = /^\/api\/information\/announcement\/id\/(.+)$/.exec(path)
+  var targetId = matched ? matched[1] : ''
+  var detail = data.ANNOUNCEMENT_LIST.filter(function(item) {
+    return item.id === targetId
+  })[0]
+
+  if (!detail) {
+    return utils.rejectWithMessage('系统通知不存在')
+  }
+
+  return utils.resolveWithDelay(utils.buildSuccess(detail))
 }
 
 function handleInteractionList(token, path, utils) {
@@ -18,7 +37,7 @@ function handleInteractionList(token, path, utils) {
     return authError
   }
 
-  var matched = /^\/api\/message\/interaction\/start\/(\d+)\/size\/(\d+)$/.exec(path)
+  var matched = /^\/api\/information\/message\/interaction\/start\/(\d+)\/size\/(\d+)$/.exec(path)
   var start = matched ? Number(matched[1]) : 0
   var size = matched ? Number(matched[2]) : 20
   var state = utils.readState()
@@ -44,7 +63,7 @@ function handleMessageRead(token, path, utils) {
     return authError
   }
 
-  var messageId = /^\/api\/message\/id\/(.+)\/read$/.exec(path)
+  var messageId = /^\/api\/information\/message\/id\/(.+)\/read$/.exec(path)
   if (!messageId) {
     return utils.rejectWithMessage('消息不存在')
   }
@@ -76,6 +95,7 @@ function handleMessageReadAll(token, utils) {
 
 module.exports = {
   handleAnnouncementList: handleAnnouncementList,
+  handleAnnouncementDetail: handleAnnouncementDetail,
   handleInteractionList: handleInteractionList,
   handleUnreadCount: handleUnreadCount,
   handleMessageRead: handleMessageRead,

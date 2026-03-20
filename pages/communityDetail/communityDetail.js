@@ -1,10 +1,11 @@
 const {
   getCommunityModule,
   getCommunityPageTitle,
-  LOST_FOUND_ITEM_OPTIONS,
+  getLostFoundItemDictionaryOptions,
   DATING_GRADE_OPTIONS,
   DELIVERY_PLACEHOLDER_PICKUP_CODE
 } = require('../../constants/community.js')
+const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
 const pageUtils = require('../../utils/page.js')
 const { createSubmitGuard } = require('../../utils/debounce.js')
@@ -112,7 +113,7 @@ function buildDetail(moduleId, payload) {
         qq: item.qq || '',
         wechat: item.wechat || '',
         phone: item.phone || '',
-        typeLabel: findLabel(LOST_FOUND_ITEM_OPTIONS, item.itemType, '其他'),
+        typeLabel: findLabel(getLostFoundItemDictionaryOptions(), item.itemType, '其他'),
         badgeText: Number(item.lostType) === 0 ? '寻物启事' : '失物招领',
         canLike: false
       }
@@ -283,6 +284,16 @@ Page({
         loading: false
       })
       pageUtils.showTopTips(this, error.message)
+    })
+  },
+
+  ensureProfileOptions: function() {
+    if (this.data.moduleId !== 'ershou' && this.data.moduleId !== 'lostandfound') {
+      return Promise.resolve()
+    }
+
+    return fetchProfileOptions().catch(function() {
+      return null
     })
   },
 
@@ -574,7 +585,9 @@ Page({
       moduleConfig: moduleConfig,
       detailId: options.id
     })
-    this.loadDetail()
+    this.ensureProfileOptions().finally(() => {
+      this.loadDetail()
+    })
   },
 
   onUnload: function() {

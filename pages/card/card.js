@@ -38,7 +38,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '我的校园卡',
+      title: '校园卡',
       path: '/pages/card/card'
     }
   }

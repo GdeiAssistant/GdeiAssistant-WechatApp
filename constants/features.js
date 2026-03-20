@@ -75,8 +75,8 @@ const FEATURE_LIST = [
   },
   {
     id: 'collection',
-    title: '馆藏查询',
-    description: '检索图书馆馆藏',
+    title: '图书馆',
+    description: '检索馆藏并进入借阅与续借',
     icon: '/image/mono/collection.png',
     page: '/pages/collection/collection',
     section: 'campus'
@@ -91,19 +91,19 @@ const FEATURE_LIST = [
   },
   {
     id: 'data',
-    title: '数据查询',
+    title: '校园数据',
     description: '电费与黄页信息查询',
     icon: '/image/mono/data.png',
     page: '/pages/data/data',
-    section: 'tooling'
+    section: 'campus'
   },
   {
     id: 'news',
-    title: '新闻通知',
-    description: '查看校园新闻和通知',
+    title: '信息中心',
+    description: '查看校园新闻、系统公告与互动消息',
     icon: '/image/mono/news.png',
     page: '/pages/news/news',
-    section: 'tooling'
+    section: 'information'
   },
   {
     id: 'ershou',
@@ -156,7 +156,7 @@ const FEATURE_LIST = [
   {
     id: 'dating',
     title: '卖室友',
-    description: '查看校园交友信息',
+    description: '浏览资料、发布内容并处理互动',
     icon: '/image/mono/dating.png',
     page: '/pages/communityList/communityList?module=dating',
     section: 'community'
@@ -181,18 +181,18 @@ const FEATURE_SECTIONS = [
       'cet',
       'kaoyan',
       'spare',
-      'bill',
       'card',
-      'cardLost',
       'evaluate',
       'collection',
-      'book'
+      'data'
     ]
   },
   {
-    id: 'tooling',
-    title: '信息查询',
-    featureIds: ['data', 'news']
+    id: 'information',
+    title: '信息中心',
+    featureIds: [
+      'news'
+    ]
   },
   {
     id: 'community',

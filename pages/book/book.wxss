@@ -4,3 +4,73 @@
   position: static;
   background-color: #fff;
 }
+
+.borrow-empty {
+  margin-top: 20rpx;
+  padding: 32rpx 24rpx;
+  border-radius: 24rpx;
+  background: #f6f8fb;
+  color: #5d6b82;
+  line-height: 1.6;
+}
+
+.renew-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32rpx;
+  background: rgba(14, 24, 37, 0.48);
+}
+
+.renew-dialog {
+  width: 100%;
+  max-width: 640rpx;
+  padding: 36rpx 32rpx;
+  border-radius: 28rpx;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.renew-dialog__title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #132238;
+}
+
+.renew-dialog__message {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  line-height: 1.6;
+  color: #5d6b82;
+}
+
+.renew-dialog__input {
+  margin-top: 24rpx;
+  padding: 24rpx;
+  border-radius: 20rpx;
+  background: #f6f8fb;
+}
+
+.renew-dialog__error {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: #c54242;
+}
+
+.renew-dialog__actions {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 28rpx;
+}
+
+.renew-dialog__button {
+  flex: 1;
+}
+
+.renew-dialog__button_secondary {
+  color: #355070;
+  background: #eef3f8;
+}

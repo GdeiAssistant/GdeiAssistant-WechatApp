@@ -1,5 +1,16 @@
 <view block class="page__bd">
   <view class="container" wx:if="{{card}}">
+    <view class="module_shortcuts">
+      <navigator url="/pages/bill/bill" class="shortcut_card" hover-class="shortcut_card_active">
+        <view class="shortcut_title">消费记录</view>
+        <view class="shortcut_desc">查看校园卡消费流水</view>
+      </navigator>
+      <navigator url="/pages/cardLost/cardLost" class="shortcut_card shortcut_card_warn" hover-class="shortcut_card_active">
+        <view class="shortcut_title">校园卡挂失</view>
+        <view class="shortcut_desc">卡片异常时可在这里立即挂失</view>
+      </navigator>
+    </view>
+
     <view class="weui-cells__title">基本信息</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell">

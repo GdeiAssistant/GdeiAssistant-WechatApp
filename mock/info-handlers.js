@@ -1,7 +1,7 @@
 var data = require('./mock-data.js')
 
 function handleNews(path, utils) {
-  var matched = /^\/api\/news\/type\/(\d+)\/start\/(\d+)\/size\/(\d+)$/.exec(path)
+  var matched = /^\/api\/information\/news\/type\/(\d+)\/start\/(\d+)\/size\/(\d+)$/.exec(path)
   if (!matched) {
     return utils.rejectWithMessage('未匹配到新闻接口')
   }
@@ -11,6 +11,29 @@ function handleNews(path, utils) {
   var size = Number(matched[3])
   var list = data.NEWS_BY_TYPE[type] || []
   return utils.resolveWithDelay(utils.buildSuccess(list.slice(start, start + size)))
+}
+
+function handleNewsDetail(path, utils) {
+  var matched = /^\/api\/information\/news\/id\/(.+)$/.exec(path)
+  if (!matched) {
+    return utils.rejectWithMessage('未匹配到新闻详情接口')
+  }
+
+  var targetId = matched[1]
+  var found = null
+
+  Object.keys(data.NEWS_BY_TYPE).some(function(type) {
+    found = (data.NEWS_BY_TYPE[type] || []).filter(function(item) {
+      return item.id === targetId
+    })[0] || null
+    return !!found
+  })
+
+  if (!found) {
+    return utils.rejectWithMessage('新闻通知不存在')
+  }
+
+  return utils.resolveWithDelay(utils.buildSuccess(found))
 }
 
 function handleElectricFees(payload, utils) {
@@ -81,6 +104,7 @@ function handleModuleStateDetail(utils) {
 
 module.exports = {
   handleNews: handleNews,
+  handleNewsDetail: handleNewsDetail,
   handleElectricFees: handleElectricFees,
   handleYellowPage: handleYellowPage,
   handleGraduateExam: handleGraduateExam,
