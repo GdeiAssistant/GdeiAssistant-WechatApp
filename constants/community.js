@@ -94,7 +94,7 @@ const DELIVERY_DEFAULT_ORDER_NAME = '代收'
 const DELIVERY_PLACEHOLDER_PICKUP_CODE = '00000000000'
 
 const COMMUNITY_PAGE_TITLES = {
-  ershou: {
+  marketplace: {
     center: '个人中心',
     detail: '商品详情',
     publish: '发布商品',
@@ -140,12 +140,12 @@ const COMMUNITY_PAGE_TITLES = {
 
 const COMMUNITY_MODULES = [
   {
-    id: 'ershou',
+    id: 'marketplace',
     title: '二手交易',
     summary: '浏览和发布校园闲置物品',
-    icon: '/image/ershou.png',
+    icon: '/image/marketplace.png',
     heroStyle: 'background: linear-gradient(135deg, #e9fff7 0%, #f7fffc 100%);',
-    page: '/pages/communityList/communityList?module=ershou',
+    page: '/pages/communityList/communityList?module=marketplace',
     supportsSearch: true,
     searchPlaceholder: '搜索商品名称或关键词',
     centerEnabled: true,

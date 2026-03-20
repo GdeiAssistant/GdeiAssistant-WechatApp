@@ -15,7 +15,7 @@ function getFeed(moduleId, options) {
   const keyword = String(config.keyword || '').trim()
 
   switch (moduleId) {
-    case 'ershou':
+    case 'marketplace':
       if (keyword) {
         return request({
           url: endpoints.community.secondhand.keyword(encodeURIComponent(keyword), start),
@@ -98,7 +98,7 @@ function getFeed(moduleId, options) {
 
 function getDetail(moduleId, id) {
   switch (moduleId) {
-    case 'ershou':
+    case 'marketplace':
       return request({
         url: endpoints.community.secondhand.detail(id),
         method: 'GET',
@@ -185,7 +185,7 @@ function getCenter(moduleId, options) {
   const size = Number(config.size || 10)
 
   switch (moduleId) {
-    case 'ershou':
+    case 'marketplace':
       return request({
         url: endpoints.community.secondhand.profile,
         method: 'GET',
@@ -263,7 +263,7 @@ function getCenter(moduleId, options) {
 
 function publish(moduleId, payload) {
   switch (moduleId) {
-    case 'ershou':
+    case 'marketplace':
       return requestForm({
         url: endpoints.community.secondhand.publish,
         method: 'POST',

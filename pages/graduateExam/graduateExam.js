@@ -50,7 +50,7 @@ Page({
   onShareAppMessage: function() {
     return {
       title: '考研查询',
-      path: '/pages/kaoyan/kaoyan'
+      path: '/pages/graduateExam/graduateExam'
     }
   }
 })

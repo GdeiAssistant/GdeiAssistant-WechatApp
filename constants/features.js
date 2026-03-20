@@ -26,11 +26,11 @@ const FEATURE_LIST = [
     section: 'campus'
   },
   {
-    id: 'kaoyan',
+    id: 'graduateExam',
     title: '考研查询',
     description: '查询研究生成绩',
-    icon: '/image/mono/kaoyan.png',
-    page: '/pages/kaoyan/kaoyan',
+    icon: '/image/mono/graduateExam.png',
+    page: '/pages/graduateExam/graduateExam',
     section: 'campus'
   },
   {
@@ -106,11 +106,11 @@ const FEATURE_LIST = [
     section: 'information'
   },
   {
-    id: 'ershou',
+    id: 'marketplace',
     title: '二手交易',
     description: '浏览与发布校园闲置',
-    icon: '/image/mono/ershou.png',
-    page: '/pages/communityList/communityList?module=ershou',
+    icon: '/image/mono/marketplace.png',
+    page: '/pages/communityList/communityList?module=marketplace',
     section: 'community'
   },
   {
@@ -179,7 +179,7 @@ const FEATURE_SECTIONS = [
       'grade',
       'schedule',
       'cet',
-      'kaoyan',
+      'graduateExam',
       'spare',
       'card',
       'evaluate',
@@ -198,7 +198,7 @@ const FEATURE_SECTIONS = [
     id: 'community',
     title: '校园社区',
     featureIds: [
-      'ershou',
+      'marketplace',
       'lostandfound',
       'secret',
       'express',
