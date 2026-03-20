@@ -36,13 +36,13 @@
 
       <view class="weui-loadmore" wx:if="{{announcementLoading}}">
         <i class="weui-loading"></i>
-        <view class="weui-loadmore__tips">正在加载系统通知</view>
+        <view class="weui-loadmore__tips">正在加载系统公告</view>
       </view>
       <view class="weui-loadmore" wx:if="{{!announcementLoading && announcementFinished && announcementList.length}}">
-        <view class="weui-loadmore__tips">没有更多系统通知了</view>
+        <view class="weui-loadmore__tips">没有更多系统公告了</view>
       </view>
       <view class="weui-loadmore" wx:if="{{!announcementLoading && announcementFinished && !announcementList.length}}">
-        <view class="weui-loadmore__tips">暂无系统通知</view>
+        <view class="weui-loadmore__tips">暂无系统公告</view>
       </view>
     </view>
   </block>

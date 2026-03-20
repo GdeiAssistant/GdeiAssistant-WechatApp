@@ -43,8 +43,8 @@ const FEATURE_LIST = [
   },
   {
     id: 'bill',
-    title: '消费查询',
-    description: '查询校园卡消费记录',
+    title: '校园卡消费',
+    description: '查看校园卡消费记录',
     icon: '/image/mono/bill.png',
     page: '/pages/bill/bill',
     section: 'campus'
@@ -83,8 +83,8 @@ const FEATURE_LIST = [
   },
   {
     id: 'book',
-    title: '借阅查询',
-    description: '查看个人借阅并续借',
+    title: '我的借阅',
+    description: '查看个人借阅记录并续借',
     icon: '/image/mono/book.png',
     page: '/pages/book/book',
     section: 'campus'

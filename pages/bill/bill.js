@@ -56,7 +56,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '消费查询',
+      title: '校园卡消费',
       path: '/pages/bill/bill'
     }
   }

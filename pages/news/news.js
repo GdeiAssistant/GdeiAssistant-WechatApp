@@ -32,7 +32,7 @@ Page({
       loadingKey: 'loading'
     }).then((result) => {
       if (!result.success) {
-        throw new Error(result.message || '加载新闻通知失败')
+        throw new Error(result.message || '加载新闻失败')
       }
 
       const nextList = Array.isArray(result.data) ? result.data : []
@@ -71,7 +71,7 @@ Page({
     }
 
     wx.setStorageSync(storageKeys.newsDetailItem, Object.assign({}, item, {
-      navigationTitle: '新闻通知'
+      navigationTitle: '新闻'
     }))
     wx.navigateTo({
       url: `/pages/newsDetail/newsDetail?mode=news&id=${encodeURIComponent(item.id)}`
@@ -96,7 +96,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '新闻通知',
+      title: '新闻',
       path: '/pages/news/news'
     }
   }

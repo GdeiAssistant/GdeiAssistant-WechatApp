@@ -32,7 +32,7 @@ Page({
       this.setData({
         newsItem: Object.assign({}, currentItem, payload, {
           publishDate: payload.publishDate || payload.publishTime || currentItem.publishDate || '',
-          navigationTitle: mode === 'announcement' ? '系统通知' : '新闻通知'
+          navigationTitle: mode === 'announcement' ? '系统公告' : '新闻'
         }),
         errorMessage: null
       })
@@ -54,7 +54,7 @@ Page({
     })
 
     wx.setNavigationBarTitle({
-      title: mode === 'announcement' ? '系统通知' : '新闻通知'
+      title: mode === 'announcement' ? '系统公告' : '新闻'
     })
 
     this.loadDetail(detailId || (newsItem && newsItem.id) || '', mode)
@@ -63,8 +63,8 @@ Page({
   onShareAppMessage: function() {
     const navigationTitle = this.data.newsItem && this.data.newsItem.navigationTitle
     return {
-      title: this.data.newsItem && this.data.newsItem.title ? this.data.newsItem.title : '新闻通知',
-      path: navigationTitle === '系统通知' ? '/pages/inbox/inbox' : '/pages/news/news'
+      title: this.data.newsItem && this.data.newsItem.title ? this.data.newsItem.title : '新闻',
+      path: navigationTitle === '系统公告' ? '/pages/inbox/inbox' : '/pages/news/news'
     }
   }
 })

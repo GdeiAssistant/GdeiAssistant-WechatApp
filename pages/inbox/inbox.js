@@ -4,7 +4,7 @@ const pageUtils = require('../../utils/page.js')
 
 const PAGE_SIZE = 10
 const INBOX_TABS = [
-  { key: 'announcement', label: '系统通知' },
+  { key: 'announcement', label: '系统公告' },
   { key: 'interaction', label: '互动消息' }
 ]
 
@@ -234,7 +234,7 @@ Page({
       title: item.title,
       publishDate: item.publishDate || '',
       content: item.content || '',
-      navigationTitle: '系统通知'
+      navigationTitle: '系统公告'
     })
     wx.navigateTo({
       url: `/pages/newsDetail/newsDetail?mode=announcement&id=${encodeURIComponent(item.id)}`

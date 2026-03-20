@@ -129,7 +129,7 @@ const COMMUNITY_PAGE_TITLES = {
   dating: {
     center: '互动中心',
     detail: '卖室友',
-    publish: '出卖室友'
+    publish: '发布资料'
   },
   photograph: {
     center: '我的作品',

@@ -8,14 +8,14 @@ function buildTabs(moduleId) {
     case 'ershou':
       return [
         { key: 'doing', label: '正在出售' },
-        { key: 'sold', label: '已下架' },
-        { key: 'off', label: '已售出' }
+        { key: 'sold', label: '已售出' },
+        { key: 'off', label: '已下架' }
       ]
     case 'lostandfound':
       return [
-        { key: 'lost', label: '寻物信息' },
-        { key: 'found', label: '招领信息' },
-        { key: 'didfound', label: '已寻回' }
+        { key: 'lost', label: '寻物' },
+        { key: 'found', label: '招领' },
+        { key: 'didfound', label: '已找回' }
       ]
     case 'delivery':
       return [
@@ -104,10 +104,7 @@ Page({
               summary: item.location,
               cover: item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
               priceText: Number(item.price || 0).toFixed(2),
-              actions: [
-                { id: 'edit', label: '编辑' },
-                { id: 'state:1', label: '重新上架' }
-              ],
+              actions: [],
               canOpenDetail: false
             })
           }),
@@ -119,7 +116,10 @@ Page({
               summary: item.location,
               cover: item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
               priceText: Number(item.price || 0).toFixed(2),
-              actions: [],
+              actions: [
+                { id: 'edit', label: '编辑' },
+                { id: 'state:1', label: '重新上架' }
+              ],
               canOpenDetail: false
             })
           })
