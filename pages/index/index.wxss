@@ -56,7 +56,7 @@
 
 .userinfo-entry {
   margin-top: 14rpx;
-  color: #7b7b7b;
+  color: var(--color-text-secondary);
   font-size: 24rpx;
   text-decoration: underline;
 }

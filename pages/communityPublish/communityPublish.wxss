@@ -31,7 +31,7 @@
 
 .hero_summary {
   margin-top: 12rpx;
-  color: #777;
+  color: var(--color-text-secondary);
   font-size: 24rpx;
   line-height: 1.7;
 }
@@ -94,7 +94,7 @@
   height: 200rpx;
   border-radius: 22rpx;
   overflow: hidden;
-  background: #f2f4f5;
+  background: var(--color-bg-secondary);
 }
 
 .image_preview {
@@ -120,7 +120,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #3cb395;
+  color: var(--color-primary);
   font-size: 72rpx;
 }
 

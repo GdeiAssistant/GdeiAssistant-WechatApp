@@ -50,7 +50,7 @@
 }
 
 .meta_action {
-  color: #7a7a7a;
+  color: var(--color-text-secondary);
   font-size: 24rpx;
 }
 
@@ -70,7 +70,7 @@
 }
 
 .interaction_card_active {
-  background: #f1f1f1;
+  background: var(--color-bg-secondary);
 }
 
 .interaction_header {
@@ -97,12 +97,12 @@
 
 .interaction_read_done {
   background: var(--color-divider);
-  color: #9a9a9a;
+  color: var(--color-text-tertiary);
 }
 
 .interaction_read_pending {
   background: var(--color-border);
-  color: #555;
+  color: var(--color-text-secondary);
 }
 
 .interaction_tags {
@@ -116,7 +116,7 @@
   padding: 4rpx 12rpx;
   border-radius: 999rpx;
   background: var(--color-bg-tertiary);
-  color: #777;
+  color: var(--color-text-secondary);
   font-size: 22rpx;
 }
 
@@ -133,6 +133,6 @@
 
 .interaction_time {
   margin-top: 18rpx;
-  color: #a1a1a1;
+  color: var(--color-text-tertiary);
   font-size: 22rpx;
 }

@@ -71,13 +71,13 @@
 
 .profile_subtitle {
   margin-top: 10rpx;
-  color: #909090;
+  color: var(--color-text-tertiary);
   font-size: 24rpx;
 }
 
 .profile_status {
   margin-top: 12rpx;
-  color: #3cb395;
+  color: var(--color-primary);
   font-size: 24rpx;
 }
 
