@@ -52,6 +52,12 @@ module.exports = {
   applyTheme: function (pageInstance) {
     var effective = resolveEffective(getStoredThemeMode())
     pageInstance.setData({ themeClass: effective === 'dark' ? 'theme-dark' : '' })
+    // Sync navigation bar colors with theme
+    wx.setNavigationBarColor({
+      frontColor: effective === 'dark' ? '#ffffff' : '#000000',
+      backgroundColor: effective === 'dark' ? '#1e1e1e' : '#ffffff',
+      animation: { duration: 200, timingFunc: 'easeIn' }
+    })
   },
 
   initThemeListener: function () {
