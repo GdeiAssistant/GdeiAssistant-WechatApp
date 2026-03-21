@@ -1,0 +1,35 @@
+/* Theme CSS Variables — Light (default) and Dark */
+
+page {
+  --color-bg-primary: #F8F8F8;
+  --color-bg-secondary: #f2f2f2;
+  --color-bg-tertiary: #ebebeb;
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-text-primary: #333333;
+  --color-text-secondary: #666666;
+  --color-text-tertiary: #999999;
+  --color-border: #e5e7eb;
+  --color-divider: #ececec;
+  --color-primary: #1AAD19;
+  --color-primary-hover: #148a14;
+  --color-danger: #e94747;
+  --color-link: #576b95;
+}
+
+.theme-dark {
+  --color-bg-primary: #121212;
+  --color-bg-secondary: #1a1a1a;
+  --color-bg-tertiary: #242424;
+  --color-surface: #1e1e1e;
+  --color-surface-raised: #2a2a2a;
+  --color-text-primary: #e5e7eb;
+  --color-text-secondary: #9ca3af;
+  --color-text-tertiary: #9295a0;
+  --color-border: #374151;
+  --color-divider: #2a2a2a;
+  --color-primary: #34D399;
+  --color-primary-hover: #6EE7B7;
+  --color-danger: #ff7c7c;
+  --color-link: #60a5fa;
+}

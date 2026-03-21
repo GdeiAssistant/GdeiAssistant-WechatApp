@@ -4,7 +4,7 @@
   margin-top: 35rpx;
   margin-bottom: 35rpx;
   text-align: center;
-  color: #aaa;
+  color: var(--color-text-tertiary);
 }
 
 .userinfo_card {
@@ -13,7 +13,7 @@
   justify-content: space-between;
   margin: 20rpx 24rpx 0;
   padding: 28rpx 30rpx;
-  background: linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg-secondary) 100%);
   border-radius: 26rpx;
   box-shadow: 0 14rpx 34rpx rgba(0, 0, 0, 0.05);
 }
@@ -43,14 +43,14 @@
 }
 
 .userinfo-nickname {
-  color: #333;
+  color: var(--color-text-primary);
   font-size: 34rpx;
   font-weight: 600;
 }
 
 .userinfo-source {
   margin-top: 8rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   font-size: 24rpx;
 }
 
@@ -70,7 +70,7 @@
   height: 84rpx;
   margin-left: 24rpx;
   border-radius: 24rpx;
-  background: #f2f2f2;
+  background: var(--color-bg-secondary);
   flex-shrink: 0;
 }
 
@@ -86,8 +86,8 @@
   min-width: 36rpx;
   padding: 4rpx 10rpx;
   border-radius: 999rpx;
-  background: #e94747;
-  color: #fff;
+  background: var(--color-danger);
+  color: var(--color-surface);
   font-size: 22rpx;
   text-align: center;
   line-height: 1.2;
@@ -97,7 +97,7 @@
 .section_title {
   padding: 0 30rpx;
   margin-bottom: 10rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   font-size: 28rpx;
 }
 

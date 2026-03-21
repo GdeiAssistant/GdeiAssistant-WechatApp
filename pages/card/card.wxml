@@ -1,4 +1,4 @@
-<view block class="page__bd">
+<view block class="page__bd {{themeClass}}">
   <view class="container" wx:if="{{card}}">
     <view class="module_shortcuts">
       <navigator url="/pages/bill/bill" class="shortcut_card" hover-class="shortcut_card_active">

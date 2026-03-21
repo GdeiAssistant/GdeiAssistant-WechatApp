@@ -1,3 +1,4 @@
+<view class="page-root {{themeClass}}">
 <view class="weui-navbar">
   <block wx:for="{{tabs}}" wx:key="*this">
     <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
@@ -24,4 +25,4 @@
       </view>
     </view>
   </view>
-</view>
+</view></view>

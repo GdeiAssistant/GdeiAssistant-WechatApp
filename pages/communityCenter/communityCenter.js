@@ -2,6 +2,7 @@ const { getCommunityModule, getCommunityPageTitle } = require('../../constants/c
 const communityApi = require('../../services/apis/community.js')
 const userApi = require('../../services/apis/user.js')
 const pageUtils = require('../../utils/page.js')
+var themeUtil = require('../../utils/theme')
 
 function buildTabs(moduleId) {
   switch (moduleId) {
@@ -57,6 +58,7 @@ function formatSecretPublishText(publishTime, timer) {
 
 Page({
   data: {
+    themeClass: '',
     moduleId: '',
     moduleConfig: null,
     tabs: [],
@@ -469,6 +471,7 @@ Page({
   },
 
   onShow: function() {
+    themeUtil.applyTheme(this)
     if (!this.data.hasShownOnce) {
       this.setData({
         hasShownOnce: true

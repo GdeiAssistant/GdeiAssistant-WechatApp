@@ -1,4 +1,4 @@
-<view class="page__bd community-page">
+<view class="page__bd community-page {{themeClass}}">
   <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
 
   <view class="hero_card" wx:if="{{moduleConfig}}" style="{{moduleConfig.heroStyle}}">

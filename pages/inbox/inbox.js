@@ -1,6 +1,7 @@
 const storageKeys = require('../../constants/storage.js')
 const messagesApi = require('../../services/apis/messages.js')
 const pageUtils = require('../../utils/page.js')
+var themeUtil = require('../../utils/theme')
 
 const PAGE_SIZE = 10
 const INBOX_TABS = [
@@ -132,6 +133,7 @@ function buildInteractionUrl(item) {
 
 Page({
   data: {
+    themeClass: '',
     inboxTabs: INBOX_TABS,
     activeTab: 'announcement',
     announcementList: [],
@@ -325,6 +327,7 @@ Page({
   },
 
   onShow: function() {
+    themeUtil.applyTheme(this)
     if (this.data.activeTab === 'interaction') {
       this.loadInteractionMeta()
     }

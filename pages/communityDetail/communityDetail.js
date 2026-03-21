@@ -9,6 +9,7 @@ const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
 const pageUtils = require('../../utils/page.js')
 const { createSubmitGuard } = require('../../utils/debounce.js')
+var themeUtil = require('../../utils/theme')
 
 const commentGuard = createSubmitGuard()
 const guessGuard = createSubmitGuard()
@@ -228,7 +229,11 @@ function buildDetail(moduleId, payload) {
 }
 
 Page({
+  onShow: function () {
+    themeUtil.applyTheme(this)
+  },
   data: {
+    themeClass: '',
     moduleId: '',
     moduleConfig: null,
     detailId: '',

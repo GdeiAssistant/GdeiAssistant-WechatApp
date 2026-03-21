@@ -2,6 +2,7 @@ const userApi = require('../../services/apis/user.js')
 const uploadService = require('../../services/upload.js')
 const pageUtils = require('../../utils/page.js')
 const LOCATION_REGIONS = require('../../constants/location-regions.js')
+var themeUtil = require('../../utils/theme')
 const {
   fetchProfileOptions,
   getFacultyCodeByLabel,
@@ -469,7 +470,11 @@ function validateIntroduction(introduction) {
 }
 
 Page({
+  onShow: function () {
+    themeUtil.applyTheme(this)
+  },
   data: {
+    themeClass: '',
     loading: true,
     errorMessage: null,
     todayDate: '',

@@ -1,4 +1,4 @@
-<view class="page__bd">
+<view class="page__bd {{themeClass}}">
   <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
 
   <view class="container" wx:if="{{!result}}">

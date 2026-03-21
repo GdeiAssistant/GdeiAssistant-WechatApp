@@ -3,13 +3,13 @@
 .profile_page {
   min-height: 100vh;
   padding-bottom: 40rpx;
-  background: #F8F8F8;
+  background: var(--color-bg-primary);
 }
 
 .loading_box {
   padding: 80rpx 0;
   text-align: center;
-  color: #999;
+  color: var(--color-text-tertiary);
 }
 
 .loading_box text {
@@ -22,7 +22,7 @@
   align-items: flex-start;
   margin: 24rpx 24rpx 0;
   padding: 30rpx;
-  background: linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg-secondary) 100%);
   border-radius: 28rpx;
   box-shadow: 0 16rpx 40rpx rgba(0, 0, 0, 0.05);
 }
@@ -36,8 +36,8 @@
   width: 132rpx;
   height: 132rpx;
   border-radius: 50%;
-  background: #f2f2f2;
-  border: 6rpx solid #fff;
+  background: var(--color-bg-secondary);
+  border: 6rpx solid var(--color-surface);
   box-shadow: 0 10rpx 26rpx rgba(0, 0, 0, 0.08);
 }
 
@@ -50,7 +50,7 @@
   padding: 8rpx 14rpx;
   border-radius: 999rpx;
   background: rgba(51, 51, 51, 0.86);
-  color: #fff;
+  color: var(--color-surface);
   font-size: 20rpx;
   text-align: center;
   white-space: nowrap;
@@ -66,7 +66,7 @@
 .profile_name {
   font-size: 36rpx;
   font-weight: 700;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .profile_subtitle {
@@ -83,7 +83,7 @@
 
 .profile_intro {
   margin-top: 18rpx;
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 26rpx;
   line-height: 1.7;
 }
@@ -103,7 +103,7 @@
 .profile_textarea {
   width: 100%;
   box-sizing: border-box;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .profile_textarea {

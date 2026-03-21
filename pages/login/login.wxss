@@ -27,18 +27,18 @@ form {
 }
 
 .userinfo-nickname {
-  color: #666;
+  color: var(--color-text-secondary);
 }
 
 .userinfo-source {
-  color: #bbb;
+  color: var(--color-text-tertiary);
   font-size: 26rpx;
 }
 
 .mock_hint {
   display: block;
   margin: 20rpx 40rpx 0;
-  color: #888;
+  color: var(--color-text-secondary);
   text-align: center;
   font-size: 26rpx;
 }
@@ -46,7 +46,7 @@ form {
 .settings_link {
   display: block;
   margin-top: 20rpx;
-  color: #576b95;
+  color: var(--color-link);
   text-align: center;
   font-size: 28rpx;
 }
@@ -55,5 +55,5 @@ form {
   margin-top: 35rpx;
   margin-bottom: 35rpx;
   text-align: center;
-  color: #aaa;
+  color: var(--color-text-tertiary);
 }

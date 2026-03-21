@@ -62,5 +62,25 @@
     "noAnnouncement": "No announcements",
     "noInteraction": "No messages",
     "markAllRead": "Mark all read"
+  },
+  "appearance": {
+    "title": "Interface & Appearance",
+    "theme": {
+      "label": "Theme",
+      "system": "Follow System",
+      "light": "Light Mode",
+      "dark": "Dark Mode"
+    },
+    "font": {
+      "label": "Font Size",
+      "small": "Small",
+      "standard": "Standard",
+      "large": "Large",
+      "xlarge": "Extra Large",
+      "preview": "Preview: GdeiAssistant Campus Helper"
+    },
+    "language": {
+      "label": "Language"
+    }
   }
 }
