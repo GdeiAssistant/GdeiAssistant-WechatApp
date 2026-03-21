@@ -15,7 +15,7 @@ const ENDPOINTS_MODULE = path.join(ROOT, 'services/endpoints.js')
 function requiresFields(item, fields, label) {
   fields.forEach(function(field) {
     assert.ok(
-      item[field] !== undefined && item[field] !== null,
+      item[field] !== undefined && item[field] !== null && item[field] !== '',
       label + ': missing field "' + field + '" on id=' + (item.id || item.orderId || '(unknown)')
     )
   })
