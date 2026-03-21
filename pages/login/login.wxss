@@ -27,7 +27,7 @@ form {
 }
 
 .userinfo-nickname {
-  color: #aaa;
+  color: #666;
 }
 
 .userinfo-source {
