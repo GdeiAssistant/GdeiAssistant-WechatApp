@@ -2,7 +2,7 @@
 
 .center_page {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: #F8F8F8;
   padding-bottom: 120rpx;
 }
 

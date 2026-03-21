@@ -2,7 +2,7 @@
 
 .publish_page {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: #F8F8F8;
   padding: 20rpx 24rpx 40rpx;
   box-sizing: border-box;
 }
