@@ -19,7 +19,7 @@ page, .page, .page__bd {
 }
 
 .weui-media-box__title {
-  color: #43b0d1;
+  color: var(--color-link);
   font-size: 26rpx;
 }
 
@@ -31,7 +31,7 @@ page, .page, .page__bd {
 }
 
 .weui-media-box__info {
-  color: #000;
+  color: var(--color-text-primary);
   line-height: 1.6;
 }
 

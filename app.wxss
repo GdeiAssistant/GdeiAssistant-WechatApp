@@ -43,17 +43,17 @@ form{
   display: inline-block;
   padding: 0 40rpx 20rpx 40rpx;
   font-size: 32rpx;
-  color: #BEBEBE;
+  color: var(--color-text-tertiary);
 }
 .page-head-line{
   margin: 0 auto;
   width: 150rpx;
   height: 2rpx;
-  background-color: #D8D8D8;
+  background-color: var(--color-divider);
 }
 .page-head-desc{
   padding-top: 20rpx;
-  color: #9B9B9B;
+  color: var(--color-text-tertiary);
   font-size: 32rpx;
 }
 
@@ -76,7 +76,7 @@ form{
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #fff;
+  background-color: var(--color-surface);
   width: 100%;
   padding: 50rpx 0 150rpx 0;
 }
@@ -87,18 +87,18 @@ form{
 .page-body-text {
   font-size: 30rpx;
   line-height: 26px;
-  color: #ccc;
+  color: var(--color-text-tertiary);
 }
 .page-body-text-small {
   font-size: 24rpx;
-  color: #000;
+  color: var(--color-text-primary);
   margin-bottom: 100rpx;
 }
 
 .page-foot{
   margin: 100rpx 0 30rpx 0;
   text-align: center;
-  color: #1aad19;
+  color: var(--color-primary);
   font-size: 0;
 }
 .icon-foot{
@@ -128,7 +128,7 @@ form{
 }
 .page-section-title{
   font-size: 28rpx;
-  color: #999999;
+  color: var(--color-text-tertiary);
   margin-bottom: 10rpx;
   padding-left: 30rpx;
   padding-right: 30rpx;
@@ -149,21 +149,21 @@ form{
 .image-plus {
   width: 150rpx;
   height: 150rpx;
-  border: 2rpx solid #D9D9D9;
+  border: 2rpx solid var(--color-divider);
   position: relative;
 }
 .image-plus-nb{
   border: 0;
 }
 .image-plus-text{
-  color: #888888;
+  color: var(--color-text-tertiary);
   font-size: 28rpx;
 }
 .image-plus-horizontal {
   position: absolute;
   top: 50%;
   left: 50%;
-  background-color: #d9d9d9;
+  background-color: var(--color-divider);
   width: 4rpx;
   height: 80rpx;
   transform: translate(-50%, -50%);
@@ -172,7 +172,7 @@ form{
   position: absolute;
   top: 50%;
   left: 50%;
-  background-color: #d9d9d9;
+  background-color: var(--color-divider);
   width: 80rpx;
   height: 4rpx;
   transform: translate(-50%, -50%);
@@ -182,8 +182,8 @@ form{
   position: relative;
   align-items: center;
   justify-content: center;
-  background-color: #1AAD19;
-  color: #FFFFFF;
+  background-color: var(--color-primary);
+  color: var(--color-surface);
   font-size: 36rpx;
 }
 .demo-text-1:before{
@@ -197,8 +197,8 @@ form{
   position: relative;
   align-items: center;
   justify-content: center;
-  background-color: #2782D7;
-  color: #FFFFFF;
+  background-color: var(--color-link);
+  color: var(--color-surface);
   font-size: 36rpx;
 }
 .demo-text-2:before{
@@ -212,8 +212,8 @@ form{
   position: relative;
   align-items: center;
   justify-content: center;
-  background-color: #F1F1F1;
-  color: #353535;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
   font-size: 36rpx;
 }
 .demo-text-3:before{

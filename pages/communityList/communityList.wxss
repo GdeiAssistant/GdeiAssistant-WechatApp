@@ -30,7 +30,7 @@
 
 .hero_summary {
   margin-top: 12rpx;
-  color: #777;
+  color: var(--color-text-secondary);
   font-size: 28rpx;
   line-height: 1.7;
 }
@@ -85,7 +85,7 @@
   flex: 1;
   height: 76rpx;
   padding: 0 24rpx;
-  background: #f6f7f8;
+  background: var(--color-bg-secondary);
   border-radius: 999rpx;
   font-size: 28rpx;
 }
@@ -96,7 +96,7 @@
 }
 
 .search_button_secondary {
-  background: #f1f1f1;
+  background: var(--color-bg-secondary);
   color: var(--color-text-secondary);
 }
 
@@ -121,7 +121,7 @@
 }
 
 .tab_item_active {
-  background: #2f2f2f;
+  background: var(--color-text-primary);
   color: var(--color-surface);
 }
 
@@ -148,7 +148,7 @@
   width: 220rpx;
   height: 220rpx;
   flex-shrink: 0;
-  background: #eef2f3;
+  background: var(--color-bg-secondary);
 }
 
 .market_content {
@@ -177,7 +177,7 @@
 .dating_cover {
   width: 100%;
   height: 220rpx;
-  background: #eef2f3;
+  background: var(--color-bg-secondary);
 }
 
 .lost_badges {
@@ -191,7 +191,7 @@
 .topic_cover {
   width: 100%;
   height: 320rpx;
-  background: #eef2f3;
+  background: var(--color-bg-secondary);
 }
 
 .delivery_card {
@@ -230,13 +230,13 @@
   justify-content: center;
   padding: 6rpx 14rpx;
   border-radius: 999rpx;
-  background: #e8f7f3;
-  color: #3cb395;
+  background: var(--color-bg-tertiary);
+  color: var(--color-primary);
   font-size: 22rpx;
 }
 
 .card_sub_badge {
-  background: #f4f6f8;
+  background: var(--color-bg-secondary);
   color: var(--color-text-secondary);
 }
 
@@ -253,7 +253,7 @@
 }
 
 .price_text {
-  color: #ea4335;
+  color: var(--color-danger);
   font-size: 32rpx;
   font-weight: 600;
 }
@@ -266,7 +266,7 @@
 
 .secret_card {
   padding: 26rpx;
-  border-left: 8rpx solid #2f2f2f;
+  border-left: 8rpx solid var(--color-text-primary);
 }
 
 .dating_card .card_title,
@@ -339,7 +339,7 @@
 
 .bottom_button_secondary {
   background: var(--color-surface);
-  color: #2f2f2f;
+  color: var(--color-text-primary);
 }
 
 .empty_panel {

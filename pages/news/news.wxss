@@ -22,14 +22,14 @@
   margin-right: 16rpx;
   padding: 10rpx 22rpx;
   border-radius: 999rpx;
-  background: #f1f1f1;
+  background: var(--color-bg-secondary);
   color: var(--color-text-secondary);
   font-size: 24rpx;
 }
 
 .news_type_item_active {
   background: var(--color-divider);
-  color: #4f4f4f;
+  color: var(--color-text-secondary);
 }
 
 .section_card {

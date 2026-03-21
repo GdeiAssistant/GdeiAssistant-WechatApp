@@ -30,7 +30,7 @@
 
 .hero_summary {
   margin-top: 12rpx;
-  color: #777;
+  color: var(--color-text-secondary);
   font-size: 24rpx;
   line-height: 1.7;
 }
@@ -56,7 +56,7 @@
   width: 104rpx;
   height: 104rpx;
   border-radius: 50%;
-  background: #eef2f3;
+  background: var(--color-bg-secondary);
   flex-shrink: 0;
 }
 
@@ -97,7 +97,7 @@
 }
 
 .tab_item_active {
-  background: #2f2f2f;
+  background: var(--color-text-primary);
   color: var(--color-surface);
 }
 
@@ -132,7 +132,7 @@
 .center_cover {
   width: 200rpx;
   height: 200rpx;
-  background: #eef2f3;
+  background: var(--color-bg-secondary);
   flex-shrink: 0;
 }
 
@@ -172,7 +172,7 @@
 }
 
 .price_text {
-  color: #ea4335;
+  color: var(--color-danger);
   font-size: 30rpx;
   font-weight: 600;
 }
