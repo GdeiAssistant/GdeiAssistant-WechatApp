@@ -1,0 +1,66 @@
+{
+  "common": {
+    "loading": "読み込み中...",
+    "retry": "再試行",
+    "confirm": "確認",
+    "cancel": "キャンセル",
+    "submit": "送信",
+    "save": "保存",
+    "delete": "削除",
+    "back": "戻る",
+    "more": "もっと見る",
+    "noData": "データがありません",
+    "networkError": "ネットワークエラー、後でお試しください",
+    "loadFailed": "読み込み失敗",
+    "publishSuccess": "投稿しました",
+    "publishFailed": "投稿に失敗しました"
+  },
+  "tab": {
+    "home": "ホーム",
+    "info": "お知らせ",
+    "profile": "マイページ"
+  },
+  "feature": {
+    "grade": "成績照会",
+    "schedule": "時間割",
+    "cet": "CET成績",
+    "graduateExam": "大学院入試",
+    "spare": "空き教室",
+    "library": "図書館",
+    "card": "学生証",
+    "dataCenter": "データ照会",
+    "evaluate": "授業評価",
+    "marketplace": "フリマ",
+    "delivery": "デリバリー",
+    "lostFound": "落とし物",
+    "secret": "秘密の木",
+    "dating": "ルームメイト",
+    "express": "告白の壁",
+    "topic": "トピック",
+    "photograph": "フォトウォール"
+  },
+  "login": {
+    "title": "ログイン",
+    "username": "ユーザー名",
+    "password": "パスワード",
+    "button": "ログイン",
+    "loading": "ログイン中..."
+  },
+  "profile": {
+    "settings": "設定",
+    "language": "言語",
+    "theme": "テーマカラー",
+    "logout": "ログアウト",
+    "privacy": "プライバシー",
+    "feedback": "ヘルプ"
+  },
+  "info": {
+    "news": "ニュース",
+    "announcement": "お知らせ",
+    "interaction": "メッセージ",
+    "noNews": "ニュースはありません",
+    "noAnnouncement": "お知らせはありません",
+    "noInteraction": "メッセージはありません",
+    "markAllRead": "すべて既読にする"
+  }
+}

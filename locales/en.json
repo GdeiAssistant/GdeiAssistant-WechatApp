@@ -1,0 +1,66 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "retry": "Retry",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "save": "Save",
+    "delete": "Delete",
+    "back": "Back",
+    "more": "More",
+    "noData": "No data available",
+    "networkError": "Network error, please try again",
+    "loadFailed": "Failed to load",
+    "publishSuccess": "Published",
+    "publishFailed": "Publish failed"
+  },
+  "tab": {
+    "home": "Home",
+    "info": "News",
+    "profile": "Me"
+  },
+  "feature": {
+    "grade": "Grades",
+    "schedule": "Schedule",
+    "cet": "CET Score",
+    "graduateExam": "Postgrad Exam",
+    "spare": "Spare Rooms",
+    "library": "Library",
+    "card": "Campus Card",
+    "dataCenter": "Data Center",
+    "evaluate": "Evaluation",
+    "marketplace": "Marketplace",
+    "delivery": "Delivery",
+    "lostFound": "Lost & Found",
+    "secret": "Secret",
+    "dating": "Roommate",
+    "express": "Confession",
+    "topic": "Topics",
+    "photograph": "Photo Wall"
+  },
+  "login": {
+    "title": "Login",
+    "username": "Username",
+    "password": "Password",
+    "button": "Login",
+    "loading": "Logging in..."
+  },
+  "profile": {
+    "settings": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "logout": "Logout",
+    "privacy": "Privacy",
+    "feedback": "Help & Feedback"
+  },
+  "info": {
+    "news": "News",
+    "announcement": "Announcements",
+    "interaction": "Messages",
+    "noNews": "No news",
+    "noAnnouncement": "No announcements",
+    "noInteraction": "No messages",
+    "markAllRead": "Mark all read"
+  }
+}

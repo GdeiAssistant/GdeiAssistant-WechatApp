@@ -1,0 +1,66 @@
+{
+  "common": {
+    "loading": "加载中...",
+    "retry": "重试",
+    "confirm": "确认",
+    "cancel": "取消",
+    "submit": "提交",
+    "save": "保存",
+    "delete": "删除",
+    "back": "返回",
+    "more": "更多",
+    "noData": "暂无数据",
+    "networkError": "网络异常，请稍后再试",
+    "loadFailed": "加载失败",
+    "publishSuccess": "发布成功",
+    "publishFailed": "发布失败"
+  },
+  "tab": {
+    "home": "首页",
+    "info": "资讯",
+    "profile": "我的"
+  },
+  "feature": {
+    "grade": "成绩查询",
+    "schedule": "课表查询",
+    "cet": "四六级查询",
+    "graduateExam": "考研查询",
+    "spare": "教室查询",
+    "library": "图书馆",
+    "card": "校园卡",
+    "dataCenter": "数据查询",
+    "evaluate": "教学评价",
+    "marketplace": "二手交易",
+    "delivery": "全民快递",
+    "lostFound": "失物招领",
+    "secret": "校园树洞",
+    "dating": "卖室友",
+    "express": "表白墙",
+    "topic": "话题",
+    "photograph": "拍好校园"
+  },
+  "login": {
+    "title": "登录",
+    "username": "用户名",
+    "password": "密码",
+    "button": "登录",
+    "loading": "登录中..."
+  },
+  "profile": {
+    "settings": "设置",
+    "language": "语言",
+    "theme": "主题色",
+    "logout": "退出登录",
+    "privacy": "隐私设置",
+    "feedback": "帮助与反馈"
+  },
+  "info": {
+    "news": "新闻",
+    "announcement": "系统公告",
+    "interaction": "互动消息",
+    "noNews": "暂无新闻",
+    "noAnnouncement": "暂无系统公告",
+    "noInteraction": "暂无互动消息",
+    "markAllRead": "全部已读"
+  }
+}

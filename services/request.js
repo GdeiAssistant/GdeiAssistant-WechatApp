@@ -23,6 +23,8 @@ function request(options) {
     if (sessionToken) {
       header.Authorization = `Bearer ${sessionToken}`
     }
+    const app = getApp()
+    header['Accept-Language'] = (app && app.globalData && app.globalData.locale) || 'zh-CN'
 
     if (showLoading) {
       wx.showNavigationBarLoading()

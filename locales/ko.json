@@ -1,0 +1,66 @@
+{
+  "common": {
+    "loading": "로딩 중...",
+    "retry": "재시도",
+    "confirm": "확인",
+    "cancel": "취소",
+    "submit": "제출",
+    "save": "저장",
+    "delete": "삭제",
+    "back": "뒤로",
+    "more": "더보기",
+    "noData": "데이터가 없습니다",
+    "networkError": "네트워크 오류, 나중에 다시 시도하세요",
+    "loadFailed": "로딩 실패",
+    "publishSuccess": "게시 완료",
+    "publishFailed": "게시 실패"
+  },
+  "tab": {
+    "home": "홈",
+    "info": "소식",
+    "profile": "마이페이지"
+  },
+  "feature": {
+    "grade": "성적 조회",
+    "schedule": "시간표",
+    "cet": "CET 성적",
+    "graduateExam": "대학원 시험",
+    "spare": "빈 강의실",
+    "library": "도서관",
+    "card": "학생증",
+    "dataCenter": "데이터 조회",
+    "evaluate": "수업 평가",
+    "marketplace": "중고거래",
+    "delivery": "배달",
+    "lostFound": "분실물",
+    "secret": "비밀나무",
+    "dating": "룸메이트",
+    "express": "고백벽",
+    "topic": "토픽",
+    "photograph": "포토월"
+  },
+  "login": {
+    "title": "로그인",
+    "username": "아이디",
+    "password": "비밀번호",
+    "button": "로그인",
+    "loading": "로그인 중..."
+  },
+  "profile": {
+    "settings": "설정",
+    "language": "언어",
+    "theme": "테마",
+    "logout": "로그아웃",
+    "privacy": "개인정보",
+    "feedback": "도움말"
+  },
+  "info": {
+    "news": "뉴스",
+    "announcement": "공지사항",
+    "interaction": "메시지",
+    "noNews": "뉴스가 없습니다",
+    "noAnnouncement": "공지사항이 없습니다",
+    "noInteraction": "메시지가 없습니다",
+    "markAllRead": "모두 읽음"
+  }
+}

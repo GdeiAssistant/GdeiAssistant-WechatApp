@@ -54,8 +54,11 @@ if (!String.prototype.padStart) {
   }
 }
 
+var i18n = require('./utils/i18n')
+
 App({
   globalData: {
-    userInfo: null
+    userInfo: null,
+    locale: i18n.getCurrentLocale()
   }
 })

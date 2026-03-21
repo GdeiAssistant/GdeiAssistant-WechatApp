@@ -1,0 +1,66 @@
+{
+  "common": {
+    "loading": "載入中...",
+    "retry": "重試",
+    "confirm": "確認",
+    "cancel": "取消",
+    "submit": "提交",
+    "save": "儲存",
+    "delete": "刪除",
+    "back": "返回",
+    "more": "更多",
+    "noData": "暫無數據",
+    "networkError": "網絡異常，請稍後再試",
+    "loadFailed": "載入失敗",
+    "publishSuccess": "發佈成功",
+    "publishFailed": "發佈失敗"
+  },
+  "tab": {
+    "home": "首頁",
+    "info": "資訊",
+    "profile": "我的"
+  },
+  "feature": {
+    "grade": "成績查詢",
+    "schedule": "課表查詢",
+    "cet": "四六級查詢",
+    "graduateExam": "考研查詢",
+    "spare": "課室查詢",
+    "library": "圖書館",
+    "card": "校園卡",
+    "dataCenter": "數據查詢",
+    "evaluate": "教學評價",
+    "marketplace": "二手交易",
+    "delivery": "全民快遞",
+    "lostFound": "失物招領",
+    "secret": "校園樹洞",
+    "dating": "賣室友",
+    "express": "表白牆",
+    "topic": "話題",
+    "photograph": "拍好校園"
+  },
+  "login": {
+    "title": "登入",
+    "username": "用戶名",
+    "password": "密碼",
+    "button": "登入",
+    "loading": "登入中..."
+  },
+  "profile": {
+    "settings": "設定",
+    "language": "語言",
+    "theme": "主題色",
+    "logout": "登出",
+    "privacy": "私隱設定",
+    "feedback": "幫助與反饋"
+  },
+  "info": {
+    "news": "新聞",
+    "announcement": "系統公告",
+    "interaction": "互動消息",
+    "noNews": "暫無新聞",
+    "noAnnouncement": "暫無系統公告",
+    "noInteraction": "暫無互動消息",
+    "markAllRead": "全部已讀"
+  }
+}
