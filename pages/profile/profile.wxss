@@ -3,7 +3,7 @@
 .profile_page {
   min-height: 100vh;
   padding-bottom: 40rpx;
-  background: #f5f5f5;
+  background: #F8F8F8;
 }
 
 .loading_box {

@@ -2,7 +2,7 @@
 
 .news_page {
   padding-bottom: 28rpx;
-  background: #f7f7f7;
+  background: #F8F8F8;
 }
 
 .news_type_scroll {

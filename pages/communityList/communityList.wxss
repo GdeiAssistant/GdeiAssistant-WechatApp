@@ -2,7 +2,7 @@
 
 .community-page {
   padding-bottom: 130rpx;
-  background: #f5f5f5;
+  background: #F8F8F8;
   min-height: 100vh;
 }
 
