@@ -5,11 +5,13 @@ const auth = require('../../services/auth.js')
 const authApi = require('../../services/apis/auth.js')
 const dataSource = require('../../services/data-source.js')
 const { createSubmitGuard } = require('../../utils/debounce.js')
+var themeUtil = require('../../utils/theme')
 
 const loginGuard = createSubmitGuard()
 
 Page({
   data: {
+    themeClass: '',
     ready: false,
     versionCode: '',
     useMockData: false,
@@ -104,6 +106,7 @@ Page({
   },
 
   onShow: function() {
+    themeUtil.applyTheme(this)
     this.refreshRuntimeState()
   }
 })

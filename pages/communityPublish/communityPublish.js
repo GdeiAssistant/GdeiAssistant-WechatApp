@@ -17,6 +17,7 @@ const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
 const { uploadLocalFileByPresignedUrl, uploadLocalFilesByPresignedUrl } = require('../../services/upload.js')
 const pageUtils = require('../../utils/page.js')
+var themeUtil = require('../../utils/theme')
 
 const EDITABLE_MODULE_IDS = ['ershou', 'lostandfound']
 
@@ -125,7 +126,11 @@ function findEditableItem(moduleId, payload, itemId) {
 }
 
 Page({
+  onShow: function () {
+    themeUtil.applyTheme(this)
+  },
   data: {
+    themeClass: '',
     moduleId: '',
     moduleConfig: null,
     mode: 'create',

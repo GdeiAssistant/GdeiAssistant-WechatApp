@@ -1,8 +1,13 @@
 const utils = require('../../utils/util.js')
 const campusApi = require('../../services/apis/campus.js')
+var themeUtil = require('../../utils/theme')
 
 Page({
+  onShow: function () {
+    themeUtil.applyTheme(this)
+  },
   data: {
+    themeClass: '',
     tabs: ['大一', '大二', '大三', '大四'],
     firstTermGradeList: null,
     secondTermGradeList: null,

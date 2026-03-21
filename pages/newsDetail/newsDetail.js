@@ -2,9 +2,14 @@ const storageKeys = require('../../constants/storage.js')
 const infoApi = require('../../services/apis/info.js')
 const messagesApi = require('../../services/apis/messages.js')
 const pageUtils = require('../../utils/page.js')
+var themeUtil = require('../../utils/theme')
 
 Page({
+  onShow: function () {
+    themeUtil.applyTheme(this)
+  },
   data: {
+    themeClass: '',
     newsItem: null,
     loading: false,
     errorMessage: null,

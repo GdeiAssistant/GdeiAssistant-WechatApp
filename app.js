@@ -55,10 +55,18 @@ if (!String.prototype.padStart) {
 }
 
 var i18n = require('./utils/i18n')
+var themeUtil = require('./utils/theme')
 
 App({
+  onLaunch: function () {
+    this.globalData.theme = themeUtil.getEffectiveTheme()
+    this.globalData.fontScaleStep = themeUtil.getFontScaleStep()
+    themeUtil.initThemeListener()
+  },
   globalData: {
     userInfo: null,
-    locale: i18n.getCurrentLocale()
+    locale: i18n.getCurrentLocale(),
+    theme: 'light',
+    fontScaleStep: 1
   }
 })

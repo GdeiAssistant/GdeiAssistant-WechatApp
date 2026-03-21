@@ -13,8 +13,12 @@
 - 教室查询
 - 图书馆
 - 校园卡
+- 校园卡充值
+- 校园卡挂失
+- 电费查询
 - 数据查询
 - 教学评价
+- 校园黄页
 
 ### 校园生活
 
@@ -27,47 +31,93 @@
 - 校园话题
 - 拍好校园
 
-### 信息通知
+### 资讯信息
 
 - 新闻通知
+- 系统通知公告
+- 互动消息
 
 ### 个人中心
 
-- 个人资料
+- 个人资料展示与编辑
 - 头像管理
+- 界面和外观（主题切换、字体大小、语言）
 - 设置
 - 退出登录
 
 ## 技术栈
 
-- 微信小程序
+- 微信小程序原生框架
 - WeUI
 - Promise 风格服务层
+- CSS 变量主题系统（亮色/暗色）
 - `mock` / `remote` 双数据源
+- i18n 国际化（6 语言）
 
 ## 工程结构
 
 ```text
 GdeiAssistant-WechatApp/
-├── pages/
+├── pages/                 # 页面模块（27 个页面）
 ├── services/
-│   ├── apis/
-│   ├── auth.js
-│   ├── endpoints.js
-│   ├── request.js
-│   └── upload.js
-├── mock/
-├── constants/
-├── config/
-├── utils/
-└── common/lib/weui.wxss
+│   ├── apis/              # 按业务拆分的接口模块
+│   ├── auth.js            # 登录态管理
+│   ├── data-source.js     # mock/remote 切换
+│   ├── endpoints.js       # 接口路径定义
+│   ├── request.js         # 统一请求封装
+│   ├── response.js        # 响应归一化
+│   └── upload.js          # 文件上传
+├── mock/                  # 本地模拟数据
+├── constants/             # 业务常量
+├── config/                # 环境配置
+├── utils/                 # 工具函数（i18n、主题）
+├── styles/                # 全局主题变量
+├── locales/               # 国际化语言文件（6 语言）
+├── scripts/               # 构建辅助脚本
+└── common/lib/weui.wxss   # WeUI 样式库
 ```
 
-## 数据源与资料配置
+## 架构说明
+
+### 1. 数据源模式
+
+项目支持两种数据源：
 
 - `remote`：请求真实后端接口
 - `mock`：使用本地模拟数据
-- 个人资料地区数据同步自后端仓库 `location.xml`
+
+切换入口位于设置页，切换后即时生效。
+
+当前 mock 登录账号：
+
+- 用户名：`gdeiassistant`
+- 密码：`gdeiassistant`
+
+### 2. 登录态管理
+
+登录链路由以下模块协作完成：
+
+- `auth.js`：Session Token 的存取、验证与清除
+- `request.js`：统一注入鉴权 Header，处理 401 失效
+- `response.js`：响应格式归一化，适配多种后端返回结构
+
+### 3. 网络层
+
+网络层基于 `wx.request`，统一负责：
+
+- 请求构建与 Header 注入
+- Bearer Token 注入
+- 加载状态 UI 管理
+- Mock 模式分发
+- 401 与登录失效处理
+
+### 4. 主题系统
+
+应用支持亮色/暗色主题切换，基于 CSS 变量实现：
+
+- `styles/theme.wxss`：定义亮色与暗色两套 CSS 变量
+- `utils/theme.js`：主题管理工具，支持跟随系统、手动切换、持久化存储
+- 所有页面通过 `themeClass` 动态绑定主题
 
 ## 运行环境
 
@@ -90,11 +140,18 @@ GdeiAssistant-WechatApp/
 
 ## Mock 模式说明
 
-- 登录页或设置页可切换 `mock` 数据源
+调试环境默认支持 `mock` 数据源。
+
+当前 mock 登录账号：
+
 - 用户名：`gdeiassistant`
 - 密码：`gdeiassistant`
 
+设置页可切换 `mock` / `remote` 数据源，切换后即时生效。
+
 ## 后端接口位置
+
+本项目对应的后端仓库为：
 
 - GitHub：`https://github.com/GdeiAssistant/GdeiAssistant`
 
@@ -102,6 +159,11 @@ GdeiAssistant-WechatApp/
 
 本项目采用 [Apache License 2.0](LICENSE.md) 开源协议。
 
+你可以在遵守协议条款的前提下使用、修改和分发本项目代码。
+
 ## 免责声明
 
-本项目仅用于学习与研究用途。
+1. 本项目为校园场景应用客户端，功能和数据能力以学校实际开放范围、后端接口能力及账号权限为准。
+2. 仓库中的 `mock` 数据仅用于本地开发和界面联调，不代表真实校园业务数据。
+3. 本项目不对因第三方服务异常、学校系统调整、网络问题或接口变更导致的功能不可用承担责任。
+4. 使用者在接入真实后端或部署衍生版本时，应自行确保账号、隐私、日志和数据安全合规。

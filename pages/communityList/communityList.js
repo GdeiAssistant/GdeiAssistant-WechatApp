@@ -11,6 +11,7 @@ const {
 const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
 const pageUtils = require('../../utils/page.js')
+var themeUtil = require('../../utils/theme')
 
 function findLabel(options, value, fallback) {
   const item = (options || []).filter(function(optionItem) {
@@ -135,6 +136,7 @@ function normalizeItem(moduleId, item) {
 
 Page({
   data: {
+    themeClass: '',
     moduleId: '',
     moduleConfig: null,
     searchKeyword: '',
@@ -359,6 +361,7 @@ Page({
   },
 
   onShow: function() {
+    themeUtil.applyTheme(this)
     if (this.data.moduleId) {
       this.loadStatsIfNeeded()
     }

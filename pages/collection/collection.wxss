@@ -2,14 +2,14 @@
 
 .weui-navbar {
   position: static;
-  background-color: #fff;
+  background-color: var(--color-surface);
 }
 
 .loadmore {
   margin-top: 20rpx;
   margin-bottom: 20rpx;
   text-align: center;
-  color: #aaa;
+  color: var(--color-text-tertiary);
 }
 
 .module_shortcuts {

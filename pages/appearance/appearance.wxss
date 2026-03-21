@@ -1,0 +1,39 @@
+.page {
+  min-height: 100vh;
+  background: var(--color-bg-primary);
+}
+.section-title {
+  font-size: 26rpx;
+  color: var(--color-text-secondary);
+  padding: 24rpx 32rpx 12rpx;
+}
+.option-list {
+  background: var(--color-surface);
+}
+.option-item {
+  padding: 24rpx 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1rpx solid var(--color-divider);
+  color: var(--color-text-primary);
+}
+.check {
+  color: var(--color-primary);
+}
+.font-card {
+  background: var(--color-surface);
+  padding: 24rpx 32rpx;
+}
+.font-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 22rpx;
+  color: var(--color-text-secondary);
+  margin-top: 8rpx;
+}
+.font-preview {
+  display: block;
+  margin-top: 20rpx;
+  color: var(--color-text-primary);
+}

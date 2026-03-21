@@ -1,5 +1,6 @@
 const dataApi = require('../../services/apis/data.js')
 const pageUtils = require('../../utils/page.js')
+var themeUtil = require('../../utils/theme')
 
 function buildYearOptions() {
   const currentYear = new Date().getFullYear()
@@ -11,7 +12,11 @@ function buildYearOptions() {
 }
 
 Page({
+  onShow: function () {
+    themeUtil.applyTheme(this)
+  },
   data: {
+    themeClass: '',
     yearOptions: buildYearOptions(),
     yearIndex: 0,
     name: '',

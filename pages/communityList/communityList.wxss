@@ -2,7 +2,7 @@
 
 .community-page {
   padding-bottom: 130rpx;
-  background: #F8F8F8;
+  background: var(--color-bg-primary);
   min-height: 100vh;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .hero_title {
-  color: #222;
+  color: var(--color-text-primary);
   font-size: 38rpx;
   font-weight: 700;
 }
@@ -47,7 +47,7 @@
   padding: 24rpx;
   display: flex;
   justify-content: space-between;
-  background: #fff;
+  background: var(--color-surface);
   border-radius: 20rpx;
   box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.04);
 }
@@ -62,12 +62,12 @@
 .stat_value {
   font-size: 36rpx;
   font-weight: 600;
-  color: #222;
+  color: var(--color-text-primary);
 }
 
 .stat_label {
   font-size: 28rpx;
-  color: #888;
+  color: var(--color-text-secondary);
 }
 
 .search_bar {
@@ -76,7 +76,7 @@
   gap: 12rpx;
   align-items: center;
   padding: 14rpx;
-  background: #fff;
+  background: var(--color-surface);
   border-radius: 24rpx;
   box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.04);
 }
@@ -97,7 +97,7 @@
 
 .search_button_secondary {
   background: #f1f1f1;
-  color: #666;
+  color: var(--color-text-secondary);
 }
 
 .tab_scroll {
@@ -114,15 +114,15 @@
   margin-right: 16rpx;
   padding: 16rpx 28rpx;
   border-radius: 999rpx;
-  background: #fff;
-  color: #666;
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
   font-size: 28rpx;
   box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.03);
 }
 
 .tab_item_active {
   background: #2f2f2f;
-  color: #fff;
+  color: var(--color-surface);
 }
 
 .list_section {
@@ -134,7 +134,7 @@
 .delivery_card,
 .photo_card {
   margin-bottom: 20rpx;
-  background: #fff;
+  background: var(--color-surface);
   border-radius: 24rpx;
   overflow: hidden;
   box-shadow: 0 14rpx 34rpx rgba(0, 0, 0, 0.045);
@@ -167,7 +167,7 @@
 .dating_card {
   width: 48.2%;
   margin-bottom: 20rpx;
-  background: #fff;
+  background: var(--color-surface);
   border-radius: 22rpx;
   overflow: hidden;
   box-shadow: 0 14rpx 34rpx rgba(0, 0, 0, 0.045);
@@ -211,13 +211,13 @@
 .card_title {
   font-size: 30rpx;
   font-weight: 600;
-  color: #222;
+  color: var(--color-text-primary);
   line-height: 1.5;
 }
 
 .card_summary {
   margin-top: 14rpx;
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 28rpx;
   line-height: 1.7;
   word-break: break-word;
@@ -237,7 +237,7 @@
 
 .card_sub_badge {
   background: #f4f6f8;
-  color: #666;
+  color: var(--color-text-secondary);
 }
 
 .delivery_badge {
@@ -247,7 +247,7 @@
 
 .card_meta {
   flex: 1;
-  color: #888;
+  color: var(--color-text-secondary);
   font-size: 28rpx;
   line-height: 1.5;
 }
@@ -260,7 +260,7 @@
 
 .time_text,
 .metric_text {
-  color: #999;
+  color: var(--color-text-tertiary);
   font-size: 22rpx;
 }
 
@@ -338,28 +338,28 @@
 }
 
 .bottom_button_secondary {
-  background: #fff;
+  background: var(--color-surface);
   color: #2f2f2f;
 }
 
 .empty_panel {
   margin: 24rpx;
   padding: 52rpx 32rpx;
-  background: #fff;
+  background: var(--color-surface);
   border-radius: 24rpx;
   text-align: center;
   box-shadow: 0 12rpx 30rpx rgba(0, 0, 0, 0.04);
 }
 
 .empty_title {
-  color: #333;
+  color: var(--color-text-primary);
   font-size: 30rpx;
   font-weight: 600;
 }
 
 .empty_summary {
   margin-top: 14rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   font-size: 24rpx;
   line-height: 1.7;
 }

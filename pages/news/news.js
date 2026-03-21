@@ -1,6 +1,7 @@
 const storageKeys = require('../../constants/storage.js')
 const infoApi = require('../../services/apis/info.js')
 const pageUtils = require('../../utils/page.js')
+var themeUtil = require('../../utils/theme')
 
 const PAGE_SIZE = 10
 const NEWS_TABS = [
@@ -11,7 +12,11 @@ const NEWS_TABS = [
 ]
 
 Page({
+  onShow: function () {
+    themeUtil.applyTheme(this)
+  },
   data: {
+    themeClass: '',
     tabs: NEWS_TABS,
     activeType: 1,
     newsList: [],

@@ -1,5 +1,7 @@
+@import './styles/theme.wxss';
+
 page {
-  background-color: #F8F8F8;
+  background-color: var(--color-bg-primary);
   height: 100%;
   font-size: 32rpx;
   line-height: 1.6;

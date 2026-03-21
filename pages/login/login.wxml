@@ -1,4 +1,4 @@
-<view class="container" wx:if="{{ready}}">
+<view class="container {{themeClass}}" wx:if="{{ready}}">
 
   <view class="userinfo">
     <image class="userinfo-avatar" src="../../image/logo.png" background-size="cover"></image>

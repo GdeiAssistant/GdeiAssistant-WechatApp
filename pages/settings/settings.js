@@ -2,6 +2,7 @@ const { FEATURE_SECTIONS, FEATURE_MAP, MOCK_CREDENTIALS_HINT } = require('../../
 const auth = require('../../services/auth.js')
 const dataSource = require('../../services/data-source.js')
 const featureConfig = require('../../services/feature-config.js')
+var themeUtil = require('../../utils/theme')
 
 function buildFeatureSections() {
   const featureVisibility = featureConfig.getFeatureVisibility()
@@ -23,6 +24,7 @@ function buildFeatureSections() {
 
 Page({
   data: {
+    themeClass: '',
     useMockData: false,
     dataSourceLabel: '',
     mockCredentialsHint: MOCK_CREDENTIALS_HINT,
@@ -66,6 +68,7 @@ Page({
   },
 
   onShow: function() {
+    themeUtil.applyTheme(this)
     this.refreshPageState()
   }
 })

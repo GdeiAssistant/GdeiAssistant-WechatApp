@@ -2,7 +2,7 @@
 
 .news_page {
   padding-bottom: 28rpx;
-  background: #F8F8F8;
+  background: var(--color-bg-primary);
 }
 
 .news_type_scroll {
@@ -11,7 +11,7 @@
   z-index: 20;
   white-space: nowrap;
   padding: 20rpx 24rpx 18rpx;
-  background: #fff;
+  background: var(--color-surface);
 }
 
 .news_type_row {
@@ -23,18 +23,18 @@
   padding: 10rpx 22rpx;
   border-radius: 999rpx;
   background: #f1f1f1;
-  color: #888;
+  color: var(--color-text-secondary);
   font-size: 24rpx;
 }
 
 .news_type_item_active {
-  background: #e3e3e3;
+  background: var(--color-divider);
   color: #4f4f4f;
 }
 
 .section_card {
   margin: 24rpx;
-  background: #fff;
+  background: var(--color-surface);
   border-radius: 24rpx;
   overflow: hidden;
   box-shadow: 0 12rpx 32rpx rgba(0, 0, 0, 0.04);
@@ -46,7 +46,7 @@
 
 .news_title {
   padding-right: 20rpx;
-  color: #333;
+  color: var(--color-text-primary);
   word-break: break-word;
 }
 

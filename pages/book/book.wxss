@@ -2,7 +2,7 @@
 
 .weui-navbar {
   position: static;
-  background-color: #fff;
+  background-color: var(--color-surface);
 }
 
 .borrow-empty {
@@ -30,7 +30,7 @@
   max-width: 640rpx;
   padding: 36rpx 32rpx;
   border-radius: 28rpx;
-  background: #ffffff;
+  background: var(--color-surface);
   box-sizing: border-box;
 }
 

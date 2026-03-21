@@ -2,10 +2,10 @@
 
 .weui-navbar {
   position: static;
-  background-color: #fff;
+  background-color: var(--color-surface);
 }
 
 .lost_warning {
   text-align: center;
-  color: #aaa;
+  color: var(--color-text-tertiary);
 }

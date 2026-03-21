@@ -3,19 +3,19 @@
 .detail-loading {
   padding: 80rpx 30rpx;
   text-align: center;
-  color: #888;
+  color: var(--color-text-secondary);
 }
 
 .detail_title {
   padding: 40rpx 30rpx 20rpx;
   font-size: 36rpx;
-  color: #333;
+  color: var(--color-text-primary);
   font-weight: 600;
 }
 
 .detail_date {
   padding: 0 30rpx 20rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   font-size: 26rpx;
 }
 

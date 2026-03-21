@@ -1,8 +1,13 @@
 const libraryApi = require('../../services/apis/library.js')
 const pageUtils = require('../../utils/page.js')
+var themeUtil = require('../../utils/theme')
 
 Page({
+  onShow: function () {
+    themeUtil.applyTheme(this)
+  },
   data: {
+    themeClass: '',
     list: [],
     keyword: null,
     currentPage: 0,

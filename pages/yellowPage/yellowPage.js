@@ -1,5 +1,6 @@
 const dataApi = require('../../services/apis/data.js')
 const pageUtils = require('../../utils/page.js')
+var themeUtil = require('../../utils/theme')
 
 function groupYellowPage(result) {
   const typeList = result.type || []
@@ -19,7 +20,11 @@ function groupYellowPage(result) {
 }
 
 Page({
+  onShow: function () {
+    themeUtil.applyTheme(this)
+  },
   data: {
+    themeClass: '',
     loading: false,
     groupedYellowPages: [],
     errorMessage: null

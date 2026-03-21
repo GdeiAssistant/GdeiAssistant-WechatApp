@@ -2,5 +2,5 @@
 
 .weui-navbar {
   position: static;
-  background-color: #fff;
+  background-color: var(--color-surface);
 }

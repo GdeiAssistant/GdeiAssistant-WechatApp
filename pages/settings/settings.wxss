@@ -3,14 +3,14 @@
 .section_title {
   margin-top: 20rpx;
   padding: 0 30rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   font-size: 28rpx;
 }
 
 .mock_hint {
   display: block;
   margin: 20rpx 30rpx 0;
-  color: #888;
+  color: var(--color-text-secondary);
   text-align: center;
   font-size: 26rpx;
 }

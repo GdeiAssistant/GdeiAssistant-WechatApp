@@ -212,6 +212,13 @@ const FEATURE_SECTIONS = [
 
 const SYSTEM_ACTIONS = [
   {
+    id: 'appearance',
+    title: '界面和外观',
+    description: '主题、字体大小、语言',
+    icon: '/image/mono/about.png',
+    page: '/pages/appearance/appearance'
+  },
+  {
     id: 'settings',
     title: '功能设置',
     description: '切换 mock 与管理首页模块',

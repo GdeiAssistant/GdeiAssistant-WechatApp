@@ -2,19 +2,19 @@
 
 .inbox_page {
   padding-bottom: 28rpx;
-  background: #F8F8F8;
+  background: var(--color-bg-primary);
 }
 
 .inbox_tabs {
   position: sticky;
   top: 0;
   z-index: 20;
-  background-color: #fff;
+  background-color: var(--color-surface);
 }
 
 .section_card {
   margin: 24rpx 24rpx 0;
-  background: #fff;
+  background: var(--color-surface);
   border-radius: 24rpx;
   overflow: hidden;
   box-shadow: 0 12rpx 32rpx rgba(0, 0, 0, 0.04);
@@ -22,13 +22,13 @@
 
 .item_title {
   padding-right: 20rpx;
-  color: #333;
+  color: var(--color-text-primary);
   word-break: break-word;
 }
 
 .item_summary {
   margin-top: 8rpx;
-  color: #999;
+  color: var(--color-text-tertiary);
   font-size: 24rpx;
   line-height: 1.6;
 }
@@ -45,7 +45,7 @@
 }
 
 .meta_badge {
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 24rpx;
 }
 
@@ -62,7 +62,7 @@
   margin-top: 16rpx;
   padding: 24rpx;
   border-radius: 18rpx;
-  background: #f8f8f8;
+  background: var(--color-bg-primary);
 }
 
 .interaction_card:first-child {
@@ -83,7 +83,7 @@
 .interaction_title {
   flex: 1;
   min-width: 0;
-  color: #333;
+  color: var(--color-text-primary);
   font-size: 30rpx;
   font-weight: 600;
 }
@@ -96,12 +96,12 @@
 }
 
 .interaction_read_done {
-  background: #ececec;
+  background: var(--color-divider);
   color: #9a9a9a;
 }
 
 .interaction_read_pending {
-  background: #dfdfdf;
+  background: var(--color-border);
   color: #555;
 }
 
@@ -115,18 +115,18 @@
 .interaction_tag {
   padding: 4rpx 12rpx;
   border-radius: 999rpx;
-  background: #ebebeb;
+  background: var(--color-bg-tertiary);
   color: #777;
   font-size: 22rpx;
 }
 
 .interaction_tag_secondary {
-  background: #f0f0f0;
+  background: var(--color-bg-secondary);
 }
 
 .interaction_content {
   margin-top: 18rpx;
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 26rpx;
   line-height: 1.7;
 }

@@ -1,0 +1,37 @@
+<view class="page {{themeClass}}">
+  <view class="section-title">{{t.themeLabel}}</view>
+  <view class="option-list">
+    <view class="option-item" data-mode="system" bindtap="onThemeSelect">
+      <text>{{t.themeSystem}}</text>
+      <text class="check" wx:if="{{themeMode === 'system'}}">✓</text>
+    </view>
+    <view class="option-item" data-mode="light" bindtap="onThemeSelect">
+      <text>{{t.themeLight}}</text>
+      <text class="check" wx:if="{{themeMode === 'light'}}">✓</text>
+    </view>
+    <view class="option-item" data-mode="dark" bindtap="onThemeSelect">
+      <text>{{t.themeDark}}</text>
+      <text class="check" wx:if="{{themeMode === 'dark'}}">✓</text>
+    </view>
+  </view>
+
+  <view class="section-title">{{t.fontLabel}}</view>
+  <view class="font-card">
+    <slider min="0" max="3" step="1" value="{{fontScaleStep}}" activeColor="{{themeClass === 'theme-dark' ? '#34D399' : '#1AAD19'}}" bindchange="onFontChange" />
+    <view class="font-labels">
+      <text>{{t.fontSmall}}</text>
+      <text>{{t.fontStandard}}</text>
+      <text>{{t.fontLarge}}</text>
+      <text>{{t.fontXlarge}}</text>
+    </view>
+    <text class="font-preview" style="font-size: {{fontScales[fontScaleStep] * 28}}rpx">{{t.fontPreview}}</text>
+  </view>
+
+  <view class="section-title">{{t.langLabel}}</view>
+  <view class="option-list">
+    <view class="option-item" wx:for="{{locales}}" wx:key="code" data-code="{{item.code}}" bindtap="onLocaleSelect">
+      <text>{{item.label}}</text>
+      <text class="check" wx:if="{{currentLocale === item.code}}">✓</text>
+    </view>
+  </view>
+</view>

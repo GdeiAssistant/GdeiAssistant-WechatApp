@@ -4,6 +4,7 @@ const messagesApi = require('../../services/apis/messages.js')
 const userApi = require('../../services/apis/user.js')
 const featureConfig = require('../../services/feature-config.js')
 const dataSource = require('../../services/data-source.js')
+var themeUtil = require('../../utils/theme')
 
 function formatInboxBadge(unreadCount) {
   const count = Number(unreadCount || 0)
@@ -15,6 +16,7 @@ function formatInboxBadge(unreadCount) {
 
 Page({
   data: {
+    themeClass: '',
     avatar: null,
     nickname: null,
     homeSections: [],
@@ -134,6 +136,7 @@ Page({
   },
 
   onShow: function() {
+    themeUtil.applyTheme(this)
     this.loadProfile()
     this.loadInboxStatus()
     this.loadHomeSections()

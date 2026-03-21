@@ -8,9 +8,14 @@ const {
 } = require('../../constants/spare.js')
 const infoApi = require('../../services/apis/info.js')
 const pageUtils = require('../../utils/page.js')
+var themeUtil = require('../../utils/theme')
 
 Page({
+  onShow: function () {
+    themeUtil.applyTheme(this)
+  },
   data: {
+    themeClass: '',
     campusOptions: SPARE_CAMPUS_OPTIONS,
     roomTypeOptions: SPARE_ROOM_TYPE_OPTIONS,
     weekDayOptions: SPARE_WEEKDAY_OPTIONS,

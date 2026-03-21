@@ -1,8 +1,13 @@
 const utils = require('../../utils/util.js')
 const campusApi = require('../../services/apis/campus.js')
+var themeUtil = require('../../utils/theme')
 
 Page({
+  onShow: function () {
+    themeUtil.applyTheme(this)
+  },
   data: {
+    themeClass: '',
     card: null
   },
 

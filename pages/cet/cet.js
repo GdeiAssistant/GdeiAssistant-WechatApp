@@ -1,9 +1,14 @@
 const cetApi = require('../../services/apis/cet.js')
 const dataSource = require('../../services/data-source.js')
 const pageUtils = require('../../utils/page.js')
+var themeUtil = require('../../utils/theme')
 
 Page({
+  onShow: function () {
+    themeUtil.applyTheme(this)
+  },
   data: {
+    themeClass: '',
     ticketNumber: '',
     name: '',
     checkcode: '',
