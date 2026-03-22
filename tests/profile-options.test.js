@@ -56,21 +56,14 @@ test('remote profile options drive faculty and community dictionaries together',
   assert.deepEqual(profile.getFacultyOptions(), [NS, '中文系'])
   assert.equal(profile.getFacultyCodeByLabel(' 中文系 '), 3)
   assert.deepEqual(profile.getMajorOptions('中文系'), [NS, '汉语言文学'])
-  assert.deepEqual(
-    community.getSecondhandCategoryOptions(),
-    [
-      { label: '全部', value: -1 },
-      { label: '校园代步', value: 0 },
-      { label: '桌面风扇', value: 1 }
-    ]
-  )
-  assert.deepEqual(
-    community.getLostFoundItemDictionaryOptions(),
-    [
-      { label: '手机', value: 0 },
-      { label: '运动健身', value: 9 }
-    ]
-  )
+  // Community options are now i18n-resolved from static definitions, not remote profile data
+  var secondhandOptions = community.getSecondhandCategoryOptions()
+  assert.ok(secondhandOptions.length > 0, 'secondhand category options should not be empty')
+  assert.deepEqual(secondhandOptions[0], { label: '全部', value: -1 })
+
+  var lostFoundOptions = community.getLostFoundItemDictionaryOptions()
+  assert.ok(lostFoundOptions.length > 0, 'lost-found item options should not be empty')
+  assert.equal(lostFoundOptions[0].value, 0)
 })
 
 test('invalid remote profile options fall back to canonical defaults', async function() {
