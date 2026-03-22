@@ -4,6 +4,29 @@ const dataSource = require('./data-source.js')
 const mock = require('../mock/index.js')
 const { normalizePayload, pickMessage } = require('./response.js')
 
+const DEVICE_ID_STORAGE_KEY = '__gdei_device_id'
+
+function getDeviceId() {
+  try {
+    const info = wx.getDeviceInfo()
+    if (info && info.deviceId) {
+      return info.deviceId
+    }
+  } catch (_) {
+    // getDeviceInfo not available in older base libraries
+  }
+  let id = wx.getStorageSync(DEVICE_ID_STORAGE_KEY)
+  if (!id) {
+    id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      const r = Math.random() * 16 | 0
+      const v = c === 'x' ? r : (r & 0x3 | 0x8)
+      return v.toString(16)
+    })
+    wx.setStorageSync(DEVICE_ID_STORAGE_KEY, id)
+  }
+  return id
+}
+
 function request(options) {
   const {
     url,
@@ -25,6 +48,7 @@ function request(options) {
     }
     const app = getApp()
     header['Accept-Language'] = (app && app.globalData && app.globalData.locale) || 'zh-CN'
+    header['X-Device-ID'] = getDeviceId()
 
     if (showLoading) {
       wx.showNavigationBarLoading()
