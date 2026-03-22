@@ -36,13 +36,13 @@
 
       <view class="weui-loadmore" wx:if="{{announcementLoading}}">
         <i class="weui-loading"></i>
-        <view class="weui-loadmore__tips">正在加载系统公告</view>
+        <view class="weui-loadmore__tips">{{t.loadingAnnouncement}}</view>
       </view>
       <view class="weui-loadmore" wx:if="{{!announcementLoading && announcementFinished && announcementList.length}}">
-        <view class="weui-loadmore__tips">没有更多系统公告了</view>
+        <view class="weui-loadmore__tips">{{t.noMoreAnnouncement}}</view>
       </view>
       <view class="weui-loadmore" wx:if="{{!announcementLoading && announcementFinished && !announcementList.length}}">
-        <view class="weui-loadmore__tips">暂无系统公告</view>
+        <view class="weui-loadmore__tips">{{t.noAnnouncement}}</view>
       </view>
     </view>
   </block>
@@ -50,8 +50,8 @@
   <block wx:else>
     <view class="section_card">
       <view class="interaction_meta" wx:if="{{interactionUnreadCount}}">
-        <view class="meta_badge">{{interactionUnreadCount}} 条未读</view>
-        <view class="meta_action" bindtap="markAllInteractionRead">全部已读</view>
+        <view class="meta_badge">{{interactionUnreadCount}} {{t.unreadCount}}</view>
+        <view class="meta_action" bindtap="markAllInteractionRead">{{t.markAllRead}}</view>
       </view>
 
       <view class="interaction_list" wx:if="{{interactionList.length}}">
@@ -79,13 +79,13 @@
 
       <view class="weui-loadmore" wx:if="{{interactionLoading}}">
         <i class="weui-loading"></i>
-        <view class="weui-loadmore__tips">正在加载互动消息</view>
+        <view class="weui-loadmore__tips">{{t.loadingInteraction}}</view>
       </view>
       <view class="weui-loadmore" wx:if="{{!interactionLoading && interactionFinished && interactionList.length}}">
-        <view class="weui-loadmore__tips">没有更多互动消息了</view>
+        <view class="weui-loadmore__tips">{{t.noMoreInteraction}}</view>
       </view>
       <view class="weui-loadmore" wx:if="{{!interactionLoading && interactionFinished && !interactionList.length}}">
-        <view class="weui-loadmore__tips">暂无互动消息</view>
+        <view class="weui-loadmore__tips">{{t.noInteraction}}</view>
       </view>
     </view>
   </block>

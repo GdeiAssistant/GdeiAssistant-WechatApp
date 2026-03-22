@@ -1,21 +1,21 @@
 <view class="page__bd {{themeClass}}" style="{{fontStyle}}">
-  <view class="weui-cells__title">数据源</view>
+  <view class="weui-cells__title">{{t.dataSourceTitle}}</view>
   <view class="weui-cells weui-cells_after-title">
     <view class="weui-cell weui-cell_switch">
-      <view class="weui-cell__bd">使用模拟测试数据</view>
+      <view class="weui-cell__bd">{{t.useMockData}}</view>
       <view class="weui-cell__ft">
         <switch checked="{{useMockData}}" bindchange="handleDataSourceChange" />
       </view>
     </view>
     <view class="weui-cell">
-      <view class="weui-cell__bd">当前模式</view>
+      <view class="weui-cell__bd">{{t.currentMode}}</view>
       <view class="weui-cell__ft">{{dataSourceLabel}}</view>
     </view>
   </view>
 
   <text wx:if="{{useMockData}}" class="mock_hint">{{mockCredentialsHint}}</text>
 
-  <view class="weui-cells__title">首页模块展示设置</view>
+  <view class="weui-cells__title">{{t.featureDisplayTitle}}</view>
   <block wx:for="{{featureSections}}" wx:key="id" wx:for-item="section">
     <view class="section_title">{{section.title}}</view>
     <view class="weui-cells weui-cells_after-title">

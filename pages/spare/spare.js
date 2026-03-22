@@ -9,12 +9,15 @@ const {
 const infoApi = require('../../services/apis/info.js')
 const pageUtils = require('../../utils/page.js')
 var themeUtil = require('../../utils/theme')
+const i18n = require('../../utils/i18n.js')
 
 Page({
   onShow: function () {
     themeUtil.applyTheme(this)
+    this.refreshI18n()
   },
   data: {
+    t: {},
     themeClass: '',
     campusOptions: SPARE_CAMPUS_OPTIONS,
     roomTypeOptions: SPARE_ROOM_TYPE_OPTIONS,
@@ -80,7 +83,7 @@ Page({
     const payload = this.buildQueryPayload()
 
     if (payload.minSeating && payload.maxSeating && payload.minSeating > payload.maxSeating) {
-      pageUtils.showTopTips(this, '最少座位数不能大于最多座位数')
+      pageUtils.showTopTips(this, this.data.t.seatingError)
       return
     }
 
@@ -107,8 +110,38 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '空教室',
+      title: this.data.t.shareTitle,
       path: '/pages/spare/spare'
     }
+  },
+
+  refreshI18n: function() {
+    this.setData({
+      t: {
+        navTitle: i18n.t('sparePage.navTitle'),
+        queryConditions: i18n.t('sparePage.queryConditions'),
+        campus: i18n.t('sparePage.campus'),
+        roomType: i18n.t('sparePage.roomType'),
+        weekDay: i18n.t('sparePage.weekDay'),
+        weekType: i18n.t('sparePage.weekType'),
+        classPeriod: i18n.t('sparePage.classPeriod'),
+        minSeating: i18n.t('sparePage.minSeating'),
+        maxSeating: i18n.t('sparePage.maxSeating'),
+        optional: i18n.t('sparePage.optional'),
+        search: i18n.t('sparePage.search'),
+        queryResult: i18n.t('sparePage.queryResult'),
+        noResult: i18n.t('sparePage.noResult'),
+        roomNumber: i18n.t('sparePage.roomNumber'),
+        roomTypeLabel: i18n.t('sparePage.roomTypeLabel'),
+        campusLabel: i18n.t('sparePage.campusLabel'),
+        sectionLabel: i18n.t('sparePage.sectionLabel'),
+        classCapacity: i18n.t('sparePage.classCapacity'),
+        examCapacity: i18n.t('sparePage.examCapacity'),
+        reSearch: i18n.t('sparePage.reSearch'),
+        seatingError: i18n.t('sparePage.seatingError'),
+        shareTitle: i18n.t('sparePage.shareTitle')
+      }
+    })
+    wx.setNavigationBarTitle({ title: this.data.t.navTitle })
   }
 })
