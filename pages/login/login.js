@@ -1,5 +1,5 @@
 const storageKeys = require('../../constants/storage.js')
-const { MOCK_CREDENTIALS_HINT } = require('../../constants/features.js')
+const { getMockCredentialsHint } = require('../../constants/features.js')
 const utils = require('../../utils/util.js')
 const auth = require('../../services/auth.js')
 const authApi = require('../../services/apis/auth.js')
@@ -19,7 +19,7 @@ Page({
     versionCode: '',
     useMockData: false,
     dataSourceLabel: '',
-    mockCredentialsHint: MOCK_CREDENTIALS_HINT
+    mockCredentialsHint: ''
   },
 
   refreshI18n: function () {
@@ -35,7 +35,8 @@ Page({
         debugSettings: i18n.t('login.debugSettings'),
         useMockData: i18n.t('login.useMockData'),
         moreSettings: i18n.t('login.moreSettings')
-      }
+      },
+      mockCredentialsHint: getMockCredentialsHint()
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
   },

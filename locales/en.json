@@ -290,5 +290,137 @@
     "language": {
       "label": "Language"
     }
+  },
+  "mock": {
+    "credentialsHint": "Mock account: {{username}} / {{password}}"
+  },
+  "dataSource": {
+    "mock": "Mock Data",
+    "remote": "Live API"
+  },
+  "features": {
+    "grade": { "title": "Grades", "desc": "View annual and semester grades" },
+    "schedule": { "title": "Schedule", "desc": "View weekly class schedule" },
+    "cet": { "title": "CET Score", "desc": "Query CET scores and save ticket number" },
+    "graduateExam": { "title": "Postgrad Exam", "desc": "Query postgraduate exam scores" },
+    "spare": { "title": "Spare Rooms", "desc": "Find available classrooms" },
+    "bill": { "title": "Card Transactions", "desc": "View campus card transaction history" },
+    "card": { "title": "Campus Card", "desc": "View campus card info and balance" },
+    "cardLost": { "title": "Report Lost Card", "desc": "Report campus card as lost" },
+    "evaluate": { "title": "Evaluation", "desc": "Complete teaching evaluations" },
+    "collection": { "title": "Library", "desc": "Search catalog, borrow and renew books" },
+    "book": { "title": "My Loans", "desc": "View loan records and renew books" },
+    "data": { "title": "Campus Data", "desc": "Electricity and directory info" },
+    "news": { "title": "Info Center", "desc": "View campus news, announcements and messages" },
+    "marketplace": { "title": "Marketplace", "desc": "Browse and post used items" },
+    "lostandfound": { "title": "Lost & Found", "desc": "Post lost and found items" },
+    "secret": { "title": "Secret Wall", "desc": "Post anonymously" },
+    "express": { "title": "Confession Wall", "desc": "View and post confessions" },
+    "topic": { "title": "Campus Topics", "desc": "Join popular campus discussions" },
+    "delivery": { "title": "Delivery", "desc": "Post and accept campus errands" },
+    "dating": { "title": "Roommate Market", "desc": "Browse profiles, post and interact" },
+    "photograph": { "title": "Photo Wall", "desc": "View and share campus photos" },
+    "sections": {
+      "campus": "Campus Services",
+      "information": "Info Center",
+      "community": "Campus Community"
+    },
+    "actions": {
+      "appearance": { "title": "Interface & Appearance", "desc": "Theme, font size, language" },
+      "settings": { "title": "Settings", "desc": "Toggle mock data and manage home modules" },
+      "logout": { "title": "Logout", "desc": "Log out of current account" }
+    }
+  },
+  "spare": {
+    "campus": {
+      "any": "Any",
+      "haizhu": "Haizhu Campus",
+      "huadu": "Huadu Campus",
+      "nanhai": "Nanhai Campus",
+      "correspondence": "Correspondence Campus"
+    },
+    "roomType": {
+      "any": "Any",
+      "noRoom": "No-room Course",
+      "playground": "Playground",
+      "largeMultimedia": "Large Multimedia",
+      "computerLab": "Computer Lab",
+      "sculptureRoom": "Sculpture Room",
+      "multimediaRoom": "Multimedia Room",
+      "translationRoom": "Translation Room",
+      "fashionLab": "Fashion Lab",
+      "pianoRoom1": "Piano Room",
+      "pianoRoom2": "Piano Room",
+      "publicComputerLab": "Public Computer Lab",
+      "chinesePaintingRoom": "Chinese Painting Room",
+      "artStudio": "Art Studio",
+      "chemistryLab": "Chemistry Lab",
+      "computerRoom": "Computer Room",
+      "teachingAidsRoom": "Teaching Aids Room",
+      "educationLab": "Education Lab",
+      "anatomyLab": "Anatomy Lab",
+      "financeMathLab": "Financial Math Lab",
+      "artClassroom": "Art Classroom",
+      "montessoriRoom": "Montessori Room",
+      "modelMakingLab": "Model Making Lab",
+      "graphicDesignLab": "Graphic Design Lab",
+      "practiceRoom": "Practice Room",
+      "photographyLab": "Photography Lab",
+      "vocalRoom": "Vocal Room",
+      "biologyLab": "Biology Lab",
+      "trainingRoom": "Training Room",
+      "sightSingingRoom": "Sight-singing Room",
+      "potteryRoom": "Pottery Room",
+      "gymnasticsRoom": "Gymnastics Room",
+      "networkLab": "Network Lab",
+      "microTeachingRoom": "Micro-teaching Room",
+      "noRoomNeeded": "No Room Needed",
+      "danceRoom1": "Dance Room",
+      "danceRoom2": "Dance Room",
+      "physicsLab": "Physics Lab",
+      "smallMultimedia": "Small Multimedia",
+      "smallMultimediaUnder70": "Small Multimedia (<70)",
+      "smallClassroomUnder70": "Small Classroom (<70)",
+      "groupRoom": "Group Room",
+      "fitnessRoom": "Fitness Room",
+      "musicRoom": "Music Room",
+      "musicMajorRoom": "Music Major Room",
+      "languageLab": "Language Lab",
+      "smartRecordingRoom": "Smart Recording Room",
+      "mediumMultimedia": "Medium Multimedia (70-100)",
+      "majorClassroom": "Major Classroom",
+      "majorTheoryRoom": "Major Theory Room",
+      "majorLab": "Major Lab",
+      "counselingRoom": "Counseling Room",
+      "comprehensivePaintingLab": "Comprehensive Painting Lab"
+    },
+    "weekday": {
+      "any": "Any",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat",
+      "sun": "Sun"
+    },
+    "weekType": {
+      "any": "Any",
+      "odd": "Odd Week",
+      "even": "Even Week"
+    },
+    "classPeriod": {
+      "period12": "Period 1-2",
+      "period3": "Period 3",
+      "period45": "Period 4-5",
+      "period67": "Period 6-7",
+      "period89": "Period 8-9",
+      "period1012": "Period 10-12",
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening",
+      "daytime": "Daytime",
+      "allDay": "All Day"
+    }
   }
 }

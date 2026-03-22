@@ -1,10 +1,10 @@
 const {
   SPARE_TIME_RANGE_MAP,
-  SPARE_CAMPUS_OPTIONS,
-  SPARE_ROOM_TYPE_OPTIONS,
-  SPARE_WEEKDAY_OPTIONS,
-  SPARE_WEEK_TYPE_OPTIONS,
-  SPARE_CLASS_PERIOD_OPTIONS
+  getSpareCampusOptions,
+  getSpareRoomTypeOptions,
+  getSpareWeekdayOptions,
+  getSpareWeekTypeOptions,
+  getSpareClassPeriodOptions
 } = require('../../constants/spare.js')
 const infoApi = require('../../services/apis/info.js')
 const pageUtils = require('../../utils/page.js')
@@ -19,11 +19,11 @@ Page({
   data: {
     t: {},
     themeClass: '',
-    campusOptions: SPARE_CAMPUS_OPTIONS,
-    roomTypeOptions: SPARE_ROOM_TYPE_OPTIONS,
-    weekDayOptions: SPARE_WEEKDAY_OPTIONS,
-    weekTypeOptions: SPARE_WEEK_TYPE_OPTIONS,
-    classPeriodOptions: SPARE_CLASS_PERIOD_OPTIONS,
+    campusOptions: [],
+    roomTypeOptions: [],
+    weekDayOptions: [],
+    weekTypeOptions: [],
+    classPeriodOptions: [],
     campusIndex: 0,
     roomTypeIndex: 0,
     weekDayIndex: 0,
@@ -140,7 +140,12 @@ Page({
         reSearch: i18n.t('sparePage.reSearch'),
         seatingError: i18n.t('sparePage.seatingError'),
         shareTitle: i18n.t('sparePage.shareTitle')
-      }
+      },
+      campusOptions: getSpareCampusOptions(),
+      roomTypeOptions: getSpareRoomTypeOptions(),
+      weekDayOptions: getSpareWeekdayOptions(),
+      weekTypeOptions: getSpareWeekTypeOptions(),
+      classPeriodOptions: getSpareClassPeriodOptions()
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
   }

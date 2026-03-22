@@ -1,4 +1,4 @@
-const { FEATURE_SECTIONS, FEATURE_MAP, MOCK_CREDENTIALS_HINT } = require('../../constants/features.js')
+const { getFeatureSections, getFeatureMap, getMockCredentialsHint } = require('../../constants/features.js')
 const auth = require('../../services/auth.js')
 const dataSource = require('../../services/data-source.js')
 const featureConfig = require('../../services/feature-config.js')
@@ -7,12 +7,13 @@ const i18n = require('../../utils/i18n.js')
 
 function buildFeatureSections() {
   const featureVisibility = featureConfig.getFeatureVisibility()
-  return FEATURE_SECTIONS.map(function(section) {
+  const featureMap = getFeatureMap()
+  return getFeatureSections().map(function(section) {
     return {
       id: section.id,
       title: section.title,
       features: section.featureIds.map(function(featureId) {
-        const feature = FEATURE_MAP[featureId]
+        const feature = featureMap[featureId]
         return {
           id: feature.id,
           title: feature.title,
@@ -29,7 +30,7 @@ Page({
     themeClass: '',
     useMockData: false,
     dataSourceLabel: '',
-    mockCredentialsHint: MOCK_CREDENTIALS_HINT,
+    mockCredentialsHint: '',
     featureSections: []
   },
 
@@ -37,6 +38,7 @@ Page({
     this.setData({
       useMockData: dataSource.isMockMode(),
       dataSourceLabel: dataSource.getDataSourceLabel(),
+      mockCredentialsHint: getMockCredentialsHint(),
       featureSections: buildFeatureSections()
     })
   },

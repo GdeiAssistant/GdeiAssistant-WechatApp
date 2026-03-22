@@ -1,4 +1,4 @@
-const { SYSTEM_ACTIONS } = require('../../constants/features.js')
+const { getSystemActions } = require('../../constants/features.js')
 const auth = require('../../services/auth.js')
 const messagesApi = require('../../services/apis/messages.js')
 const userApi = require('../../services/apis/user.js')
@@ -23,7 +23,7 @@ Page({
     avatar: null,
     nickname: null,
     homeSections: [],
-    systemActions: SYSTEM_ACTIONS,
+    systemActions: [],
     dataSourceLabel: '',
     hiddenFeatureIds: [],
     inboxUnreadCount: 0,
@@ -39,7 +39,8 @@ Page({
         dataSourceLabel: i18n.t('index.dataSourceLabel') + dataSourceRaw,
         viewProfile: i18n.t('index.viewProfile'),
         settingsSection: i18n.t('index.settingsSection')
-      }
+      },
+      systemActions: getSystemActions()
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
   },
