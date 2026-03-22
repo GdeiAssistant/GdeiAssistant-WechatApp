@@ -11,7 +11,27 @@ Page({
   refreshI18n: function () {
     this.setData({
       t: {
-        navTitle: i18n.t('graduateExamPage.navTitle')
+        navTitle: i18n.t('graduateExamPage.navTitle'),
+        queryInfo: i18n.t('graduateExamPage.queryInfo'),
+        nameLabel: i18n.t('graduateExamPage.nameLabel'),
+        namePlaceholder: i18n.t('graduateExamPage.namePlaceholder'),
+        examNumberLabel: i18n.t('graduateExamPage.examNumberLabel'),
+        examNumberPlaceholder: i18n.t('graduateExamPage.examNumberPlaceholder'),
+        idNumberLabel: i18n.t('graduateExamPage.idNumberLabel'),
+        idNumberPlaceholder: i18n.t('graduateExamPage.idNumberPlaceholder'),
+        queryButton: i18n.t('graduateExamPage.queryButton'),
+        fillAllFields: i18n.t('graduateExamPage.fillAllFields'),
+        resultTitle: i18n.t('graduateExamPage.resultTitle'),
+        resultName: i18n.t('graduateExamPage.resultName'),
+        signUpNumber: i18n.t('graduateExamPage.signUpNumber'),
+        resultExamNumber: i18n.t('graduateExamPage.resultExamNumber'),
+        totalScore: i18n.t('graduateExamPage.totalScore'),
+        firstScore: i18n.t('graduateExamPage.firstScore'),
+        secondScore: i18n.t('graduateExamPage.secondScore'),
+        thirdScore: i18n.t('graduateExamPage.thirdScore'),
+        fourthScore: i18n.t('graduateExamPage.fourthScore'),
+        reQuery: i18n.t('graduateExamPage.reQuery'),
+        shareTitle: i18n.t('graduateExamPage.shareTitle')
       }
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
@@ -42,7 +62,7 @@ Page({
     }
 
     if (!payload.name || !payload.examNumber || !payload.idNumber) {
-      pageUtils.showTopTips(this, '请完整填写考研查询信息')
+      pageUtils.showTopTips(this, i18n.t('graduateExamPage.fillAllFields'))
       return
     }
 
@@ -65,7 +85,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '考研查询',
+      title: i18n.t('graduateExamPage.shareTitle'),
       path: '/pages/graduateExam/graduateExam'
     }
   }

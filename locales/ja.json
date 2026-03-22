@@ -332,31 +332,87 @@
     }
   },
   "billPage": {
-    "navTitle": "学生証利用履歴"
+    "navTitle": "学生証利用履歴",
+    "selectDateHint": "照会する日付を選択してください",
+    "dateLabel": "日付",
+    "notSelected": "未選択",
+    "queryButton": "検索",
+    "noRecords": "利用履歴はありません",
+    "recordsTitle": "利用履歴",
+    "yuan": "元",
+    "reQuery": "再検索",
+    "shareTitle": "学生証利用履歴"
   },
   "bookPage": {
     "navTitle": "マイ貸出"
   },
   "graduateExamPage": {
-    "navTitle": "大学院入試照会"
+    "navTitle": "大学院入試照会",
+    "queryInfo": "検索情報",
+    "nameLabel": "氏名",
+    "namePlaceholder": "氏名を入力",
+    "examNumberLabel": "受験番号",
+    "examNumberPlaceholder": "受験番号を入力",
+    "idNumberLabel": "証明書番号",
+    "idNumberPlaceholder": "証明書番号を入力",
+    "queryButton": "検索",
+    "fillAllFields": "すべての検索項目を入力してください",
+    "resultTitle": "大学院入試成績",
+    "resultName": "氏名",
+    "signUpNumber": "登録番号",
+    "resultExamNumber": "受験番号",
+    "totalScore": "合計",
+    "firstScore": "科目1",
+    "secondScore": "科目2",
+    "thirdScore": "科目3",
+    "fourthScore": "科目4",
+    "reQuery": "再検索",
+    "shareTitle": "大学院入試照会"
   },
   "dataPage": {
     "navTitle": "データ照会"
   },
   "cardLostPage": {
-    "navTitle": "紛失届"
+    "navTitle": "紛失届",
+    "passwordLabel": "パスワード",
+    "passwordPlaceholder": "6桁のカードパスワードを入力",
+    "passwordValidation": "正しい6桁のカードパスワードを入力してください",
+    "reportButton": "紛失届出",
+    "warning": "注意：届出後、カード発行窓口で再発行手続きが必要です",
+    "successTitle": "届出完了",
+    "successContent": "できるだけ早くカード発行窓口で再発行手続きをしてください",
+    "shareTitle": "紛失届"
   },
   "electricityPage": {
     "navTitle": "電気料金照会"
   },
   "collectionPage": {
-    "navTitle": "図書館"
+    "navTitle": "図書館",
+    "myLoans": "マイ貸出",
+    "myLoansDesc": "貸出記録の確認と更新",
+    "bookNameLabel": "書名",
+    "bookNamePlaceholder": "図書情報を入力",
+    "bookNameValidation": "検索する書名を入力してください",
+    "queryButton": "検索",
+    "noBooks": "該当する図書が見つかりません",
+    "queryResult": "検索結果",
+    "loadMore": "もっと読み込む",
+    "noMoreBooks": "これ以上の図書情報はありません",
+    "loadingData": "読み込み中",
+    "shareTitle": "図書館"
   },
   "yellowPagePage": {
     "navTitle": "電話帳検索"
   },
   "evaluatePage": {
-    "navTitle": "授業評価"
+    "navTitle": "授業評価",
+    "autoSubmitTitle": "自動送信",
+    "autoSubmitLabel": "評価情報を直接送信",
+    "submitButton": "送信",
+    "successTitle": "評価完了",
+    "successWithSubmit": "評価が完了し、情報が送信されました",
+    "successWithoutSubmit": "評価が完了しました。教務システムにログインして最終確認してください",
+    "shareTitle": "授業評価"
   },
   "spare": {
     "campus": {

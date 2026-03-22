@@ -4,8 +4,8 @@
 
     <view class="module_shortcuts">
       <navigator url="/pages/book/book" class="shortcut_card" hover-class="shortcut_card_active">
-        <view class="shortcut_title">我的借阅</view>
-        <view class="shortcut_desc">查询借阅记录并完成续借</view>
+        <view class="shortcut_title">{{t.myLoans}}</view>
+        <view class="shortcut_desc">{{t.myLoansDesc}}</view>
       </navigator>
     </view>
 
@@ -19,17 +19,17 @@
           <view class="weui-cells weui-cells_after-title">
             <view class="weui-cell weui-cell_input weui-cell_vcode">
               <view class="weui-cell__hd">
-                <view class="weui-label">书名</view>
+                <view class="weui-label">{{t.bookNameLabel}}</view>
               </view>
               <view class="weui-cell__bd">
-                <input name="keyword" class="weui-input" maxlength='50' type="text" placeholder="请输入图书信息" />
+                <input name="keyword" class="weui-input" maxlength='50' type="text" placeholder="{{t.bookNamePlaceholder}}" />
               </view>
             </view>
           </view>
         </view>
 
         <view class="weui-btn-area">
-          <button class="weui-btn" disabled="{{loading}}" type="primary" formType="submit">查询</button>
+          <button class="weui-btn" disabled="{{loading}}" type="primary" formType="submit">{{t.queryButton}}</button>
         </view>
 
       </form>
@@ -39,7 +39,7 @@
   </view>
 
   <view block class="container" wx:if="{{list.length!=0}}">
-    <view class="weui-cells__title">查询结果</view>
+    <view class="weui-cells__title">{{t.queryResult}}</view>
     <view class="weui-cells weui-cells_after-title">
       <block wx:for="{{list}}" wx:for-item="i" wx:key="collectionList">
         <navigator url="../collectionDetail/collectionDetail?bookname={{i.bookname}}&{{i.detailURL}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
@@ -48,8 +48,8 @@
         </navigator>
       </block>
     </view>
-    <text wx:if="{{currentPage<sumPage}}" class="loadmore" bindtap="loadMore">点击加载更多信息</text>
-    <text wx:if="{{currentPage>=sumPage}}" disable="true" class="loadmore">没有更多图书信息</text>
+    <text wx:if="{{currentPage<sumPage}}" class="loadmore" bindtap="loadMore">{{t.loadMore}}</text>
+    <text wx:if="{{currentPage>=sumPage}}" disable="true" class="loadmore">{{t.noMoreBooks}}</text>
   </view>
 
 </view>

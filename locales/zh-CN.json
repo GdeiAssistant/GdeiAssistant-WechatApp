@@ -332,31 +332,87 @@
     }
   },
   "billPage": {
-    "navTitle": "校园卡消费"
+    "navTitle": "校园卡消费",
+    "selectDateHint": "请选择查询日期",
+    "dateLabel": "日期",
+    "notSelected": "未选择",
+    "queryButton": "查询",
+    "noRecords": "没有消费记录",
+    "recordsTitle": "消费记录",
+    "yuan": "元",
+    "reQuery": "重新查询",
+    "shareTitle": "校园卡消费"
   },
   "bookPage": {
     "navTitle": "我的借阅"
   },
   "graduateExamPage": {
-    "navTitle": "考研查询"
+    "navTitle": "考研查询",
+    "queryInfo": "查询信息",
+    "nameLabel": "姓名",
+    "namePlaceholder": "请输入姓名",
+    "examNumberLabel": "考号",
+    "examNumberPlaceholder": "请输入准考证号",
+    "idNumberLabel": "证件号",
+    "idNumberPlaceholder": "请输入证件号",
+    "queryButton": "查询",
+    "fillAllFields": "请完整填写考研查询信息",
+    "resultTitle": "考研成绩",
+    "resultName": "姓名",
+    "signUpNumber": "报名号",
+    "resultExamNumber": "准考证号",
+    "totalScore": "总分",
+    "firstScore": "科目一",
+    "secondScore": "科目二",
+    "thirdScore": "科目三",
+    "fourthScore": "科目四",
+    "reQuery": "重新查询",
+    "shareTitle": "考研查询"
   },
   "dataPage": {
     "navTitle": "数据查询"
   },
   "cardLostPage": {
-    "navTitle": "校园卡挂失"
+    "navTitle": "校园卡挂失",
+    "passwordLabel": "密码",
+    "passwordPlaceholder": "请输入6位校园卡密码",
+    "passwordValidation": "请输入正确的校园卡查询密码",
+    "reportButton": "挂失",
+    "warning": "注意：挂失后需要到办卡处进行补办校园卡",
+    "successTitle": "挂失成功",
+    "successContent": "请尽快前往办卡处进行校园卡补办",
+    "shareTitle": "校园卡挂失"
   },
   "electricityPage": {
     "navTitle": "电费查询"
   },
   "collectionPage": {
-    "navTitle": "图书馆"
+    "navTitle": "图书馆",
+    "myLoans": "我的借阅",
+    "myLoansDesc": "查询借阅记录并完成续借",
+    "bookNameLabel": "书名",
+    "bookNamePlaceholder": "请输入图书信息",
+    "bookNameValidation": "请填写要查询的书名",
+    "queryButton": "查询",
+    "noBooks": "没有找到对应的图书信息",
+    "queryResult": "查询结果",
+    "loadMore": "点击加载更多信息",
+    "noMoreBooks": "没有更多图书信息",
+    "loadingData": "数据加载中",
+    "shareTitle": "图书馆"
   },
   "yellowPagePage": {
     "navTitle": "黄页查询"
   },
   "evaluatePage": {
-    "navTitle": "一键评教"
+    "navTitle": "一键评教",
+    "autoSubmitTitle": "自动提交",
+    "autoSubmitLabel": "直接提交评教信息",
+    "submitButton": "提交",
+    "successTitle": "一键评教成功",
+    "successWithSubmit": "一键评教成功，评教信息已提交",
+    "successWithoutSubmit": "一键评教成功，请登录教务系统进行最终确认",
+    "shareTitle": "教学评价"
   },
   "spare": {
     "campus": {

@@ -332,31 +332,87 @@
     }
   },
   "billPage": {
-    "navTitle": "Card Transactions"
+    "navTitle": "Card Transactions",
+    "selectDateHint": "Select a date to query",
+    "dateLabel": "Date",
+    "notSelected": "Not selected",
+    "queryButton": "Query",
+    "noRecords": "No transaction records",
+    "recordsTitle": "Transaction Records",
+    "yuan": " CNY",
+    "reQuery": "Query Again",
+    "shareTitle": "Card Transactions"
   },
   "bookPage": {
     "navTitle": "My Loans"
   },
   "graduateExamPage": {
-    "navTitle": "Postgrad Exam"
+    "navTitle": "Postgrad Exam",
+    "queryInfo": "Query Info",
+    "nameLabel": "Name",
+    "namePlaceholder": "Enter your name",
+    "examNumberLabel": "Ticket No.",
+    "examNumberPlaceholder": "Enter admission ticket number",
+    "idNumberLabel": "ID Number",
+    "idNumberPlaceholder": "Enter ID number",
+    "queryButton": "Query",
+    "fillAllFields": "Please fill in all query fields",
+    "resultTitle": "Exam Results",
+    "resultName": "Name",
+    "signUpNumber": "Registration No.",
+    "resultExamNumber": "Ticket No.",
+    "totalScore": "Total",
+    "firstScore": "Subject 1",
+    "secondScore": "Subject 2",
+    "thirdScore": "Subject 3",
+    "fourthScore": "Subject 4",
+    "reQuery": "Query Again",
+    "shareTitle": "Postgrad Exam"
   },
   "dataPage": {
     "navTitle": "Data Query"
   },
   "cardLostPage": {
-    "navTitle": "Report Lost Card"
+    "navTitle": "Report Lost Card",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter 6-digit card password",
+    "passwordValidation": "Please enter a valid 6-digit card password",
+    "reportButton": "Report Lost",
+    "warning": "Note: After reporting lost, please visit the card office to get a replacement",
+    "successTitle": "Reported Successfully",
+    "successContent": "Please visit the card office to get a replacement card as soon as possible",
+    "shareTitle": "Report Lost Card"
   },
   "electricityPage": {
     "navTitle": "Electricity Bill"
   },
   "collectionPage": {
-    "navTitle": "Library"
+    "navTitle": "Library",
+    "myLoans": "My Loans",
+    "myLoansDesc": "View loan records and renew books",
+    "bookNameLabel": "Book",
+    "bookNamePlaceholder": "Enter book information",
+    "bookNameValidation": "Please enter a book name to search",
+    "queryButton": "Search",
+    "noBooks": "No matching books found",
+    "queryResult": "Search Results",
+    "loadMore": "Load more",
+    "noMoreBooks": "No more books",
+    "loadingData": "Loading",
+    "shareTitle": "Library"
   },
   "yellowPagePage": {
     "navTitle": "Yellow Pages"
   },
   "evaluatePage": {
-    "navTitle": "Evaluation"
+    "navTitle": "Evaluation",
+    "autoSubmitTitle": "Auto Submit",
+    "autoSubmitLabel": "Submit evaluation directly",
+    "submitButton": "Submit",
+    "successTitle": "Evaluation Successful",
+    "successWithSubmit": "Evaluation completed and submitted successfully",
+    "successWithoutSubmit": "Evaluation completed. Please log in to the academic system to confirm",
+    "shareTitle": "Teaching Evaluation"
   },
   "spare": {
     "campus": {

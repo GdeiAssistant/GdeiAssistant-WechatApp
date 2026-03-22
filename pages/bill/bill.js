@@ -12,7 +12,17 @@ Page({
   refreshI18n: function () {
     this.setData({
       t: {
-        navTitle: i18n.t('billPage.navTitle')
+        navTitle: i18n.t('billPage.navTitle'),
+        selectDateHint: i18n.t('billPage.selectDateHint'),
+        dateLabel: i18n.t('billPage.dateLabel'),
+        notSelected: i18n.t('billPage.notSelected'),
+        queryButton: i18n.t('billPage.queryButton'),
+        noRecords: i18n.t('billPage.noRecords'),
+        recordsTitle: i18n.t('billPage.recordsTitle'),
+        yuan: i18n.t('billPage.yuan'),
+        reQuery: i18n.t('billPage.reQuery'),
+        queryFailed: i18n.t('common.queryFailed'),
+        shareTitle: i18n.t('billPage.shareTitle')
       }
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
@@ -38,7 +48,7 @@ Page({
 
   submit: function() {
     if (!this.data.date) {
-      pageUtils.showTopTips(this, '请选择需要查询的日期')
+      pageUtils.showTopTips(this, i18n.t('billPage.selectDateHint'))
       return
     }
 
@@ -50,10 +60,10 @@ Page({
       if (result.success) {
         this.setData({ result: result.data.cardList })
       } else {
-        utils.showModal('查询失败', result.message)
+        utils.showModal(i18n.t('common.queryFailed'), result.message)
       }
     }).catch((error) => {
-      utils.showModal('查询失败', error.message)
+      utils.showModal(i18n.t('common.queryFailed'), error.message)
     })
   },
 
@@ -72,7 +82,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '校园卡消费',
+      title: i18n.t('billPage.shareTitle'),
       path: '/pages/bill/bill'
     }
   }

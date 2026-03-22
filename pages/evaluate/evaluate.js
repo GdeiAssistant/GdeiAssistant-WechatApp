@@ -12,7 +12,14 @@ Page({
   refreshI18n: function () {
     this.setData({
       t: {
-        navTitle: i18n.t('evaluatePage.navTitle')
+        navTitle: i18n.t('evaluatePage.navTitle'),
+        autoSubmitTitle: i18n.t('evaluatePage.autoSubmitTitle'),
+        autoSubmitLabel: i18n.t('evaluatePage.autoSubmitLabel'),
+        submitButton: i18n.t('evaluatePage.submitButton'),
+        successTitle: i18n.t('evaluatePage.successTitle'),
+        successWithSubmit: i18n.t('evaluatePage.successWithSubmit'),
+        successWithoutSubmit: i18n.t('evaluatePage.successWithoutSubmit'),
+        shareTitle: i18n.t('evaluatePage.shareTitle')
       }
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
@@ -31,9 +38,9 @@ Page({
     }).then((result) => {
       if (result.success) {
         if (this.data.checked) {
-          utils.showModal('一键评教成功', '一键评教成功，评教信息已提交')
+          utils.showModal(i18n.t('evaluatePage.successTitle'), i18n.t('evaluatePage.successWithSubmit'))
         } else {
-          utils.showModal('一键评教成功', '一键评教成功，请登录教务系统进行最终确认')
+          utils.showModal(i18n.t('evaluatePage.successTitle'), i18n.t('evaluatePage.successWithoutSubmit'))
         }
       } else {
         pageUtils.showTopTips(this, result.message)
@@ -49,7 +56,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '教学评价',
+      title: i18n.t('evaluatePage.shareTitle'),
       path: '/pages/evaluate/evaluate'
     }
   }

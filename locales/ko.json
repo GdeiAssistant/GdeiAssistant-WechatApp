@@ -332,31 +332,87 @@
     }
   },
   "billPage": {
-    "navTitle": "학생증 거래 내역"
+    "navTitle": "학생증 거래 내역",
+    "selectDateHint": "조회할 날짜를 선택하세요",
+    "dateLabel": "날짜",
+    "notSelected": "미선택",
+    "queryButton": "조회",
+    "noRecords": "거래 내역이 없습니다",
+    "recordsTitle": "거래 내역",
+    "yuan": "위안",
+    "reQuery": "다시 조회",
+    "shareTitle": "학생증 거래 내역"
   },
   "bookPage": {
     "navTitle": "내 대출"
   },
   "graduateExamPage": {
-    "navTitle": "대학원 시험 조회"
+    "navTitle": "대학원 시험 조회",
+    "queryInfo": "조회 정보",
+    "nameLabel": "이름",
+    "namePlaceholder": "이름을 입력하세요",
+    "examNumberLabel": "수험번호",
+    "examNumberPlaceholder": "수험번호를 입력하세요",
+    "idNumberLabel": "신분증 번호",
+    "idNumberPlaceholder": "신분증 번호를 입력하세요",
+    "queryButton": "조회",
+    "fillAllFields": "모든 조회 정보를 입력하세요",
+    "resultTitle": "대학원 시험 성적",
+    "resultName": "이름",
+    "signUpNumber": "접수번호",
+    "resultExamNumber": "수험번호",
+    "totalScore": "총점",
+    "firstScore": "과목 1",
+    "secondScore": "과목 2",
+    "thirdScore": "과목 3",
+    "fourthScore": "과목 4",
+    "reQuery": "다시 조회",
+    "shareTitle": "대학원 시험 조회"
   },
   "dataPage": {
     "navTitle": "데이터 조회"
   },
   "cardLostPage": {
-    "navTitle": "분실 신고"
+    "navTitle": "분실 신고",
+    "passwordLabel": "비밀번호",
+    "passwordPlaceholder": "6자리 카드 비밀번호 입력",
+    "passwordValidation": "올바른 6자리 카드 비밀번호를 입력하세요",
+    "reportButton": "분실 신고",
+    "warning": "주의: 분실 신고 후 카드 발급처에서 재발급 받아야 합니다",
+    "successTitle": "신고 완료",
+    "successContent": "가능한 빨리 카드 발급처에서 재발급 받으세요",
+    "shareTitle": "분실 신고"
   },
   "electricityPage": {
     "navTitle": "전기요금 조회"
   },
   "collectionPage": {
-    "navTitle": "도서관"
+    "navTitle": "도서관",
+    "myLoans": "내 대출",
+    "myLoansDesc": "대출 기록 확인 및 연장",
+    "bookNameLabel": "도서명",
+    "bookNamePlaceholder": "도서 정보를 입력하세요",
+    "bookNameValidation": "검색할 도서명을 입력하세요",
+    "queryButton": "검색",
+    "noBooks": "해당 도서를 찾을 수 없습니다",
+    "queryResult": "검색 결과",
+    "loadMore": "더 불러오기",
+    "noMoreBooks": "더 이상 도서 정보가 없습니다",
+    "loadingData": "로딩 중",
+    "shareTitle": "도서관"
   },
   "yellowPagePage": {
     "navTitle": "전화번호부 검색"
   },
   "evaluatePage": {
-    "navTitle": "수업 평가"
+    "navTitle": "수업 평가",
+    "autoSubmitTitle": "자동 제출",
+    "autoSubmitLabel": "평가 정보 바로 제출",
+    "submitButton": "제출",
+    "successTitle": "평가 완료",
+    "successWithSubmit": "평가가 완료되어 정보가 제출되었습니다",
+    "successWithoutSubmit": "평가가 완료되었습니다. 교무 시스템에 로그인하여 최종 확인하세요",
+    "shareTitle": "수업 평가"
   },
   "spare": {
     "campus": {
