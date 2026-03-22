@@ -4,12 +4,12 @@ const {
   getSecondhandCategoryOptions,
   getLostFoundModeDictionaryOptions,
   getLostFoundItemDictionaryOptions,
-  SECRET_THEME_OPTIONS,
-  SECRET_TYPE_OPTIONS,
-  EXPRESS_GENDER_OPTIONS,
-  DATING_AREA_OPTIONS,
-  DATING_GRADE_OPTIONS,
-  PHOTOGRAPH_TAB_OPTIONS,
+  getSecretThemeOptions,
+  getSecretTypeOptions,
+  getExpressGenderOptions,
+  getDatingAreaOptions,
+  getDatingGradeOptions,
+  getPhotographTabOptions,
   DELIVERY_DEFAULT_ORDER_NAME,
   DELIVERY_PLACEHOLDER_PICKUP_CODE
 } = require('../../constants/community.js')
@@ -17,6 +17,7 @@ const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
 const { uploadLocalFileByPresignedUrl, uploadLocalFilesByPresignedUrl } = require('../../services/upload.js')
 const pageUtils = require('../../utils/page.js')
+const i18n = require('../../utils/i18n.js')
 var themeUtil = require('../../utils/theme')
 
 const EDITABLE_MODULE_IDS = ['ershou', 'lostandfound']
@@ -92,7 +93,7 @@ function buildReadonlyImages(imageUrls) {
   return (imageUrls || []).map(function(url, index) {
     return {
       path: url,
-      name: pickTempFileName(url, `image-${index + 1}.jpg`),
+      name: pickTempFileName(url, 'image-' + (index + 1) + '.jpg'),
       readonly: true
     }
   })
@@ -128,6 +129,7 @@ function findEditableItem(moduleId, payload, itemId) {
 Page({
   onShow: function () {
     themeUtil.applyTheme(this)
+    this.refreshI18n()
   },
   data: {
     themeClass: '',
@@ -137,15 +139,15 @@ Page({
     isEditMode: false,
     editItemId: '',
     pageLoading: false,
-    secondhandTypeOptions: getSecondhandCategoryOptions().slice(1),
-    lostFoundModeOptions: getLostFoundModeDictionaryOptions(),
-    lostFoundItemOptions: getLostFoundItemDictionaryOptions(),
-    secretThemeOptions: SECRET_THEME_OPTIONS,
-    secretTypeOptions: SECRET_TYPE_OPTIONS,
-    expressGenderOptions: EXPRESS_GENDER_OPTIONS,
-    datingAreaOptions: DATING_AREA_OPTIONS,
-    datingGradeOptions: DATING_GRADE_OPTIONS,
-    photographTypeOptions: PHOTOGRAPH_TAB_OPTIONS,
+    secondhandTypeOptions: [],
+    lostFoundModeOptions: [],
+    lostFoundItemOptions: [],
+    secretThemeOptions: [],
+    secretTypeOptions: [],
+    expressGenderOptions: [],
+    datingAreaOptions: [],
+    datingGradeOptions: [],
+    photographTypeOptions: [],
     secondhandTypeIndex: 0,
     lostFoundModeIndex: 0,
     lostFoundItemIndex: 0,
@@ -165,7 +167,95 @@ Page({
     voiceFile: null,
     voiceDuration: 0,
     voicePlaying: false,
-    errorMessage: null
+    errorMessage: null,
+    t: {}
+  },
+
+  refreshI18n: function() {
+    var moduleConfig = this.data.moduleId ? getCommunityModule(this.data.moduleId) : this.data.moduleConfig
+
+    var tData = {
+      basicInfo: i18n.t('community.publish.basicInfo'),
+      loadingExisting: i18n.t('community.publish.loadingExisting'),
+      imageUpload: i18n.t('community.publish.imageUpload'),
+      editImageNotSupported: i18n.t('community.publish.editImageNotSupported'),
+      datingImageHint: i18n.t('community.publish.datingImageHint'),
+      saveChanges: i18n.t('community.publish.saveChanges'),
+      submitPublish: i18n.t('community.publish.submitPublish'),
+      editHeroSummary: i18n.t('community.publish.editHeroSummary'),
+      productName: i18n.t('community.publish.productName'),
+      productPrice: i18n.t('community.publish.productPrice'),
+      productCategory: i18n.t('community.publish.productCategory'),
+      tradeLocation: i18n.t('community.publish.tradeLocation'),
+      qqNumber: i18n.t('community.publish.qqNumber'),
+      phoneOptional: i18n.t('community.publish.phoneOptional'),
+      productDesc: i18n.t('community.publish.productDesc'),
+      infoType: i18n.t('community.publish.infoType'),
+      itemCategory: i18n.t('community.publish.itemCategory'),
+      itemName: i18n.t('community.publish.itemName'),
+      location: i18n.t('community.publish.location'),
+      qqOptional: i18n.t('community.publish.qqOptional'),
+      wechatOptional: i18n.t('community.publish.wechatOptional'),
+      phoneOptional2: i18n.t('community.publish.phoneOptional2'),
+      itemDesc: i18n.t('community.publish.itemDesc'),
+      theme: i18n.t('community.publish.theme'),
+      contentType: i18n.t('community.publish.contentType'),
+      autoDelete24h: i18n.t('community.list.autoDelete24h'),
+      secretPlaceholder: i18n.t('community.publish.secretPlaceholder'),
+      startRecording: i18n.t('community.publish.startRecording'),
+      stopRecording: i18n.t('community.publish.stopRecording'),
+      recordedDuration: i18n.t('community.publish.recordedDuration'),
+      previewVoice: i18n.t('community.publish.previewVoice'),
+      stopPreview: i18n.t('community.publish.stopPreview'),
+      yourNickname: i18n.t('community.publish.yourNickname'),
+      yourRealname: i18n.t('community.publish.yourRealname'),
+      yourGender: i18n.t('community.publish.yourGender'),
+      targetName: i18n.t('community.publish.targetName'),
+      targetGender: i18n.t('community.publish.targetGender'),
+      confessionContent: i18n.t('community.publish.confessionContent'),
+      topicKeyword: i18n.t('community.publish.topicKeyword'),
+      topicContent: i18n.t('community.publish.topicContent'),
+      pickupLocation: i18n.t('community.publish.pickupLocation'),
+      pickupCodeOptional: i18n.t('community.publish.pickupCodeOptional'),
+      deliveryAddress: i18n.t('community.publish.deliveryAddress'),
+      contactPhone: i18n.t('community.publish.contactPhone'),
+      errandFee: i18n.t('community.publish.errandFee'),
+      remarksOptional: i18n.t('community.publish.remarksOptional'),
+      nickname: i18n.t('community.publish.nickname'),
+      grade: i18n.t('community.publish.grade'),
+      displayArea: i18n.t('community.publish.displayArea'),
+      major: i18n.t('community.publish.major'),
+      hometown: i18n.t('community.publish.hometown'),
+      roommateIntro: i18n.t('community.publish.roommateIntro'),
+      workTitle: i18n.t('community.publish.workTitle'),
+      workType: i18n.t('community.publish.workType'),
+      shootingDesc: i18n.t('community.publish.shootingDesc')
+    }
+
+    this.setData({
+      moduleConfig: moduleConfig,
+      t: tData
+    })
+
+    if (moduleConfig && this.data.moduleId) {
+      wx.setNavigationBarTitle({
+        title: getCommunityPageTitle(this.data.moduleId, this.data.isEditMode ? 'edit' : 'publish', moduleConfig.title)
+      })
+    }
+  },
+
+  refreshDictionaryOptions: function() {
+    this.setData({
+      secondhandTypeOptions: getSecondhandCategoryOptions().slice(1),
+      lostFoundModeOptions: getLostFoundModeDictionaryOptions(),
+      lostFoundItemOptions: getLostFoundItemDictionaryOptions(),
+      secretThemeOptions: getSecretThemeOptions(),
+      secretTypeOptions: getSecretTypeOptions(),
+      expressGenderOptions: getExpressGenderOptions(),
+      datingAreaOptions: getDatingAreaOptions(),
+      datingGradeOptions: getDatingGradeOptions(),
+      photographTypeOptions: getPhotographTabOptions()
+    })
   },
 
   setFieldValue: function(event) {
@@ -205,13 +295,13 @@ Page({
 
   chooseImages: function() {
     if (this.data.isEditMode) {
-      pageUtils.showTopTips(this, '编辑模式暂不支持修改图片')
+      pageUtils.showTopTips(this, i18n.t('community.publish.editImageNotSupported'))
       return
     }
 
     const remainCount = this.getImageLimit() - this.data.images.length
     if (remainCount <= 0) {
-      pageUtils.showTopTips(this, `最多只能上传 ${this.getImageLimit()} 张图片`)
+      pageUtils.showTopTips(this, i18n.tReplace('community.publish.imageLimit', { max: this.getImageLimit() }))
       return
     }
 
@@ -224,7 +314,7 @@ Page({
           const filePath = fileItem.path || (result.tempFilePaths || [])[index] || ''
           return {
             path: filePath,
-            name: pickTempFileName(filePath, `image-${Date.now()}-${index}.jpg`)
+            name: pickTempFileName(filePath, 'image-' + Date.now() + '-' + index + '.jpg')
           }
         }).filter(function(item) {
           return !!item.path
@@ -238,7 +328,7 @@ Page({
 
   removeImage: function(event) {
     if (this.data.isEditMode) {
-      pageUtils.showTopTips(this, '编辑模式暂不支持修改图片')
+      pageUtils.showTopTips(this, i18n.t('community.publish.editImageNotSupported'))
       return
     }
 
@@ -273,7 +363,7 @@ Page({
         this.setData({
           recording: false
         })
-        pageUtils.showTopTips(this, '录音失败')
+        pageUtils.showTopTips(this, i18n.t('community.publish.recordingFailed'))
       })
     }
 
@@ -335,8 +425,8 @@ Page({
 
   navigateBackToModule: function() {
     const targetUrl = this.data.isEditMode
-      ? `/pages/communityCenter/communityCenter?module=${this.data.moduleId}`
-      : `/pages/communityList/communityList?module=${this.data.moduleId}`
+      ? '/pages/communityCenter/communityCenter?module=' + this.data.moduleId
+      : '/pages/communityList/communityList?module=' + this.data.moduleId
     const pageStack = getCurrentPages()
     if (pageStack.length > 1) {
       wx.navigateBack({
@@ -361,17 +451,17 @@ Page({
         const qq = trimValue(form.qq)
         const phone = trimValue(form.phone)
 
-        if (!name) return '请输入商品名称'
-        if (getMaxLengthMessage(name, SECONDHAND_NAME_MAX_LENGTH, `商品名称不能超过${SECONDHAND_NAME_MAX_LENGTH}个字符`)) return getMaxLengthMessage(name, SECONDHAND_NAME_MAX_LENGTH, `商品名称不能超过${SECONDHAND_NAME_MAX_LENGTH}个字符`)
-        if (!description) return '请输入商品描述'
-        if (getMaxLengthMessage(description, SECONDHAND_DESCRIPTION_MAX_LENGTH, `商品描述不能超过${SECONDHAND_DESCRIPTION_MAX_LENGTH}个字符`)) return getMaxLengthMessage(description, SECONDHAND_DESCRIPTION_MAX_LENGTH, `商品描述不能超过${SECONDHAND_DESCRIPTION_MAX_LENGTH}个字符`)
-        if (!(Number(form.price || 0) > 0)) return '请输入正确的商品价格'
-        if (!location) return '请输入交易地点'
-        if (getMaxLengthMessage(location, SECONDHAND_LOCATION_MAX_LENGTH, `交易地点不能超过${SECONDHAND_LOCATION_MAX_LENGTH}个字符`)) return getMaxLengthMessage(location, SECONDHAND_LOCATION_MAX_LENGTH, `交易地点不能超过${SECONDHAND_LOCATION_MAX_LENGTH}个字符`)
-        if (!qq) return '请输入 QQ 号'
-        if (getMaxLengthMessage(qq, SECONDHAND_QQ_MAX_LENGTH, `QQ 号不能超过${SECONDHAND_QQ_MAX_LENGTH}个字符`)) return getMaxLengthMessage(qq, SECONDHAND_QQ_MAX_LENGTH, `QQ 号不能超过${SECONDHAND_QQ_MAX_LENGTH}个字符`)
-        if (getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, `手机号不能超过${CONTACT_PHONE_MAX_LENGTH}个字符`)) return getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, `手机号不能超过${CONTACT_PHONE_MAX_LENGTH}个字符`)
-        if (!this.data.isEditMode && !this.data.images.length) return '请至少上传一张图片'
+        if (!name) return i18n.t('community.publish.v.productNameRequired')
+        if (getMaxLengthMessage(name, SECONDHAND_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.productNameTooLong', { max: SECONDHAND_NAME_MAX_LENGTH }))) return getMaxLengthMessage(name, SECONDHAND_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.productNameTooLong', { max: SECONDHAND_NAME_MAX_LENGTH }))
+        if (!description) return i18n.t('community.publish.v.productDescRequired')
+        if (getMaxLengthMessage(description, SECONDHAND_DESCRIPTION_MAX_LENGTH, i18n.tReplace('community.publish.v.productDescTooLong', { max: SECONDHAND_DESCRIPTION_MAX_LENGTH }))) return getMaxLengthMessage(description, SECONDHAND_DESCRIPTION_MAX_LENGTH, i18n.tReplace('community.publish.v.productDescTooLong', { max: SECONDHAND_DESCRIPTION_MAX_LENGTH }))
+        if (!(Number(form.price || 0) > 0)) return i18n.t('community.publish.v.priceInvalid')
+        if (!location) return i18n.t('community.publish.v.locationRequired')
+        if (getMaxLengthMessage(location, SECONDHAND_LOCATION_MAX_LENGTH, i18n.tReplace('community.publish.v.locationTooLong', { max: SECONDHAND_LOCATION_MAX_LENGTH }))) return getMaxLengthMessage(location, SECONDHAND_LOCATION_MAX_LENGTH, i18n.tReplace('community.publish.v.locationTooLong', { max: SECONDHAND_LOCATION_MAX_LENGTH }))
+        if (!qq) return i18n.t('community.publish.v.qqRequired')
+        if (getMaxLengthMessage(qq, SECONDHAND_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong', { max: SECONDHAND_QQ_MAX_LENGTH }))) return getMaxLengthMessage(qq, SECONDHAND_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong', { max: SECONDHAND_QQ_MAX_LENGTH }))
+        if (getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.phoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH }))) return getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.phoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH }))
+        if (!this.data.isEditMode && !this.data.images.length) return i18n.t('community.publish.v.imageRequired')
         return ''
       }
       case 'lostandfound': {
@@ -382,30 +472,30 @@ Page({
         const wechat = trimValue(form.wechat)
         const phone = trimValue(form.phone)
 
-        if (!name) return '请输入物品名称'
-        if (getMaxLengthMessage(name, LOST_FOUND_NAME_MAX_LENGTH, `物品名称不能超过${LOST_FOUND_NAME_MAX_LENGTH}个字符`)) return getMaxLengthMessage(name, LOST_FOUND_NAME_MAX_LENGTH, `物品名称不能超过${LOST_FOUND_NAME_MAX_LENGTH}个字符`)
-        if (!description) return '请输入物品描述'
-        if (getMaxLengthMessage(description, LOST_FOUND_DESCRIPTION_MAX_LENGTH, `物品描述不能超过${LOST_FOUND_DESCRIPTION_MAX_LENGTH}个字符`)) return getMaxLengthMessage(description, LOST_FOUND_DESCRIPTION_MAX_LENGTH, `物品描述不能超过${LOST_FOUND_DESCRIPTION_MAX_LENGTH}个字符`)
-        if (!location) return '请输入地点'
-        if (getMaxLengthMessage(location, LOST_FOUND_LOCATION_MAX_LENGTH, `地点不能超过${LOST_FOUND_LOCATION_MAX_LENGTH}个字符`)) return getMaxLengthMessage(location, LOST_FOUND_LOCATION_MAX_LENGTH, `地点不能超过${LOST_FOUND_LOCATION_MAX_LENGTH}个字符`)
-        if (getMaxLengthMessage(qq, LOST_FOUND_QQ_MAX_LENGTH, `QQ 不能超过${LOST_FOUND_QQ_MAX_LENGTH}个字符`)) return getMaxLengthMessage(qq, LOST_FOUND_QQ_MAX_LENGTH, `QQ 不能超过${LOST_FOUND_QQ_MAX_LENGTH}个字符`)
-        if (getMaxLengthMessage(wechat, LOST_FOUND_WECHAT_MAX_LENGTH, `微信不能超过${LOST_FOUND_WECHAT_MAX_LENGTH}个字符`)) return getMaxLengthMessage(wechat, LOST_FOUND_WECHAT_MAX_LENGTH, `微信不能超过${LOST_FOUND_WECHAT_MAX_LENGTH}个字符`)
-        if (getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, `电话不能超过${CONTACT_PHONE_MAX_LENGTH}个字符`)) return getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, `电话不能超过${CONTACT_PHONE_MAX_LENGTH}个字符`)
+        if (!name) return i18n.t('community.publish.v.itemNameRequired')
+        if (getMaxLengthMessage(name, LOST_FOUND_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.itemNameTooLong', { max: LOST_FOUND_NAME_MAX_LENGTH }))) return getMaxLengthMessage(name, LOST_FOUND_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.itemNameTooLong', { max: LOST_FOUND_NAME_MAX_LENGTH }))
+        if (!description) return i18n.t('community.publish.v.itemDescRequired')
+        if (getMaxLengthMessage(description, LOST_FOUND_DESCRIPTION_MAX_LENGTH, i18n.tReplace('community.publish.v.itemDescTooLong', { max: LOST_FOUND_DESCRIPTION_MAX_LENGTH }))) return getMaxLengthMessage(description, LOST_FOUND_DESCRIPTION_MAX_LENGTH, i18n.tReplace('community.publish.v.itemDescTooLong', { max: LOST_FOUND_DESCRIPTION_MAX_LENGTH }))
+        if (!location) return i18n.t('community.publish.v.locationRequired2')
+        if (getMaxLengthMessage(location, LOST_FOUND_LOCATION_MAX_LENGTH, i18n.tReplace('community.publish.v.locationTooLong2', { max: LOST_FOUND_LOCATION_MAX_LENGTH }))) return getMaxLengthMessage(location, LOST_FOUND_LOCATION_MAX_LENGTH, i18n.tReplace('community.publish.v.locationTooLong2', { max: LOST_FOUND_LOCATION_MAX_LENGTH }))
+        if (getMaxLengthMessage(qq, LOST_FOUND_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong2', { max: LOST_FOUND_QQ_MAX_LENGTH }))) return getMaxLengthMessage(qq, LOST_FOUND_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong2', { max: LOST_FOUND_QQ_MAX_LENGTH }))
+        if (getMaxLengthMessage(wechat, LOST_FOUND_WECHAT_MAX_LENGTH, i18n.tReplace('community.publish.v.wechatTooLong', { max: LOST_FOUND_WECHAT_MAX_LENGTH }))) return getMaxLengthMessage(wechat, LOST_FOUND_WECHAT_MAX_LENGTH, i18n.tReplace('community.publish.v.wechatTooLong', { max: LOST_FOUND_WECHAT_MAX_LENGTH }))
+        if (getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.phoneTooLong2', { max: CONTACT_PHONE_MAX_LENGTH }))) return getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.phoneTooLong2', { max: CONTACT_PHONE_MAX_LENGTH }))
         if (!qq && !wechat && !phone) {
-          return '请至少填写一种联系方式'
+          return i18n.t('community.publish.v.contactRequired')
         }
-        if (!this.data.isEditMode && !this.data.images.length) return '请至少上传一张图片'
+        if (!this.data.isEditMode && !this.data.images.length) return i18n.t('community.publish.v.imageRequired')
         return ''
       }
       case 'secret': {
         const content = trimValue(form.content)
 
         if (Number(this.data.secretTypeIndex) === 0 && !content) {
-          return '请输入树洞内容'
+          return i18n.t('community.publish.v.secretContentRequired')
         }
-        if (getMaxLengthMessage(content, SECRET_CONTENT_MAX_LENGTH, `树洞内容不能超过${SECRET_CONTENT_MAX_LENGTH}个字符`)) return getMaxLengthMessage(content, SECRET_CONTENT_MAX_LENGTH, `树洞内容不能超过${SECRET_CONTENT_MAX_LENGTH}个字符`)
+        if (getMaxLengthMessage(content, SECRET_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.secretContentTooLong', { max: SECRET_CONTENT_MAX_LENGTH }))) return getMaxLengthMessage(content, SECRET_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.secretContentTooLong', { max: SECRET_CONTENT_MAX_LENGTH }))
         if (Number(this.data.secretTypeIndex) === 1 && !this.data.voiceFile) {
-          return '请先录制语音'
+          return i18n.t('community.publish.v.voiceRequired')
         }
         return ''
       }
@@ -415,23 +505,23 @@ Page({
         const targetName = trimValue(form.targetName)
         const content = trimValue(form.content)
 
-        if (!nickname) return '请输入昵称'
-        if (getMaxLengthMessage(nickname, EXPRESS_NAME_MAX_LENGTH, `昵称不能超过${EXPRESS_NAME_MAX_LENGTH}个字符`)) return getMaxLengthMessage(nickname, EXPRESS_NAME_MAX_LENGTH, `昵称不能超过${EXPRESS_NAME_MAX_LENGTH}个字符`)
-        if (getMaxLengthMessage(realname, EXPRESS_NAME_MAX_LENGTH, `真名不能超过${EXPRESS_NAME_MAX_LENGTH}个字符`)) return getMaxLengthMessage(realname, EXPRESS_NAME_MAX_LENGTH, `真名不能超过${EXPRESS_NAME_MAX_LENGTH}个字符`)
-        if (!targetName) return '请输入 TA 的名字'
-        if (getMaxLengthMessage(targetName, EXPRESS_NAME_MAX_LENGTH, `TA 的名字不能超过${EXPRESS_NAME_MAX_LENGTH}个字符`)) return getMaxLengthMessage(targetName, EXPRESS_NAME_MAX_LENGTH, `TA 的名字不能超过${EXPRESS_NAME_MAX_LENGTH}个字符`)
-        if (!content) return '请输入表白内容'
-        if (getMaxLengthMessage(content, EXPRESS_CONTENT_MAX_LENGTH, `表白内容不能超过${EXPRESS_CONTENT_MAX_LENGTH}个字符`)) return getMaxLengthMessage(content, EXPRESS_CONTENT_MAX_LENGTH, `表白内容不能超过${EXPRESS_CONTENT_MAX_LENGTH}个字符`)
+        if (!nickname) return i18n.t('community.publish.v.nicknameRequired')
+        if (getMaxLengthMessage(nickname, EXPRESS_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.nicknameTooLong', { max: EXPRESS_NAME_MAX_LENGTH }))) return getMaxLengthMessage(nickname, EXPRESS_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.nicknameTooLong', { max: EXPRESS_NAME_MAX_LENGTH }))
+        if (getMaxLengthMessage(realname, EXPRESS_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.realnameTooLong', { max: EXPRESS_NAME_MAX_LENGTH }))) return getMaxLengthMessage(realname, EXPRESS_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.realnameTooLong', { max: EXPRESS_NAME_MAX_LENGTH }))
+        if (!targetName) return i18n.t('community.publish.v.targetNameRequired')
+        if (getMaxLengthMessage(targetName, EXPRESS_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.targetNameTooLong', { max: EXPRESS_NAME_MAX_LENGTH }))) return getMaxLengthMessage(targetName, EXPRESS_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.targetNameTooLong', { max: EXPRESS_NAME_MAX_LENGTH }))
+        if (!content) return i18n.t('community.publish.v.confessionRequired')
+        if (getMaxLengthMessage(content, EXPRESS_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.confessionTooLong', { max: EXPRESS_CONTENT_MAX_LENGTH }))) return getMaxLengthMessage(content, EXPRESS_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.confessionTooLong', { max: EXPRESS_CONTENT_MAX_LENGTH }))
         return ''
       }
       case 'topic': {
         const topic = trimValue(form.topic)
         const content = trimValue(form.content)
 
-        if (!topic) return '请输入话题关键词'
-        if (getMaxLengthMessage(topic, TOPIC_KEYWORD_MAX_LENGTH, `话题关键词不能超过${TOPIC_KEYWORD_MAX_LENGTH}个字符`)) return getMaxLengthMessage(topic, TOPIC_KEYWORD_MAX_LENGTH, `话题关键词不能超过${TOPIC_KEYWORD_MAX_LENGTH}个字符`)
-        if (!content) return '请输入话题内容'
-        if (getMaxLengthMessage(content, TOPIC_CONTENT_MAX_LENGTH, `话题内容不能超过${TOPIC_CONTENT_MAX_LENGTH}个字符`)) return getMaxLengthMessage(content, TOPIC_CONTENT_MAX_LENGTH, `话题内容不能超过${TOPIC_CONTENT_MAX_LENGTH}个字符`)
+        if (!topic) return i18n.t('community.publish.v.topicRequired')
+        if (getMaxLengthMessage(topic, TOPIC_KEYWORD_MAX_LENGTH, i18n.tReplace('community.publish.v.topicTooLong', { max: TOPIC_KEYWORD_MAX_LENGTH }))) return getMaxLengthMessage(topic, TOPIC_KEYWORD_MAX_LENGTH, i18n.tReplace('community.publish.v.topicTooLong', { max: TOPIC_KEYWORD_MAX_LENGTH }))
+        if (!content) return i18n.t('community.publish.v.topicContentRequired')
+        if (getMaxLengthMessage(content, TOPIC_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.topicContentTooLong', { max: TOPIC_CONTENT_MAX_LENGTH }))) return getMaxLengthMessage(content, TOPIC_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.topicContentTooLong', { max: TOPIC_CONTENT_MAX_LENGTH }))
         return ''
       }
       case 'delivery': {
@@ -441,15 +531,15 @@ Page({
         const contactPhone = trimValue(form.contactPhone)
         const description = trimValue(form.description)
 
-        if (!pickupAddress) return '请输入取件地点'
-        if (getMaxLengthMessage(pickupAddress, DELIVERY_COMPANY_MAX_LENGTH, `取件地点不能超过${DELIVERY_COMPANY_MAX_LENGTH}个字符`)) return getMaxLengthMessage(pickupAddress, DELIVERY_COMPANY_MAX_LENGTH, `取件地点不能超过${DELIVERY_COMPANY_MAX_LENGTH}个字符`)
-        if (getExactLengthMessage(pickupCode, 11, '取件码长度必须为11个字符')) return getExactLengthMessage(pickupCode, 11, '取件码长度必须为11个字符')
-        if (!deliveryAddress) return '请输入送达地址'
-        if (getMaxLengthMessage(deliveryAddress, DELIVERY_ADDRESS_MAX_LENGTH, `送达地址不能超过${DELIVERY_ADDRESS_MAX_LENGTH}个字符`)) return getMaxLengthMessage(deliveryAddress, DELIVERY_ADDRESS_MAX_LENGTH, `送达地址不能超过${DELIVERY_ADDRESS_MAX_LENGTH}个字符`)
-        if (!contactPhone) return '请输入联系人电话'
-        if (getMaxLengthMessage(contactPhone, CONTACT_PHONE_MAX_LENGTH, `联系人电话不能超过${CONTACT_PHONE_MAX_LENGTH}个字符`)) return getMaxLengthMessage(contactPhone, CONTACT_PHONE_MAX_LENGTH, `联系人电话不能超过${CONTACT_PHONE_MAX_LENGTH}个字符`)
-        if (getMaxLengthMessage(description, DELIVERY_REMARKS_MAX_LENGTH, `备注说明不能超过${DELIVERY_REMARKS_MAX_LENGTH}个字符`)) return getMaxLengthMessage(description, DELIVERY_REMARKS_MAX_LENGTH, `备注说明不能超过${DELIVERY_REMARKS_MAX_LENGTH}个字符`)
-        if (!(Number(form.reward || 0) > 0)) return '请输入有效的跑腿费'
+        if (!pickupAddress) return i18n.t('community.publish.v.pickupRequired')
+        if (getMaxLengthMessage(pickupAddress, DELIVERY_COMPANY_MAX_LENGTH, i18n.tReplace('community.publish.v.pickupTooLong', { max: DELIVERY_COMPANY_MAX_LENGTH }))) return getMaxLengthMessage(pickupAddress, DELIVERY_COMPANY_MAX_LENGTH, i18n.tReplace('community.publish.v.pickupTooLong', { max: DELIVERY_COMPANY_MAX_LENGTH }))
+        if (getExactLengthMessage(pickupCode, 11, i18n.t('community.publish.v.pickupCodeLength'))) return getExactLengthMessage(pickupCode, 11, i18n.t('community.publish.v.pickupCodeLength'))
+        if (!deliveryAddress) return i18n.t('community.publish.v.deliveryAddrRequired')
+        if (getMaxLengthMessage(deliveryAddress, DELIVERY_ADDRESS_MAX_LENGTH, i18n.tReplace('community.publish.v.deliveryAddrTooLong', { max: DELIVERY_ADDRESS_MAX_LENGTH }))) return getMaxLengthMessage(deliveryAddress, DELIVERY_ADDRESS_MAX_LENGTH, i18n.tReplace('community.publish.v.deliveryAddrTooLong', { max: DELIVERY_ADDRESS_MAX_LENGTH }))
+        if (!contactPhone) return i18n.t('community.publish.v.phoneRequired')
+        if (getMaxLengthMessage(contactPhone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.contactPhoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH }))) return getMaxLengthMessage(contactPhone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.contactPhoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH }))
+        if (getMaxLengthMessage(description, DELIVERY_REMARKS_MAX_LENGTH, i18n.tReplace('community.publish.v.remarksTooLong', { max: DELIVERY_REMARKS_MAX_LENGTH }))) return getMaxLengthMessage(description, DELIVERY_REMARKS_MAX_LENGTH, i18n.tReplace('community.publish.v.remarksTooLong', { max: DELIVERY_REMARKS_MAX_LENGTH }))
+        if (!(Number(form.reward || 0) > 0)) return i18n.t('community.publish.v.rewardInvalid')
         return ''
       }
       case 'dating': {
@@ -460,33 +550,33 @@ Page({
         const wechat = trimValue(form.wechat)
         const content = trimValue(form.content)
 
-        if (!nickname) return '请输入昵称'
-        if (getMaxLengthMessage(nickname, DATING_NICKNAME_MAX_LENGTH, `昵称不能超过${DATING_NICKNAME_MAX_LENGTH}个字符`)) return getMaxLengthMessage(nickname, DATING_NICKNAME_MAX_LENGTH, `昵称不能超过${DATING_NICKNAME_MAX_LENGTH}个字符`)
-        if (!faculty) return '请输入专业'
-        if (getMaxLengthMessage(faculty, DATING_FACULTY_MAX_LENGTH, `专业不能超过${DATING_FACULTY_MAX_LENGTH}个字符`)) return getMaxLengthMessage(faculty, DATING_FACULTY_MAX_LENGTH, `专业不能超过${DATING_FACULTY_MAX_LENGTH}个字符`)
-        if (!hometown) return '请输入家乡'
-        if (getMaxLengthMessage(hometown, DATING_HOMETOWN_MAX_LENGTH, `家乡不能超过${DATING_HOMETOWN_MAX_LENGTH}个字符`)) return getMaxLengthMessage(hometown, DATING_HOMETOWN_MAX_LENGTH, `家乡不能超过${DATING_HOMETOWN_MAX_LENGTH}个字符`)
-        if (getMaxLengthMessage(qq, DATING_QQ_MAX_LENGTH, `QQ 不能超过${DATING_QQ_MAX_LENGTH}个字符`)) return getMaxLengthMessage(qq, DATING_QQ_MAX_LENGTH, `QQ 不能超过${DATING_QQ_MAX_LENGTH}个字符`)
-        if (getMaxLengthMessage(wechat, DATING_WECHAT_MAX_LENGTH, `微信不能超过${DATING_WECHAT_MAX_LENGTH}个字符`)) return getMaxLengthMessage(wechat, DATING_WECHAT_MAX_LENGTH, `微信不能超过${DATING_WECHAT_MAX_LENGTH}个字符`)
+        if (!nickname) return i18n.t('community.publish.v.nicknameRequired')
+        if (getMaxLengthMessage(nickname, DATING_NICKNAME_MAX_LENGTH, i18n.tReplace('community.publish.v.nicknameTooLong', { max: DATING_NICKNAME_MAX_LENGTH }))) return getMaxLengthMessage(nickname, DATING_NICKNAME_MAX_LENGTH, i18n.tReplace('community.publish.v.nicknameTooLong', { max: DATING_NICKNAME_MAX_LENGTH }))
+        if (!faculty) return i18n.t('community.publish.v.majorRequired')
+        if (getMaxLengthMessage(faculty, DATING_FACULTY_MAX_LENGTH, i18n.tReplace('community.publish.v.majorTooLong', { max: DATING_FACULTY_MAX_LENGTH }))) return getMaxLengthMessage(faculty, DATING_FACULTY_MAX_LENGTH, i18n.tReplace('community.publish.v.majorTooLong', { max: DATING_FACULTY_MAX_LENGTH }))
+        if (!hometown) return i18n.t('community.publish.v.hometownRequired')
+        if (getMaxLengthMessage(hometown, DATING_HOMETOWN_MAX_LENGTH, i18n.tReplace('community.publish.v.hometownTooLong', { max: DATING_HOMETOWN_MAX_LENGTH }))) return getMaxLengthMessage(hometown, DATING_HOMETOWN_MAX_LENGTH, i18n.tReplace('community.publish.v.hometownTooLong', { max: DATING_HOMETOWN_MAX_LENGTH }))
+        if (getMaxLengthMessage(qq, DATING_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong2', { max: DATING_QQ_MAX_LENGTH }))) return getMaxLengthMessage(qq, DATING_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong2', { max: DATING_QQ_MAX_LENGTH }))
+        if (getMaxLengthMessage(wechat, DATING_WECHAT_MAX_LENGTH, i18n.tReplace('community.publish.v.wechatTooLong', { max: DATING_WECHAT_MAX_LENGTH }))) return getMaxLengthMessage(wechat, DATING_WECHAT_MAX_LENGTH, i18n.tReplace('community.publish.v.wechatTooLong', { max: DATING_WECHAT_MAX_LENGTH }))
         if (!qq && !wechat) {
-          return 'QQ 和微信至少填写一个'
+          return i18n.t('community.publish.v.qqWechatRequired')
         }
-        if (!content) return '请输入介绍内容'
-        if (getMaxLengthMessage(content, DATING_CONTENT_MAX_LENGTH, `介绍内容不能超过${DATING_CONTENT_MAX_LENGTH}个字符`)) return getMaxLengthMessage(content, DATING_CONTENT_MAX_LENGTH, `介绍内容不能超过${DATING_CONTENT_MAX_LENGTH}个字符`)
+        if (!content) return i18n.t('community.publish.v.introRequired')
+        if (getMaxLengthMessage(content, DATING_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.introTooLong', { max: DATING_CONTENT_MAX_LENGTH }))) return getMaxLengthMessage(content, DATING_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.introTooLong', { max: DATING_CONTENT_MAX_LENGTH }))
         return ''
       }
       case 'photograph': {
         const title = trimValue(form.title)
         const content = trimValue(form.content)
 
-        if (!title) return '请输入作品标题'
-        if (getMaxLengthMessage(title, PHOTOGRAPH_TITLE_MAX_LENGTH, `作品标题不能超过${PHOTOGRAPH_TITLE_MAX_LENGTH}个字符`)) return getMaxLengthMessage(title, PHOTOGRAPH_TITLE_MAX_LENGTH, `作品标题不能超过${PHOTOGRAPH_TITLE_MAX_LENGTH}个字符`)
-        if (getMaxLengthMessage(content, PHOTOGRAPH_CONTENT_MAX_LENGTH, `拍摄说明不能超过${PHOTOGRAPH_CONTENT_MAX_LENGTH}个字符`)) return getMaxLengthMessage(content, PHOTOGRAPH_CONTENT_MAX_LENGTH, `拍摄说明不能超过${PHOTOGRAPH_CONTENT_MAX_LENGTH}个字符`)
-        if (!this.data.images.length) return '请至少上传一张图片'
+        if (!title) return i18n.t('community.publish.v.workTitleRequired')
+        if (getMaxLengthMessage(title, PHOTOGRAPH_TITLE_MAX_LENGTH, i18n.tReplace('community.publish.v.workTitleTooLong', { max: PHOTOGRAPH_TITLE_MAX_LENGTH }))) return getMaxLengthMessage(title, PHOTOGRAPH_TITLE_MAX_LENGTH, i18n.tReplace('community.publish.v.workTitleTooLong', { max: PHOTOGRAPH_TITLE_MAX_LENGTH }))
+        if (getMaxLengthMessage(content, PHOTOGRAPH_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.shootingDescTooLong', { max: PHOTOGRAPH_CONTENT_MAX_LENGTH }))) return getMaxLengthMessage(content, PHOTOGRAPH_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.shootingDescTooLong', { max: PHOTOGRAPH_CONTENT_MAX_LENGTH }))
+        if (!this.data.images.length) return i18n.t('community.publish.v.imageRequired')
         return ''
       }
       default:
-        return '暂不支持当前模块'
+        return i18n.t('community.publish.v.moduleNotSupported')
     }
   },
 
@@ -555,7 +645,7 @@ Page({
           })
         }
         return uploadLocalFileByPresignedUrl(this.data.voiceFile, {
-          fileName: `secret-voice-${Date.now()}.mp3`
+          fileName: 'secret-voice-' + Date.now() + '.mp3'
         }).then((voiceKey) => {
           return {
             theme: this.data.secretThemeOptions[this.data.secretThemeIndex].value,
@@ -618,7 +708,7 @@ Page({
           }
         })
       default:
-        return Promise.reject(new Error('暂不支持当前模块'))
+        return Promise.reject(new Error(i18n.t('community.publish.v.moduleNotSupported')))
     }
   },
 
@@ -635,7 +725,7 @@ Page({
       return communityApi.updateLostAndFoundItem(this.data.editItemId, payload)
     }
 
-    return Promise.reject(new Error('当前模块暂不支持编辑'))
+    return Promise.reject(new Error(i18n.t('community.publish.v.editNotSupported')))
   },
 
   submitPublish: function() {
@@ -662,12 +752,12 @@ Page({
         submitting: false
       })
       if (!result.success) {
-        pageUtils.showTopTips(this, result.message || (this.data.isEditMode ? '保存失败' : '发布失败'))
+        pageUtils.showTopTips(this, result.message || (this.data.isEditMode ? i18n.t('community.publish.saveFailed') : i18n.t('common.publishFailed')))
         return
       }
 
       wx.showToast({
-        title: this.data.isEditMode ? '保存成功' : '发布成功',
+        title: this.data.isEditMode ? i18n.t('community.publish.saveSuccess') : i18n.t('common.publishSuccess'),
         icon: 'success'
       })
       setTimeout(() => {
@@ -719,14 +809,6 @@ Page({
     }
   },
 
-  refreshDictionaryOptions: function() {
-    this.setData({
-      secondhandTypeOptions: getSecondhandCategoryOptions().slice(1),
-      lostFoundModeOptions: getLostFoundModeDictionaryOptions(),
-      lostFoundItemOptions: getLostFoundItemDictionaryOptions()
-    })
-  },
-
   loadEditItem: function() {
     if (!this.data.isEditMode) {
       return Promise.resolve()
@@ -740,13 +822,13 @@ Page({
       return communityApi.getCenter(this.data.moduleId)
     }).then((result) => {
       if (!result.success) {
-        pageUtils.showTopTips(this, result.message || '加载失败')
+        pageUtils.showTopTips(this, result.message || i18n.t('common.loadFailed'))
         return
       }
 
       const editItem = findEditableItem(this.data.moduleId, result.data || {}, this.data.editItemId)
       if (!editItem) {
-        pageUtils.showTopTips(this, '未找到要编辑的内容')
+        pageUtils.showTopTips(this, i18n.t('community.publish.editItemNotFound'))
         return
       }
 
@@ -765,8 +847,8 @@ Page({
     const moduleConfig = getCommunityModule(moduleId)
     if (!moduleConfig) {
       wx.showModal({
-        title: '提示',
-        content: '未识别的社区模块',
+        title: i18n.t('community.common.notice'),
+        content: i18n.t('community.common.unknownModule'),
         showCancel: false
       })
       return
@@ -794,6 +876,8 @@ Page({
         imageLimit: this.getImageLimit(moduleId),
         secretDeleteAfter24Hours: false
       })
+
+      this.refreshI18n()
 
       if (isEditMode) {
         this.loadEditItem()

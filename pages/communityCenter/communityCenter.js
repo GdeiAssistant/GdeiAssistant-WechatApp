@@ -2,32 +2,33 @@ const { getCommunityModule, getCommunityPageTitle } = require('../../constants/c
 const communityApi = require('../../services/apis/community.js')
 const userApi = require('../../services/apis/user.js')
 const pageUtils = require('../../utils/page.js')
+const i18n = require('../../utils/i18n.js')
 var themeUtil = require('../../utils/theme')
 
 function buildTabs(moduleId) {
   switch (moduleId) {
     case 'ershou':
       return [
-        { key: 'doing', label: '正在出售' },
-        { key: 'sold', label: '已售出' },
-        { key: 'off', label: '已下架' }
+        { key: 'doing', label: i18n.t('community.center.tabSelling') },
+        { key: 'sold', label: i18n.t('community.center.tabSold') },
+        { key: 'off', label: i18n.t('community.center.tabOffShelf') }
       ]
     case 'lostandfound':
       return [
-        { key: 'lost', label: '寻物' },
-        { key: 'found', label: '招领' },
-        { key: 'didfound', label: '已找回' }
+        { key: 'lost', label: i18n.t('community.center.tabLost') },
+        { key: 'found', label: i18n.t('community.center.tabFound') },
+        { key: 'didfound', label: i18n.t('community.center.tabRecovered') }
       ]
     case 'delivery':
       return [
-        { key: 'published', label: '我发布的' },
-        { key: 'accepted', label: '我接的单' }
+        { key: 'published', label: i18n.t('community.center.tabMyPublished') },
+        { key: 'accepted', label: i18n.t('community.center.tabMyAccepted') }
       ]
     case 'dating':
       return [
-        { key: 'received', label: '收到的撩' },
-        { key: 'sent', label: '我发出的' },
-        { key: 'posts', label: '我的发布' }
+        { key: 'received', label: i18n.t('community.center.tabReceivedPick') },
+        { key: 'sent', label: i18n.t('community.center.tabSentPick') },
+        { key: 'posts', label: i18n.t('community.center.tabMyPosts') }
       ]
     default:
       return []
@@ -38,7 +39,7 @@ function normalizeStandardItem(item, options) {
   const config = options || {}
   return {
     id: config.id,
-    title: config.title || '未命名内容',
+    title: config.title || i18n.t('community.list.unnamedContent'),
     subtitle: config.subtitle || '',
     summary: config.summary || '',
     cover: config.cover || '',
@@ -51,7 +52,8 @@ function normalizeStandardItem(item, options) {
 function formatSecretPublishText(publishTime, timer) {
   const baseText = String(publishTime || '').trim()
   if (Number(timer) === 1) {
-    return baseText ? `${baseText} · 24 小时后自动删除` : '24 小时后自动删除'
+    var autoDeleteText = i18n.t('community.list.autoDelete24h')
+    return baseText ? baseText + ' \u00b7 ' + autoDeleteText : autoDeleteText
   }
   return baseText
 }
@@ -68,7 +70,8 @@ Page({
     summaryProfile: null,
     hasShownOnce: false,
     loading: true,
-    errorMessage: null
+    errorMessage: null,
+    t: {}
   },
 
   setActiveTab: function(tabKey) {
@@ -92,9 +95,9 @@ Page({
               cover: item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
               priceText: Number(item.price || 0).toFixed(2),
               actions: [
-                { id: 'edit', label: '编辑' },
-                { id: 'state:0', label: '下架' },
-                { id: 'state:2', label: '售出' }
+                { id: 'edit', label: i18n.t('community.center.actionEdit') },
+                { id: 'state:0', label: i18n.t('community.center.actionOffShelf') },
+                { id: 'state:2', label: i18n.t('community.center.actionSold') }
               ]
             })
           }),
@@ -119,8 +122,8 @@ Page({
               cover: item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
               priceText: Number(item.price || 0).toFixed(2),
               actions: [
-                { id: 'edit', label: '编辑' },
-                { id: 'state:1', label: '重新上架' }
+                { id: 'edit', label: i18n.t('community.center.actionEdit') },
+                { id: 'state:1', label: i18n.t('community.center.actionRelist') }
               ],
               canOpenDetail: false
             })
@@ -136,8 +139,8 @@ Page({
               summary: item.location,
               cover: item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/lostandfound.png',
               actions: [
-                { id: 'edit', label: '编辑' },
-                { id: 'didfound', label: '确认寻回' }
+                { id: 'edit', label: i18n.t('community.center.actionEdit') },
+                { id: 'didfound', label: i18n.t('community.center.actionConfirmFound') }
               ]
             })
           }),
@@ -149,8 +152,8 @@ Page({
               summary: item.location,
               cover: item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/lostandfound.png',
               actions: [
-                { id: 'edit', label: '编辑' },
-                { id: 'didfound', label: '确认寻回' }
+                { id: 'edit', label: i18n.t('community.center.actionEdit') },
+                { id: 'didfound', label: i18n.t('community.center.actionConfirmFound') }
               ]
             })
           }),
@@ -171,9 +174,9 @@ Page({
           default: (payload || []).map(function(item) {
             return normalizeStandardItem(item, {
               id: item.id,
-              title: Number(item.type) === 1 ? '语音树洞' : '文字树洞',
+              title: Number(item.type) === 1 ? i18n.t('community.center.voiceSecret') : i18n.t('community.center.textSecret'),
               subtitle: formatSecretPublishText(item.publishTime, item.timer),
-              summary: Number(item.type) === 1 ? '点击查看详情播放语音' : item.content,
+              summary: Number(item.type) === 1 ? i18n.t('community.center.tapPlayVoice') : item.content,
               actions: []
             })
           })
@@ -183,7 +186,7 @@ Page({
           default: (payload || []).map(function(item) {
             return normalizeStandardItem(item, {
               id: item.id,
-              title: `${item.nickname || '匿名同学'} -> ${item.name || 'TA'}`,
+              title: (item.nickname || i18n.t('community.list.anonStudent')) + ' -> ' + (item.name || 'TA'),
               subtitle: item.publishTime,
               summary: item.content,
               actions: []
@@ -195,7 +198,7 @@ Page({
           default: (payload || []).map(function(item) {
             return normalizeStandardItem(item, {
               id: item.id,
-              title: `#${item.topic || '校园话题'}`,
+              title: '#' + (item.topic || i18n.t('community.list.campusTopic')),
               subtitle: item.publishTime,
               summary: item.content,
               cover: item.imageUrls && item.imageUrls.length ? item.imageUrls[0] : '',
@@ -208,7 +211,7 @@ Page({
           published: (payload.published || []).map(function(item) {
             return normalizeStandardItem(item, {
               id: item.orderId,
-              title: item.company || '全民快递',
+              title: item.company || i18n.t('community.modules.delivery.title'),
               subtitle: item.orderTime,
               summary: item.address,
               priceText: Number(item.price || 0).toFixed(2),
@@ -218,7 +221,7 @@ Page({
           accepted: (payload.accepted || []).map(function(item) {
             return normalizeStandardItem(item, {
               id: item.orderId,
-              title: item.company || '全民快递',
+              title: item.company || i18n.t('community.modules.delivery.title'),
               subtitle: item.orderTime,
               summary: item.address,
               priceText: Number(item.price || 0).toFixed(2),
@@ -232,14 +235,14 @@ Page({
             const profile = item.roommateProfile || {}
             return {
               id: item.pickId,
-              title: profile.nickname || item.username || '匿名同学',
+              title: profile.nickname || item.username || i18n.t('community.list.anonStudent'),
               subtitle: item.createTime || '',
               summary: item.content || '',
               cover: profile.pictureURL || '/image/dating.png',
               status: Number(item.state || 0),
               actions: Number(item.state || 0) === 0 ? [
-                { id: 'acceptPick', label: '同意' },
-                { id: 'rejectPick', label: '拒绝' }
+                { id: 'acceptPick', label: i18n.t('community.center.actionAccept') },
+                { id: 'rejectPick', label: i18n.t('community.center.actionReject') }
               ] : []
             }
           }),
@@ -247,7 +250,7 @@ Page({
             const profile = item.roommateProfile || {}
             return {
               id: item.pickId,
-              title: profile.nickname || '匿名同学',
+              title: profile.nickname || i18n.t('community.list.anonStudent'),
               subtitle: item.createTime || '',
               summary: item.content || '',
               cover: profile.pictureURL || '/image/dating.png',
@@ -260,13 +263,13 @@ Page({
           posts: (payload.profiles || []).map(function(item) {
             return {
               id: item.profileId,
-              title: item.nickname || '卖室友',
+              title: item.nickname || i18n.t('community.modules.dating.title'),
               subtitle: item.createTime || '',
               summary: item.content || '',
               cover: item.pictureURL || '/image/dating.png',
               status: Number(item.state || 0),
               actions: [
-                { id: 'hideProfile', label: '隐藏' }
+                { id: 'hideProfile', label: i18n.t('community.center.actionHide') }
               ]
             }
           })
@@ -276,7 +279,7 @@ Page({
           default: (payload || []).map(function(item) {
             return normalizeStandardItem(item, {
               id: item.id,
-              title: item.title || '作品',
+              title: item.title || i18n.t('community.list.campusWork'),
               subtitle: item.createTime || '',
               summary: item.content || '',
               cover: item.firstImageUrl || (item.imageUrls && item.imageUrls.length ? item.imageUrls[0] : '/image/photograph.png'),
@@ -308,7 +311,7 @@ Page({
       this.setData({
         summaryProfile: {
           avatar: profile.avatar || '/image/default.png',
-          nickname: profile.nickname || profile.username || '我',
+          nickname: profile.nickname || profile.username || i18n.t('community.center.me'),
           introduction: profile.introduction || ''
         }
       })
@@ -324,7 +327,7 @@ Page({
     }).then((resultList) => {
       const result = resultList[0]
       if (!result.success) {
-        pageUtils.showTopTips(this, result.message || '加载失败')
+        pageUtils.showTopTips(this, result.message || i18n.t('common.loadFailed'))
         return
       }
 
@@ -361,7 +364,7 @@ Page({
     }
 
     wx.navigateTo({
-      url: `/pages/communityDetail/communityDetail?module=${this.data.moduleId}&id=${itemId}`
+      url: '/pages/communityDetail/communityDetail?module=' + this.data.moduleId + '&id=' + itemId
     })
   },
 
@@ -375,7 +378,7 @@ Page({
 
     if (action === 'edit') {
       wx.navigateTo({
-        url: `/pages/communityPublish/communityPublish?module=${this.data.moduleId}&mode=edit&id=${itemId}`
+        url: '/pages/communityPublish/communityPublish?module=' + this.data.moduleId + '&mode=edit&id=' + itemId
       })
       return
     }
@@ -384,7 +387,7 @@ Page({
       const state = Number(action.split(':')[1])
       communityApi.updateSecondhandState(itemId, state).then((result) => {
         if (!result.success) {
-          pageUtils.showTopTips(this, result.message || '操作失败')
+          pageUtils.showTopTips(this, result.message || i18n.t('community.common.operationFailed'))
           return
         }
         this.loadCenter()
@@ -397,7 +400,7 @@ Page({
     if (action === 'didfound') {
       communityApi.markLostAndFoundDone(itemId).then((result) => {
         if (!result.success) {
-          pageUtils.showTopTips(this, result.message || '操作失败')
+          pageUtils.showTopTips(this, result.message || i18n.t('community.common.operationFailed'))
           return
         }
         this.loadCenter()
@@ -410,7 +413,7 @@ Page({
     if (action === 'acceptPick' || action === 'rejectPick') {
       communityApi.updateDatingPickState(itemId, action === 'acceptPick' ? 1 : -1).then((result) => {
         if (!result.success) {
-          pageUtils.showTopTips(this, result.message || '操作失败')
+          pageUtils.showTopTips(this, result.message || i18n.t('community.common.operationFailed'))
           return
         }
         this.loadCenter()
@@ -423,7 +426,7 @@ Page({
     if (action === 'hideProfile') {
       communityApi.updateDatingProfileState(itemId, 0).then((result) => {
         if (!result.success) {
-          pageUtils.showTopTips(this, result.message || '操作失败')
+          pageUtils.showTopTips(this, result.message || i18n.t('community.common.operationFailed'))
           return
         }
         this.loadCenter()
@@ -435,8 +438,35 @@ Page({
 
   openPublish: function() {
     wx.navigateTo({
-      url: `/pages/communityPublish/communityPublish?module=${this.data.moduleId}`
+      url: '/pages/communityPublish/communityPublish?module=' + this.data.moduleId
     })
+  },
+
+  refreshI18n: function() {
+    var moduleConfig = this.data.moduleId ? getCommunityModule(this.data.moduleId) : this.data.moduleConfig
+    var tabs = this.data.moduleId ? buildTabs(this.data.moduleId) : this.data.tabs
+
+    var tData = {
+      loading: i18n.t('community.list.loading'),
+      emptyTitle: i18n.t('community.list.emptyTitle'),
+      emptySummaryCenter: i18n.t('community.center.emptySummary'),
+      continuePublish: i18n.t('community.center.continuePublish'),
+      contactQQ: i18n.t('community.center.contactQQ'),
+      contactWechat: i18n.t('community.center.contactWechat'),
+      contactPending: i18n.t('community.center.contactPending')
+    }
+
+    this.setData({
+      moduleConfig: moduleConfig,
+      tabs: tabs,
+      t: tData
+    })
+
+    if (moduleConfig) {
+      wx.setNavigationBarTitle({
+        title: getCommunityPageTitle(this.data.moduleId, 'center', moduleConfig.title)
+      })
+    }
   },
 
   onLoad: function(options) {
@@ -444,8 +474,8 @@ Page({
     const moduleConfig = getCommunityModule(moduleId)
     if (!moduleConfig) {
       wx.showModal({
-        title: '提示',
-        content: '未识别的社区模块',
+        title: i18n.t('community.common.notice'),
+        content: i18n.t('community.common.unknownModule'),
         showCancel: false
       })
       return
@@ -467,11 +497,13 @@ Page({
       tabs: tabs,
       activeTabKey: initialTabKey
     })
+    this.refreshI18n()
     this.loadCenter()
   },
 
   onShow: function() {
     themeUtil.applyTheme(this)
+    this.refreshI18n()
     if (!this.data.hasShownOnce) {
       this.setData({
         hasShownOnce: true
@@ -486,8 +518,8 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: this.data.moduleConfig ? this.data.moduleConfig.title : '校园社区',
-      path: `/pages/communityCenter/communityCenter?module=${this.data.moduleId}`
+      title: this.data.moduleConfig ? this.data.moduleConfig.title : i18n.t('community.common.campusCommunity'),
+      path: '/pages/communityCenter/communityCenter?module=' + this.data.moduleId
     }
   }
 })

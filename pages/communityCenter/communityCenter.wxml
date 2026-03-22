@@ -34,12 +34,12 @@
 
   <view class="loading_box" wx:if="{{loading}}">
     <i class="weui-loading"></i>
-    <text>正在加载</text>
+    <text>{{t.loading}}</text>
   </view>
 
   <view wx:if="{{!loading && activeItems.length === 0}}" class="empty_box">
-    <view class="empty_title">暂无内容</view>
-    <view class="empty_summary">你可以先去发布一条新的内容。</view>
+    <view class="empty_title">{{t.emptyTitle}}</view>
+    <view class="empty_summary">{{t.emptySummaryCenter}}</view>
   </view>
 
   <view class="list_section" wx:if="{{!loading && activeItems.length}}">
@@ -57,9 +57,9 @@
         <view class="card_title">{{item.title}}</view>
         <view class="card_summary">{{item.summary}}</view>
         <view class="card_time">{{item.subtitle}}</view>
-        <view class="contact_hint" wx:if="{{item.qq}}">QQ：{{item.qq}}</view>
-        <view class="contact_hint" wx:if="{{item.wechat}}">微信：{{item.wechat}}</view>
-        <view class="contact_hint" wx:if="{{!item.qq && !item.wechat}}">等待对方处理后显示联系方式</view>
+        <view class="contact_hint" wx:if="{{item.qq}}">{{t.contactQQ}}{{item.qq}}</view>
+        <view class="contact_hint" wx:if="{{item.wechat}}">{{t.contactWechat}}{{item.wechat}}</view>
+        <view class="contact_hint" wx:if="{{!item.qq && !item.wechat}}">{{t.contactPending}}</view>
       </view>
 
       <view wx:else class="center_card standard_card" data-id="{{item.id}}" data-index="{{index}}" bindtap="openDetail">
@@ -90,6 +90,6 @@
   </view>
 
   <view class="bottom_bar" wx:if="{{moduleConfig}}">
-    <button class="bottom_button" type="primary" bindtap="openPublish">继续发布</button>
+    <button class="bottom_button" type="primary" bindtap="openPublish">{{t.continuePublish}}</button>
   </view>
 </view>
