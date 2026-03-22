@@ -1,180 +1,181 @@
-const { MOCK_CREDENTIALS_HINT } = require('./mock.js')
+const { getMockCredentialsHint } = require('./mock.js')
+const i18n = require('../utils/i18n.js')
 
-const FEATURE_LIST = [
+const FEATURE_DEFS = [
   {
     id: 'grade',
-    title: '成绩查询',
-    description: '查看学年成绩与学期成绩',
+    titleKey: 'features.grade.title',
+    descKey: 'features.grade.desc',
     icon: '/image/mono/grade.png',
     page: '/pages/grade/grade',
     section: 'campus'
   },
   {
     id: 'schedule',
-    title: '课表查询',
-    description: '查看每周课表安排',
+    titleKey: 'features.schedule.title',
+    descKey: 'features.schedule.desc',
     icon: '/image/mono/schedule.png',
     page: '/pages/schedule/schedule',
     section: 'campus'
   },
   {
     id: 'cet',
-    title: '四六级查询',
-    description: '查询四六级成绩并保存考号',
+    titleKey: 'features.cet.title',
+    descKey: 'features.cet.desc',
     icon: '/image/mono/cet.png',
     page: '/pages/cet/cet',
     section: 'campus'
   },
   {
     id: 'graduateExam',
-    title: '考研查询',
-    description: '查询研究生成绩',
+    titleKey: 'features.graduateExam.title',
+    descKey: 'features.graduateExam.desc',
     icon: '/image/mono/graduateExam.png',
     page: '/pages/graduateExam/graduateExam',
     section: 'campus'
   },
   {
     id: 'spare',
-    title: '教室查询',
-    description: '查询当前空闲教室',
+    titleKey: 'features.spare.title',
+    descKey: 'features.spare.desc',
     icon: '/image/mono/spare.png',
     page: '/pages/spare/spare',
     section: 'campus'
   },
   {
     id: 'bill',
-    title: '校园卡消费',
-    description: '查看校园卡消费记录',
+    titleKey: 'features.bill.title',
+    descKey: 'features.bill.desc',
     icon: '/image/mono/bill.png',
     page: '/pages/bill/bill',
     section: 'campus'
   },
   {
     id: 'card',
-    title: '校园卡',
-    description: '查看校园卡信息与余额',
+    titleKey: 'features.card.title',
+    descKey: 'features.card.desc',
     icon: '/image/mono/card.png',
     page: '/pages/card/card',
     section: 'campus'
   },
   {
     id: 'cardLost',
-    title: '校园卡挂失',
-    description: '挂失校园卡',
+    titleKey: 'features.cardLost.title',
+    descKey: 'features.cardLost.desc',
     icon: '/image/mono/cardLost.png',
     page: '/pages/cardLost/cardLost',
     section: 'campus'
   },
   {
     id: 'evaluate',
-    title: '教学评价',
-    description: '一键完成教学评价',
+    titleKey: 'features.evaluate.title',
+    descKey: 'features.evaluate.desc',
     icon: '/image/mono/evaluate.png',
     page: '/pages/evaluate/evaluate',
     section: 'campus'
   },
   {
     id: 'collection',
-    title: '图书馆',
-    description: '检索馆藏并进入借阅与续借',
+    titleKey: 'features.collection.title',
+    descKey: 'features.collection.desc',
     icon: '/image/mono/collection.png',
     page: '/pages/collection/collection',
     section: 'campus'
   },
   {
     id: 'book',
-    title: '我的借阅',
-    description: '查看个人借阅记录并续借',
+    titleKey: 'features.book.title',
+    descKey: 'features.book.desc',
     icon: '/image/mono/book.png',
     page: '/pages/book/book',
     section: 'campus'
   },
   {
     id: 'data',
-    title: '校园数据',
-    description: '电费与黄页信息查询',
+    titleKey: 'features.data.title',
+    descKey: 'features.data.desc',
     icon: '/image/mono/data.png',
     page: '/pages/data/data',
     section: 'campus'
   },
   {
     id: 'news',
-    title: '信息中心',
-    description: '查看校园新闻、系统公告与互动消息',
+    titleKey: 'features.news.title',
+    descKey: 'features.news.desc',
     icon: '/image/mono/news.png',
     page: '/pages/news/news',
     section: 'information'
   },
   {
     id: 'marketplace',
-    title: '二手交易',
-    description: '浏览与发布校园闲置',
+    titleKey: 'features.marketplace.title',
+    descKey: 'features.marketplace.desc',
     icon: '/image/mono/marketplace.png',
     page: '/pages/communityList/communityList?module=marketplace',
     section: 'community'
   },
   {
     id: 'lostandfound',
-    title: '失物招领',
-    description: '发布寻物与招领信息',
+    titleKey: 'features.lostandfound.title',
+    descKey: 'features.lostandfound.desc',
     icon: '/image/mono/lostandfound.png',
     page: '/pages/communityList/communityList?module=lostandfound',
     section: 'community'
   },
   {
     id: 'secret',
-    title: '校园树洞',
-    description: '匿名说说心里话',
+    titleKey: 'features.secret.title',
+    descKey: 'features.secret.desc',
     icon: '/image/mono/secret.png',
     page: '/pages/communityList/communityList?module=secret',
     section: 'community'
   },
   {
     id: 'express',
-    title: '表白墙',
-    description: '查看与发布校园表白',
+    titleKey: 'features.express.title',
+    descKey: 'features.express.desc',
     icon: '/image/mono/express.png',
     page: '/pages/communityList/communityList?module=express',
     section: 'community'
   },
   {
     id: 'topic',
-    title: '校园话题',
-    description: '参与热门校园讨论',
+    titleKey: 'features.topic.title',
+    descKey: 'features.topic.desc',
     icon: '/image/mono/topic.png',
     page: '/pages/communityList/communityList?module=topic',
     section: 'community'
   },
   {
     id: 'delivery',
-    title: '全民快递',
-    description: '发布与接取校园跑腿',
+    titleKey: 'features.delivery.title',
+    descKey: 'features.delivery.desc',
     icon: '/image/mono/delivery.png',
     page: '/pages/communityList/communityList?module=delivery',
     section: 'community'
   },
   {
     id: 'dating',
-    title: '卖室友',
-    description: '浏览资料、发布内容并处理互动',
+    titleKey: 'features.dating.title',
+    descKey: 'features.dating.desc',
     icon: '/image/mono/dating.png',
     page: '/pages/communityList/communityList?module=dating',
     section: 'community'
   },
   {
     id: 'photograph',
-    title: '拍好校园',
-    description: '查看与分享校园摄影',
+    titleKey: 'features.photograph.title',
+    descKey: 'features.photograph.desc',
     icon: '/image/mono/photograph.png',
     page: '/pages/communityList/communityList?module=photograph',
     section: 'community'
   }
 ]
 
-const FEATURE_SECTIONS = [
+const SECTION_DEFS = [
   {
     id: 'campus',
-    title: '校园服务',
+    titleKey: 'features.sections.campus',
     featureIds: [
       'grade',
       'schedule',
@@ -189,14 +190,14 @@ const FEATURE_SECTIONS = [
   },
   {
     id: 'information',
-    title: '信息中心',
+    titleKey: 'features.sections.information',
     featureIds: [
       'news'
     ]
   },
   {
     id: 'community',
-    title: '校园社区',
+    titleKey: 'features.sections.community',
     featureIds: [
       'marketplace',
       'lostandfound',
@@ -210,47 +211,90 @@ const FEATURE_SECTIONS = [
   }
 ]
 
-const SYSTEM_ACTIONS = [
+const SYSTEM_ACTION_DEFS = [
   {
     id: 'appearance',
-    title: '界面和外观',
-    description: '主题、字体大小、语言',
+    titleKey: 'features.actions.appearance.title',
+    descKey: 'features.actions.appearance.desc',
     icon: '/image/mono/about.png',
     page: '/pages/appearance/appearance'
   },
   {
     id: 'settings',
-    title: '功能设置',
-    description: '切换 mock 与管理首页模块',
+    titleKey: 'features.actions.settings.title',
+    descKey: 'features.actions.settings.desc',
     icon: '/image/mono/about.png',
     page: '/pages/settings/settings'
   },
   {
     id: 'logout',
-    title: '退出账号',
-    description: '退出当前账号',
+    titleKey: 'features.actions.logout.title',
+    descKey: 'features.actions.logout.desc',
     icon: '/image/mono/exit.png',
     action: 'logout'
   }
 ]
 
-const FEATURE_MAP = FEATURE_LIST.reduce(function(map, feature) {
-  map[feature.id] = feature
-  return map
-}, {})
+function resolveFeature(def) {
+  return {
+    id: def.id,
+    title: i18n.t(def.titleKey),
+    description: i18n.t(def.descKey),
+    icon: def.icon,
+    page: def.page,
+    section: def.section
+  }
+}
+
+function getFeatureList() {
+  return FEATURE_DEFS.map(resolveFeature)
+}
+
+function getFeatureMap() {
+  return getFeatureList().reduce(function(map, feature) {
+    map[feature.id] = feature
+    return map
+  }, {})
+}
+
+function getFeatureSections() {
+  return SECTION_DEFS.map(function(section) {
+    return {
+      id: section.id,
+      title: i18n.t(section.titleKey),
+      featureIds: section.featureIds
+    }
+  })
+}
+
+function getSystemActions() {
+  return SYSTEM_ACTION_DEFS.map(function(def) {
+    var result = {
+      id: def.id,
+      title: i18n.t(def.titleKey),
+      description: i18n.t(def.descKey),
+      icon: def.icon
+    }
+    if (def.page) result.page = def.page
+    if (def.action) result.action = def.action
+    return result
+  })
+}
 
 function getDefaultFeatureVisibility() {
-  return FEATURE_LIST.reduce(function(result, feature) {
-    result[feature.id] = true
+  return FEATURE_DEFS.reduce(function(result, def) {
+    result[def.id] = true
     return result
   }, {})
 }
 
 module.exports = {
-  FEATURE_LIST,
-  FEATURE_MAP,
-  FEATURE_SECTIONS,
-  SYSTEM_ACTIONS,
-  MOCK_CREDENTIALS_HINT,
+  FEATURE_DEFS,
+  SECTION_DEFS,
+  getFeatureList,
+  getFeatureMap,
+  getFeatureSections,
+  getSystemActions,
+  getMockCredentialsHint,
   getDefaultFeatureVisibility
 }

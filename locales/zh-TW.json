@@ -290,5 +290,137 @@
     "language": {
       "label": "語言"
     }
+  },
+  "mock": {
+    "credentialsHint": "Mock 帳號：{{username}} / {{password}}"
+  },
+  "dataSource": {
+    "mock": "模擬資料",
+    "remote": "真實介面"
+  },
+  "features": {
+    "grade": { "title": "成績查詢", "desc": "查看學年成績與學期成績" },
+    "schedule": { "title": "課表查詢", "desc": "查看每週課表安排" },
+    "cet": { "title": "四六級查詢", "desc": "查詢四六級成績並儲存考號" },
+    "graduateExam": { "title": "考研查詢", "desc": "查詢研究所成績" },
+    "spare": { "title": "教室查詢", "desc": "查詢目前空閒教室" },
+    "bill": { "title": "校園卡消費", "desc": "查看校園卡消費紀錄" },
+    "card": { "title": "校園卡", "desc": "查看校園卡資訊與餘額" },
+    "cardLost": { "title": "校園卡掛失", "desc": "掛失校園卡" },
+    "evaluate": { "title": "教學評量", "desc": "一鍵完成教學評量" },
+    "collection": { "title": "圖書館", "desc": "檢索館藏並進入借閱與續借" },
+    "book": { "title": "我的借閱", "desc": "查看個人借閱紀錄並續借" },
+    "data": { "title": "校園資料", "desc": "電費與黃頁資訊查詢" },
+    "news": { "title": "資訊中心", "desc": "查看校園新聞、系統公告與互動訊息" },
+    "marketplace": { "title": "二手交易", "desc": "瀏覽與發佈校園閒置" },
+    "lostandfound": { "title": "失物招領", "desc": "發佈尋物與招領資訊" },
+    "secret": { "title": "校園樹洞", "desc": "匿名說說心裡話" },
+    "express": { "title": "表白牆", "desc": "查看與發佈校園表白" },
+    "topic": { "title": "校園話題", "desc": "參與熱門校園討論" },
+    "delivery": { "title": "全民快遞", "desc": "發佈與接取校園跑腿" },
+    "dating": { "title": "賣室友", "desc": "瀏覽資料、發佈內容並處理互動" },
+    "photograph": { "title": "拍好校園", "desc": "查看與分享校園攝影" },
+    "sections": {
+      "campus": "校園服務",
+      "information": "資訊中心",
+      "community": "校園社區"
+    },
+    "actions": {
+      "appearance": { "title": "介面和外觀", "desc": "主題、字體大小、語言" },
+      "settings": { "title": "功能設定", "desc": "切換 mock 與管理首頁模組" },
+      "logout": { "title": "登出帳號", "desc": "登出目前帳號" }
+    }
+  },
+  "spare": {
+    "campus": {
+      "any": "不限",
+      "haizhu": "海珠校區",
+      "huadu": "花都校區",
+      "nanhai": "廣東輕工南海校區",
+      "correspondence": "業餘函授校區"
+    },
+    "roomType": {
+      "any": "不限",
+      "noRoom": "不用教室的課程",
+      "playground": "操場",
+      "largeMultimedia": "大型多媒體",
+      "computerLab": "電腦專業機房",
+      "sculptureRoom": "雕塑室",
+      "multimediaRoom": "多媒體教室",
+      "translationRoom": "翻譯室",
+      "fashionLab": "服裝實驗室",
+      "pianoRoom1": "鋼琴室",
+      "pianoRoom2": "鋼琴室",
+      "publicComputerLab": "公用機房",
+      "chinesePaintingRoom": "國畫臨摹室",
+      "artStudio": "畫室",
+      "chemistryLab": "化學實驗室",
+      "computerRoom": "機房",
+      "teachingAidsRoom": "教具室",
+      "educationLab": "教育實驗室",
+      "anatomyLab": "解剖實驗室",
+      "financeMathLab": "金融數學實驗室",
+      "artClassroom": "美術教室",
+      "montessoriRoom": "蒙特梭利教學法專用教室",
+      "modelMakingLab": "模型製作實驗室",
+      "graphicDesignLab": "平面製作實驗室",
+      "practiceRoom": "琴房",
+      "photographyLab": "攝影實驗室",
+      "vocalRoom": "聲樂教室",
+      "biologyLab": "生物實驗室",
+      "trainingRoom": "實習室",
+      "sightSingingRoom": "視唱練耳室",
+      "potteryRoom": "陶藝室",
+      "gymnasticsRoom": "體操房",
+      "networkLab": "網路實驗室",
+      "microTeachingRoom": "微型教學教室",
+      "noRoomNeeded": "無須教室",
+      "danceRoom1": "舞蹈室",
+      "danceRoom2": "舞蹈室",
+      "physicsLab": "物理實驗室",
+      "smallMultimedia": "小型多媒體",
+      "smallMultimediaUnder70": "小型多媒體(<70)",
+      "smallClassroomUnder70": "小型普通教室(<70)",
+      "groupRoom": "小組教室",
+      "fitnessRoom": "形體房",
+      "musicRoom": "音樂室",
+      "musicMajorRoom": "音樂專業教室",
+      "languageLab": "語音室",
+      "smartRecordingRoom": "智慧錄影室",
+      "mediumMultimedia": "中型多媒體(70-100)",
+      "majorClassroom": "專業課教室",
+      "majorTheoryRoom": "專業理論教室",
+      "majorLab": "專業實驗室",
+      "counselingRoom": "諮詢室",
+      "comprehensivePaintingLab": "綜合繪畫實驗室"
+    },
+    "weekday": {
+      "any": "不限",
+      "mon": "週一",
+      "tue": "週二",
+      "wed": "週三",
+      "thu": "週四",
+      "fri": "週五",
+      "sat": "週六",
+      "sun": "週日"
+    },
+    "weekType": {
+      "any": "不限",
+      "odd": "單週",
+      "even": "雙週"
+    },
+    "classPeriod": {
+      "period12": "第 1-2 節",
+      "period3": "第 3 節",
+      "period45": "第 4-5 節",
+      "period67": "第 6-7 節",
+      "period89": "第 8-9 節",
+      "period1012": "第 10-12 節",
+      "morning": "上午",
+      "afternoon": "下午",
+      "evening": "晚上",
+      "daytime": "白天",
+      "allDay": "整天"
+    }
   }
 }

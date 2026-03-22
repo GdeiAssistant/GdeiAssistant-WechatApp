@@ -1,4 +1,5 @@
 const storageKeys = require('../constants/storage.js')
+const i18n = require('../utils/i18n.js')
 
 const DATA_SOURCE_MODES = {
   remote: 'remote',
@@ -37,7 +38,7 @@ function isMockMode() {
 }
 
 function getDataSourceLabel() {
-  return isMockMode() ? '模拟数据' : '真实接口'
+  return isMockMode() ? i18n.t('dataSource.mock') : i18n.t('dataSource.remote')
 }
 
 module.exports = {

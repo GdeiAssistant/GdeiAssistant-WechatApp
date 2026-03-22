@@ -290,5 +290,137 @@
     "language": {
       "label": "言語"
     }
+  },
+  "mock": {
+    "credentialsHint": "Mockアカウント：{{username}} / {{password}}"
+  },
+  "dataSource": {
+    "mock": "モックデータ",
+    "remote": "実際のAPI"
+  },
+  "features": {
+    "grade": { "title": "成績照会", "desc": "学年・学期の成績を確認" },
+    "schedule": { "title": "時間割", "desc": "毎週の時間割を確認" },
+    "cet": { "title": "CET成績", "desc": "CET成績照会と受験番号の保存" },
+    "graduateExam": { "title": "大学院入試", "desc": "大学院入試の成績を照会" },
+    "spare": { "title": "空き教室", "desc": "空き教室を検索" },
+    "bill": { "title": "学生証利用履歴", "desc": "学生証の利用履歴を確認" },
+    "card": { "title": "学生証", "desc": "学生証の情報と残高を確認" },
+    "cardLost": { "title": "紛失届", "desc": "学生証の紛失届を提出" },
+    "evaluate": { "title": "授業評価", "desc": "授業評価をワンクリックで完了" },
+    "collection": { "title": "図書館", "desc": "蔵書検索・貸出・更新" },
+    "book": { "title": "マイ貸出", "desc": "貸出記録の確認と更新" },
+    "data": { "title": "キャンパスデータ", "desc": "電気料金・電話帳情報の照会" },
+    "news": { "title": "インフォメーション", "desc": "キャンパスニュース・お知らせ・メッセージを確認" },
+    "marketplace": { "title": "フリマ", "desc": "中古品の閲覧と投稿" },
+    "lostandfound": { "title": "落とし物", "desc": "紛失物・拾得物の情報を投稿" },
+    "secret": { "title": "秘密の木", "desc": "匿名で投稿" },
+    "express": { "title": "告白の壁", "desc": "告白の閲覧と投稿" },
+    "topic": { "title": "キャンパストピック", "desc": "人気のキャンパス討論に参加" },
+    "delivery": { "title": "デリバリー", "desc": "キャンパス配達の投稿と受注" },
+    "dating": { "title": "ルームメイト", "desc": "プロフィール閲覧・投稿・交流" },
+    "photograph": { "title": "フォトウォール", "desc": "キャンパス写真の閲覧と共有" },
+    "sections": {
+      "campus": "キャンパスサービス",
+      "information": "インフォメーション",
+      "community": "キャンパスコミュニティ"
+    },
+    "actions": {
+      "appearance": { "title": "インターフェースと外観", "desc": "テーマ、フォントサイズ、言語" },
+      "settings": { "title": "機能設定", "desc": "モックデータの切替とホームモジュール管理" },
+      "logout": { "title": "ログアウト", "desc": "現在のアカウントからログアウト" }
+    }
+  },
+  "spare": {
+    "campus": {
+      "any": "指定なし",
+      "haizhu": "海珠キャンパス",
+      "huadu": "花都キャンパス",
+      "nanhai": "南海キャンパス",
+      "correspondence": "通信教育キャンパス"
+    },
+    "roomType": {
+      "any": "指定なし",
+      "noRoom": "教室不要の授業",
+      "playground": "グラウンド",
+      "largeMultimedia": "大マルチメディア",
+      "computerLab": "コンピュータ専用機房",
+      "sculptureRoom": "彫刻室",
+      "multimediaRoom": "マルチメディア教室",
+      "translationRoom": "翻訳室",
+      "fashionLab": "ファッション実験室",
+      "pianoRoom1": "ピアノ室",
+      "pianoRoom2": "ピアノ室",
+      "publicComputerLab": "公共機房",
+      "chinesePaintingRoom": "国画臨模室",
+      "artStudio": "アトリエ",
+      "chemistryLab": "化学実験室",
+      "computerRoom": "機房",
+      "teachingAidsRoom": "教具室",
+      "educationLab": "教育実験室",
+      "anatomyLab": "解剖実験室",
+      "financeMathLab": "金融数学実験室",
+      "artClassroom": "美術教室",
+      "montessoriRoom": "モンテッソーリ教室",
+      "modelMakingLab": "模型製作実験室",
+      "graphicDesignLab": "グラフィック制作実験室",
+      "practiceRoom": "練習室",
+      "photographyLab": "写真実験室",
+      "vocalRoom": "声楽教室",
+      "biologyLab": "生物実験室",
+      "trainingRoom": "実習室",
+      "sightSingingRoom": "視唱練耳室",
+      "potteryRoom": "陶芸室",
+      "gymnasticsRoom": "体操室",
+      "networkLab": "ネットワーク実験室",
+      "microTeachingRoom": "マイクロティーチング教室",
+      "noRoomNeeded": "教室不要",
+      "danceRoom1": "ダンス室",
+      "danceRoom2": "ダンス室",
+      "physicsLab": "物理実験室",
+      "smallMultimedia": "小マルチメディア",
+      "smallMultimediaUnder70": "小マルチメディア(<70)",
+      "smallClassroomUnder70": "小教室(<70)",
+      "groupRoom": "グループ教室",
+      "fitnessRoom": "フィットネス室",
+      "musicRoom": "音楽室",
+      "musicMajorRoom": "音楽専門教室",
+      "languageLab": "語学実験室",
+      "smartRecordingRoom": "スマート録画室",
+      "mediumMultimedia": "中マルチメディア(70-100)",
+      "majorClassroom": "専門教室",
+      "majorTheoryRoom": "専門理論教室",
+      "majorLab": "専門実験室",
+      "counselingRoom": "相談室",
+      "comprehensivePaintingLab": "総合絵画実験室"
+    },
+    "weekday": {
+      "any": "指定なし",
+      "mon": "月",
+      "tue": "火",
+      "wed": "水",
+      "thu": "木",
+      "fri": "金",
+      "sat": "土",
+      "sun": "日"
+    },
+    "weekType": {
+      "any": "指定なし",
+      "odd": "奇数週",
+      "even": "偶数週"
+    },
+    "classPeriod": {
+      "period12": "第1-2限",
+      "period3": "第3限",
+      "period45": "第4-5限",
+      "period67": "第6-7限",
+      "period89": "第8-9限",
+      "period1012": "第10-12限",
+      "morning": "午前",
+      "afternoon": "午後",
+      "evening": "夜",
+      "daytime": "日中",
+      "allDay": "終日"
+    }
   }
 }

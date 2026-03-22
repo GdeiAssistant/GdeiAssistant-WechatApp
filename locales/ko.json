@@ -290,5 +290,137 @@
     "language": {
       "label": "언어"
     }
+  },
+  "mock": {
+    "credentialsHint": "Mock 계정: {{username}} / {{password}}"
+  },
+  "dataSource": {
+    "mock": "모의 데이터",
+    "remote": "실제 API"
+  },
+  "features": {
+    "grade": { "title": "성적 조회", "desc": "학년 및 학기 성적 확인" },
+    "schedule": { "title": "시간표", "desc": "주간 시간표 확인" },
+    "cet": { "title": "CET 성적", "desc": "CET 성적 조회 및 수험번호 저장" },
+    "graduateExam": { "title": "대학원 시험", "desc": "대학원 시험 성적 조회" },
+    "spare": { "title": "빈 강의실", "desc": "빈 강의실 검색" },
+    "bill": { "title": "학생증 거래", "desc": "학생증 거래 내역 확인" },
+    "card": { "title": "학생증", "desc": "학생증 정보 및 잔액 확인" },
+    "cardLost": { "title": "분실 신고", "desc": "학생증 분실 신고" },
+    "evaluate": { "title": "수업 평가", "desc": "수업 평가 한번에 완료" },
+    "collection": { "title": "도서관", "desc": "장서 검색, 대출 및 연장" },
+    "book": { "title": "내 대출", "desc": "대출 기록 확인 및 연장" },
+    "data": { "title": "캠퍼스 데이터", "desc": "전기요금 및 전화번호부 조회" },
+    "news": { "title": "정보 센터", "desc": "캠퍼스 뉴스, 공지사항 및 메시지 확인" },
+    "marketplace": { "title": "중고거래", "desc": "중고 물품 보기 및 게시" },
+    "lostandfound": { "title": "분실물", "desc": "분실물 및 습득물 정보 게시" },
+    "secret": { "title": "비밀나무", "desc": "익명으로 게시" },
+    "express": { "title": "고백벽", "desc": "고백 보기 및 게시" },
+    "topic": { "title": "캠퍼스 토픽", "desc": "인기 캠퍼스 토론 참여" },
+    "delivery": { "title": "배달", "desc": "캠퍼스 배달 게시 및 수락" },
+    "dating": { "title": "룸메이트", "desc": "프로필 보기, 게시 및 교류" },
+    "photograph": { "title": "포토월", "desc": "캠퍼스 사진 보기 및 공유" },
+    "sections": {
+      "campus": "캠퍼스 서비스",
+      "information": "정보 센터",
+      "community": "캠퍼스 커뮤니티"
+    },
+    "actions": {
+      "appearance": { "title": "인터페이스 및 외관", "desc": "테마, 글꼴 크기, 언어" },
+      "settings": { "title": "기능 설정", "desc": "모의 데이터 전환 및 홈 모듈 관리" },
+      "logout": { "title": "로그아웃", "desc": "현재 계정에서 로그아웃" }
+    }
+  },
+  "spare": {
+    "campus": {
+      "any": "전체",
+      "haizhu": "하이주 캠퍼스",
+      "huadu": "화두 캠퍼스",
+      "nanhai": "난하이 캠퍼스",
+      "correspondence": "통신교육 캠퍼스"
+    },
+    "roomType": {
+      "any": "전체",
+      "noRoom": "강의실 불필요 과목",
+      "playground": "운동장",
+      "largeMultimedia": "대형 멀티미디어",
+      "computerLab": "컴퓨터 전용 실습실",
+      "sculptureRoom": "조각실",
+      "multimediaRoom": "멀티미디어 강의실",
+      "translationRoom": "번역실",
+      "fashionLab": "패션 실험실",
+      "pianoRoom1": "피아노실",
+      "pianoRoom2": "피아노실",
+      "publicComputerLab": "공용 컴퓨터실",
+      "chinesePaintingRoom": "국화 임모실",
+      "artStudio": "화실",
+      "chemistryLab": "화학 실험실",
+      "computerRoom": "컴퓨터실",
+      "teachingAidsRoom": "교구실",
+      "educationLab": "교육 실험실",
+      "anatomyLab": "해부학 실험실",
+      "financeMathLab": "금융수학 실험실",
+      "artClassroom": "미술 강의실",
+      "montessoriRoom": "몬테소리 교실",
+      "modelMakingLab": "모형 제작 실험실",
+      "graphicDesignLab": "그래픽 디자인 실험실",
+      "practiceRoom": "연습실",
+      "photographyLab": "사진 실험실",
+      "vocalRoom": "성악 강의실",
+      "biologyLab": "생물 실험실",
+      "trainingRoom": "실습실",
+      "sightSingingRoom": "시창청음실",
+      "potteryRoom": "도예실",
+      "gymnasticsRoom": "체조실",
+      "networkLab": "네트워크 실험실",
+      "microTeachingRoom": "마이크로티칭 교실",
+      "noRoomNeeded": "강의실 불필요",
+      "danceRoom1": "무용실",
+      "danceRoom2": "무용실",
+      "physicsLab": "물리 실험실",
+      "smallMultimedia": "소형 멀티미디어",
+      "smallMultimediaUnder70": "소형 멀티미디어(<70)",
+      "smallClassroomUnder70": "소형 일반 강의실(<70)",
+      "groupRoom": "그룹 강의실",
+      "fitnessRoom": "피트니스실",
+      "musicRoom": "음악실",
+      "musicMajorRoom": "음악 전공 강의실",
+      "languageLab": "어학 실험실",
+      "smartRecordingRoom": "스마트 녹화실",
+      "mediumMultimedia": "중형 멀티미디어(70-100)",
+      "majorClassroom": "전공 강의실",
+      "majorTheoryRoom": "전공 이론 강의실",
+      "majorLab": "전공 실험실",
+      "counselingRoom": "상담실",
+      "comprehensivePaintingLab": "종합 회화 실험실"
+    },
+    "weekday": {
+      "any": "전체",
+      "mon": "월",
+      "tue": "화",
+      "wed": "수",
+      "thu": "목",
+      "fri": "금",
+      "sat": "토",
+      "sun": "일"
+    },
+    "weekType": {
+      "any": "전체",
+      "odd": "홀수 주",
+      "even": "짝수 주"
+    },
+    "classPeriod": {
+      "period12": "1-2교시",
+      "period3": "3교시",
+      "period45": "4-5교시",
+      "period67": "6-7교시",
+      "period89": "8-9교시",
+      "period1012": "10-12교시",
+      "morning": "오전",
+      "afternoon": "오후",
+      "evening": "저녁",
+      "daytime": "낮",
+      "allDay": "종일"
+    }
   }
 }
