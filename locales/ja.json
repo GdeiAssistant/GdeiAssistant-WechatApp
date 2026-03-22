@@ -331,6 +331,33 @@
       "logout": { "title": "ログアウト", "desc": "現在のアカウントからログアウト" }
     }
   },
+  "billPage": {
+    "navTitle": "学生証利用履歴"
+  },
+  "bookPage": {
+    "navTitle": "マイ貸出"
+  },
+  "graduateExamPage": {
+    "navTitle": "大学院入試照会"
+  },
+  "dataPage": {
+    "navTitle": "データ照会"
+  },
+  "cardLostPage": {
+    "navTitle": "紛失届"
+  },
+  "electricityPage": {
+    "navTitle": "電気料金照会"
+  },
+  "collectionPage": {
+    "navTitle": "図書館"
+  },
+  "yellowPagePage": {
+    "navTitle": "電話帳検索"
+  },
+  "evaluatePage": {
+    "navTitle": "授業評価"
+  },
   "spare": {
     "campus": {
       "any": "指定なし",

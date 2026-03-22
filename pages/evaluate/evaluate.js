@@ -2,13 +2,24 @@ const utils = require('../../utils/util.js')
 const campusApi = require('../../services/apis/campus.js')
 const pageUtils = require('../../utils/page.js')
 var themeUtil = require('../../utils/theme')
+var i18n = require('../../utils/i18n')
 
 Page({
   onShow: function () {
     themeUtil.applyTheme(this)
+    this.refreshI18n()
+  },
+  refreshI18n: function () {
+    this.setData({
+      t: {
+        navTitle: i18n.t('evaluatePage.navTitle')
+      }
+    })
+    wx.setNavigationBarTitle({ title: this.data.t.navTitle })
   },
   data: {
     themeClass: '',
+    t: {},
     checked: false,
     loading: false,
     errorMessage: null

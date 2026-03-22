@@ -23,7 +23,7 @@ Page({
   refreshI18n: function () {
     var tabs = i18n.t('schedule.tabs')
     if (!Array.isArray(tabs)) {
-      tabs = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+      tabs = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     }
     this.setData({
       tabs: tabs,

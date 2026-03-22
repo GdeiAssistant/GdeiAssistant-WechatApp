@@ -1,6 +1,7 @@
 const dataApi = require('../../services/apis/data.js')
 const pageUtils = require('../../utils/page.js')
 var themeUtil = require('../../utils/theme')
+var i18n = require('../../utils/i18n')
 
 function buildYearOptions() {
   const currentYear = new Date().getFullYear()
@@ -14,9 +15,19 @@ function buildYearOptions() {
 Page({
   onShow: function () {
     themeUtil.applyTheme(this)
+    this.refreshI18n()
+  },
+  refreshI18n: function () {
+    this.setData({
+      t: {
+        navTitle: i18n.t('electricityPage.navTitle')
+      }
+    })
+    wx.setNavigationBarTitle({ title: this.data.t.navTitle })
   },
   data: {
     themeClass: '',
+    t: {},
     yearOptions: buildYearOptions(),
     yearIndex: 0,
     name: '',
