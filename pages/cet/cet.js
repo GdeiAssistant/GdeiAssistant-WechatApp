@@ -2,13 +2,44 @@ const cetApi = require('../../services/apis/cet.js')
 const dataSource = require('../../services/data-source.js')
 const pageUtils = require('../../utils/page.js')
 var themeUtil = require('../../utils/theme')
+var i18n = require('../../utils/i18n')
 
 Page({
   onShow: function () {
     themeUtil.applyTheme(this)
+    this.refreshI18n()
+  },
+  refreshI18n: function () {
+    this.setData({
+      t: {
+        navTitle: i18n.t('cetPage.navTitle'),
+        queryInfo: i18n.t('cetPage.queryInfo'),
+        ticketNumber: i18n.t('cetPage.ticketNumber'),
+        ticketPlaceholder: i18n.t('cetPage.ticketPlaceholder'),
+        name: i18n.t('cetPage.name'),
+        namePlaceholder: i18n.t('cetPage.namePlaceholder'),
+        captcha: i18n.t('cetPage.captcha'),
+        captchaPlaceholder: i18n.t('cetPage.captchaPlaceholder'),
+        refresh: i18n.t('cetPage.refresh'),
+        query: i18n.t('cetPage.query'),
+        saveTicket: i18n.t('cetPage.saveTicket'),
+        loadSavedTicket: i18n.t('cetPage.loadSavedTicket'),
+        examType: i18n.t('cetPage.examType'),
+        school: i18n.t('cetPage.school'),
+        admissionCard: i18n.t('cetPage.admissionCard'),
+        scoreInfo: i18n.t('cetPage.scoreInfo'),
+        totalScore: i18n.t('cetPage.totalScore'),
+        listening: i18n.t('cetPage.listening'),
+        reading: i18n.t('cetPage.reading'),
+        writingTranslation: i18n.t('cetPage.writingTranslation'),
+        queryAgain: i18n.t('cetPage.queryAgain')
+      }
+    })
+    wx.setNavigationBarTitle({ title: this.data.t.navTitle })
   },
   data: {
     themeClass: '',
+    t: {},
     ticketNumber: '',
     name: '',
     checkcode: '',
@@ -53,7 +84,7 @@ Page({
   saveTicketNumber: function() {
     const ticketNumber = String(this.data.ticketNumber || '').trim()
     if (!/^\d{15}$/.test(ticketNumber)) {
-      pageUtils.showTopTips(this, '准考证号必须为 15 位数字')
+      pageUtils.showTopTips(this, i18n.t('cetPage.ticketValidation'))
       return
     }
 
@@ -65,7 +96,7 @@ Page({
     }).then((result) => {
       if (result.success) {
         wx.showToast({
-          title: '保存成功',
+          title: i18n.t('cetPage.saveSuccess'),
           icon: 'success'
         })
       } else {
@@ -82,17 +113,17 @@ Page({
     const checkcode = String(this.data.checkcode || '').trim()
 
     if (!/^\d{15}$/.test(ticketNumber)) {
-      pageUtils.showTopTips(this, '请填写 15 位准考证号')
+      pageUtils.showTopTips(this, i18n.t('cetPage.ticketFormatError'))
       return
     }
 
     if (!name) {
-      pageUtils.showTopTips(this, '请填写姓名')
+      pageUtils.showTopTips(this, i18n.t('cetPage.nameRequired'))
       return
     }
 
     if (!checkcode) {
-      pageUtils.showTopTips(this, '请输入验证码')
+      pageUtils.showTopTips(this, i18n.t('cetPage.captchaRequired'))
       return
     }
 
@@ -128,7 +159,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '四六级查询',
+      title: i18n.t('cetPage.shareTitle'),
       path: '/pages/cet/cet'
     }
   }

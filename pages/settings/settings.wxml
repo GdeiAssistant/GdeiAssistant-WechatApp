@@ -1,4 +1,4 @@
-<view class="page__bd {{themeClass}}">
+<view class="page__bd {{themeClass}}" style="{{fontStyle}}">
   <view class="weui-cells__title">数据源</view>
   <view class="weui-cells weui-cells_after-title">
     <view class="weui-cell weui-cell_switch">

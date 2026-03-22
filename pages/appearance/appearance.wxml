@@ -1,4 +1,4 @@
-<view class="page {{themeClass}}">
+<view class="page {{themeClass}}" style="{{fontStyle}}">
   <view class="section-title">{{t.themeLabel}}</view>
   <view class="option-list">
     <view class="option-item" data-mode="system" bindtap="onThemeSelect">

@@ -59,13 +59,18 @@ var themeUtil = require('./utils/theme')
 
 App({
   onLaunch: function () {
+    // Restore locale from storage so all pages pick it up
+    var savedLocale = i18n.getCurrentLocale()
+    this.globalData.locale = savedLocale
+
+    // Restore theme and font settings
     this.globalData.theme = themeUtil.getEffectiveTheme()
     this.globalData.fontScaleStep = themeUtil.getFontScaleStep()
     themeUtil.initThemeListener()
   },
   globalData: {
     userInfo: null,
-    locale: i18n.getCurrentLocale(),
+    locale: 'zh-CN',
     theme: 'light',
     fontScaleStep: 1
   }

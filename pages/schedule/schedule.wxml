@@ -1,4 +1,19 @@
-<view class="page__bd {{themeClass}}">
+<wxs module="scheduleHelper">
+  function formatWeekButton(week, tpl) {
+    if (!tpl || !week) return '';
+    return tpl.replace('{{week}}', week);
+  }
+  function formatWeekRange(min, max, tpl) {
+    if (!tpl) return '';
+    return tpl.replace('{{min}}', min).replace('{{max}}', max);
+  }
+  module.exports = {
+    formatWeekButton: formatWeekButton,
+    formatWeekRange: formatWeekRange
+  };
+</wxs>
+
+<view class="page__bd {{themeClass}}" style="{{fontStyle}}">
 
   <view class="weui-navbar">
     <block wx:for="{{tabs}}" wx:key="*this">
@@ -11,7 +26,7 @@
   <view block wx:if="{{week}}">
     <view class="weui-btn-area">
       <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
-        <button type="default">当前查询的周数：第{{week}}周</button>
+        <button type="default">{{scheduleHelper.formatWeekButton(week, t.weekLabel)}}</button>
       </picker>
     </view>
   </view>
@@ -27,7 +42,7 @@
           <view class="weui-media-box__info">
             <block>
               <text class="weui-media-box__bold" style='font-size:15px'>{{i.scheduleName}}\n</text>
-              <text style='float:left'>第{{i.minScheduleWeek}}周至第{{i.maxScheduleWeek}}周\n{{i.scheduleTeacher}}</text>
+              <text style='float:left'>{{scheduleHelper.formatWeekRange(i.minScheduleWeek, i.maxScheduleWeek, t.weekRange)}}\n{{i.scheduleTeacher}}</text>
               <text style='float:right'>{{i.scheduleLocation}}</text>
             </block>
           </view>

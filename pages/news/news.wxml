@@ -1,4 +1,4 @@
-<view class="page__bd news_page {{themeClass}}">
+<view class="page__bd news_page {{themeClass}}" style="{{fontStyle}}">
   <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
 
   <scroll-view scroll-x class="news_type_scroll" enable-flex>
@@ -36,13 +36,13 @@
 
     <view class="weui-loadmore" wx:if="{{loading}}">
       <i class="weui-loading"></i>
-      <view class="weui-loadmore__tips">正在加载新闻</view>
+      <view class="weui-loadmore__tips">{{t.loadingNews}}</view>
     </view>
     <view class="weui-loadmore" wx:if="{{!loading && finished && newsList.length}}">
-      <view class="weui-loadmore__tips">没有更多新闻了</view>
+      <view class="weui-loadmore__tips">{{t.noMoreNews}}</view>
     </view>
     <view class="weui-loadmore" wx:if="{{!loading && finished && !newsList.length}}">
-      <view class="weui-loadmore__tips">暂无新闻</view>
+      <view class="weui-loadmore__tips">{{t.noNews}}</view>
     </view>
   </view>
 </view>

@@ -1,9 +1,9 @@
-<view class="container {{themeClass}}" wx:if="{{ready}}">
+<view class="container {{themeClass}}" style="{{fontStyle}}" wx:if="{{ready}}">
 
   <view class="userinfo">
     <image class="userinfo-avatar" src="../../image/logo.png" background-size="cover"></image>
-    <text class="userinfo-nickname">广东二师助手</text>
-    <text class="userinfo-source">当前数据源：{{dataSourceLabel}}</text>
+    <text class="userinfo-nickname">{{t.appName}}</text>
+    <text class="userinfo-source">{{t.dataSourceLabel}}</text>
   </view>
 
   <view class="page-body">
@@ -11,7 +11,7 @@
       <view class='page-section'>
         <view class="weui-cells weui-cells_after-title">
           <view class="weui-cell weui-cell_input">
-            <input name="username" class="weui-input" maxlength='25' type="text" placeholder="请输入校园网账号" />
+            <input name="username" class="weui-input" maxlength='25' type="text" placeholder="{{t.usernamePlaceholder}}" />
           </view>
         </view>
       </view>
@@ -19,21 +19,21 @@
       <view class="page-section">
         <view class="weui-cells weui-cells_after-title">
           <view class="weui-cell weui-cell_input">
-            <input name="password" class="weui-input" maxlength='30' password type="text" placeholder="请输入校园网密码" />
+            <input name="password" class="weui-input" maxlength='30' password type="text" placeholder="{{t.passwordPlaceholder}}" />
           </view>
         </view>
       </view>
 
       <view class="btn-area">
-        <button type="primary" formType="submit">登录</button>
+        <button type="primary" formType="submit">{{t.button}}</button>
       </view>
 
     </form>
 
-    <view class="weui-cells__title">调试设置</view>
+    <view class="weui-cells__title">{{t.debugSettings}}</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-cell_switch">
-        <view class="weui-cell__bd">使用模拟测试数据</view>
+        <view class="weui-cell__bd">{{t.useMockData}}</view>
         <view class="weui-cell__ft">
           <switch checked="{{useMockData}}" bindchange="handleDataSourceChange" />
         </view>
@@ -42,7 +42,7 @@
 
     <text wx:if="{{useMockData}}" class="mock_hint">{{mockCredentialsHint}}</text>
     <navigator url="/pages/settings/settings" class="settings_link" hover-class="none">
-      更多功能设置
+      {{t.moreSettings}}
     </navigator>
   </view>
 

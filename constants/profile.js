@@ -1,7 +1,10 @@
 const userApi = require('../services/apis/user.js')
+const i18n = require('../utils/i18n.js')
+
+const NOT_SELECTED = '__not_selected__'
 
 const FACULTY_OPTIONS = [
-  '未选择',
+  NOT_SELECTED,
   '教育学院',
   '政法系',
   '中文系',
@@ -21,23 +24,23 @@ const FACULTY_OPTIONS = [
 ]
 
 const MAJOR_OPTIONS_BY_FACULTY = {
-  未选择: ['未选择'],
-  教育学院: ['未选择', '教育学', '学前教育', '小学教育', '特殊教育'],
-  政法系: ['未选择', '法学', '思想政治教育', '社会工作'],
-  中文系: ['未选择', '汉语言文学', '历史学', '秘书学'],
-  数学系: ['未选择', '数学与应用数学', '信息与计算科学', '统计学'],
-  外语系: ['未选择', '英语', '商务英语', '日语', '翻译'],
-  物理与信息工程系: ['未选择', '物理学', '电子信息工程', '通信工程'],
-  化学系: ['未选择', '化学', '应用化学', '材料化学'],
-  生物与食品工程学院: ['未选择', '生物科学', '生物技术', '食品科学与工程'],
-  体育学院: ['未选择', '体育教育', '社会体育指导与管理'],
-  美术学院: ['未选择', '美术学', '视觉传达设计', '环境设计'],
-  计算机科学系: ['未选择', '软件工程', '网络工程', '计算机科学与技术', '物联网工程'],
-  音乐系: ['未选择', '音乐学', '音乐表演', '舞蹈学'],
-  教师研修学院: ['未选择', '教育学', '教育技术学'],
-  成人教育学院: ['未选择', '汉语言文学', '学前教育', '行政管理'],
-  网络教育学院: ['未选择', '计算机科学与技术', '工商管理', '会计学'],
-  马克思主义学院: ['未选择', '思想政治教育', '马克思主义理论']
+  [NOT_SELECTED]: [NOT_SELECTED],
+  教育学院: [NOT_SELECTED, '教育学', '学前教育', '小学教育', '特殊教育'],
+  政法系: [NOT_SELECTED, '法学', '思想政治教育', '社会工作'],
+  中文系: [NOT_SELECTED, '汉语言文学', '历史学', '秘书学'],
+  数学系: [NOT_SELECTED, '数学与应用数学', '信息与计算科学', '统计学'],
+  外语系: [NOT_SELECTED, '英语', '商务英语', '日语', '翻译'],
+  物理与信息工程系: [NOT_SELECTED, '物理学', '电子信息工程', '通信工程'],
+  化学系: [NOT_SELECTED, '化学', '应用化学', '材料化学'],
+  生物与食品工程学院: [NOT_SELECTED, '生物科学', '生物技术', '食品科学与工程'],
+  体育学院: [NOT_SELECTED, '体育教育', '社会体育指导与管理'],
+  美术学院: [NOT_SELECTED, '美术学', '视觉传达设计', '环境设计'],
+  计算机科学系: [NOT_SELECTED, '软件工程', '网络工程', '计算机科学与技术', '物联网工程'],
+  音乐系: [NOT_SELECTED, '音乐学', '音乐表演', '舞蹈学'],
+  教师研修学院: [NOT_SELECTED, '教育学', '教育技术学'],
+  成人教育学院: [NOT_SELECTED, '汉语言文学', '学前教育', '行政管理'],
+  网络教育学院: [NOT_SELECTED, '计算机科学与技术', '工商管理', '会计学'],
+  马克思主义学院: [NOT_SELECTED, '思想政治教育', '马克思主义理论']
 }
 
 const DEFAULT_PROFILE_OPTIONS_PAYLOAD = {
@@ -45,7 +48,7 @@ const DEFAULT_PROFILE_OPTIONS_PAYLOAD = {
     return {
       code: index,
       label: label,
-      majors: MAJOR_OPTIONS_BY_FACULTY[label] || ['未选择']
+      majors: MAJOR_OPTIONS_BY_FACULTY[label] || [NOT_SELECTED]
     }
   }),
   marketplaceItemTypes: [
@@ -93,7 +96,7 @@ let hasLoadedRemoteProfileOptions = false
 
 function getEnrollmentYearOptions() {
   const currentYear = new Date().getFullYear()
-  const yearOptions = ['未选择']
+  const yearOptions = [NOT_SELECTED]
 
   for (let year = 2014; year <= currentYear; year += 1) {
     yearOptions.push(String(year))
@@ -109,7 +112,7 @@ function fetchProfileOptions(forceRefresh) {
 
   return userApi.getProfileOptions().then(function(result) {
     if (!result.success) {
-      throw new Error(result.message || '加载资料选项失败')
+      throw new Error(result.message || i18n.t('profilePage.loadProfileFailed'))
     }
 
     cachedProfileOptions = normalizeProfileOptions(result.data || {})
@@ -145,12 +148,12 @@ function getMajorOptions(faculty) {
   const matchedOption = getCachedProfileOptions().faculties.filter(function(option) {
     return normalizeOptionLookup(option.label) === normalizedFaculty
   })[0]
-  return matchedOption ? matchedOption.majors.slice() : ['未选择']
+  return matchedOption ? matchedOption.majors.slice() : [NOT_SELECTED]
 }
 
 function canSelectMajor(faculty) {
   const normalizedFaculty = String(faculty || '').trim()
-  return !!normalizedFaculty && normalizedFaculty !== '未选择'
+  return !!normalizedFaculty && normalizedFaculty !== NOT_SELECTED
 }
 
 function getMarketplaceItemOptions() {
@@ -202,7 +205,7 @@ function normalizeFacultyOptions(options, fallbackOptions) {
     return {
       code: code,
       label: label,
-      majors: majors.length ? majors : ['未选择']
+      majors: majors.length ? majors : [NOT_SELECTED]
     }
   }).filter(function(option) {
     return !!option
@@ -237,6 +240,7 @@ function normalizeOptionLookup(value) {
 }
 
 module.exports = {
+  NOT_SELECTED,
   FACULTY_OPTIONS,
   MAJOR_OPTIONS_BY_FACULTY,
   fetchProfileOptions,

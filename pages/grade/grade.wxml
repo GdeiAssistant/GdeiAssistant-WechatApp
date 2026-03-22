@@ -1,4 +1,4 @@
-<view class="page-root {{themeClass}}">
+<view class="page-root {{themeClass}}" style="{{fontStyle}}">
 <view class="weui-navbar">
   <block wx:for="{{tabs}}" wx:key="*this">
     <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
@@ -10,14 +10,14 @@
 <view class="container">
 
   <view block class="page__bd" wx:if="{{firstTermGradeList && secondTermGradeList}}">
-    <view class="weui-cells__title">第一学期</view>
+    <view class="weui-cells__title">{{t.firstTerm}}</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell" wx:for="{{firstTermGradeList}}" wx:for-item="item" wx:key="item-key">
         <view class="weui-cell__bd">{{item.gradeName}}</view>
         <view class="weui-cell__ft">{{item.gradeScore}}</view>
       </view>
     </view>
-    <view class="weui-cells__title">第二学期</view>
+    <view class="weui-cells__title">{{t.secondTerm}}</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell" wx:for="{{secondTermGradeList}}" wx:for-item="item" wx:key="item-key">
         <view class="weui-cell__bd">{{item.gradeName}}</view>

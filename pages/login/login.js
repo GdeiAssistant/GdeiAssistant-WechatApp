@@ -6,17 +6,38 @@ const authApi = require('../../services/apis/auth.js')
 const dataSource = require('../../services/data-source.js')
 const { createSubmitGuard } = require('../../utils/debounce.js')
 var themeUtil = require('../../utils/theme')
+var i18n = require('../../utils/i18n')
 
 const loginGuard = createSubmitGuard()
 
 Page({
   data: {
     themeClass: '',
+    fontStyle: '',
+    t: {},
     ready: false,
     versionCode: '',
     useMockData: false,
-    dataSourceLabel: '真实接口',
+    dataSourceLabel: '',
     mockCredentialsHint: MOCK_CREDENTIALS_HINT
+  },
+
+  refreshI18n: function () {
+    var dataSourceRaw = dataSource.getDataSourceLabel()
+    this.setData({
+      t: {
+        navTitle: i18n.t('login.navTitle'),
+        appName: i18n.t('login.appName'),
+        dataSourceLabel: i18n.t('login.dataSourceLabel') + dataSourceRaw,
+        usernamePlaceholder: i18n.t('login.usernamePlaceholder'),
+        passwordPlaceholder: i18n.t('login.passwordPlaceholder'),
+        button: i18n.t('login.button'),
+        debugSettings: i18n.t('login.debugSettings'),
+        useMockData: i18n.t('login.useMockData'),
+        moreSettings: i18n.t('login.moreSettings')
+      }
+    })
+    wx.setNavigationBarTitle({ title: this.data.t.navTitle })
   },
 
   formSubmit: function(e) {
@@ -26,13 +47,13 @@ Page({
     const password = String(e.detail.value.password || '').trim()
 
     if (!username) {
-      utils.showNoActionModal('请填写校园网账号信息', '用户名不能为空')
+      utils.showNoActionModal(i18n.t('login.fillCredentials'), i18n.t('login.usernameEmpty'))
       loginGuard.release()
       return
     }
 
     if (!password) {
-      utils.showNoActionModal('请填写校园网账号信息', '密码不能为空')
+      utils.showNoActionModal(i18n.t('login.fillCredentials'), i18n.t('login.passwordEmpty'))
       loginGuard.release()
       return
     }
@@ -51,10 +72,10 @@ Page({
         })
         return
       }
-      utils.showModal('登录失败', result.message || '账号或密码错误')
+      utils.showModal(i18n.t('login.loginFailed'), result.message || i18n.t('login.defaultError'))
     }).catch((error) => {
       wx.hideNavigationBarLoading()
-      utils.showModal('登录失败', error.message)
+      utils.showModal(i18n.t('login.loginFailed'), error.message)
     }).finally(function () {
       loginGuard.release()
     })
@@ -62,8 +83,7 @@ Page({
 
   refreshRuntimeState: function() {
     this.setData({
-      useMockData: dataSource.isMockMode(),
-      dataSourceLabel: dataSource.getDataSourceLabel()
+      useMockData: dataSource.isMockMode()
     })
   },
 
@@ -72,6 +92,7 @@ Page({
     dataSource.setDataSourceMode(useMockData ? dataSource.DATA_SOURCE_MODES.mock : dataSource.DATA_SOURCE_MODES.remote)
     auth.clearSession()
     this.refreshRuntimeState()
+    this.refreshI18n()
   },
 
   onLoad: function() {
@@ -84,6 +105,7 @@ Page({
 
     this.setData({ versionCode: versionCode })
     this.refreshRuntimeState()
+    this.refreshI18n()
 
     auth.validateSessionToken().then((valid) => {
       if (valid) {
@@ -108,5 +130,6 @@ Page({
   onShow: function() {
     themeUtil.applyTheme(this)
     this.refreshRuntimeState()
+    this.refreshI18n()
   }
 })

@@ -1,4 +1,4 @@
-<view class="page__bd detail_page {{themeClass}}">
+<view class="page__bd detail_page {{themeClass}}" style="{{fontStyle}}">
   <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
 
   <view class="loading_box" wx:if="{{loading}}">
