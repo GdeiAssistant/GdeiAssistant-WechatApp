@@ -2,13 +2,15 @@ const {
   getCommunityModule,
   getCommunityPageTitle,
   getLostFoundItemDictionaryOptions,
-  DATING_GRADE_OPTIONS,
+  getDatingGradeOptions,
+  getDeliveryStatusOptions,
   DELIVERY_PLACEHOLDER_PICKUP_CODE
 } = require('../../constants/community.js')
 const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
 const pageUtils = require('../../utils/page.js')
 const { createSubmitGuard } = require('../../utils/debounce.js')
+const i18n = require('../../utils/i18n.js')
 var themeUtil = require('../../utils/theme')
 
 const commentGuard = createSubmitGuard()
@@ -31,7 +33,8 @@ function findLabel(options, value, fallback) {
 function formatSecretPublishText(publishTime, timer) {
   const baseText = String(publishTime || '').trim()
   if (Number(timer) === 1) {
-    return baseText ? `${baseText} · 24 小时后自动删除` : '24 小时后自动删除'
+    var autoDeleteText = i18n.t('community.list.autoDelete24h')
+    return baseText ? baseText + ' \u00b7 ' + autoDeleteText : autoDeleteText
   }
   return baseText
 }
@@ -44,17 +47,17 @@ function maskSensitiveText(text) {
   if (value.length <= 4) {
     return '***'
   }
-  return `${'*'.repeat(Math.max(value.length - 4, 3))}${value.slice(-4)}`
+  return '*'.repeat(Math.max(value.length - 4, 3)) + value.slice(-4)
 }
 
 function buildDeliveryRoleTitle(detailType) {
   switch (Number(detailType)) {
     case 0:
-      return '发布者'
+      return i18n.t('community.detail.rolePublisher')
     case 3:
-      return '接单者'
+      return i18n.t('community.detail.roleAcceptor')
     default:
-      return '大厅访客'
+      return i18n.t('community.detail.roleVisitor')
   }
 }
 
@@ -63,19 +66,19 @@ function buildDeliveryStatusDescription(status, detailType) {
   const normalizedType = Number(detailType)
 
   if (normalizedStatus === 0 && normalizedType === 0) {
-    return '订单正在等待同学接单，保持电话畅通即可。'
+    return i18n.t('community.detail.deliveryDesc00')
   }
   if (normalizedStatus === 0 && normalizedType === 1) {
-    return '当前仍在大厅中，接单后才能看到完整取件码和联系方式。'
+    return i18n.t('community.detail.deliveryDesc01')
   }
   if (normalizedStatus === 1 && normalizedType === 0) {
-    return '已有同学接单，确认收件后可在这里完成交易。'
+    return i18n.t('community.detail.deliveryDesc10')
   }
   if (normalizedStatus === 1 && normalizedType === 3) {
-    return '你已成功接单，请及时完成取件并送达。'
+    return i18n.t('community.detail.deliveryDesc13')
   }
   if (normalizedStatus === 2) {
-    return '这笔订单已经完成，可回看记录。'
+    return i18n.t('community.detail.deliveryDesc2')
   }
   return ''
 }
@@ -87,12 +90,12 @@ function buildDetail(moduleId, payload) {
       const profile = payload.profile || {}
       return {
         images: item.pictureURL || [],
-        title: item.name || '商品详情',
+        title: item.name || i18n.t('community.detail.productDetail'),
         subtitle: item.location || '',
         description: item.description || '',
         priceText: Number(item.price || 0).toFixed(2),
         publishTime: item.publishTime || '',
-        sellerName: profile.nickname || profile.username || '匿名同学',
+        sellerName: profile.nickname || profile.username || i18n.t('community.list.anonStudent'),
         sellerAvatar: profile.avatarURL || '/image/default.png',
         qq: item.qq || '',
         wechat: '',
@@ -103,28 +106,29 @@ function buildDetail(moduleId, payload) {
     case 'lostandfound': {
       const item = payload.item || {}
       const profile = payload.profile || {}
+      var locationLabel = Number(item.lostType) === 0 ? i18n.t('community.detail.lostLocation') : i18n.t('community.detail.foundLocation')
       return {
         images: item.pictureURL || [],
-        title: item.name || '失物详情',
-        subtitle: `${Number(item.lostType) === 0 ? '丢失地点' : '拾取地点'}：${item.location || '未填写'}`,
+        title: item.name || i18n.t('community.detail.lostDetail'),
+        subtitle: locationLabel + '\uff1a' + (item.location || i18n.t('community.detail.notFilled')),
         description: item.description || '',
         publishTime: item.publishTime || '',
-        sellerName: profile.nickname || profile.username || '匿名同学',
+        sellerName: profile.nickname || profile.username || i18n.t('community.list.anonStudent'),
         sellerAvatar: profile.avatarURL || '/image/default.png',
         qq: item.qq || '',
         wechat: item.wechat || '',
         phone: item.phone || '',
-        typeLabel: findLabel(getLostFoundItemDictionaryOptions(), item.itemType, '其他'),
-        badgeText: Number(item.lostType) === 0 ? '寻物启事' : '失物招领',
+        typeLabel: findLabel(getLostFoundItemDictionaryOptions(), item.itemType, i18n.t('community.category.other')),
+        badgeText: Number(item.lostType) === 0 ? i18n.t('community.lostFoundMode.lostNotice') : i18n.t('community.lostFoundMode.foundNotice'),
         canLike: false
       }
     }
     case 'secret':
       return {
         id: payload.id,
-        title: '校园树洞',
+        title: i18n.t('community.modules.secret.title'),
         subtitle: formatSecretPublishText(payload.publishTime, payload.timer),
-        description: Number(payload.type) === 1 ? '这是一段语音树洞，点击播放收听。' : (payload.content || ''),
+        description: Number(payload.type) === 1 ? i18n.t('community.detail.voiceSecretDesc') : (payload.content || ''),
         content: payload.content || '',
         type: Number(payload.type || 0),
         theme: Number(payload.theme || 1),
@@ -138,7 +142,7 @@ function buildDetail(moduleId, payload) {
     case 'express':
       return {
         id: payload.id,
-        title: `${payload.nickname || '匿名同学'} -> ${payload.name || 'TA'}`,
+        title: (payload.nickname || i18n.t('community.list.anonStudent')) + ' -> ' + (payload.name || 'TA'),
         subtitle: payload.publishTime || '',
         description: payload.content || '',
         likeCount: Number(payload.likeCount || 0),
@@ -152,7 +156,7 @@ function buildDetail(moduleId, payload) {
     case 'topic':
       return {
         id: payload.id,
-        title: `#${payload.topic || '校园话题'}`,
+        title: '#' + (payload.topic || i18n.t('community.list.campusTopic')),
         subtitle: payload.publishTime || '',
         description: payload.content || '',
         images: payload.imageUrls || [],
@@ -171,7 +175,7 @@ function buildDetail(moduleId, payload) {
 
       return {
         id: order.orderId,
-        title: order.company || '全民快递',
+        title: order.company || i18n.t('community.modules.delivery.title'),
         subtitle: order.orderTime || '',
         description: order.remarks || '',
         pickupAddress: order.company || '',
@@ -186,7 +190,7 @@ function buildDetail(moduleId, payload) {
         canViewSensitiveInfo: canViewSensitiveInfo,
         userRoleTitle: buildDeliveryRoleTitle(detailType),
         statusDescription: buildDeliveryStatusDescription(orderState, detailType),
-        sensitiveHint: !canViewSensitiveInfo && (hasMeaningfulPickupCode || phone) ? '接单后才能查看完整取件码和联系方式' : '',
+        sensitiveHint: !canViewSensitiveInfo && (hasMeaningfulPickupCode || phone) ? i18n.t('community.detail.sensitiveHint') : '',
         tradeId: payload.trade && payload.trade.tradeId ? payload.trade.tradeId : null,
         canAccept: detailType === 1 && orderState === 0,
         canFinish: detailType === 0 && orderState === 1
@@ -196,8 +200,8 @@ function buildDetail(moduleId, payload) {
       const profile = payload.profile || {}
       return {
         id: profile.profileId,
-        title: profile.nickname || '卖室友',
-        subtitle: `${findLabel(DATING_GRADE_OPTIONS, profile.grade, '未知年级')} · ${profile.faculty || ''}`,
+        title: profile.nickname || i18n.t('community.modules.dating.title'),
+        subtitle: findLabel(getDatingGradeOptions(), profile.grade, i18n.t('community.list.unknownGrade')) + ' \u00b7 ' + (profile.faculty || ''),
         description: profile.content || '',
         images: payload.pictureURL ? [payload.pictureURL] : [],
         hometown: profile.hometown || '',
@@ -211,7 +215,7 @@ function buildDetail(moduleId, payload) {
     case 'photograph':
       return {
         id: payload.id,
-        title: payload.title || '作品详情',
+        title: payload.title || i18n.t('community.detail.workDetail'),
         subtitle: payload.createTime || '',
         description: payload.content || '',
         images: payload.imageUrls || [],
@@ -222,7 +226,7 @@ function buildDetail(moduleId, payload) {
       }
     default:
       return {
-        title: '详情',
+        title: i18n.t('community.detail.detail'),
         description: ''
       }
   }
@@ -231,6 +235,7 @@ function buildDetail(moduleId, payload) {
 Page({
   onShow: function () {
     themeUtil.applyTheme(this)
+    this.refreshI18n()
   },
   data: {
     themeClass: '',
@@ -244,7 +249,62 @@ Page({
     commentInput: '',
     guessInput: '',
     pickInput: '',
-    playingVoice: false
+    playingVoice: false,
+    t: {}
+  },
+
+  refreshI18n: function() {
+    var moduleConfig = this.data.moduleId ? getCommunityModule(this.data.moduleId) : this.data.moduleConfig
+
+    var tData = {
+      loading: i18n.t('community.list.loading'),
+      publishTime: i18n.t('community.detail.publishTime'),
+      contactInfo: i18n.t('community.detail.contactInfo'),
+      copy: i18n.t('community.detail.copy'),
+      call: i18n.t('community.detail.call'),
+      publisher: i18n.t('community.detail.publisher'),
+      secretInteraction: i18n.t('community.detail.secretInteraction'),
+      playVoice: i18n.t('community.detail.playVoice'),
+      stopVoice: i18n.t('community.detail.stopVoice'),
+      cancelLike: i18n.t('community.detail.cancelLike'),
+      like: i18n.t('community.list.like'),
+      liked: i18n.t('community.detail.liked'),
+      comment: i18n.t('community.list.comment'),
+      interactionData: i18n.t('community.detail.interactionData'),
+      guessPlaceholder: i18n.t('community.detail.guessPlaceholder'),
+      submitBtn: i18n.t('common.submit'),
+      guessHint: i18n.t('community.detail.guessHint'),
+      taskInfo: i18n.t('community.detail.taskInfo'),
+      myRole: i18n.t('community.detail.myRole'),
+      pickupPoint: i18n.t('community.detail.pickupPoint'),
+      deliveryAddr: i18n.t('community.detail.deliveryAddr'),
+      pickupCode: i18n.t('community.detail.pickupCode'),
+      contactPhone: i18n.t('community.detail.contactPhone'),
+      errandFee: i18n.t('community.detail.errandFee'),
+      acceptOrder: i18n.t('community.detail.acceptOrder'),
+      confirmComplete: i18n.t('community.detail.confirmComplete'),
+      hometown: i18n.t('community.detail.hometown'),
+      contactNotVisible: i18n.t('community.detail.contactNotVisible'),
+      pickPlaceholder: i18n.t('community.detail.pickPlaceholder'),
+      sendPick: i18n.t('community.detail.sendPick'),
+      commentSection: i18n.t('community.detail.commentSection'),
+      postComment: i18n.t('community.detail.postComment'),
+      commentPlaceholder: i18n.t('community.detail.commentPlaceholder'),
+      submitComment: i18n.t('community.detail.submitComment'),
+      contactQQ: i18n.t('community.center.contactQQ'),
+      contactWechat: i18n.t('community.center.contactWechat')
+    }
+
+    this.setData({
+      moduleConfig: moduleConfig,
+      t: tData
+    })
+
+    if (moduleConfig && this.data.moduleId) {
+      wx.setNavigationBarTitle({
+        title: getCommunityPageTitle(this.data.moduleId, 'detail', moduleConfig.title)
+      })
+    }
   },
 
   loadComments: function() {
@@ -256,8 +316,8 @@ Page({
       if (result.success) {
         const normalizedComments = (Array.isArray(result.data) ? result.data : []).map(function(item, index) {
           return Object.assign({
-            id: item.id || item.commentId || `comment_${index}`,
-            nickname: item.nickname || '匿名同学',
+            id: item.id || item.commentId || 'comment_' + index,
+            nickname: item.nickname || i18n.t('community.list.anonStudent'),
             comment: item.comment || '',
             publishTime: item.publishTime || item.createTime || ''
           }, item)
@@ -274,7 +334,7 @@ Page({
       return communityApi.getDetail(this.data.moduleId, this.data.detailId)
     }).then((result) => {
       if (!result.success) {
-        pageUtils.showTopTips(this, result.message || '加载失败')
+        pageUtils.showTopTips(this, result.message || i18n.t('common.loadFailed'))
         return
       }
 
@@ -353,7 +413,7 @@ Page({
 
     communityApi.toggleLike(this.data.moduleId, this.data.detailId, nextValue).then((result) => {
       if (!result.success) {
-        pageUtils.showTopTips(this, result.message || '操作失败')
+        pageUtils.showTopTips(this, result.message || i18n.t('community.common.operationFailed'))
         return
       }
 
@@ -378,19 +438,19 @@ Page({
 
     const comment = String(this.data.commentInput || '').trim()
     if (!comment) {
-      pageUtils.showTopTips(this, '评论内容不能为空')
+      pageUtils.showTopTips(this, i18n.t('community.detail.commentEmpty'))
       commentGuard.release()
       return
     }
     if (comment.length > COMMENT_MAX_LENGTH) {
-      pageUtils.showTopTips(this, `评论内容不能超过${COMMENT_MAX_LENGTH}个字符`)
+      pageUtils.showTopTips(this, i18n.tReplace('community.detail.commentTooLong', { max: COMMENT_MAX_LENGTH }))
       commentGuard.release()
       return
     }
 
     communityApi.submitComment(this.data.moduleId, this.data.detailId, comment).then((result) => {
       if (!result.success) {
-        pageUtils.showTopTips(this, result.message || '评论失败')
+        pageUtils.showTopTips(this, result.message || i18n.t('community.detail.commentFailed'))
         return
       }
 
@@ -416,19 +476,19 @@ Page({
 
     const guessedName = String(this.data.guessInput || '').trim()
     if (!guessedName) {
-      pageUtils.showTopTips(this, '请输入你猜的名字')
+      pageUtils.showTopTips(this, i18n.t('community.detail.guessEmpty'))
       guessGuard.release()
       return
     }
     if (guessedName.length > EXPRESS_GUESS_MAX_LENGTH) {
-      pageUtils.showTopTips(this, `名字长度不能超过${EXPRESS_GUESS_MAX_LENGTH}个字符`)
+      pageUtils.showTopTips(this, i18n.tReplace('community.detail.guessTooLong', { max: EXPRESS_GUESS_MAX_LENGTH }))
       guessGuard.release()
       return
     }
 
     communityApi.guessExpress(this.data.detailId, guessedName).then((result) => {
       if (!result.success) {
-        pageUtils.showTopTips(this, result.message || '提交失败')
+        pageUtils.showTopTips(this, result.message || i18n.t('community.detail.submitFailed'))
         return
       }
 
@@ -437,12 +497,12 @@ Page({
       if (result.data === true) {
         currentDetail.correctCount = Number(currentDetail.correctCount || 0) + 1
         wx.showToast({
-          title: '猜对了',
+          title: i18n.t('community.detail.guessCorrect'),
           icon: 'success'
         })
       } else {
         wx.showToast({
-          title: '还差一点',
+          title: i18n.t('community.detail.guessWrong'),
           icon: 'none'
         })
       }
@@ -460,11 +520,11 @@ Page({
   acceptDelivery: function() {
     communityApi.acceptDeliveryOrder(this.data.detailId).then((result) => {
       if (!result.success) {
-        pageUtils.showTopTips(this, result.message || '接单失败')
+        pageUtils.showTopTips(this, result.message || i18n.t('community.detail.acceptFailed'))
         return
       }
       wx.showToast({
-        title: '接单成功',
+        title: i18n.t('community.detail.acceptSuccess'),
         icon: 'success'
       })
       this.loadDetail()
@@ -480,11 +540,11 @@ Page({
     }
     communityApi.finishDeliveryTrade(tradeId).then((result) => {
       if (!result.success) {
-        pageUtils.showTopTips(this, result.message || '确认失败')
+        pageUtils.showTopTips(this, result.message || i18n.t('community.detail.confirmFailed'))
         return
       }
       wx.showToast({
-        title: '已确认完成',
+        title: i18n.t('community.detail.confirmSuccess'),
         icon: 'success'
       })
       this.loadDetail()
@@ -498,23 +558,23 @@ Page({
 
     const content = String(this.data.pickInput || '').trim()
     if (!content) {
-      pageUtils.showTopTips(this, '请输入撩一下内容')
+      pageUtils.showTopTips(this, i18n.t('community.detail.pickEmpty'))
       pickGuard.release()
       return
     }
     if (content.length > DATING_PICK_MAX_LENGTH) {
-      pageUtils.showTopTips(this, `撩一下内容不能超过${DATING_PICK_MAX_LENGTH}个字符`)
+      pageUtils.showTopTips(this, i18n.tReplace('community.detail.pickTooLong', { max: DATING_PICK_MAX_LENGTH }))
       pickGuard.release()
       return
     }
 
     communityApi.submitDatingPick(this.data.detailId, content).then((result) => {
       if (!result.success) {
-        pageUtils.showTopTips(this, result.message || '发送失败')
+        pageUtils.showTopTips(this, result.message || i18n.t('community.detail.sendFailed'))
         return
       }
       wx.showToast({
-        title: '发送成功',
+        title: i18n.t('community.detail.sendSuccess'),
         icon: 'success'
       })
       this.setData({
@@ -550,7 +610,7 @@ Page({
         this.setData({
           playingVoice: false
         })
-        pageUtils.showTopTips(this, '语音播放失败')
+        pageUtils.showTopTips(this, i18n.t('community.detail.voicePlayFailed'))
       })
     }
 
@@ -574,8 +634,8 @@ Page({
     const moduleConfig = getCommunityModule(moduleId)
     if (!moduleConfig || !options.id) {
       wx.showModal({
-        title: '提示',
-        content: '页面参数不完整',
+        title: i18n.t('community.common.notice'),
+        content: i18n.t('community.detail.incompleteParams'),
         showCancel: false
       })
       return
@@ -590,6 +650,7 @@ Page({
       moduleConfig: moduleConfig,
       detailId: options.id
     })
+    this.refreshI18n()
     this.ensureProfileOptions().finally(() => {
       this.loadDetail()
     })
@@ -607,8 +668,8 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: this.data.detail && this.data.detail.title ? this.data.detail.title : (this.data.moduleConfig ? this.data.moduleConfig.title : '校园社区'),
-      path: `/pages/communityDetail/communityDetail?module=${this.data.moduleId}&id=${this.data.detailId}`
+      title: this.data.detail && this.data.detail.title ? this.data.detail.title : (this.data.moduleConfig ? this.data.moduleConfig.title : i18n.t('community.common.campusCommunity')),
+      path: '/pages/communityDetail/communityDetail?module=' + this.data.moduleId + '&id=' + this.data.detailId
     }
   }
 })

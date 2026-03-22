@@ -63,7 +63,15 @@
   "schedule": {
     "navTitle": "我的課表",
     "title": "課表查詢",
-    "tabs": ["週一", "週二", "週三", "週四", "週五", "週六", "週日"],
+    "tabs": [
+      "週一",
+      "週二",
+      "週三",
+      "週四",
+      "週五",
+      "週六",
+      "週日"
+    ],
     "currentWeek": "當前查詢的週數：第{{week}}週",
     "weekRange": "第{{min}}週至第{{max}}週"
   },
@@ -81,7 +89,12 @@
   "grade": {
     "navTitle": "成績查詢",
     "title": "成績查詢",
-    "tabs": ["大一", "大二", "大三", "大四"],
+    "tabs": [
+      "大一",
+      "大二",
+      "大三",
+      "大四"
+    ],
     "firstTerm": "第一學期",
     "secondTerm": "第二學期"
   },
@@ -106,10 +119,22 @@
     "noMoreNews": "沒有更多新聞了",
     "loadNewsFailed": "載入新聞失敗",
     "newsTabs": [
-      { "type": 1, "label": "學校要聞" },
-      { "type": 2, "label": "院部通知" },
-      { "type": 3, "label": "通知公告" },
-      { "type": 4, "label": "學術動態" }
+      {
+        "type": 1,
+        "label": "學校要聞"
+      },
+      {
+        "type": 2,
+        "label": "院部通知"
+      },
+      {
+        "type": 3,
+        "label": "通知公告"
+      },
+      {
+        "type": 4,
+        "label": "學術動態"
+      }
     ]
   },
   "profilePage": {
@@ -299,36 +324,108 @@
     "remote": "真實接口"
   },
   "features": {
-    "grade": { "title": "成績查詢", "desc": "查看學年成績與學期成績" },
-    "schedule": { "title": "課表查詢", "desc": "查看每週課表安排" },
-    "cet": { "title": "四六級查詢", "desc": "查詢四六級成績並保存考號" },
-    "graduateExam": { "title": "考研查詢", "desc": "查詢研究生成績" },
-    "spare": { "title": "課室查詢", "desc": "查詢當前空閒課室" },
-    "bill": { "title": "校園卡消費", "desc": "查看校園卡消費記錄" },
-    "card": { "title": "校園卡", "desc": "查看校園卡資訊與餘額" },
-    "cardLost": { "title": "校園卡掛失", "desc": "掛失校園卡" },
-    "evaluate": { "title": "教學評價", "desc": "一鍵完成教學評價" },
-    "collection": { "title": "圖書館", "desc": "檢索館藏並進入借閱與續借" },
-    "book": { "title": "我的借閱", "desc": "查看個人借閱記錄並續借" },
-    "data": { "title": "校園數據", "desc": "電費與黃頁資訊查詢" },
-    "news": { "title": "資訊中心", "desc": "查看校園新聞、系統公告與互動消息" },
-    "marketplace": { "title": "二手交易", "desc": "瀏覽與發佈校園閒置" },
-    "lostandfound": { "title": "失物招領", "desc": "發佈尋物與招領資訊" },
-    "secret": { "title": "校園樹洞", "desc": "匿名說說心裏話" },
-    "express": { "title": "表白牆", "desc": "查看與發佈校園表白" },
-    "topic": { "title": "校園話題", "desc": "參與熱門校園討論" },
-    "delivery": { "title": "全民快遞", "desc": "發佈與接取校園跑腿" },
-    "dating": { "title": "賣室友", "desc": "瀏覽資料、發佈內容並處理互動" },
-    "photograph": { "title": "拍好校園", "desc": "查看與分享校園攝影" },
+    "grade": {
+      "title": "成績查詢",
+      "desc": "查看學年成績與學期成績"
+    },
+    "schedule": {
+      "title": "課表查詢",
+      "desc": "查看每週課表安排"
+    },
+    "cet": {
+      "title": "四六級查詢",
+      "desc": "查詢四六級成績並保存考號"
+    },
+    "graduateExam": {
+      "title": "考研查詢",
+      "desc": "查詢研究生成績"
+    },
+    "spare": {
+      "title": "課室查詢",
+      "desc": "查詢當前空閒課室"
+    },
+    "bill": {
+      "title": "校園卡消費",
+      "desc": "查看校園卡消費記錄"
+    },
+    "card": {
+      "title": "校園卡",
+      "desc": "查看校園卡資訊與餘額"
+    },
+    "cardLost": {
+      "title": "校園卡掛失",
+      "desc": "掛失校園卡"
+    },
+    "evaluate": {
+      "title": "教學評價",
+      "desc": "一鍵完成教學評價"
+    },
+    "collection": {
+      "title": "圖書館",
+      "desc": "檢索館藏並進入借閱與續借"
+    },
+    "book": {
+      "title": "我的借閱",
+      "desc": "查看個人借閱記錄並續借"
+    },
+    "data": {
+      "title": "校園數據",
+      "desc": "電費與黃頁資訊查詢"
+    },
+    "news": {
+      "title": "資訊中心",
+      "desc": "查看校園新聞、系統公告與互動消息"
+    },
+    "marketplace": {
+      "title": "二手交易",
+      "desc": "瀏覽與發佈校園閒置"
+    },
+    "lostandfound": {
+      "title": "失物招領",
+      "desc": "發佈尋物與招領資訊"
+    },
+    "secret": {
+      "title": "校園樹洞",
+      "desc": "匿名說說心裏話"
+    },
+    "express": {
+      "title": "表白牆",
+      "desc": "查看與發佈校園表白"
+    },
+    "topic": {
+      "title": "校園話題",
+      "desc": "參與熱門校園討論"
+    },
+    "delivery": {
+      "title": "全民快遞",
+      "desc": "發佈與接取校園跑腿"
+    },
+    "dating": {
+      "title": "賣室友",
+      "desc": "瀏覽資料、發佈內容並處理互動"
+    },
+    "photograph": {
+      "title": "拍好校園",
+      "desc": "查看與分享校園攝影"
+    },
     "sections": {
       "campus": "校園服務",
       "information": "資訊中心",
       "community": "校園社區"
     },
     "actions": {
-      "appearance": { "title": "介面和外觀", "desc": "主題、字體大小、語言" },
-      "settings": { "title": "功能設定", "desc": "切換 mock 與管理首頁模塊" },
-      "logout": { "title": "登出賬號", "desc": "登出當前賬號" }
+      "appearance": {
+        "title": "介面和外觀",
+        "desc": "主題、字體大小、語言"
+      },
+      "settings": {
+        "title": "功能設定",
+        "desc": "切換 mock 與管理首頁模塊"
+      },
+      "logout": {
+        "title": "登出賬號",
+        "desc": "登出當前賬號"
+      }
     }
   },
   "billPage": {
@@ -504,6 +601,412 @@
       "evening": "晚上",
       "daytime": "白天",
       "allDay": "整天"
+    }
+  },
+  "community": {
+    "common": {
+      "notice": "提示",
+      "unknownModule": "未識別的社區模塊",
+      "campusCommunity": "校園社區",
+      "operationFailed": "操作失敗"
+    },
+    "category": {
+      "all": "全部",
+      "campusTransport": "校園代步",
+      "phone": "手機",
+      "computer": "電腦",
+      "digitalAccessory": "數碼配件",
+      "digital": "數碼",
+      "appliance": "電器",
+      "sportsFitness": "運動健身",
+      "clothingUmbrella": "衣物傘帽",
+      "booksTextbooks": "圖書教材",
+      "rental": "租賃",
+      "lifeEntertainment": "生活娛樂",
+      "other": "其他"
+    },
+    "lostFoundMode": {
+      "lostNotice": "尋物啟事",
+      "foundNotice": "失物招領"
+    },
+    "lostFoundItem": {
+      "phone": "手機",
+      "campusCard": "校園卡",
+      "idCard": "身份證",
+      "bankCard": "銀行卡",
+      "book": "書",
+      "key": "鑰匙",
+      "bag": "包包",
+      "clothingHat": "衣帽",
+      "campusTransport": "校園代步",
+      "sportsFitness": "運動健身",
+      "digitalAccessory": "數碼配件",
+      "other": "其他"
+    },
+    "secretTheme": {
+      "theme": "主題 {{n}}"
+    },
+    "secretType": {
+      "text": "文字",
+      "voice": "語音"
+    },
+    "gender": {
+      "male": "男",
+      "female": "女",
+      "secret": "保密"
+    },
+    "deliveryStatus": {
+      "all": "全部",
+      "pending": "待接單",
+      "delivering": "配送中",
+      "completed": "已完成"
+    },
+    "datingArea": {
+      "girls": "小姐姐",
+      "boys": "小哥哥"
+    },
+    "datingGrade": {
+      "year1": "大一",
+      "year2": "大二",
+      "year3": "大三",
+      "year4": "大四"
+    },
+    "photographTab": {
+      "life": "生活照",
+      "campus": "校園照"
+    },
+    "modules": {
+      "marketplace": {
+        "title": "二手交易",
+        "summary": "瀏覽與發佈校園閒置物品",
+        "searchPlaceholder": "搜索商品名稱或關鍵詞"
+      },
+      "lostandfound": {
+        "title": "失物招領",
+        "summary": "發佈尋物啟事和失物招領資訊",
+        "searchPlaceholder": "搜索失物關鍵詞"
+      },
+      "secret": {
+        "title": "校園樹洞",
+        "summary": "匿名記錄心情，分享不想說出口的話"
+      },
+      "express": {
+        "title": "表白牆",
+        "summary": "給心動的人留下一句悄悄話",
+        "searchPlaceholder": "搜索名字或內容"
+      },
+      "topic": {
+        "title": "校園話題",
+        "summary": "參與熱門討論，看看同學們在聊什麼",
+        "searchPlaceholder": "搜索話題關鍵詞"
+      },
+      "delivery": {
+        "title": "全民快遞",
+        "summary": "代拿快遞與校園跑腿互助"
+      },
+      "dating": {
+        "title": "賣室友",
+        "summary": "查看和發佈室友推薦資訊"
+      },
+      "photograph": {
+        "title": "拍好校園",
+        "summary": "分享鏡頭裏的校園瞬間與作品"
+      }
+    },
+    "pageTitle": {
+      "marketplace": {
+        "center": "個人中心",
+        "detail": "商品詳情",
+        "publish": "發佈商品",
+        "edit": "編輯商品"
+      },
+      "lostandfound": {
+        "center": "個人中心",
+        "detail": "詳情",
+        "publish": "發佈資訊",
+        "edit": "編輯資訊"
+      },
+      "secret": {
+        "center": "我的樹洞",
+        "detail": "匿名詳情",
+        "publish": "發佈樹洞"
+      },
+      "express": {
+        "center": "我的",
+        "detail": "詳情",
+        "publish": "發佈表白"
+      },
+      "topic": {
+        "center": "我的",
+        "detail": "話題詳情",
+        "publish": "發佈話題"
+      },
+      "delivery": {
+        "center": "我的跑腿",
+        "detail": "任務詳情",
+        "publish": "發佈全民快遞"
+      },
+      "dating": {
+        "center": "互動中心",
+        "detail": "賣室友",
+        "publish": "發佈資料"
+      },
+      "photograph": {
+        "center": "我的作品",
+        "detail": "作品詳情",
+        "publish": "發佈作品"
+      }
+    },
+    "pageTitleFallback": {
+      "edit": "編輯{{title}}",
+      "publish": "發佈{{title}}"
+    },
+    "list": {
+      "search": "搜索",
+      "clear": "清空",
+      "loading": "正在載入",
+      "noMore": "沒有更多數據了",
+      "emptyTitle": "暫無內容",
+      "emptySummary": "換個篩選條件試試，或者發佈一條新的內容。",
+      "like": "點贊",
+      "comment": "評論",
+      "publishBtn": "發佈{{title}}",
+      "myBtn": "我的",
+      "statPhotos": "作品",
+      "statComments": "評論",
+      "statLikes": "點贊",
+      "autoDelete24h": "24 小時後自動刪除",
+      "unnamedProduct": "未命名商品",
+      "unnamedItem": "未命名物品",
+      "unnamedContent": "未命名內容",
+      "secondhand": "閒置",
+      "lost": "尋物",
+      "found": "招領",
+      "voiceSecret": "一段語音樹洞",
+      "anonSecret": "匿名樹洞",
+      "tapVoiceSecret": "點擊查看語音樹洞內容",
+      "anonStudent": "匿名同學",
+      "campusTopic": "校園話題",
+      "campusErrand": "校園跑腿",
+      "task": "任務",
+      "unknownGrade": "未知年級",
+      "campusWork": "校園作品"
+    },
+    "center": {
+      "tabSelling": "正在出售",
+      "tabSold": "已售出",
+      "tabOffShelf": "已下架",
+      "tabLost": "尋物",
+      "tabFound": "招領",
+      "tabRecovered": "已找回",
+      "tabMyPublished": "我發佈的",
+      "tabMyAccepted": "我接的單",
+      "tabReceivedPick": "收到的撩",
+      "tabSentPick": "我發出的",
+      "tabMyPosts": "我的發佈",
+      "actionEdit": "編輯",
+      "actionOffShelf": "下架",
+      "actionSold": "售出",
+      "actionRelist": "重新上架",
+      "actionConfirmFound": "確認尋回",
+      "actionAccept": "同意",
+      "actionReject": "拒絕",
+      "actionHide": "隱藏",
+      "voiceSecret": "語音樹洞",
+      "textSecret": "文字樹洞",
+      "tapPlayVoice": "點擊查看詳情播放語音",
+      "emptySummary": "你可以先去發佈一條新的內容。",
+      "continuePublish": "繼續發佈",
+      "me": "我",
+      "contactQQ": "QQ：",
+      "contactWechat": "微信：",
+      "contactPending": "等待對方處理後顯示聯繫方式"
+    },
+    "detail": {
+      "detail": "詳情",
+      "productDetail": "商品詳情",
+      "lostDetail": "失物詳情",
+      "workDetail": "作品詳情",
+      "lostLocation": "丟失地點",
+      "foundLocation": "拾取地點",
+      "notFilled": "未填寫",
+      "voiceSecretDesc": "這是一段語音樹洞，點擊播放收聽。",
+      "publishTime": "發佈時間：",
+      "contactInfo": "聯繫資訊",
+      "copy": "複製",
+      "call": "撥打",
+      "publisher": "發佈者：",
+      "secretInteraction": "樹洞互動",
+      "playVoice": "播放語音",
+      "stopVoice": "停止播放語音",
+      "cancelLike": "取消點贊",
+      "liked": "已點贊",
+      "interactionData": "互動數據",
+      "guessPlaceholder": "輸入你猜的名字",
+      "guessHint": "已猜 {{guessCount}} 次，猜中 {{correctCount}} 次",
+      "taskInfo": "任務資訊",
+      "myRole": "我的角色：",
+      "pickupPoint": "取件點：",
+      "deliveryAddr": "送達地址：",
+      "pickupCode": "取件碼：",
+      "contactPhone": "聯繫電話：",
+      "errandFee": "跑腿費：",
+      "acceptOrder": "立即接單",
+      "confirmComplete": "確認完成",
+      "hometown": "家鄉：",
+      "contactNotVisible": "對方同意後才會顯示聯繫方式",
+      "pickPlaceholder": "說點什麼吧，不超過 50 字",
+      "sendPick": "發送撩一下",
+      "commentSection": "評論區",
+      "postComment": "發表評論",
+      "commentPlaceholder": "寫下你的評論，不超過 50 字",
+      "submitComment": "提交評論",
+      "rolePublisher": "發佈者",
+      "roleAcceptor": "接單者",
+      "roleVisitor": "大廳訪客",
+      "deliveryDesc00": "訂單正在等待同學接單，保持電話暢通即可。",
+      "deliveryDesc01": "當前仍在大廳中，接單後才能看到完整取件碼和聯繫方式。",
+      "deliveryDesc10": "已有同學接單，確認收件後可在這裏完成交易。",
+      "deliveryDesc13": "你已成功接單，請及時完成取件並送達。",
+      "deliveryDesc2": "這筆訂單已經完成，可回看記錄。",
+      "sensitiveHint": "接單後才能查看完整取件碼和聯繫方式",
+      "incompleteParams": "頁面參數不完整",
+      "commentEmpty": "評論內容不能為空",
+      "commentTooLong": "評論內容不能超過{{max}}個字元",
+      "commentFailed": "評論失敗",
+      "guessEmpty": "請輸入你猜的名字",
+      "guessTooLong": "名字長度不能超過{{max}}個字元",
+      "submitFailed": "提交失敗",
+      "guessCorrect": "猜對了",
+      "guessWrong": "還差一點",
+      "acceptFailed": "接單失敗",
+      "acceptSuccess": "接單成功",
+      "confirmFailed": "確認失敗",
+      "confirmSuccess": "已確認完成",
+      "pickEmpty": "請輸入撩一下內容",
+      "pickTooLong": "撩一下內容不能超過{{max}}個字元",
+      "sendFailed": "發送失敗",
+      "sendSuccess": "發送成功",
+      "voicePlayFailed": "語音播放失敗"
+    },
+    "publish": {
+      "basicInfo": "基礎資訊",
+      "loadingExisting": "正在載入已有內容...",
+      "imageUpload": "圖片上傳",
+      "editImageNotSupported": "編輯模式暫不支持修改圖片",
+      "datingImageHint": "賣室友僅展示第一張圖片",
+      "saveChanges": "儲存修改",
+      "submitPublish": "提交發佈",
+      "editHeroSummary": "修改當前已發佈內容",
+      "productName": "商品名稱",
+      "productPrice": "商品價格",
+      "productCategory": "商品分類：",
+      "tradeLocation": "交易地點",
+      "qqNumber": "QQ 號",
+      "phoneOptional": "手機號（可選）",
+      "productDesc": "商品描述",
+      "infoType": "資訊類型：",
+      "itemCategory": "物品分類：",
+      "itemName": "物品名稱",
+      "location": "地點",
+      "qqOptional": "QQ（可選）",
+      "wechatOptional": "微信（可選）",
+      "phoneOptional2": "電話（可選）",
+      "itemDesc": "物品描述",
+      "theme": "主題：",
+      "contentType": "內容類型：",
+      "secretPlaceholder": "說點心裏話吧",
+      "startRecording": "開始錄音",
+      "stopRecording": "結束錄音",
+      "recordedDuration": "已錄製語音",
+      "previewVoice": "試聽語音",
+      "stopPreview": "停止試聽",
+      "yourNickname": "你的暱稱",
+      "yourRealname": "你的真名（可選）",
+      "yourGender": "你的性別：",
+      "targetName": "TA 的名字",
+      "targetGender": "TA 的性別：",
+      "confessionContent": "表白內容",
+      "topicKeyword": "話題關鍵詞",
+      "topicContent": "聊聊你的想法",
+      "pickupLocation": "取件地點",
+      "pickupCodeOptional": "取件碼（可選）",
+      "deliveryAddress": "送達地址",
+      "contactPhone": "聯繫電話",
+      "errandFee": "跑腿費",
+      "remarksOptional": "備註說明（可選）",
+      "nickname": "暱稱",
+      "grade": "年級：",
+      "displayArea": "展示區：",
+      "major": "專業",
+      "hometown": "家鄉",
+      "roommateIntro": "介紹一下你想推薦的室友",
+      "workTitle": "作品標題",
+      "workType": "作品類型：",
+      "shootingDesc": "拍攝說明（可選）",
+      "imageLimit": "最多只能上傳 {{max}} 張圖片",
+      "recordingFailed": "錄音失敗",
+      "saveFailed": "儲存失敗",
+      "saveSuccess": "儲存成功",
+      "editItemNotFound": "未找到要編輯的內容",
+      "v": {
+        "productNameRequired": "請輸入商品名稱",
+        "productNameTooLong": "商品名稱不能超過{{max}}個字元",
+        "productDescRequired": "請輸入商品描述",
+        "productDescTooLong": "商品描述不能超過{{max}}個字元",
+        "priceInvalid": "請輸入正確的商品價格",
+        "locationRequired": "請輸入交易地點",
+        "locationTooLong": "交易地點不能超過{{max}}個字元",
+        "qqRequired": "請輸入 QQ 號",
+        "qqTooLong": "QQ 號不能超過{{max}}個字元",
+        "phoneTooLong": "手機號不能超過{{max}}個字元",
+        "imageRequired": "請至少上傳一張圖片",
+        "itemNameRequired": "請輸入物品名稱",
+        "itemNameTooLong": "物品名稱不能超過{{max}}個字元",
+        "itemDescRequired": "請輸入物品描述",
+        "itemDescTooLong": "物品描述不能超過{{max}}個字元",
+        "locationRequired2": "請輸入地點",
+        "locationTooLong2": "地點不能超過{{max}}個字元",
+        "qqTooLong2": "QQ 不能超過{{max}}個字元",
+        "wechatTooLong": "微信不能超過{{max}}個字元",
+        "phoneTooLong2": "電話不能超過{{max}}個字元",
+        "contactRequired": "請至少填寫一種聯繫方式",
+        "secretContentRequired": "請輸入樹洞內容",
+        "secretContentTooLong": "樹洞內容不能超過{{max}}個字元",
+        "voiceRequired": "請先錄製語音",
+        "nicknameRequired": "請輸入暱稱",
+        "nicknameTooLong": "暱稱不能超過{{max}}個字元",
+        "realnameTooLong": "真名不能超過{{max}}個字元",
+        "targetNameRequired": "請輸入 TA 的名字",
+        "targetNameTooLong": "TA 的名字不能超過{{max}}個字元",
+        "confessionRequired": "請輸入表白內容",
+        "confessionTooLong": "表白內容不能超過{{max}}個字元",
+        "topicRequired": "請輸入話題關鍵詞",
+        "topicTooLong": "話題關鍵詞不能超過{{max}}個字元",
+        "topicContentRequired": "請輸入話題內容",
+        "topicContentTooLong": "話題內容不能超過{{max}}個字元",
+        "pickupRequired": "請輸入取件地點",
+        "pickupTooLong": "取件地點不能超過{{max}}個字元",
+        "pickupCodeLength": "取件碼長度必須為11個字元",
+        "deliveryAddrRequired": "請輸入送達地址",
+        "deliveryAddrTooLong": "送達地址不能超過{{max}}個字元",
+        "phoneRequired": "請輸入聯繫人電話",
+        "contactPhoneTooLong": "聯繫人電話不能超過{{max}}個字元",
+        "remarksTooLong": "備註說明不能超過{{max}}個字元",
+        "rewardInvalid": "請輸入有效的跑腿費",
+        "majorRequired": "請輸入專業",
+        "majorTooLong": "專業不能超過{{max}}個字元",
+        "hometownRequired": "請輸入家鄉",
+        "hometownTooLong": "家鄉不能超過{{max}}個字元",
+        "qqWechatRequired": "QQ 和微信至少填寫一個",
+        "introRequired": "請輸入介紹內容",
+        "introTooLong": "介紹內容不能超過{{max}}個字元",
+        "workTitleRequired": "請輸入作品標題",
+        "workTitleTooLong": "作品標題不能超過{{max}}個字元",
+        "shootingDescTooLong": "拍攝說明不能超過{{max}}個字元",
+        "moduleNotSupported": "暫不支持當前模塊",
+        "editNotSupported": "當前模塊暫不支持編輯"
+      }
     }
   }
 }

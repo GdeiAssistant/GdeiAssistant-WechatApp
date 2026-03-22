@@ -63,7 +63,15 @@
   "schedule": {
     "navTitle": "マイ時間割",
     "title": "時間割",
-    "tabs": ["月", "火", "水", "木", "金", "土", "日"],
+    "tabs": [
+      "月",
+      "火",
+      "水",
+      "木",
+      "金",
+      "土",
+      "日"
+    ],
     "currentWeek": "現在の週：第{{week}}週",
     "weekRange": "第{{min}}週〜第{{max}}週"
   },
@@ -81,7 +89,12 @@
   "grade": {
     "navTitle": "成績照会",
     "title": "成績照会",
-    "tabs": ["1年", "2年", "3年", "4年"],
+    "tabs": [
+      "1年",
+      "2年",
+      "3年",
+      "4年"
+    ],
     "firstTerm": "前期",
     "secondTerm": "後期"
   },
@@ -106,10 +119,22 @@
     "noMoreNews": "これ以上ニュースはありません",
     "loadNewsFailed": "ニュースの読み込みに失敗しました",
     "newsTabs": [
-      { "type": 1, "label": "大学ニュース" },
-      { "type": 2, "label": "学部通知" },
-      { "type": 3, "label": "お知らせ" },
-      { "type": 4, "label": "学術動向" }
+      {
+        "type": 1,
+        "label": "大学ニュース"
+      },
+      {
+        "type": 2,
+        "label": "学部通知"
+      },
+      {
+        "type": 3,
+        "label": "お知らせ"
+      },
+      {
+        "type": 4,
+        "label": "学術動向"
+      }
     ]
   },
   "profilePage": {
@@ -299,36 +324,108 @@
     "remote": "実際のAPI"
   },
   "features": {
-    "grade": { "title": "成績照会", "desc": "学年・学期の成績を確認" },
-    "schedule": { "title": "時間割", "desc": "毎週の時間割を確認" },
-    "cet": { "title": "CET成績", "desc": "CET成績照会と受験番号の保存" },
-    "graduateExam": { "title": "大学院入試", "desc": "大学院入試の成績を照会" },
-    "spare": { "title": "空き教室", "desc": "空き教室を検索" },
-    "bill": { "title": "学生証利用履歴", "desc": "学生証の利用履歴を確認" },
-    "card": { "title": "学生証", "desc": "学生証の情報と残高を確認" },
-    "cardLost": { "title": "紛失届", "desc": "学生証の紛失届を提出" },
-    "evaluate": { "title": "授業評価", "desc": "授業評価をワンクリックで完了" },
-    "collection": { "title": "図書館", "desc": "蔵書検索・貸出・更新" },
-    "book": { "title": "マイ貸出", "desc": "貸出記録の確認と更新" },
-    "data": { "title": "キャンパスデータ", "desc": "電気料金・電話帳情報の照会" },
-    "news": { "title": "インフォメーション", "desc": "キャンパスニュース・お知らせ・メッセージを確認" },
-    "marketplace": { "title": "フリマ", "desc": "中古品の閲覧と投稿" },
-    "lostandfound": { "title": "落とし物", "desc": "紛失物・拾得物の情報を投稿" },
-    "secret": { "title": "秘密の木", "desc": "匿名で投稿" },
-    "express": { "title": "告白の壁", "desc": "告白の閲覧と投稿" },
-    "topic": { "title": "キャンパストピック", "desc": "人気のキャンパス討論に参加" },
-    "delivery": { "title": "デリバリー", "desc": "キャンパス配達の投稿と受注" },
-    "dating": { "title": "ルームメイト", "desc": "プロフィール閲覧・投稿・交流" },
-    "photograph": { "title": "フォトウォール", "desc": "キャンパス写真の閲覧と共有" },
+    "grade": {
+      "title": "成績照会",
+      "desc": "学年・学期の成績を確認"
+    },
+    "schedule": {
+      "title": "時間割",
+      "desc": "毎週の時間割を確認"
+    },
+    "cet": {
+      "title": "CET成績",
+      "desc": "CET成績照会と受験番号の保存"
+    },
+    "graduateExam": {
+      "title": "大学院入試",
+      "desc": "大学院入試の成績を照会"
+    },
+    "spare": {
+      "title": "空き教室",
+      "desc": "空き教室を検索"
+    },
+    "bill": {
+      "title": "学生証利用履歴",
+      "desc": "学生証の利用履歴を確認"
+    },
+    "card": {
+      "title": "学生証",
+      "desc": "学生証の情報と残高を確認"
+    },
+    "cardLost": {
+      "title": "紛失届",
+      "desc": "学生証の紛失届を提出"
+    },
+    "evaluate": {
+      "title": "授業評価",
+      "desc": "授業評価をワンクリックで完了"
+    },
+    "collection": {
+      "title": "図書館",
+      "desc": "蔵書検索・貸出・更新"
+    },
+    "book": {
+      "title": "マイ貸出",
+      "desc": "貸出記録の確認と更新"
+    },
+    "data": {
+      "title": "キャンパスデータ",
+      "desc": "電気料金・電話帳情報の照会"
+    },
+    "news": {
+      "title": "インフォメーション",
+      "desc": "キャンパスニュース・お知らせ・メッセージを確認"
+    },
+    "marketplace": {
+      "title": "フリマ",
+      "desc": "中古品の閲覧と投稿"
+    },
+    "lostandfound": {
+      "title": "落とし物",
+      "desc": "紛失物・拾得物の情報を投稿"
+    },
+    "secret": {
+      "title": "秘密の木",
+      "desc": "匿名で投稿"
+    },
+    "express": {
+      "title": "告白の壁",
+      "desc": "告白の閲覧と投稿"
+    },
+    "topic": {
+      "title": "キャンパストピック",
+      "desc": "人気のキャンパス討論に参加"
+    },
+    "delivery": {
+      "title": "デリバリー",
+      "desc": "キャンパス配達の投稿と受注"
+    },
+    "dating": {
+      "title": "ルームメイト",
+      "desc": "プロフィール閲覧・投稿・交流"
+    },
+    "photograph": {
+      "title": "フォトウォール",
+      "desc": "キャンパス写真の閲覧と共有"
+    },
     "sections": {
       "campus": "キャンパスサービス",
       "information": "インフォメーション",
       "community": "キャンパスコミュニティ"
     },
     "actions": {
-      "appearance": { "title": "インターフェースと外観", "desc": "テーマ、フォントサイズ、言語" },
-      "settings": { "title": "機能設定", "desc": "モックデータの切替とホームモジュール管理" },
-      "logout": { "title": "ログアウト", "desc": "現在のアカウントからログアウト" }
+      "appearance": {
+        "title": "インターフェースと外観",
+        "desc": "テーマ、フォントサイズ、言語"
+      },
+      "settings": {
+        "title": "機能設定",
+        "desc": "モックデータの切替とホームモジュール管理"
+      },
+      "logout": {
+        "title": "ログアウト",
+        "desc": "現在のアカウントからログアウト"
+      }
     }
   },
   "billPage": {
@@ -504,6 +601,412 @@
       "evening": "夜",
       "daytime": "日中",
       "allDay": "終日"
+    }
+  },
+  "community": {
+    "common": {
+      "notice": "お知らせ",
+      "unknownModule": "不明なコミュニティモジュール",
+      "campusCommunity": "キャンパスコミュニティ",
+      "operationFailed": "操作に失敗しました"
+    },
+    "category": {
+      "all": "すべて",
+      "campusTransport": "キャンパス移動",
+      "phone": "携帯電話",
+      "computer": "パソコン",
+      "digitalAccessory": "デジタルアクセサリー",
+      "digital": "デジタル",
+      "appliance": "家電",
+      "sportsFitness": "スポーツ",
+      "clothingUmbrella": "衣類・傘・帽子",
+      "booksTextbooks": "書籍・教科書",
+      "rental": "レンタル",
+      "lifeEntertainment": "生活・娯楽",
+      "other": "その他"
+    },
+    "lostFoundMode": {
+      "lostNotice": "紛失届",
+      "foundNotice": "拾得届"
+    },
+    "lostFoundItem": {
+      "phone": "携帯電話",
+      "campusCard": "キャンパスカード",
+      "idCard": "身分証",
+      "bankCard": "キャッシュカード",
+      "book": "本",
+      "key": "鍵",
+      "bag": "バッグ",
+      "clothingHat": "衣服・帽子",
+      "campusTransport": "キャンパス移動",
+      "sportsFitness": "スポーツ",
+      "digitalAccessory": "デジタルアクセサリー",
+      "other": "その他"
+    },
+    "secretTheme": {
+      "theme": "テーマ {{n}}"
+    },
+    "secretType": {
+      "text": "テキスト",
+      "voice": "音声"
+    },
+    "gender": {
+      "male": "男性",
+      "female": "女性",
+      "secret": "非公開"
+    },
+    "deliveryStatus": {
+      "all": "すべて",
+      "pending": "受付中",
+      "delivering": "配達中",
+      "completed": "完了"
+    },
+    "datingArea": {
+      "girls": "女子",
+      "boys": "男子"
+    },
+    "datingGrade": {
+      "year1": "1年生",
+      "year2": "2年生",
+      "year3": "3年生",
+      "year4": "4年生"
+    },
+    "photographTab": {
+      "life": "日常写真",
+      "campus": "キャンパス写真"
+    },
+    "modules": {
+      "marketplace": {
+        "title": "フリマ",
+        "summary": "キャンパスの中古品を閲覧・投稿",
+        "searchPlaceholder": "商品名やキーワードで検索"
+      },
+      "lostandfound": {
+        "title": "落とし物",
+        "summary": "紛失届と拾得届を投稿",
+        "searchPlaceholder": "紛失物を検索"
+      },
+      "secret": {
+        "title": "ひみつの壁",
+        "summary": "匿名で気持ちを共有"
+      },
+      "express": {
+        "title": "告白の壁",
+        "summary": "好きな人にメッセージを残す",
+        "searchPlaceholder": "名前や内容で検索"
+      },
+      "topic": {
+        "title": "キャンパストピック",
+        "summary": "人気の話題に参加",
+        "searchPlaceholder": "トピックキーワードで検索"
+      },
+      "delivery": {
+        "title": "デリバリー",
+        "summary": "キャンパス内の配達・おつかい"
+      },
+      "dating": {
+        "title": "ルームメイト紹介",
+        "summary": "ルームメイト情報を閲覧・投稿"
+      },
+      "photograph": {
+        "title": "フォトウォール",
+        "summary": "キャンパスの瞬間と作品を共有"
+      }
+    },
+    "pageTitle": {
+      "marketplace": {
+        "center": "マイページ",
+        "detail": "商品詳細",
+        "publish": "商品を投稿",
+        "edit": "商品を編集"
+      },
+      "lostandfound": {
+        "center": "マイページ",
+        "detail": "詳細",
+        "publish": "情報を投稿",
+        "edit": "情報を編集"
+      },
+      "secret": {
+        "center": "マイひみつ",
+        "detail": "匿名詳細",
+        "publish": "ひみつを投稿"
+      },
+      "express": {
+        "center": "マイページ",
+        "detail": "詳細",
+        "publish": "告白を投稿"
+      },
+      "topic": {
+        "center": "マイページ",
+        "detail": "トピック詳細",
+        "publish": "トピックを投稿"
+      },
+      "delivery": {
+        "center": "マイおつかい",
+        "detail": "タスク詳細",
+        "publish": "デリバリーを投稿"
+      },
+      "dating": {
+        "center": "交流センター",
+        "detail": "ルームメイト",
+        "publish": "プロフィール投稿"
+      },
+      "photograph": {
+        "center": "マイ作品",
+        "detail": "作品詳細",
+        "publish": "作品を投稿"
+      }
+    },
+    "pageTitleFallback": {
+      "edit": "{{title}}を編集",
+      "publish": "{{title}}を投稿"
+    },
+    "list": {
+      "search": "検索",
+      "clear": "クリア",
+      "loading": "読み込み中",
+      "noMore": "これ以上データはありません",
+      "emptyTitle": "コンテンツなし",
+      "emptySummary": "フィルタを変更するか、新しく投稿してください。",
+      "like": "いいね",
+      "comment": "コメント",
+      "publishBtn": "{{title}}を投稿",
+      "myBtn": "マイページ",
+      "statPhotos": "作品",
+      "statComments": "コメント",
+      "statLikes": "いいね",
+      "autoDelete24h": "24時間後に自動削除",
+      "unnamedProduct": "名前なし商品",
+      "unnamedItem": "名前なし",
+      "unnamedContent": "名前なしコンテンツ",
+      "secondhand": "中古",
+      "lost": "紛失",
+      "found": "拾得",
+      "voiceSecret": "音声ひみつ",
+      "anonSecret": "匿名ひみつ",
+      "tapVoiceSecret": "タップして音声を聴く",
+      "anonStudent": "匿名",
+      "campusTopic": "キャンパストピック",
+      "campusErrand": "キャンパスおつかい",
+      "task": "タスク",
+      "unknownGrade": "不明な学年",
+      "campusWork": "キャンパス作品"
+    },
+    "center": {
+      "tabSelling": "出品中",
+      "tabSold": "売却済",
+      "tabOffShelf": "取下げ済",
+      "tabLost": "紛失",
+      "tabFound": "拾得",
+      "tabRecovered": "回収済",
+      "tabMyPublished": "投稿したもの",
+      "tabMyAccepted": "受けた依頼",
+      "tabReceivedPick": "受信",
+      "tabSentPick": "送信",
+      "tabMyPosts": "自分の投稿",
+      "actionEdit": "編集",
+      "actionOffShelf": "取下げ",
+      "actionSold": "売却済",
+      "actionRelist": "再出品",
+      "actionConfirmFound": "回収確認",
+      "actionAccept": "承認",
+      "actionReject": "拒否",
+      "actionHide": "非表示",
+      "voiceSecret": "音声ひみつ",
+      "textSecret": "テキストひみつ",
+      "tapPlayVoice": "タップして音声を再生",
+      "emptySummary": "新しいコンテンツを投稿してみましょう。",
+      "continuePublish": "投稿を続ける",
+      "me": "自分",
+      "contactQQ": "QQ：",
+      "contactWechat": "WeChat：",
+      "contactPending": "承認後に連絡先が表示されます"
+    },
+    "detail": {
+      "detail": "詳細",
+      "productDetail": "商品詳細",
+      "lostDetail": "紛失物詳細",
+      "workDetail": "作品詳細",
+      "lostLocation": "紛失場所",
+      "foundLocation": "拾得場所",
+      "notFilled": "未入力",
+      "voiceSecretDesc": "音声ひみつです。タップして聴いてください。",
+      "publishTime": "投稿日時：",
+      "contactInfo": "連絡先",
+      "copy": "コピー",
+      "call": "電話",
+      "publisher": "投稿者：",
+      "secretInteraction": "ひみつの交流",
+      "playVoice": "音声再生",
+      "stopVoice": "音声停止",
+      "cancelLike": "いいね取消",
+      "liked": "いいね済",
+      "interactionData": "交流データ",
+      "guessPlaceholder": "名前を推測",
+      "guessHint": "{{guessCount}}回推測、{{correctCount}}回正解",
+      "taskInfo": "タスク情報",
+      "myRole": "役割：",
+      "pickupPoint": "受取場所：",
+      "deliveryAddr": "届け先：",
+      "pickupCode": "受取コード：",
+      "contactPhone": "電話：",
+      "errandFee": "報酬：",
+      "acceptOrder": "依頼を受ける",
+      "confirmComplete": "完了確認",
+      "hometown": "出身地：",
+      "contactNotVisible": "承認後に連絡先が表示されます",
+      "pickPlaceholder": "メッセージを入力（50字以内）",
+      "sendPick": "送信",
+      "commentSection": "コメント欄",
+      "postComment": "コメントする",
+      "commentPlaceholder": "コメントを入力（50字以内）",
+      "submitComment": "コメント送信",
+      "rolePublisher": "投稿者",
+      "roleAcceptor": "受注者",
+      "roleVisitor": "閲覧者",
+      "deliveryDesc00": "依頼を受けてくれる方を待っています。電話に出られるようにしてください。",
+      "deliveryDesc01": "まだロビーにあります。受注後に詳細が表示されます。",
+      "deliveryDesc10": "受注されました。受取確認で取引完了できます。",
+      "deliveryDesc13": "受注しました。速やかに受取・配達してください。",
+      "deliveryDesc2": "この依頼は完了しました。",
+      "sensitiveHint": "受注後に受取コードと連絡先が表示されます",
+      "incompleteParams": "パラメータが不完全です",
+      "commentEmpty": "コメントを入力してください",
+      "commentTooLong": "コメントは{{max}}文字以内です",
+      "commentFailed": "コメントに失敗しました",
+      "guessEmpty": "名前を入力してください",
+      "guessTooLong": "名前は{{max}}文字以内です",
+      "submitFailed": "送信に失敗しました",
+      "guessCorrect": "正解！",
+      "guessWrong": "惜しい！",
+      "acceptFailed": "受注に失敗しました",
+      "acceptSuccess": "受注しました",
+      "confirmFailed": "確認に失敗しました",
+      "confirmSuccess": "完了確認しました",
+      "pickEmpty": "メッセージを入力してください",
+      "pickTooLong": "メッセージは{{max}}文字以内です",
+      "sendFailed": "送信に失敗しました",
+      "sendSuccess": "送信しました",
+      "voicePlayFailed": "音声再生に失敗しました"
+    },
+    "publish": {
+      "basicInfo": "基本情報",
+      "loadingExisting": "既存データを読み込み中...",
+      "imageUpload": "画像アップロード",
+      "editImageNotSupported": "編集モードでは画像を変更できません",
+      "datingImageHint": "最初の画像のみ表示されます",
+      "saveChanges": "変更を保存",
+      "submitPublish": "投稿する",
+      "editHeroSummary": "投稿済みのコンテンツを編集",
+      "productName": "商品名",
+      "productPrice": "価格",
+      "productCategory": "カテゴリ：",
+      "tradeLocation": "取引場所",
+      "qqNumber": "QQ番号",
+      "phoneOptional": "電話番号（任意）",
+      "productDesc": "商品説明",
+      "infoType": "情報タイプ：",
+      "itemCategory": "カテゴリ：",
+      "itemName": "物品名",
+      "location": "場所",
+      "qqOptional": "QQ（任意）",
+      "wechatOptional": "WeChat（任意）",
+      "phoneOptional2": "電話（任意）",
+      "itemDesc": "物品説明",
+      "theme": "テーマ：",
+      "contentType": "タイプ：",
+      "secretPlaceholder": "心の声を書いてください",
+      "startRecording": "録音開始",
+      "stopRecording": "録音停止",
+      "recordedDuration": "音声録音済",
+      "previewVoice": "試聴",
+      "stopPreview": "試聴停止",
+      "yourNickname": "あなたのニックネーム",
+      "yourRealname": "本名（任意）",
+      "yourGender": "あなたの性別：",
+      "targetName": "相手の名前",
+      "targetGender": "相手の性別：",
+      "confessionContent": "告白内容",
+      "topicKeyword": "トピックキーワード",
+      "topicContent": "あなたの考えを書いてください",
+      "pickupLocation": "受取場所",
+      "pickupCodeOptional": "受取コード（任意）",
+      "deliveryAddress": "届け先",
+      "contactPhone": "連絡先電話",
+      "errandFee": "報酬",
+      "remarksOptional": "備考（任意）",
+      "nickname": "ニックネーム",
+      "grade": "学年：",
+      "displayArea": "表示エリア：",
+      "major": "専攻",
+      "hometown": "出身地",
+      "roommateIntro": "おすすめのルームメイトを紹介",
+      "workTitle": "作品タイトル",
+      "workType": "作品タイプ：",
+      "shootingDesc": "撮影説明（任意）",
+      "imageLimit": "画像は最大{{max}}枚までです",
+      "recordingFailed": "録音に失敗しました",
+      "saveFailed": "保存に失敗しました",
+      "saveSuccess": "保存しました",
+      "editItemNotFound": "編集する項目が見つかりません",
+      "v": {
+        "productNameRequired": "商品名を入力してください",
+        "productNameTooLong": "商品名は{{max}}文字以内です",
+        "productDescRequired": "商品説明を入力してください",
+        "productDescTooLong": "商品説明は{{max}}文字以内です",
+        "priceInvalid": "正しい価格を入力してください",
+        "locationRequired": "取引場所を入力してください",
+        "locationTooLong": "取引場所は{{max}}文字以内です",
+        "qqRequired": "QQ番号を入力してください",
+        "qqTooLong": "QQ番号は{{max}}文字以内です",
+        "phoneTooLong": "電話番号は{{max}}文字以内です",
+        "imageRequired": "画像を1枚以上アップロードしてください",
+        "itemNameRequired": "物品名を入力してください",
+        "itemNameTooLong": "物品名は{{max}}文字以内です",
+        "itemDescRequired": "物品説明を入力してください",
+        "itemDescTooLong": "物品説明は{{max}}文字以内です",
+        "locationRequired2": "場所を入力してください",
+        "locationTooLong2": "場所は{{max}}文字以内です",
+        "qqTooLong2": "QQは{{max}}文字以内です",
+        "wechatTooLong": "WeChatは{{max}}文字以内です",
+        "phoneTooLong2": "電話は{{max}}文字以内です",
+        "contactRequired": "連絡先を1つ以上入力してください",
+        "secretContentRequired": "ひみつの内容を入力してください",
+        "secretContentTooLong": "ひみつの内容は{{max}}文字以内です",
+        "voiceRequired": "音声を録音してください",
+        "nicknameRequired": "ニックネームを入力してください",
+        "nicknameTooLong": "ニックネームは{{max}}文字以内です",
+        "realnameTooLong": "本名は{{max}}文字以内です",
+        "targetNameRequired": "相手の名前を入力してください",
+        "targetNameTooLong": "相手の名前は{{max}}文字以内です",
+        "confessionRequired": "告白内容を入力してください",
+        "confessionTooLong": "告白内容は{{max}}文字以内です",
+        "topicRequired": "トピックキーワードを入力してください",
+        "topicTooLong": "トピックキーワードは{{max}}文字以内です",
+        "topicContentRequired": "トピック内容を入力してください",
+        "topicContentTooLong": "トピック内容は{{max}}文字以内です",
+        "pickupRequired": "受取場所を入力してください",
+        "pickupTooLong": "受取場所は{{max}}文字以内です",
+        "pickupCodeLength": "受取コードは11文字です",
+        "deliveryAddrRequired": "届け先を入力してください",
+        "deliveryAddrTooLong": "届け先は{{max}}文字以内です",
+        "phoneRequired": "連絡先電話を入力してください",
+        "contactPhoneTooLong": "連絡先電話は{{max}}文字以内です",
+        "remarksTooLong": "備考は{{max}}文字以内です",
+        "rewardInvalid": "有効な報酬を入力してください",
+        "majorRequired": "専攻を入力してください",
+        "majorTooLong": "専攻は{{max}}文字以内です",
+        "hometownRequired": "出身地を入力してください",
+        "hometownTooLong": "出身地は{{max}}文字以内です",
+        "qqWechatRequired": "QQまたはWeChatを入力してください",
+        "introRequired": "紹介文を入力してください",
+        "introTooLong": "紹介文は{{max}}文字以内です",
+        "workTitleRequired": "作品タイトルを入力してください",
+        "workTitleTooLong": "作品タイトルは{{max}}文字以内です",
+        "shootingDescTooLong": "撮影説明は{{max}}文字以内です",
+        "moduleNotSupported": "このモジュールは未対応です",
+        "editNotSupported": "このモジュールは編集に未対応です"
+      }
     }
   }
 }

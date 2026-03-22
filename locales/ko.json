@@ -63,7 +63,15 @@
   "schedule": {
     "navTitle": "내 시간표",
     "title": "시간표",
-    "tabs": ["월", "화", "수", "목", "금", "토", "일"],
+    "tabs": [
+      "월",
+      "화",
+      "수",
+      "목",
+      "금",
+      "토",
+      "일"
+    ],
     "currentWeek": "현재 주: {{week}}주차",
     "weekRange": "{{min}}주~{{max}}주"
   },
@@ -81,7 +89,12 @@
   "grade": {
     "navTitle": "성적 조회",
     "title": "성적 조회",
-    "tabs": ["1학년", "2학년", "3학년", "4학년"],
+    "tabs": [
+      "1학년",
+      "2학년",
+      "3학년",
+      "4학년"
+    ],
     "firstTerm": "1학기",
     "secondTerm": "2학기"
   },
@@ -106,10 +119,22 @@
     "noMoreNews": "더 이상 뉴스가 없습니다",
     "loadNewsFailed": "뉴스 로딩 실패",
     "newsTabs": [
-      { "type": 1, "label": "대학 뉴스" },
-      { "type": 2, "label": "학과 공지" },
-      { "type": 3, "label": "공지사항" },
-      { "type": 4, "label": "학술 동향" }
+      {
+        "type": 1,
+        "label": "대학 뉴스"
+      },
+      {
+        "type": 2,
+        "label": "학과 공지"
+      },
+      {
+        "type": 3,
+        "label": "공지사항"
+      },
+      {
+        "type": 4,
+        "label": "학술 동향"
+      }
     ]
   },
   "profilePage": {
@@ -299,36 +324,108 @@
     "remote": "실제 API"
   },
   "features": {
-    "grade": { "title": "성적 조회", "desc": "학년 및 학기 성적 확인" },
-    "schedule": { "title": "시간표", "desc": "주간 시간표 확인" },
-    "cet": { "title": "CET 성적", "desc": "CET 성적 조회 및 수험번호 저장" },
-    "graduateExam": { "title": "대학원 시험", "desc": "대학원 시험 성적 조회" },
-    "spare": { "title": "빈 강의실", "desc": "빈 강의실 검색" },
-    "bill": { "title": "학생증 거래", "desc": "학생증 거래 내역 확인" },
-    "card": { "title": "학생증", "desc": "학생증 정보 및 잔액 확인" },
-    "cardLost": { "title": "분실 신고", "desc": "학생증 분실 신고" },
-    "evaluate": { "title": "수업 평가", "desc": "수업 평가 한번에 완료" },
-    "collection": { "title": "도서관", "desc": "장서 검색, 대출 및 연장" },
-    "book": { "title": "내 대출", "desc": "대출 기록 확인 및 연장" },
-    "data": { "title": "캠퍼스 데이터", "desc": "전기요금 및 전화번호부 조회" },
-    "news": { "title": "정보 센터", "desc": "캠퍼스 뉴스, 공지사항 및 메시지 확인" },
-    "marketplace": { "title": "중고거래", "desc": "중고 물품 보기 및 게시" },
-    "lostandfound": { "title": "분실물", "desc": "분실물 및 습득물 정보 게시" },
-    "secret": { "title": "비밀나무", "desc": "익명으로 게시" },
-    "express": { "title": "고백벽", "desc": "고백 보기 및 게시" },
-    "topic": { "title": "캠퍼스 토픽", "desc": "인기 캠퍼스 토론 참여" },
-    "delivery": { "title": "배달", "desc": "캠퍼스 배달 게시 및 수락" },
-    "dating": { "title": "룸메이트", "desc": "프로필 보기, 게시 및 교류" },
-    "photograph": { "title": "포토월", "desc": "캠퍼스 사진 보기 및 공유" },
+    "grade": {
+      "title": "성적 조회",
+      "desc": "학년 및 학기 성적 확인"
+    },
+    "schedule": {
+      "title": "시간표",
+      "desc": "주간 시간표 확인"
+    },
+    "cet": {
+      "title": "CET 성적",
+      "desc": "CET 성적 조회 및 수험번호 저장"
+    },
+    "graduateExam": {
+      "title": "대학원 시험",
+      "desc": "대학원 시험 성적 조회"
+    },
+    "spare": {
+      "title": "빈 강의실",
+      "desc": "빈 강의실 검색"
+    },
+    "bill": {
+      "title": "학생증 거래",
+      "desc": "학생증 거래 내역 확인"
+    },
+    "card": {
+      "title": "학생증",
+      "desc": "학생증 정보 및 잔액 확인"
+    },
+    "cardLost": {
+      "title": "분실 신고",
+      "desc": "학생증 분실 신고"
+    },
+    "evaluate": {
+      "title": "수업 평가",
+      "desc": "수업 평가 한번에 완료"
+    },
+    "collection": {
+      "title": "도서관",
+      "desc": "장서 검색, 대출 및 연장"
+    },
+    "book": {
+      "title": "내 대출",
+      "desc": "대출 기록 확인 및 연장"
+    },
+    "data": {
+      "title": "캠퍼스 데이터",
+      "desc": "전기요금 및 전화번호부 조회"
+    },
+    "news": {
+      "title": "정보 센터",
+      "desc": "캠퍼스 뉴스, 공지사항 및 메시지 확인"
+    },
+    "marketplace": {
+      "title": "중고거래",
+      "desc": "중고 물품 보기 및 게시"
+    },
+    "lostandfound": {
+      "title": "분실물",
+      "desc": "분실물 및 습득물 정보 게시"
+    },
+    "secret": {
+      "title": "비밀나무",
+      "desc": "익명으로 게시"
+    },
+    "express": {
+      "title": "고백벽",
+      "desc": "고백 보기 및 게시"
+    },
+    "topic": {
+      "title": "캠퍼스 토픽",
+      "desc": "인기 캠퍼스 토론 참여"
+    },
+    "delivery": {
+      "title": "배달",
+      "desc": "캠퍼스 배달 게시 및 수락"
+    },
+    "dating": {
+      "title": "룸메이트",
+      "desc": "프로필 보기, 게시 및 교류"
+    },
+    "photograph": {
+      "title": "포토월",
+      "desc": "캠퍼스 사진 보기 및 공유"
+    },
     "sections": {
       "campus": "캠퍼스 서비스",
       "information": "정보 센터",
       "community": "캠퍼스 커뮤니티"
     },
     "actions": {
-      "appearance": { "title": "인터페이스 및 외관", "desc": "테마, 글꼴 크기, 언어" },
-      "settings": { "title": "기능 설정", "desc": "모의 데이터 전환 및 홈 모듈 관리" },
-      "logout": { "title": "로그아웃", "desc": "현재 계정에서 로그아웃" }
+      "appearance": {
+        "title": "인터페이스 및 외관",
+        "desc": "테마, 글꼴 크기, 언어"
+      },
+      "settings": {
+        "title": "기능 설정",
+        "desc": "모의 데이터 전환 및 홈 모듈 관리"
+      },
+      "logout": {
+        "title": "로그아웃",
+        "desc": "현재 계정에서 로그아웃"
+      }
     }
   },
   "billPage": {
@@ -504,6 +601,412 @@
       "evening": "저녁",
       "daytime": "낮",
       "allDay": "종일"
+    }
+  },
+  "community": {
+    "common": {
+      "notice": "알림",
+      "unknownModule": "알 수 없는 커뮤니티 모듈",
+      "campusCommunity": "캠퍼스 커뮤니티",
+      "operationFailed": "작업 실패"
+    },
+    "category": {
+      "all": "전체",
+      "campusTransport": "교내 이동수단",
+      "phone": "휴대폰",
+      "computer": "컴퓨터",
+      "digitalAccessory": "디지털 액세서리",
+      "digital": "디지털",
+      "appliance": "가전",
+      "sportsFitness": "스포츠·피트니스",
+      "clothingUmbrella": "의류·우산·모자",
+      "booksTextbooks": "도서·교재",
+      "rental": "대여",
+      "lifeEntertainment": "생활·오락",
+      "other": "기타"
+    },
+    "lostFoundMode": {
+      "lostNotice": "분실 신고",
+      "foundNotice": "습득 신고"
+    },
+    "lostFoundItem": {
+      "phone": "휴대폰",
+      "campusCard": "학생증",
+      "idCard": "신분증",
+      "bankCard": "은행카드",
+      "book": "책",
+      "key": "열쇠",
+      "bag": "가방",
+      "clothingHat": "의류·모자",
+      "campusTransport": "교내 이동수단",
+      "sportsFitness": "스포츠·피트니스",
+      "digitalAccessory": "디지털 액세서리",
+      "other": "기타"
+    },
+    "secretTheme": {
+      "theme": "테마 {{n}}"
+    },
+    "secretType": {
+      "text": "텍스트",
+      "voice": "음성"
+    },
+    "gender": {
+      "male": "남성",
+      "female": "여성",
+      "secret": "비공개"
+    },
+    "deliveryStatus": {
+      "all": "전체",
+      "pending": "대기 중",
+      "delivering": "배달 중",
+      "completed": "완료"
+    },
+    "datingArea": {
+      "girls": "여학생",
+      "boys": "남학생"
+    },
+    "datingGrade": {
+      "year1": "1학년",
+      "year2": "2학년",
+      "year3": "3학년",
+      "year4": "4학년"
+    },
+    "photographTab": {
+      "life": "일상 사진",
+      "campus": "캠퍼스 사진"
+    },
+    "modules": {
+      "marketplace": {
+        "title": "중고 거래",
+        "summary": "캠퍼스 중고 물품 검색 및 게시",
+        "searchPlaceholder": "상품명 또는 키워드 검색"
+      },
+      "lostandfound": {
+        "title": "분실물 센터",
+        "summary": "분실·습득 신고 게시",
+        "searchPlaceholder": "분실물 키워드 검색"
+      },
+      "secret": {
+        "title": "비밀의 벽",
+        "summary": "익명으로 마음을 나누세요"
+      },
+      "express": {
+        "title": "고백의 벽",
+        "summary": "좋아하는 사람에게 메시지를 남기세요",
+        "searchPlaceholder": "이름 또는 내용 검색"
+      },
+      "topic": {
+        "title": "캠퍼스 토픽",
+        "summary": "인기 토론에 참여하세요",
+        "searchPlaceholder": "토픽 키워드 검색"
+      },
+      "delivery": {
+        "title": "배달",
+        "summary": "캠퍼스 심부름 및 택배 픽업"
+      },
+      "dating": {
+        "title": "룸메이트 소개",
+        "summary": "룸메이트 정보 검색 및 게시"
+      },
+      "photograph": {
+        "title": "포토 월",
+        "summary": "캠퍼스 순간과 작품 공유"
+      }
+    },
+    "pageTitle": {
+      "marketplace": {
+        "center": "마이페이지",
+        "detail": "상품 상세",
+        "publish": "상품 게시",
+        "edit": "상품 편집"
+      },
+      "lostandfound": {
+        "center": "마이페이지",
+        "detail": "상세",
+        "publish": "정보 게시",
+        "edit": "정보 편집"
+      },
+      "secret": {
+        "center": "내 비밀",
+        "detail": "익명 상세",
+        "publish": "비밀 게시"
+      },
+      "express": {
+        "center": "내 게시물",
+        "detail": "상세",
+        "publish": "고백 게시"
+      },
+      "topic": {
+        "center": "내 게시물",
+        "detail": "토픽 상세",
+        "publish": "토픽 게시"
+      },
+      "delivery": {
+        "center": "내 심부름",
+        "detail": "작업 상세",
+        "publish": "배달 게시"
+      },
+      "dating": {
+        "center": "교류 센터",
+        "detail": "룸메이트",
+        "publish": "프로필 게시"
+      },
+      "photograph": {
+        "center": "내 작품",
+        "detail": "작품 상세",
+        "publish": "작품 게시"
+      }
+    },
+    "pageTitleFallback": {
+      "edit": "{{title}} 편집",
+      "publish": "{{title}} 게시"
+    },
+    "list": {
+      "search": "검색",
+      "clear": "초기화",
+      "loading": "로딩 중",
+      "noMore": "더 이상 데이터 없음",
+      "emptyTitle": "콘텐츠 없음",
+      "emptySummary": "필터를 변경하거나 새로 게시해 보세요.",
+      "like": "좋아요",
+      "comment": "댓글",
+      "publishBtn": "{{title}} 게시",
+      "myBtn": "마이",
+      "statPhotos": "작품",
+      "statComments": "댓글",
+      "statLikes": "좋아요",
+      "autoDelete24h": "24시간 후 자동 삭제",
+      "unnamedProduct": "이름 없는 상품",
+      "unnamedItem": "이름 없는 물품",
+      "unnamedContent": "이름 없는 콘텐츠",
+      "secondhand": "중고",
+      "lost": "분실",
+      "found": "습득",
+      "voiceSecret": "음성 비밀",
+      "anonSecret": "익명 비밀",
+      "tapVoiceSecret": "탭하여 음성 비밀 듣기",
+      "anonStudent": "익명",
+      "campusTopic": "캠퍼스 토픽",
+      "campusErrand": "캠퍼스 심부름",
+      "task": "작업",
+      "unknownGrade": "학년 미상",
+      "campusWork": "캠퍼스 작품"
+    },
+    "center": {
+      "tabSelling": "판매 중",
+      "tabSold": "판매 완료",
+      "tabOffShelf": "내린 상품",
+      "tabLost": "분실",
+      "tabFound": "습득",
+      "tabRecovered": "회수됨",
+      "tabMyPublished": "내 게시",
+      "tabMyAccepted": "수락한 의뢰",
+      "tabReceivedPick": "받은 관심",
+      "tabSentPick": "보낸 관심",
+      "tabMyPosts": "내 게시물",
+      "actionEdit": "편집",
+      "actionOffShelf": "내리기",
+      "actionSold": "판매 완료",
+      "actionRelist": "재등록",
+      "actionConfirmFound": "회수 확인",
+      "actionAccept": "수락",
+      "actionReject": "거절",
+      "actionHide": "숨기기",
+      "voiceSecret": "음성 비밀",
+      "textSecret": "텍스트 비밀",
+      "tapPlayVoice": "탭하여 음성 재생",
+      "emptySummary": "새 콘텐츠를 게시해 보세요.",
+      "continuePublish": "계속 게시",
+      "me": "나",
+      "contactQQ": "QQ: ",
+      "contactWechat": "WeChat: ",
+      "contactPending": "승인 후 연락처가 표시됩니다"
+    },
+    "detail": {
+      "detail": "상세",
+      "productDetail": "상품 상세",
+      "lostDetail": "분실물 상세",
+      "workDetail": "작품 상세",
+      "lostLocation": "분실 장소",
+      "foundLocation": "습득 장소",
+      "notFilled": "미입력",
+      "voiceSecretDesc": "음성 비밀입니다. 탭하여 들으세요.",
+      "publishTime": "게시 시간: ",
+      "contactInfo": "연락처",
+      "copy": "복사",
+      "call": "전화",
+      "publisher": "게시자: ",
+      "secretInteraction": "비밀 상호작용",
+      "playVoice": "음성 재생",
+      "stopVoice": "음성 정지",
+      "cancelLike": "좋아요 취소",
+      "liked": "좋아요 완료",
+      "interactionData": "상호작용 데이터",
+      "guessPlaceholder": "이름을 추측하세요",
+      "guessHint": "{{guessCount}}번 추측, {{correctCount}}번 정답",
+      "taskInfo": "작업 정보",
+      "myRole": "내 역할: ",
+      "pickupPoint": "수거 장소: ",
+      "deliveryAddr": "배달 주소: ",
+      "pickupCode": "수거 코드: ",
+      "contactPhone": "전화: ",
+      "errandFee": "수수료: ",
+      "acceptOrder": "의뢰 수락",
+      "confirmComplete": "완료 확인",
+      "hometown": "고향: ",
+      "contactNotVisible": "승인 후 연락처가 표시됩니다",
+      "pickPlaceholder": "메시지를 입력하세요 (50자 이내)",
+      "sendPick": "보내기",
+      "commentSection": "댓글",
+      "postComment": "댓글 작성",
+      "commentPlaceholder": "댓글을 입력하세요 (50자 이내)",
+      "submitComment": "댓글 등록",
+      "rolePublisher": "게시자",
+      "roleAcceptor": "수락자",
+      "roleVisitor": "방문자",
+      "deliveryDesc00": "의뢰를 수락할 사람을 기다리고 있습니다. 전화를 받을 수 있도록 해주세요.",
+      "deliveryDesc01": "아직 대기 중입니다. 수락 후 전체 정보가 표시됩니다.",
+      "deliveryDesc10": "누군가 의뢰를 수락했습니다. 수령 확인으로 거래를 완료하세요.",
+      "deliveryDesc13": "의뢰를 수락했습니다. 빠르게 수거 및 배달해 주세요.",
+      "deliveryDesc2": "이 의뢰는 완료되었습니다.",
+      "sensitiveHint": "수락 후 수거 코드와 연락처가 표시됩니다",
+      "incompleteParams": "페이지 매개변수가 불완전합니다",
+      "commentEmpty": "댓글을 입력하세요",
+      "commentTooLong": "댓글은 {{max}}자 이내여야 합니다",
+      "commentFailed": "댓글 실패",
+      "guessEmpty": "이름을 입력하세요",
+      "guessTooLong": "이름은 {{max}}자 이내여야 합니다",
+      "submitFailed": "제출 실패",
+      "guessCorrect": "정답!",
+      "guessWrong": "아깝습니다!",
+      "acceptFailed": "수락 실패",
+      "acceptSuccess": "수락 완료",
+      "confirmFailed": "확인 실패",
+      "confirmSuccess": "완료 확인됨",
+      "pickEmpty": "메시지를 입력하세요",
+      "pickTooLong": "메시지는 {{max}}자 이내여야 합니다",
+      "sendFailed": "전송 실패",
+      "sendSuccess": "전송 완료",
+      "voicePlayFailed": "음성 재생 실패"
+    },
+    "publish": {
+      "basicInfo": "기본 정보",
+      "loadingExisting": "기존 데이터 로딩 중...",
+      "imageUpload": "이미지 업로드",
+      "editImageNotSupported": "편집 모드에서는 이미지를 변경할 수 없습니다",
+      "datingImageHint": "첫 번째 이미지만 표시됩니다",
+      "saveChanges": "변경 저장",
+      "submitPublish": "게시하기",
+      "editHeroSummary": "게시된 콘텐츠 편집",
+      "productName": "상품명",
+      "productPrice": "가격",
+      "productCategory": "카테고리: ",
+      "tradeLocation": "거래 장소",
+      "qqNumber": "QQ 번호",
+      "phoneOptional": "전화번호 (선택)",
+      "productDesc": "상품 설명",
+      "infoType": "정보 유형: ",
+      "itemCategory": "물품 카테고리: ",
+      "itemName": "물품명",
+      "location": "장소",
+      "qqOptional": "QQ (선택)",
+      "wechatOptional": "WeChat (선택)",
+      "phoneOptional2": "전화 (선택)",
+      "itemDesc": "물품 설명",
+      "theme": "테마: ",
+      "contentType": "유형: ",
+      "secretPlaceholder": "마음속 이야기를 적어보세요",
+      "startRecording": "녹음 시작",
+      "stopRecording": "녹음 정지",
+      "recordedDuration": "음성 녹음됨",
+      "previewVoice": "미리 듣기",
+      "stopPreview": "미리 듣기 정지",
+      "yourNickname": "닉네임",
+      "yourRealname": "실명 (선택)",
+      "yourGender": "성별: ",
+      "targetName": "상대방 이름",
+      "targetGender": "상대방 성별: ",
+      "confessionContent": "고백 내용",
+      "topicKeyword": "토픽 키워드",
+      "topicContent": "생각을 공유하세요",
+      "pickupLocation": "수거 장소",
+      "pickupCodeOptional": "수거 코드 (선택)",
+      "deliveryAddress": "배달 주소",
+      "contactPhone": "연락처",
+      "errandFee": "수수료",
+      "remarksOptional": "비고 (선택)",
+      "nickname": "닉네임",
+      "grade": "학년: ",
+      "displayArea": "표시 영역: ",
+      "major": "전공",
+      "hometown": "고향",
+      "roommateIntro": "추천할 룸메이트를 소개하세요",
+      "workTitle": "작품 제목",
+      "workType": "작품 유형: ",
+      "shootingDesc": "촬영 설명 (선택)",
+      "imageLimit": "이미지는 최대 {{max}}장입니다",
+      "recordingFailed": "녹음 실패",
+      "saveFailed": "저장 실패",
+      "saveSuccess": "저장 완료",
+      "editItemNotFound": "편집할 항목을 찾을 수 없습니다",
+      "v": {
+        "productNameRequired": "상품명을 입력하세요",
+        "productNameTooLong": "상품명은 {{max}}자 이내여야 합니다",
+        "productDescRequired": "상품 설명을 입력하세요",
+        "productDescTooLong": "상품 설명은 {{max}}자 이내여야 합니다",
+        "priceInvalid": "올바른 가격을 입력하세요",
+        "locationRequired": "거래 장소를 입력하세요",
+        "locationTooLong": "거래 장소는 {{max}}자 이내여야 합니다",
+        "qqRequired": "QQ 번호를 입력하세요",
+        "qqTooLong": "QQ 번호는 {{max}}자 이내여야 합니다",
+        "phoneTooLong": "전화번호는 {{max}}자 이내여야 합니다",
+        "imageRequired": "이미지를 1장 이상 업로드하세요",
+        "itemNameRequired": "물품명을 입력하세요",
+        "itemNameTooLong": "물품명은 {{max}}자 이내여야 합니다",
+        "itemDescRequired": "물품 설명을 입력하세요",
+        "itemDescTooLong": "물품 설명은 {{max}}자 이내여야 합니다",
+        "locationRequired2": "장소를 입력하세요",
+        "locationTooLong2": "장소는 {{max}}자 이내여야 합니다",
+        "qqTooLong2": "QQ는 {{max}}자 이내여야 합니다",
+        "wechatTooLong": "WeChat은 {{max}}자 이내여야 합니다",
+        "phoneTooLong2": "전화는 {{max}}자 이내여야 합니다",
+        "contactRequired": "연락처를 1개 이상 입력하세요",
+        "secretContentRequired": "비밀 내용을 입력하세요",
+        "secretContentTooLong": "비밀 내용은 {{max}}자 이내여야 합니다",
+        "voiceRequired": "음성을 먼저 녹음하세요",
+        "nicknameRequired": "닉네임을 입력하세요",
+        "nicknameTooLong": "닉네임은 {{max}}자 이내여야 합니다",
+        "realnameTooLong": "실명은 {{max}}자 이내여야 합니다",
+        "targetNameRequired": "상대방 이름을 입력하세요",
+        "targetNameTooLong": "상대방 이름은 {{max}}자 이내여야 합니다",
+        "confessionRequired": "고백 내용을 입력하세요",
+        "confessionTooLong": "고백 내용은 {{max}}자 이내여야 합니다",
+        "topicRequired": "토픽 키워드를 입력하세요",
+        "topicTooLong": "토픽 키워드는 {{max}}자 이내여야 합니다",
+        "topicContentRequired": "토픽 내용을 입력하세요",
+        "topicContentTooLong": "토픽 내용은 {{max}}자 이내여야 합니다",
+        "pickupRequired": "수거 장소를 입력하세요",
+        "pickupTooLong": "수거 장소는 {{max}}자 이내여야 합니다",
+        "pickupCodeLength": "수거 코드는 11자여야 합니다",
+        "deliveryAddrRequired": "배달 주소를 입력하세요",
+        "deliveryAddrTooLong": "배달 주소는 {{max}}자 이내여야 합니다",
+        "phoneRequired": "연락처를 입력하세요",
+        "contactPhoneTooLong": "연락처는 {{max}}자 이내여야 합니다",
+        "remarksTooLong": "비고는 {{max}}자 이내여야 합니다",
+        "rewardInvalid": "유효한 수수료를 입력하세요",
+        "majorRequired": "전공을 입력하세요",
+        "majorTooLong": "전공은 {{max}}자 이내여야 합니다",
+        "hometownRequired": "고향을 입력하세요",
+        "hometownTooLong": "고향은 {{max}}자 이내여야 합니다",
+        "qqWechatRequired": "QQ 또는 WeChat을 입력하세요",
+        "introRequired": "소개를 입력하세요",
+        "introTooLong": "소개는 {{max}}자 이내여야 합니다",
+        "workTitleRequired": "작품 제목을 입력하세요",
+        "workTitleTooLong": "작품 제목은 {{max}}자 이내여야 합니다",
+        "shootingDescTooLong": "촬영 설명은 {{max}}자 이내여야 합니다",
+        "moduleNotSupported": "지원되지 않는 모듈입니다",
+        "editNotSupported": "이 모듈은 편집을 지원하지 않습니다"
+      }
     }
   }
 }

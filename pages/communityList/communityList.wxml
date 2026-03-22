@@ -12,15 +12,15 @@
   <view class="stats_panel" wx:if="{{moduleId === 'photograph' && stats}}">
     <view class="stat_item">
       <text class="stat_value">{{stats.photos}}</text>
-      <text class="stat_label">作品</text>
+      <text class="stat_label">{{t.statPhotos}}</text>
     </view>
     <view class="stat_item">
       <text class="stat_value">{{stats.comments}}</text>
-      <text class="stat_label">评论</text>
+      <text class="stat_label">{{t.statComments}}</text>
     </view>
     <view class="stat_item">
       <text class="stat_value">{{stats.likes}}</text>
-      <text class="stat_label">点赞</text>
+      <text class="stat_label">{{t.statLikes}}</text>
     </view>
   </view>
 
@@ -33,8 +33,8 @@
       bindinput="handleSearchInput"
       bindconfirm="submitSearch"
     />
-    <button size="mini" type="primary" class="search_button" bindtap="submitSearch">搜索</button>
-    <button size="mini" class="search_button search_button_secondary" wx:if="{{searchKeyword}}" bindtap="clearSearch">清空</button>
+    <button size="mini" type="primary" class="search_button" bindtap="submitSearch">{{t.search}}</button>
+    <button size="mini" class="search_button search_button_secondary" wx:if="{{searchKeyword}}" bindtap="clearSearch">{{t.clear}}</button>
   </view>
 
   <scroll-view wx:if="{{tabs.length}}" scroll-x class="tab_scroll" enable-flex>
@@ -90,8 +90,8 @@
       <view class="card_summary">{{item.summary}}</view>
       <view class="post_footer">
         <text class="time_text">{{item.timeText}}</text>
-        <text class="metric_text">点赞 {{item.likeCount}}</text>
-        <text class="metric_text">评论 {{item.commentCount}}</text>
+        <text class="metric_text">{{t.like}} {{item.likeCount}}</text>
+        <text class="metric_text">{{t.comment}} {{item.commentCount}}</text>
       </view>
     </view>
   </view>
@@ -103,8 +103,8 @@
       <view class="card_summary">{{item.summary}}</view>
       <view class="post_footer">
         <text class="time_text">{{item.timeText}}</text>
-        <text class="metric_text" wx:if="{{item.likeCount !== undefined}}">点赞 {{item.likeCount}}</text>
-        <text class="metric_text" wx:if="{{item.commentCount !== undefined}}">评论 {{item.commentCount}}</text>
+        <text class="metric_text" wx:if="{{item.likeCount !== undefined}}">{{t.like}} {{item.likeCount}}</text>
+        <text class="metric_text" wx:if="{{item.commentCount !== undefined}}">{{t.comment}} {{item.commentCount}}</text>
       </view>
     </view>
   </view>
@@ -141,26 +141,26 @@
       <view class="card_summary">{{item.summary}}</view>
       <view class="post_footer">
         <text class="time_text">{{item.timeText}}</text>
-        <text class="metric_text">点赞 {{item.likeCount}}</text>
-        <text class="metric_text">评论 {{item.commentCount}}</text>
+        <text class="metric_text">{{t.like}} {{item.likeCount}}</text>
+        <text class="metric_text">{{t.comment}} {{item.commentCount}}</text>
       </view>
     </view>
   </view>
 
   <view class="weui-loadmore" wx:if="{{loading}}">
     <i class="weui-loading"></i>
-    <view class="weui-loadmore__tips">正在加载</view>
+    <view class="weui-loadmore__tips">{{t.loading}}</view>
   </view>
   <view class="weui-loadmore" wx:if="{{!loading && finished && items.length}}">
-    <view class="weui-loadmore__tips">没有更多数据了</view>
+    <view class="weui-loadmore__tips">{{t.noMore}}</view>
   </view>
   <view class="empty_panel" wx:if="{{!loading && finished && !items.length}}">
-    <view class="empty_title">暂无内容</view>
-    <view class="empty_summary">换个筛选条件试试，或者发布一条新的内容。</view>
+    <view class="empty_title">{{t.emptyTitle}}</view>
+    <view class="empty_summary">{{t.emptySummary}}</view>
   </view>
 
   <view class="bottom_bar" wx:if="{{moduleConfig}}">
-    <button class="bottom_button" type="primary" bindtap="openPublish">发布{{moduleConfig.title}}</button>
-    <button class="bottom_button bottom_button_secondary" wx:if="{{moduleConfig.centerEnabled}}" bindtap="openCenter">我的</button>
+    <button class="bottom_button" type="primary" bindtap="openPublish">{{t.publishBtn}}</button>
+    <button class="bottom_button bottom_button_secondary" wx:if="{{moduleConfig.centerEnabled}}" bindtap="openCenter">{{t.myBtn}}</button>
   </view>
 </view>

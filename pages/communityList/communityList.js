@@ -3,14 +3,15 @@ const {
   getSecondhandCategoryOptions,
   getLostFoundModeDictionaryOptions,
   getLostFoundItemDictionaryOptions,
-  DELIVERY_STATUS_OPTIONS,
-  DATING_AREA_OPTIONS,
-  DATING_GRADE_OPTIONS,
-  PHOTOGRAPH_TAB_OPTIONS
+  getDeliveryStatusOptions,
+  getDatingAreaOptions,
+  getDatingGradeOptions,
+  getPhotographTabOptions
 } = require('../../constants/community.js')
 const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
 const pageUtils = require('../../utils/page.js')
+const i18n = require('../../utils/i18n.js')
 var themeUtil = require('../../utils/theme')
 
 function findLabel(options, value, fallback) {
@@ -28,7 +29,8 @@ function formatPrice(value) {
 function formatSecretPublishText(publishTime, timer) {
   const baseText = String(publishTime || '').trim()
   if (Number(timer) === 1) {
-    return baseText ? `${baseText} · 24 小时后自动删除` : '24 小时后自动删除'
+    var autoDeleteText = i18n.t('community.list.autoDelete24h')
+    return baseText ? baseText + ' \u00b7 ' + autoDeleteText : autoDeleteText
   }
   return baseText
 }
@@ -40,11 +42,11 @@ function normalizeItem(moduleId, item) {
     case 'ershou':
       return {
         id: rawItem.id,
-        title: rawItem.name || '未命名商品',
+        title: rawItem.name || i18n.t('community.list.unnamedProduct'),
         summary: rawItem.description || '',
         cover: rawItem.pictureURL && rawItem.pictureURL.length ? rawItem.pictureURL[0] : '/image/ershou.png',
         priceText: formatPrice(rawItem.price),
-        badgeText: findLabel(getSecondhandCategoryOptions(), rawItem.type, '闲置'),
+        badgeText: findLabel(getSecondhandCategoryOptions(), rawItem.type, i18n.t('community.list.secondhand')),
         metaText: rawItem.location || '',
         timeText: rawItem.publishTime || '',
         raw: rawItem
@@ -52,11 +54,11 @@ function normalizeItem(moduleId, item) {
     case 'lostandfound':
       return {
         id: rawItem.id,
-        title: rawItem.name || '未命名物品',
+        title: rawItem.name || i18n.t('community.list.unnamedItem'),
         summary: rawItem.description || '',
         cover: rawItem.pictureURL && rawItem.pictureURL.length ? rawItem.pictureURL[0] : '/image/lostandfound.png',
-        badgeText: Number(rawItem.lostType) === 0 ? '寻物' : '招领',
-        subBadgeText: findLabel(getLostFoundItemDictionaryOptions(), rawItem.itemType, '其他'),
+        badgeText: Number(rawItem.lostType) === 0 ? i18n.t('community.list.lost') : i18n.t('community.list.found'),
+        subBadgeText: findLabel(getLostFoundItemDictionaryOptions(), rawItem.itemType, i18n.t('community.category.other')),
         metaText: rawItem.location || '',
         timeText: rawItem.publishTime || '',
         raw: rawItem
@@ -64,8 +66,8 @@ function normalizeItem(moduleId, item) {
     case 'secret':
       return {
         id: rawItem.id,
-        title: Number(rawItem.type) === 1 ? '一段语音树洞' : '匿名树洞',
-        summary: Number(rawItem.type) === 1 ? '点击查看语音树洞内容' : (rawItem.content || ''),
+        title: Number(rawItem.type) === 1 ? i18n.t('community.list.voiceSecret') : i18n.t('community.list.anonSecret'),
+        summary: Number(rawItem.type) === 1 ? i18n.t('community.list.tapVoiceSecret') : (rawItem.content || ''),
         likeCount: Number(rawItem.likeCount || 0),
         commentCount: Number(rawItem.commentCount || 0),
         timeText: formatSecretPublishText(rawItem.publishTime, rawItem.timer),
@@ -74,7 +76,7 @@ function normalizeItem(moduleId, item) {
     case 'express':
       return {
         id: rawItem.id,
-        title: `${rawItem.nickname || '匿名同学'} -> ${rawItem.name || 'TA'}`,
+        title: (rawItem.nickname || i18n.t('community.list.anonStudent')) + ' -> ' + (rawItem.name || 'TA'),
         summary: rawItem.content || '',
         likeCount: Number(rawItem.likeCount || 0),
         commentCount: Number(rawItem.commentCount || 0),
@@ -84,7 +86,7 @@ function normalizeItem(moduleId, item) {
     case 'topic':
       return {
         id: rawItem.id,
-        title: `#${rawItem.topic || '校园话题'}`,
+        title: '#' + (rawItem.topic || i18n.t('community.list.campusTopic')),
         summary: rawItem.content || '',
         cover: rawItem.imageUrls && rawItem.imageUrls.length ? rawItem.imageUrls[0] : '',
         likeCount: Number(rawItem.likeCount || 0),
@@ -94,10 +96,10 @@ function normalizeItem(moduleId, item) {
     case 'delivery':
       return {
         id: rawItem.orderId,
-        title: rawItem.company || '校园跑腿',
+        title: rawItem.company || i18n.t('community.list.campusErrand'),
         summary: rawItem.address || '',
         priceText: formatPrice(rawItem.price),
-        badgeText: findLabel(DELIVERY_STATUS_OPTIONS, rawItem.state, '任务'),
+        badgeText: findLabel(getDeliveryStatusOptions(), rawItem.state, i18n.t('community.list.task')),
         metaText: rawItem.remarks || '',
         timeText: rawItem.orderTime || '',
         raw: rawItem
@@ -105,10 +107,10 @@ function normalizeItem(moduleId, item) {
     case 'dating':
       return {
         id: rawItem.profileId,
-        title: rawItem.nickname || '匿名同学',
+        title: rawItem.nickname || i18n.t('community.list.anonStudent'),
         summary: rawItem.content || '',
         cover: rawItem.pictureURL || '/image/dating.png',
-        badgeText: findLabel(DATING_GRADE_OPTIONS, rawItem.grade, '未知年级'),
+        badgeText: findLabel(getDatingGradeOptions(), rawItem.grade, i18n.t('community.list.unknownGrade')),
         metaText: rawItem.faculty || '',
         timeText: rawItem.hometown || '',
         raw: rawItem
@@ -116,7 +118,7 @@ function normalizeItem(moduleId, item) {
     case 'photograph':
       return {
         id: rawItem.id,
-        title: rawItem.title || '校园作品',
+        title: rawItem.title || i18n.t('community.list.campusWork'),
         summary: rawItem.content || '',
         cover: rawItem.firstImageUrl || (rawItem.imageUrls && rawItem.imageUrls.length ? rawItem.imageUrls[0] : '/image/photograph.png'),
         likeCount: Number(rawItem.likeCount || 0),
@@ -127,7 +129,7 @@ function normalizeItem(moduleId, item) {
     default:
       return {
         id: rawItem.id,
-        title: rawItem.title || '未命名内容',
+        title: rawItem.title || i18n.t('community.list.unnamedContent'),
         summary: rawItem.content || '',
         raw: rawItem
       }
@@ -149,7 +151,8 @@ Page({
     finished: false,
     loading: false,
     errorMessage: null,
-    stats: null
+    stats: null,
+    t: {}
   },
 
   buildTabs: function(moduleId) {
@@ -159,11 +162,11 @@ Page({
       case 'lostandfound':
         return getLostFoundModeDictionaryOptions()
       case 'delivery':
-        return DELIVERY_STATUS_OPTIONS
+        return getDeliveryStatusOptions()
       case 'dating':
-        return DATING_AREA_OPTIONS
+        return getDatingAreaOptions()
       case 'photograph':
-        return PHOTOGRAPH_TAB_OPTIONS
+        return getPhotographTabOptions()
       default:
         return []
     }
@@ -228,7 +231,7 @@ Page({
     }).then((result) => {
       wx.stopPullDownRefresh()
       if (!result.success) {
-        pageUtils.showTopTips(this, result.message || '加载失败')
+        pageUtils.showTopTips(this, result.message || i18n.t('common.loadFailed'))
         return
       }
 
@@ -308,20 +311,53 @@ Page({
     }
 
     wx.navigateTo({
-      url: `/pages/communityDetail/communityDetail?module=${this.data.moduleId}&id=${item.id}`
+      url: '/pages/communityDetail/communityDetail?module=' + this.data.moduleId + '&id=' + item.id
     })
   },
 
   openPublish: function() {
     wx.navigateTo({
-      url: `/pages/communityPublish/communityPublish?module=${this.data.moduleId}`
+      url: '/pages/communityPublish/communityPublish?module=' + this.data.moduleId
     })
   },
 
   openCenter: function() {
     wx.navigateTo({
-      url: `/pages/communityCenter/communityCenter?module=${this.data.moduleId}`
+      url: '/pages/communityCenter/communityCenter?module=' + this.data.moduleId
     })
+  },
+
+  refreshI18n: function() {
+    var moduleConfig = this.data.moduleId ? getCommunityModule(this.data.moduleId) : this.data.moduleConfig
+    var tabs = this.data.moduleId ? this.buildTabs(this.data.moduleId) : this.data.tabs
+
+    var tData = {
+      search: i18n.t('community.list.search'),
+      clear: i18n.t('community.list.clear'),
+      loading: i18n.t('community.list.loading'),
+      noMore: i18n.t('community.list.noMore'),
+      emptyTitle: i18n.t('community.list.emptyTitle'),
+      emptySummary: i18n.t('community.list.emptySummary'),
+      like: i18n.t('community.list.like'),
+      comment: i18n.t('community.list.comment'),
+      publishBtn: moduleConfig ? i18n.tReplace('community.list.publishBtn', { title: moduleConfig.title }) : '',
+      myBtn: i18n.t('community.list.myBtn'),
+      statPhotos: i18n.t('community.list.statPhotos'),
+      statComments: i18n.t('community.list.statComments'),
+      statLikes: i18n.t('community.list.statLikes')
+    }
+
+    this.setData({
+      moduleConfig: moduleConfig,
+      tabs: tabs,
+      t: tData
+    })
+
+    if (moduleConfig) {
+      wx.setNavigationBarTitle({
+        title: moduleConfig.title
+      })
+    }
   },
 
   onLoad: function(options) {
@@ -329,8 +365,8 @@ Page({
     const moduleConfig = getCommunityModule(moduleId)
     if (!moduleConfig) {
       wx.showModal({
-        title: '提示',
-        content: '未识别的社区模块',
+        title: i18n.t('community.common.notice'),
+        content: i18n.t('community.common.unknownModule'),
         showCancel: false,
         success: function() {
           wx.navigateBack({
@@ -355,6 +391,7 @@ Page({
         activeTabIndex: 0
       })
 
+      this.refreshI18n()
       this.loadStatsIfNeeded()
       this.loadFeed(1, true)
     })
@@ -362,6 +399,7 @@ Page({
 
   onShow: function() {
     themeUtil.applyTheme(this)
+    this.refreshI18n()
     if (this.data.moduleId) {
       this.loadStatsIfNeeded()
     }
@@ -381,8 +419,8 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: this.data.moduleConfig ? this.data.moduleConfig.title : '校园社区',
-      path: `/pages/communityList/communityList?module=${this.data.moduleId}`
+      title: this.data.moduleConfig ? this.data.moduleConfig.title : i18n.t('community.common.campusCommunity'),
+      path: '/pages/communityList/communityList?module=' + this.data.moduleId
     }
   }
 })
