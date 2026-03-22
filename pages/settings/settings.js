@@ -3,6 +3,7 @@ const auth = require('../../services/auth.js')
 const dataSource = require('../../services/data-source.js')
 const featureConfig = require('../../services/feature-config.js')
 var themeUtil = require('../../utils/theme')
+const i18n = require('../../utils/i18n.js')
 
 function buildFeatureSections() {
   const featureVisibility = featureConfig.getFeatureVisibility()
@@ -24,6 +25,7 @@ function buildFeatureSections() {
 
 Page({
   data: {
+    t: {},
     themeClass: '',
     useMockData: false,
     dataSourceLabel: '',
@@ -45,8 +47,8 @@ Page({
     auth.clearSession()
     this.refreshPageState()
     wx.showModal({
-      title: '切换成功',
-      content: '数据源已切换，请重新登录后继续使用。',
+      title: this.data.t.switchSuccess,
+      content: this.data.t.switchSuccessContent,
       showCancel: false,
       success: function() {
         wx.reLaunch({
@@ -69,6 +71,22 @@ Page({
 
   onShow: function() {
     themeUtil.applyTheme(this)
+    this.refreshI18n()
     this.refreshPageState()
+  },
+
+  refreshI18n: function() {
+    this.setData({
+      t: {
+        navTitle: i18n.t('settingsPage.navTitle'),
+        dataSourceTitle: i18n.t('settingsPage.dataSourceTitle'),
+        useMockData: i18n.t('settingsPage.useMockData'),
+        currentMode: i18n.t('settingsPage.currentMode'),
+        featureDisplayTitle: i18n.t('settingsPage.featureDisplayTitle'),
+        switchSuccess: i18n.t('settingsPage.switchSuccess'),
+        switchSuccessContent: i18n.t('settingsPage.switchSuccessContent')
+      }
+    })
+    wx.setNavigationBarTitle({ title: this.data.t.navTitle })
   }
 })

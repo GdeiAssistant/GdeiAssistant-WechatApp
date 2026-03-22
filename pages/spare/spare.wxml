@@ -2,10 +2,10 @@
   <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
 
   <view class="container" wx:if="{{result == null}}">
-    <view class="weui-cells__title">查询条件</view>
+    <view class="weui-cells__title">{{t.queryConditions}}</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell">
-        <view class="weui-cell__bd">校区</view>
+        <view class="weui-cell__bd">{{t.campus}}</view>
         <view class="weui-cell__ft">
           <picker range="{{campusOptions}}" range-key="label" value="{{campusIndex}}" data-field="campusIndex" bindchange="handlePickerChange">
             <view>{{campusOptions[campusIndex].label}}</view>
@@ -13,7 +13,7 @@
         </view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">课室类型</view>
+        <view class="weui-cell__bd">{{t.roomType}}</view>
         <view class="weui-cell__ft">
           <picker range="{{roomTypeOptions}}" range-key="label" value="{{roomTypeIndex}}" data-field="roomTypeIndex" bindchange="handlePickerChange">
             <view>{{roomTypeOptions[roomTypeIndex].label}}</view>
@@ -21,7 +21,7 @@
         </view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">星期</view>
+        <view class="weui-cell__bd">{{t.weekDay}}</view>
         <view class="weui-cell__ft">
           <picker range="{{weekDayOptions}}" range-key="label" value="{{weekDayIndex}}" data-field="weekDayIndex" bindchange="handlePickerChange">
             <view>{{weekDayOptions[weekDayIndex].label}}</view>
@@ -29,7 +29,7 @@
         </view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">单双周</view>
+        <view class="weui-cell__bd">{{t.weekType}}</view>
         <view class="weui-cell__ft">
           <picker range="{{weekTypeOptions}}" range-key="label" value="{{weekTypeIndex}}" data-field="weekTypeIndex" bindchange="handlePickerChange">
             <view>{{weekTypeOptions[weekTypeIndex].label}}</view>
@@ -37,7 +37,7 @@
         </view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">节次</view>
+        <view class="weui-cell__bd">{{t.classPeriod}}</view>
         <view class="weui-cell__ft">
           <picker range="{{classPeriodOptions}}" range-key="label" value="{{classPeriodIndex}}" data-field="classPeriodIndex" bindchange="handlePickerChange">
             <view>{{classPeriodOptions[classPeriodIndex].label}}</view>
@@ -46,29 +46,29 @@
       </view>
       <view class="weui-cell weui-cell_input">
         <view class="weui-cell__hd">
-          <view class="weui-label">最少座位</view>
+          <view class="weui-label">{{t.minSeating}}</view>
         </view>
         <view class="weui-cell__bd">
-          <input value="{{minSeating}}" data-field="minSeating" bindinput="setFieldValue" class="weui-input" type="number" placeholder="可选" />
+          <input value="{{minSeating}}" data-field="minSeating" bindinput="setFieldValue" class="weui-input" type="number" placeholder="{{t.optional}}" />
         </view>
       </view>
       <view class="weui-cell weui-cell_input">
         <view class="weui-cell__hd">
-          <view class="weui-label">最多座位</view>
+          <view class="weui-label">{{t.maxSeating}}</view>
         </view>
         <view class="weui-cell__bd">
-          <input value="{{maxSeating}}" data-field="maxSeating" bindinput="setFieldValue" class="weui-input" type="number" placeholder="可选" />
+          <input value="{{maxSeating}}" data-field="maxSeating" bindinput="setFieldValue" class="weui-input" type="number" placeholder="{{t.optional}}" />
         </view>
       </view>
     </view>
 
     <view class="btn-area">
-      <button type="primary" disabled="{{loading}}" bindtap="submitQuery">查询</button>
+      <button type="primary" disabled="{{loading}}" bindtap="submitQuery">{{t.search}}</button>
     </view>
   </view>
 
   <view class="container" wx:if="{{result != null}}">
-    <view class="weui-cells__title">{{result.length ? '查询结果' : '没有符合条件的空课室'}}</view>
+    <view class="weui-cells__title">{{result.length ? t.queryResult : t.noResult}}</view>
     <block wx:for="{{result}}" wx:key="number" wx:for-item="room">
       <view class="weui-form-preview spare_preview">
         <view class="weui-form-preview__hd">
@@ -78,27 +78,27 @@
         </view>
         <view class="weui-form-preview__bd">
           <view class="weui-form-preview__item">
-            <view class="weui-form-preview__label">课室编号</view>
+            <view class="weui-form-preview__label">{{t.roomNumber}}</view>
             <view class="weui-form-preview__value">{{room.number}}</view>
           </view>
           <view class="weui-form-preview__item">
-            <view class="weui-form-preview__label">课室类型</view>
+            <view class="weui-form-preview__label">{{t.roomTypeLabel}}</view>
             <view class="weui-form-preview__value">{{room.type}}</view>
           </view>
           <view class="weui-form-preview__item">
-            <view class="weui-form-preview__label">校区</view>
+            <view class="weui-form-preview__label">{{t.campusLabel}}</view>
             <view class="weui-form-preview__value">{{room.zone}}</view>
           </view>
           <view class="weui-form-preview__item">
-            <view class="weui-form-preview__label">节次</view>
+            <view class="weui-form-preview__label">{{t.sectionLabel}}</view>
             <view class="weui-form-preview__value">{{room.section}}</view>
           </view>
           <view class="weui-form-preview__item">
-            <view class="weui-form-preview__label">上课容量</view>
+            <view class="weui-form-preview__label">{{t.classCapacity}}</view>
             <view class="weui-form-preview__value">{{room.classSeating}}</view>
           </view>
           <view class="weui-form-preview__item">
-            <view class="weui-form-preview__label">考试容量</view>
+            <view class="weui-form-preview__label">{{t.examCapacity}}</view>
             <view class="weui-form-preview__value">{{room.examSeating}}</view>
           </view>
         </view>
@@ -106,7 +106,7 @@
     </block>
 
     <view class="btn-area">
-      <button type="primary" bindtap="resetQuery">重新查询</button>
+      <button type="primary" bindtap="resetQuery">{{t.reSearch}}</button>
     </view>
   </view>
 </view>

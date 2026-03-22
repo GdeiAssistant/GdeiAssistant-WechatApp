@@ -2,17 +2,20 @@ const storageKeys = require('../../constants/storage.js')
 const messagesApi = require('../../services/apis/messages.js')
 const pageUtils = require('../../utils/page.js')
 var themeUtil = require('../../utils/theme')
+const i18n = require('../../utils/i18n.js')
 
 const PAGE_SIZE = 10
-const INBOX_TABS = [
-  { key: 'announcement', label: '系统公告' },
-  { key: 'interaction', label: '互动消息' }
-]
+function getInboxTabs() {
+  return [
+    { key: 'announcement', label: i18n.t('inboxPage.tabAnnouncement') },
+    { key: 'interaction', label: i18n.t('inboxPage.tabInteraction') }
+  ]
+}
 
 function normalizeAnnouncementItem(item) {
   return {
     id: item.id,
-    title: item.title || '系统公告',
+    title: item.title || i18n.t('inboxPage.tabAnnouncement'),
     publishDate: item.publishDate || item.publishTime || item.createdAt || '',
     content: item.content || item.message || ''
   }
@@ -38,23 +41,23 @@ function normalizeInteractionModule(moduleId) {
 function buildInteractionModuleLabel(moduleId) {
   switch (moduleId) {
     case 'ershou':
-      return '二手交易'
+      return i18n.t('inboxPage.moduleMarketplace')
     case 'lostandfound':
-      return '失物招领'
+      return i18n.t('inboxPage.moduleLostFound')
     case 'secret':
-      return '校园树洞'
+      return i18n.t('inboxPage.moduleSecret')
     case 'express':
-      return '表白墙'
+      return i18n.t('inboxPage.moduleExpress')
     case 'topic':
-      return '校园话题'
+      return i18n.t('inboxPage.moduleTopic')
     case 'delivery':
-      return '全民快递'
+      return i18n.t('inboxPage.moduleDelivery')
     case 'dating':
-      return '卖室友'
+      return i18n.t('inboxPage.moduleDating')
     case 'photograph':
-      return '拍好校园'
+      return i18n.t('inboxPage.modulePhotograph')
     default:
-      return '互动消息'
+      return i18n.t('inboxPage.tabInteraction')
   }
 }
 
@@ -63,23 +66,23 @@ function buildInteractionActionLabel(item) {
 
   switch (normalizedType) {
     case 'comment':
-      return '评论'
+      return i18n.t('inboxPage.actionComment')
     case 'like':
-      return '点赞'
+      return i18n.t('inboxPage.actionLike')
     case 'guess':
-      return '猜名字'
+      return i18n.t('inboxPage.actionGuess')
     case 'published':
-      return '我发布的'
+      return i18n.t('inboxPage.actionPublished')
     case 'accepted':
-      return '我接的'
+      return i18n.t('inboxPage.actionAccepted')
     case 'sent':
-      return '我发出的'
+      return i18n.t('inboxPage.actionSent')
     case 'received':
-      return '我收到的'
+      return i18n.t('inboxPage.actionReceived')
     case 'posts':
-      return '我的发布'
+      return i18n.t('inboxPage.actionPosts')
     default:
-      return '新动态'
+      return i18n.t('inboxPage.actionNew')
   }
 }
 
@@ -90,7 +93,7 @@ function normalizeInteractionItem(item) {
     id: item.id,
     moduleId: moduleId,
     title: item.title || buildInteractionModuleLabel(moduleId),
-    content: item.content || item.message || '你有一条新的互动消息',
+    content: item.content || item.message || i18n.t('inboxPage.newInteractionMessage'),
     createdAt: item.createdAt || '',
     targetType: item.targetType || '',
     targetId: item.targetId || '',
@@ -98,7 +101,7 @@ function normalizeInteractionItem(item) {
     isRead: !!item.isRead,
     moduleLabel: buildInteractionModuleLabel(moduleId),
     actionLabel: buildInteractionActionLabel(item),
-    readLabel: item.isRead ? '已读' : '未读'
+    readLabel: item.isRead ? i18n.t('inboxPage.read') : i18n.t('inboxPage.unread')
   }
 }
 
@@ -134,7 +137,8 @@ function buildInteractionUrl(item) {
 Page({
   data: {
     themeClass: '',
-    inboxTabs: INBOX_TABS,
+    t: {},
+    inboxTabs: getInboxTabs(),
     activeTab: 'announcement',
     announcementList: [],
     announcementLoading: false,
@@ -236,7 +240,7 @@ Page({
       title: item.title,
       publishDate: item.publishDate || '',
       content: item.content || '',
-      navigationTitle: '系统公告'
+      navigationTitle: this.data.t.tabAnnouncement
     })
     wx.navigateTo({
       url: `/pages/newsDetail/newsDetail?mode=announcement&id=${encodeURIComponent(item.id)}`
@@ -252,7 +256,7 @@ Page({
         }
         return Object.assign({}, item, {
           isRead: nextReadState,
-          readLabel: nextReadState ? '已读' : '未读'
+          readLabel: nextReadState ? i18n.t('inboxPage.read') : i18n.t('inboxPage.unread')
         })
       }
       return item
@@ -274,7 +278,7 @@ Page({
 
     const targetUrl = buildInteractionUrl(item)
     if (!targetUrl) {
-      pageUtils.showTopTips(this, '该互动消息暂不支持跳转')
+      pageUtils.showTopTips(this, this.data.t.navigationUnsupported)
       return
     }
 
@@ -300,7 +304,7 @@ Page({
       interactionList: (this.data.interactionList || []).map(function(item) {
         return Object.assign({}, item, {
           isRead: true,
-          readLabel: '已读'
+          readLabel: i18n.t('inboxPage.read')
         })
       })
     })
@@ -328,6 +332,7 @@ Page({
 
   onShow: function() {
     themeUtil.applyTheme(this)
+    this.refreshI18n()
     if (this.data.activeTab === 'interaction') {
       this.loadInteractionMeta()
     }
@@ -358,8 +363,30 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '收件通知',
+      title: this.data.t.shareTitle,
       path: '/pages/inbox/inbox'
     }
+  },
+
+  refreshI18n: function() {
+    this.setData({
+      t: {
+        navTitle: i18n.t('inboxPage.navTitle'),
+        tabAnnouncement: i18n.t('inboxPage.tabAnnouncement'),
+        tabInteraction: i18n.t('inboxPage.tabInteraction'),
+        loadingAnnouncement: i18n.t('inboxPage.loadingAnnouncement'),
+        noMoreAnnouncement: i18n.t('inboxPage.noMoreAnnouncement'),
+        noAnnouncement: i18n.t('inboxPage.noAnnouncement'),
+        unreadCount: i18n.t('inboxPage.unreadCount'),
+        markAllRead: i18n.t('inboxPage.markAllRead'),
+        loadingInteraction: i18n.t('inboxPage.loadingInteraction'),
+        noMoreInteraction: i18n.t('inboxPage.noMoreInteraction'),
+        noInteraction: i18n.t('inboxPage.noInteraction'),
+        navigationUnsupported: i18n.t('inboxPage.navigationUnsupported'),
+        shareTitle: i18n.t('inboxPage.shareTitle')
+      },
+      inboxTabs: getInboxTabs()
+    })
+    wx.setNavigationBarTitle({ title: this.data.t.navTitle })
   }
 })
