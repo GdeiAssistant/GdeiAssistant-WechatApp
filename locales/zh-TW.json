@@ -331,6 +331,33 @@
       "logout": { "title": "登出帳號", "desc": "登出目前帳號" }
     }
   },
+  "billPage": {
+    "navTitle": "校園卡消費"
+  },
+  "bookPage": {
+    "navTitle": "我的借閱"
+  },
+  "graduateExamPage": {
+    "navTitle": "考研查詢"
+  },
+  "dataPage": {
+    "navTitle": "資料查詢"
+  },
+  "cardLostPage": {
+    "navTitle": "校園卡掛失"
+  },
+  "electricityPage": {
+    "navTitle": "電費查詢"
+  },
+  "collectionPage": {
+    "navTitle": "圖書館"
+  },
+  "yellowPagePage": {
+    "navTitle": "黃頁查詢"
+  },
+  "evaluatePage": {
+    "navTitle": "一鍵評量"
+  },
   "spare": {
     "campus": {
       "any": "不限",

@@ -331,6 +331,33 @@
       "logout": { "title": "Logout", "desc": "Log out of current account" }
     }
   },
+  "billPage": {
+    "navTitle": "Card Transactions"
+  },
+  "bookPage": {
+    "navTitle": "My Loans"
+  },
+  "graduateExamPage": {
+    "navTitle": "Postgrad Exam"
+  },
+  "dataPage": {
+    "navTitle": "Data Query"
+  },
+  "cardLostPage": {
+    "navTitle": "Report Lost Card"
+  },
+  "electricityPage": {
+    "navTitle": "Electricity Bill"
+  },
+  "collectionPage": {
+    "navTitle": "Library"
+  },
+  "yellowPagePage": {
+    "navTitle": "Yellow Pages"
+  },
+  "evaluatePage": {
+    "navTitle": "Evaluation"
+  },
   "spare": {
     "campus": {
       "any": "Any",

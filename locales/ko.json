@@ -331,6 +331,33 @@
       "logout": { "title": "로그아웃", "desc": "현재 계정에서 로그아웃" }
     }
   },
+  "billPage": {
+    "navTitle": "학생증 거래 내역"
+  },
+  "bookPage": {
+    "navTitle": "내 대출"
+  },
+  "graduateExamPage": {
+    "navTitle": "대학원 시험 조회"
+  },
+  "dataPage": {
+    "navTitle": "데이터 조회"
+  },
+  "cardLostPage": {
+    "navTitle": "분실 신고"
+  },
+  "electricityPage": {
+    "navTitle": "전기요금 조회"
+  },
+  "collectionPage": {
+    "navTitle": "도서관"
+  },
+  "yellowPagePage": {
+    "navTitle": "전화번호부 검색"
+  },
+  "evaluatePage": {
+    "navTitle": "수업 평가"
+  },
   "spare": {
     "campus": {
       "any": "전체",

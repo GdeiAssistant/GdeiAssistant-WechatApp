@@ -331,6 +331,33 @@
       "logout": { "title": "退出账号", "desc": "退出当前账号" }
     }
   },
+  "billPage": {
+    "navTitle": "校园卡消费"
+  },
+  "bookPage": {
+    "navTitle": "我的借阅"
+  },
+  "graduateExamPage": {
+    "navTitle": "考研查询"
+  },
+  "dataPage": {
+    "navTitle": "数据查询"
+  },
+  "cardLostPage": {
+    "navTitle": "校园卡挂失"
+  },
+  "electricityPage": {
+    "navTitle": "电费查询"
+  },
+  "collectionPage": {
+    "navTitle": "图书馆"
+  },
+  "yellowPagePage": {
+    "navTitle": "黄页查询"
+  },
+  "evaluatePage": {
+    "navTitle": "一键评教"
+  },
   "spare": {
     "campus": {
       "any": "不限",
