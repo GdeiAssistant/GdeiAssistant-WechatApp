@@ -1,17 +1,38 @@
 const utils = require('../../utils/util.js')
 const campusApi = require('../../services/apis/campus.js')
 var themeUtil = require('../../utils/theme')
+var i18n = require('../../utils/i18n')
 
 Page({
   onShow: function () {
     themeUtil.applyTheme(this)
+    this.refreshI18n()
   },
   data: {
     themeClass: '',
-    tabs: ['大一', '大二', '大三', '大四'],
+    fontStyle: '',
+    t: {},
+    tabs: [],
     firstTermGradeList: null,
     secondTermGradeList: null,
     activeIndex: -1
+  },
+
+  refreshI18n: function () {
+    var tabs = i18n.t('grade.tabs')
+    if (!Array.isArray(tabs)) {
+      tabs = ['大一', '大二', '大三', '大四']
+    }
+    this.setData({
+      tabs: tabs,
+      t: {
+        navTitle: i18n.t('grade.navTitle'),
+        title: i18n.t('grade.title'),
+        firstTerm: i18n.t('grade.firstTerm'),
+        secondTerm: i18n.t('grade.secondTerm')
+      }
+    })
+    wx.setNavigationBarTitle({ title: this.data.t.navTitle })
   },
 
   tabClick: function(e) {
@@ -33,21 +54,22 @@ Page({
           activeIndex: result.data.year
         })
       } else {
-        utils.showModal('查询失败', result.message)
+        utils.showModal(i18n.t('common.queryFailed'), result.message)
       }
     }).catch((error) => {
       wx.hideNavigationBarLoading()
-      utils.showModal('查询失败', error.message)
+      utils.showModal(i18n.t('common.queryFailed'), error.message)
     })
   },
 
   onLoad: function() {
+    this.refreshI18n()
     this.getGrade()
   },
 
   onShareAppMessage: function() {
     return {
-      title: '成绩查询',
+      title: i18n.t('grade.title'),
       path: '/pages/grade/grade'
     }
   }

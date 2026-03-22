@@ -1,44 +1,44 @@
-<view class="page__bd {{themeClass}}">
+<view class="page__bd {{themeClass}}" style="{{fontStyle}}">
   <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
 
   <view class="container" wx:if="{{!result}}">
-    <view class="weui-cells__title">查询信息</view>
+    <view class="weui-cells__title">{{t.queryInfo}}</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-cell_input">
         <view class="weui-cell__hd">
-          <view class="weui-label">考号</view>
+          <view class="weui-label">{{t.ticketNumber}}</view>
         </view>
         <view class="weui-cell__bd">
-          <input value="{{ticketNumber}}" data-field="ticketNumber" bindinput="setFieldValue" class="weui-input" maxlength="15" type="number" placeholder="请输入 15 位准考证号" />
+          <input value="{{ticketNumber}}" data-field="ticketNumber" bindinput="setFieldValue" class="weui-input" maxlength="15" type="number" placeholder="{{t.ticketPlaceholder}}" />
         </view>
       </view>
       <view class="weui-cell weui-cell_input">
         <view class="weui-cell__hd">
-          <view class="weui-label">姓名</view>
+          <view class="weui-label">{{t.name}}</view>
         </view>
         <view class="weui-cell__bd">
-          <input value="{{name}}" data-field="name" bindinput="setFieldValue" class="weui-input" maxlength="20" type="text" placeholder="姓名超过 3 个字可只输前 3 个" />
+          <input value="{{name}}" data-field="name" bindinput="setFieldValue" class="weui-input" maxlength="20" type="text" placeholder="{{t.namePlaceholder}}" />
         </view>
       </view>
       <view class="weui-cell weui-cell_input">
         <view class="weui-cell__hd">
-          <view class="weui-label">验证码</view>
+          <view class="weui-label">{{t.captcha}}</view>
         </view>
         <view class="weui-cell__bd">
-          <input value="{{checkcode}}" data-field="checkcode" bindinput="setFieldValue" class="weui-input" maxlength="10" type="text" placeholder="请输入验证码" />
+          <input value="{{checkcode}}" data-field="checkcode" bindinput="setFieldValue" class="weui-input" maxlength="10" type="text" placeholder="{{t.captchaPlaceholder}}" />
         </view>
         <view class="weui-cell__ft">
           <image wx:if="{{checkcodeImage}}" bindtap="loadCheckcodeImage" class="checkcode_image" src="{{checkcodeImage}}" mode="aspectFit"></image>
           <view wx:elif="{{mockCaptchaHint}}" bindtap="loadCheckcodeImage" class="checkcode_mock">{{mockCaptchaHint}}</view>
-          <view wx:else bindtap="loadCheckcodeImage" class="checkcode_mock">刷新</view>
+          <view wx:else bindtap="loadCheckcodeImage" class="checkcode_mock">{{t.refresh}}</view>
         </view>
       </view>
     </view>
 
     <view class="btn-area">
-      <button type="primary" disabled="{{loading}}" bindtap="submitQuery">查询</button>
-      <button type="default" disabled="{{loading}}" bindtap="saveTicketNumber">保存当前考号</button>
-      <button type="default" disabled="{{loading}}" bindtap="loadSavedNumber">导入已保存考号</button>
+      <button type="primary" disabled="{{loading}}" bindtap="submitQuery">{{t.query}}</button>
+      <button type="default" disabled="{{loading}}" bindtap="saveTicketNumber">{{t.saveTicket}}</button>
+      <button type="default" disabled="{{loading}}" bindtap="loadSavedNumber">{{t.loadSavedTicket}}</button>
     </view>
   </view>
 
@@ -46,34 +46,34 @@
     <view class="weui-msg">
       <view class="weui-text-area">
         <view class="weui-msg__title">{{result.name}}</view>
-        <view class="weui-msg__desc">考试类型：{{result.type}}</view>
-        <view class="weui-msg__desc">学校：{{result.school}}</view>
-        <view class="weui-msg__desc">准考证号：{{result.admissionCard}}</view>
+        <view class="weui-msg__desc">{{t.examType}}{{result.type}}</view>
+        <view class="weui-msg__desc">{{t.school}}{{result.school}}</view>
+        <view class="weui-msg__desc">{{t.admissionCard}}{{result.admissionCard}}</view>
       </view>
     </view>
 
-    <view class="weui-cells__title">成绩信息</view>
+    <view class="weui-cells__title">{{t.scoreInfo}}</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell">
-        <view class="weui-cell__bd">总分</view>
+        <view class="weui-cell__bd">{{t.totalScore}}</view>
         <view class="weui-cell__ft">{{result.totalScore}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">听力</view>
+        <view class="weui-cell__bd">{{t.listening}}</view>
         <view class="weui-cell__ft">{{result.listeningScore}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">阅读</view>
+        <view class="weui-cell__bd">{{t.reading}}</view>
         <view class="weui-cell__ft">{{result.readingScore}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">写作翻译</view>
+        <view class="weui-cell__bd">{{t.writingTranslation}}</view>
         <view class="weui-cell__ft">{{result.writingAndTranslatingScore}}</view>
       </view>
     </view>
 
     <view class="btn-area">
-      <button type="primary" bindtap="resetQuery">重新查询</button>
+      <button type="primary" bindtap="resetQuery">{{t.queryAgain}}</button>
     </view>
   </view>
 </view>

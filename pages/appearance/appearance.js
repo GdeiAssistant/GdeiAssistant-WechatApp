@@ -5,6 +5,7 @@ Page({
   data: {
     t: {},
     themeClass: '',
+    fontStyle: '',
     themeMode: 'system',
     fontScaleStep: 1,
     fontScales: themeUtil.FONT_SCALES,
@@ -59,7 +60,10 @@ Page({
   onFontChange: function (e) {
     var step = parseInt(e.detail.value, 10)
     themeUtil.setFontScaleStep(step)
-    this.setData({ fontScaleStep: step })
+    this.setData({
+      fontScaleStep: step,
+      fontStyle: themeUtil.buildFontStyle(step)
+    })
   },
 
   onLocaleSelect: function (e) {

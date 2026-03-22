@@ -2,9 +2,10 @@ const storageKeys = require('../../constants/storage.js')
 const infoApi = require('../../services/apis/info.js')
 const pageUtils = require('../../utils/page.js')
 var themeUtil = require('../../utils/theme')
+var i18n = require('../../utils/i18n')
 
 const PAGE_SIZE = 10
-const NEWS_TABS = [
+const DEFAULT_NEWS_TABS = [
   { type: 1, label: '学校要闻' },
   { type: 2, label: '院部通知' },
   { type: 3, label: '通知公告' },
@@ -14,16 +15,36 @@ const NEWS_TABS = [
 Page({
   onShow: function () {
     themeUtil.applyTheme(this)
+    this.refreshI18n()
   },
   data: {
     themeClass: '',
-    tabs: NEWS_TABS,
+    fontStyle: '',
+    t: {},
+    tabs: DEFAULT_NEWS_TABS,
     activeType: 1,
     newsList: [],
     currentPage: 1,
     finished: false,
     loading: false,
     errorMessage: null
+  },
+
+  refreshI18n: function () {
+    var tabs = i18n.t('info.newsTabs')
+    if (!Array.isArray(tabs)) {
+      tabs = DEFAULT_NEWS_TABS
+    }
+    this.setData({
+      tabs: tabs,
+      t: {
+        navTitle: i18n.t('info.navTitle'),
+        loadingNews: i18n.t('info.loadingNews'),
+        noMoreNews: i18n.t('info.noMoreNews'),
+        noNews: i18n.t('info.noNews')
+      }
+    })
+    wx.setNavigationBarTitle({ title: this.data.t.navTitle })
   },
 
   loadNews: function(pageNumber, reset) {
@@ -37,7 +58,7 @@ Page({
       loadingKey: 'loading'
     }).then((result) => {
       if (!result.success) {
-        throw new Error(result.message || '加载新闻失败')
+        throw new Error(result.message || i18n.t('info.loadNewsFailed'))
       }
 
       const nextList = Array.isArray(result.data) ? result.data : []
@@ -76,7 +97,7 @@ Page({
     }
 
     wx.setStorageSync(storageKeys.newsDetailItem, Object.assign({}, item, {
-      navigationTitle: '新闻'
+      navigationTitle: i18n.t('info.news')
     }))
     wx.navigateTo({
       url: `/pages/newsDetail/newsDetail?mode=news&id=${encodeURIComponent(item.id)}`
@@ -84,6 +105,7 @@ Page({
   },
 
   onLoad: function() {
+    this.refreshI18n()
     this.loadNews(1, true)
   },
 
@@ -101,7 +123,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '新闻',
+      title: i18n.t('info.news'),
       path: '/pages/news/news'
     }
   }

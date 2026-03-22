@@ -22,6 +22,16 @@ function getStoredFontScaleStep() {
   } catch (e) { return 1 }
 }
 
+/**
+ * Build an inline style string for font scaling based on the current step.
+ * Pages should bind this to a root element: style="{{fontStyle}}"
+ */
+function buildFontStyle(step) {
+  var scale = FONT_SCALES[step] || 1.0
+  if (scale === 1.0) return ''
+  return 'font-size:' + Math.round(scale * 32) + 'rpx;'
+}
+
 module.exports = {
   FONT_SCALES: FONT_SCALES,
 
@@ -49,9 +59,15 @@ module.exports = {
     app.globalData.fontScaleStep = step
   },
 
+  buildFontStyle: buildFontStyle,
+
   applyTheme: function (pageInstance) {
     var effective = resolveEffective(getStoredThemeMode())
-    pageInstance.setData({ themeClass: effective === 'dark' ? 'theme-dark' : '' })
+    var step = getStoredFontScaleStep()
+    pageInstance.setData({
+      themeClass: effective === 'dark' ? 'theme-dark' : '',
+      fontStyle: buildFontStyle(step)
+    })
     // Sync navigation bar colors with theme
     wx.setNavigationBarColor({
       frontColor: effective === 'dark' ? '#ffffff' : '#000000',

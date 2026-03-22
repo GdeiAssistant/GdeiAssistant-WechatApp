@@ -1,52 +1,52 @@
-<view block class="page__bd {{themeClass}}">
+<view block class="page__bd {{themeClass}}" style="{{fontStyle}}">
   <view class="container" wx:if="{{card}}">
     <view class="module_shortcuts">
       <navigator url="/pages/bill/bill" class="shortcut_card" hover-class="shortcut_card_active">
-        <view class="shortcut_title">消费记录</view>
-        <view class="shortcut_desc">查看校园卡消费流水</view>
+        <view class="shortcut_title">{{t.transactionHistory}}</view>
+        <view class="shortcut_desc">{{t.transactionHistoryDesc}}</view>
       </navigator>
       <navigator url="/pages/cardLost/cardLost" class="shortcut_card shortcut_card_warn" hover-class="shortcut_card_active">
-        <view class="shortcut_title">校园卡挂失</view>
-        <view class="shortcut_desc">卡片异常时可在这里立即挂失</view>
+        <view class="shortcut_title">{{t.reportLost}}</view>
+        <view class="shortcut_desc">{{t.reportLostDesc}}</view>
       </navigator>
     </view>
 
-    <view class="weui-cells__title">基本信息</view>
+    <view class="weui-cells__title">{{t.basicInfo}}</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell">
-        <view class="weui-cell__bd">姓名</view>
+        <view class="weui-cell__bd">{{t.name}}</view>
         <view class="weui-cell__ft">{{card.name}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">学号</view>
+        <view class="weui-cell__bd">{{t.studentId}}</view>
         <view class="weui-cell__ft">{{card.number}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">卡号</view>
+        <view class="weui-cell__bd">{{t.cardNumber}}</view>
         <view class="weui-cell__ft">{{card.cardNumber}}</view>
       </view>
     </view>
 
-    <view class="weui-cells__title">余额信息</view>
+    <view class="weui-cells__title">{{t.balanceInfo}}</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell">
-        <view class="weui-cell__bd">余额</view>
+        <view class="weui-cell__bd">{{t.balance}}</view>
         <view class="weui-cell__ft">{{card.cardBalance}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">过渡余额</view>
+        <view class="weui-cell__bd">{{t.interimBalance}}</view>
         <view class="weui-cell__ft">{{card.cardInterimBalance}}</view>
       </view>
     </view>
 
-    <view class="weui-cells__title">状态信息</view>
+    <view class="weui-cells__title">{{t.statusInfo}}</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell">
-        <view class="weui-cell__bd">冻结状态</view>
+        <view class="weui-cell__bd">{{t.freezeStatus}}</view>
         <view class="weui-cell__ft">{{card.cardFreezeState}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">挂失状态</view>
+        <view class="weui-cell__bd">{{t.lostStatus}}</view>
         <view class="weui-cell__ft">{{card.cardLostState}}</view>
       </view>
     </view>

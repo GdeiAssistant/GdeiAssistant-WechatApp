@@ -5,6 +5,7 @@ const userApi = require('../../services/apis/user.js')
 const featureConfig = require('../../services/feature-config.js')
 const dataSource = require('../../services/data-source.js')
 var themeUtil = require('../../utils/theme')
+var i18n = require('../../utils/i18n')
 
 function formatInboxBadge(unreadCount) {
   const count = Number(unreadCount || 0)
@@ -17,6 +18,8 @@ function formatInboxBadge(unreadCount) {
 Page({
   data: {
     themeClass: '',
+    fontStyle: '',
+    t: {},
     avatar: null,
     nickname: null,
     homeSections: [],
@@ -27,10 +30,24 @@ Page({
     inboxBadgeText: ''
   },
 
+  refreshI18n: function () {
+    var dataSourceRaw = dataSource.getDataSourceLabel()
+    this.setData({
+      t: {
+        appName: i18n.t('index.appName'),
+        navTitle: i18n.t('index.navTitle'),
+        dataSourceLabel: i18n.t('index.dataSourceLabel') + dataSourceRaw,
+        viewProfile: i18n.t('index.viewProfile'),
+        settingsSection: i18n.t('index.settingsSection')
+      }
+    })
+    wx.setNavigationBarTitle({ title: this.data.t.navTitle })
+  },
+
   logout: function() {
     wx.showModal({
-      title: '退出账号',
-      content: '你确定要退出当前账号吗？',
+      title: i18n.t('index.logoutTitle'),
+      content: i18n.t('index.logoutContent'),
       success: function(res) {
         if (!res.confirm) {
           return
@@ -87,6 +104,7 @@ Page({
 
   loadProfile: function() {
     const page = this
+    var defaultNickname = i18n.t('index.defaultNickname')
 
     userApi.getAvatar().then(function(result) {
       page.setData({
@@ -100,11 +118,11 @@ Page({
 
     userApi.getProfile().then(function(result) {
       page.setData({
-        nickname: result.success && result.data && result.data.nickname ? result.data.nickname : '广东二师助手用户'
+        nickname: result.success && result.data && result.data.nickname ? result.data.nickname : defaultNickname
       })
     }).catch(function() {
       page.setData({
-        nickname: '广东二师助手用户'
+        nickname: defaultNickname
       })
     })
   },
@@ -112,7 +130,7 @@ Page({
   loadInboxStatus: function() {
     messagesApi.getUnreadCount().then((result) => {
       if (!result.success) {
-        throw new Error(result.message || '获取未读消息失败')
+        throw new Error(result.message || i18n.t('index.unreadFailed'))
       }
 
       const unreadCount = Number(result.data || 0)
@@ -129,6 +147,7 @@ Page({
   },
 
   onLoad: function() {
+    this.refreshI18n()
     this.loadProfile()
     this.loadInboxStatus()
     this.setData({ hiddenFeatureIds: [] })
@@ -137,6 +156,7 @@ Page({
 
   onShow: function() {
     themeUtil.applyTheme(this)
+    this.refreshI18n()
     this.loadProfile()
     this.loadInboxStatus()
     this.loadHomeSections()
@@ -144,7 +164,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '广东二师助手',
+      title: i18n.t('index.appName'),
       path: '/pages/login/login'
     }
   }

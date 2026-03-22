@@ -20,6 +20,20 @@ function t(key) {
   }, messages) || key
 }
 
+/**
+ * Translate with placeholder replacement.
+ * Usage: tReplace('schedule.currentWeek', { week: 5 })
+ * Template uses {{key}} syntax in locale strings.
+ */
+function tReplace(key, params) {
+  var result = t(key)
+  if (typeof result !== 'string' || !params) return result
+  Object.keys(params).forEach(function (k) {
+    result = result.replace(new RegExp('\\{\\{' + k + '\\}\\}', 'g'), String(params[k]))
+  })
+  return result
+}
+
 function detectSystemLocale() {
   try {
     var info = wx.getSystemInfoSync()
@@ -46,4 +60,4 @@ function getCurrentLocale() {
   return wx.getStorageSync('locale') || detectSystemLocale()
 }
 
-module.exports = { t: t, setLocale: setLocale, getCurrentLocale: getCurrentLocale, detectSystemLocale: detectSystemLocale }
+module.exports = { t: t, tReplace: tReplace, setLocale: setLocale, getCurrentLocale: getCurrentLocale, detectSystemLocale: detectSystemLocale }

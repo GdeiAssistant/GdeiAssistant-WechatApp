@@ -3,7 +3,9 @@ const uploadService = require('../../services/upload.js')
 const pageUtils = require('../../utils/page.js')
 const LOCATION_REGIONS = require('../../constants/location-regions.js')
 var themeUtil = require('../../utils/theme')
+var i18n = require('../../utils/i18n')
 const {
+  NOT_SELECTED,
   fetchProfileOptions,
   getFacultyCodeByLabel,
   getFacultyOptions,
@@ -281,8 +283,8 @@ function normalizeProfile(profile, avatar) {
     nickname: safeProfile.nickname || '',
     avatar: avatar || safeProfile.avatar || '/image/default.png',
     birthday: safeProfile.birthday || '',
-    faculty: safeProfile.faculty || '未选择',
-    major: safeProfile.major || '未选择',
+    faculty: safeProfile.faculty || NOT_SELECTED,
+    major: safeProfile.major || NOT_SELECTED,
     enrollment: safeProfile.enrollment ? String(safeProfile.enrollment) : '',
     location: safeProfile.location || '',
     locationRegion: safeProfile.locationRegion || '',
@@ -345,6 +347,16 @@ function syncProfileLocationDisplay(profile, locationTree) {
   return nextProfile
 }
 
+function displayValue(val) {
+  return val === NOT_SELECTED ? i18n.t('profilePage.notSelected') : val
+}
+
+function toDisplayOptions(options) {
+  return options.map(function(option) {
+    return displayValue(option)
+  })
+}
+
 function buildEditableState(profile, locationTree) {
   const normalizedProfile = normalizeProfile(profile, profile.avatar)
   const facultyOptions = getFacultyOptions()
@@ -384,12 +396,17 @@ function buildEditableState(profile, locationTree) {
       },
       introduction: normalizedProfile.introduction
     },
+    displayFaculty: displayValue(normalizedProfile.faculty),
+    displayMajor: displayValue(normalizedProfile.major),
     majorOptions: majorOptions,
     facultyOptions: facultyOptions,
+    facultyDisplayOptions: toDisplayOptions(facultyOptions),
+    majorDisplayOptions: toDisplayOptions(majorOptions),
     facultyIndex: getSafeIndex(facultyOptions, normalizedProfile.faculty),
     majorIndex: getSafeIndex(majorOptions, normalizedProfile.major),
     enrollmentOptions: enrollmentOptions,
-    enrollmentIndex: getSafeIndex(enrollmentOptions, normalizedProfile.enrollment || '未选择'),
+    enrollmentDisplayOptions: toDisplayOptions(enrollmentOptions),
+    enrollmentIndex: getSafeIndex(enrollmentOptions, normalizedProfile.enrollment || NOT_SELECTED),
     majorDisabled: !canSelectMajor(normalizedProfile.faculty),
     locationRanges: locationPickerState.ranges,
     locationPickerIndex: locationPickerState.indices,
@@ -424,7 +441,7 @@ function buildInteractionPromise(promiseFactory) {
     })
     .then(function(result) {
       if (!result.success) {
-        throw new Error(result.message || '保存失败')
+        throw new Error(result.message || i18n.t('profilePage.saveFailed'))
       }
       return result
     })
@@ -453,10 +470,10 @@ function buildAvatarFileName(filePath, prefix) {
 function validateNickname(nickname) {
   const normalizedNickname = String(nickname || '').trim()
   if (!normalizedNickname) {
-    return '昵称不能为空'
+    return i18n.t('profilePage.nicknameEmpty')
   }
   if (normalizedNickname.length > NICKNAME_MAX_LENGTH) {
-    return `昵称长度不能超过${NICKNAME_MAX_LENGTH}个字符`
+    return i18n.tReplace('profilePage.nicknameTooLong', { max: NICKNAME_MAX_LENGTH })
   }
   return ''
 }
@@ -464,7 +481,7 @@ function validateNickname(nickname) {
 function validateIntroduction(introduction) {
   const normalizedIntroduction = String(introduction || '').trim()
   if (normalizedIntroduction.length > INTRODUCTION_MAX_LENGTH) {
-    return `个人简介长度不能超过${INTRODUCTION_MAX_LENGTH}个字符`
+    return i18n.tReplace('profilePage.introTooLong', { max: INTRODUCTION_MAX_LENGTH })
   }
   return ''
 }
@@ -472,17 +489,63 @@ function validateIntroduction(introduction) {
 Page({
   onShow: function () {
     themeUtil.applyTheme(this)
+    this.refreshI18n()
+  },
+  refreshI18n: function () {
+    this.setData({
+      t: {
+        navTitle: i18n.t('profilePage.navTitle'),
+        loadingProfile: i18n.t('profilePage.loadingProfile'),
+        uploading: i18n.t('profilePage.uploading'),
+        changeAvatar: i18n.t('profilePage.changeAvatar'),
+        notFilled: i18n.t('profilePage.notFilled'),
+        usernameLabel: i18n.t('profilePage.usernameLabel'),
+        ipAreaLabel: i18n.t('profilePage.ipAreaLabel'),
+        empty: i18n.t('profilePage.empty'),
+        updatingAvatar: i18n.t('profilePage.updatingAvatar'),
+        savingProfile: i18n.t('profilePage.savingProfile'),
+        accountInfo: i18n.t('profilePage.accountInfo'),
+        nickname: i18n.t('profilePage.nickname'),
+        birthday: i18n.t('profilePage.birthday'),
+        faculty: i18n.t('profilePage.faculty'),
+        major: i18n.t('profilePage.major'),
+        enrollmentYear: i18n.t('profilePage.enrollmentYear'),
+        location: i18n.t('profilePage.location'),
+        hometown: i18n.t('profilePage.hometown'),
+        introduction: i18n.t('profilePage.introduction'),
+        introPlaceholder: i18n.t('profilePage.introPlaceholder'),
+        notSelected: i18n.t('profilePage.notSelected')
+      }
+    })
+    wx.setNavigationBarTitle({ title: this.data.t.navTitle })
+    // Refresh display options and display values after locale change
+    var updateData = {
+      facultyDisplayOptions: toDisplayOptions(this.data.facultyOptions || getFacultyOptions()),
+      majorDisplayOptions: toDisplayOptions(this.data.majorOptions || [NOT_SELECTED]),
+      enrollmentDisplayOptions: toDisplayOptions(this.data.enrollmentOptions || getEnrollmentYearOptions())
+    }
+    if (this.data.form) {
+      updateData.displayFaculty = displayValue(this.data.form.faculty)
+      updateData.displayMajor = displayValue(this.data.form.major)
+    }
+    this.setData(updateData)
   },
   data: {
     themeClass: '',
+    t: {},
     loading: true,
     errorMessage: null,
     todayDate: '',
     profile: null,
     form: null,
     facultyOptions: getFacultyOptions(),
-    majorOptions: ['未选择'],
+    facultyDisplayOptions: toDisplayOptions(getFacultyOptions()),
+    majorOptions: [NOT_SELECTED],
+    majorDisplayOptions: [i18n.t('profilePage.notSelected')],
     enrollmentOptions: getEnrollmentYearOptions(),
+    enrollmentDisplayOptions: toDisplayOptions(getEnrollmentYearOptions()),
+    displayFaculty: '',
+    displayMajor: '',
     facultyIndex: 0,
     majorIndex: 0,
     enrollmentIndex: 0,
@@ -550,7 +613,7 @@ Page({
 
       return buildInteractionPromise(promiseFactory).then(() => {
         this.applyProfilePatch(patch)
-        this.setSaveStatus('已保存')
+        this.setSaveStatus(i18n.t('profilePage.saved'))
       }).catch((error) => {
         if (this.data.profile) {
           this.setEditableState(this.data.profile)
@@ -582,7 +645,7 @@ Page({
       const avatarValue = avatarResult && avatarResult.success ? avatarResult.data : ''
       const profileErrorMessage = profileResult && !profileResult.success
         ? profileResult.message
-        : '加载个人资料失败'
+        : i18n.t('profilePage.loadProfileFailed')
       const normalizedProfile = syncProfileLocationDisplay(
         profileResult && profileResult.success
           ? normalizeProfile(profileResult.data, avatarValue)
@@ -593,7 +656,8 @@ Page({
       this.setData({
         profile: normalizedProfile,
         todayDate: buildTodayDate(),
-        facultyOptions: getFacultyOptions()
+        facultyOptions: getFacultyOptions(),
+        facultyDisplayOptions: toDisplayOptions(getFacultyOptions())
       })
       this.setEditableState(normalizedProfile)
 
@@ -602,14 +666,15 @@ Page({
       }
 
       if (!profileOptionsResult) {
-        pageUtils.showTopTips(this, '资料字典加载失败，已使用本地兜底选项')
+        pageUtils.showTopTips(this, i18n.t('profilePage.optionsFallback'))
       }
     }).catch((error) => {
       const fallbackProfile = syncProfileLocationDisplay(createEmptyProfile(''), this.getLocationTree())
       this.setData({
         profile: fallbackProfile,
         todayDate: buildTodayDate(),
-        facultyOptions: getFacultyOptions()
+        facultyOptions: getFacultyOptions(),
+        facultyDisplayOptions: toDisplayOptions(getFacultyOptions())
       })
       this.setEditableState(fallbackProfile)
       pageUtils.showTopTips(this, error.message)
@@ -623,19 +688,19 @@ Page({
   refreshAvatar: function(successText) {
     return userApi.getAvatar().then((result) => {
       if (!result.success) {
-        throw new Error(result.message || '头像刷新失败')
+        throw new Error(result.message || i18n.t('profilePage.avatarRefreshFailed'))
       }
 
       this.applyProfilePatch({
         avatar: result.data || '/image/default.png'
       })
-      this.setSaveStatus(successText || '头像已更新')
+      this.setSaveStatus(successText || i18n.t('profilePage.avatarUpdated'))
     })
   },
 
   handleAvatarTap: function() {
     const hasCustomAvatar = !!(this.data.profile && this.data.profile.avatar && this.data.profile.avatar !== '/image/default.png')
-    const itemList = hasCustomAvatar ? ['更换头像', '恢复默认头像'] : ['更换头像']
+    const itemList = hasCustomAvatar ? [i18n.t('profilePage.changeAvatarAction'), i18n.t('profilePage.resetAvatarAction')] : [i18n.t('profilePage.changeAvatarAction')]
 
     wx.showActionSheet({
       itemList: itemList,
@@ -695,10 +760,10 @@ Page({
       loadingKey: ''
     }).then((result) => {
       if (!result.success) {
-        throw new Error(result.message || '头像上传失败')
+        throw new Error(result.message || i18n.t('profilePage.avatarUploadFailed'))
       }
 
-      return this.refreshAvatar('头像已更新')
+      return this.refreshAvatar(i18n.t('profilePage.avatarUpdated'))
     }).catch((error) => {
       pageUtils.showTopTips(this, error.message)
     }).finally(() => {
@@ -714,8 +779,8 @@ Page({
     }
 
     wx.showModal({
-      title: '恢复默认头像',
-      content: '确定恢复默认头像吗？',
+      title: i18n.t('profilePage.resetAvatarTitle'),
+      content: i18n.t('profilePage.resetAvatarConfirm'),
       success: (result) => {
         if (!result.confirm) {
           return
@@ -732,10 +797,10 @@ Page({
           loadingKey: ''
         }).then((response) => {
           if (!response.success) {
-            throw new Error(response.message || '恢复默认头像失败')
+            throw new Error(response.message || i18n.t('profilePage.resetAvatarFailed'))
           }
 
-          return this.refreshAvatar('已恢复默认头像')
+          return this.refreshAvatar(i18n.t('profilePage.avatarReset'))
         }).catch((error) => {
           pageUtils.showTopTips(this, error.message)
         }).finally(() => {
@@ -791,9 +856,9 @@ Page({
 
     const currentNickname = String(this.data.form.nickname || this.data.profile.nickname || '').trim()
     wx.showModal({
-      title: '修改昵称',
+      title: i18n.t('profilePage.editNicknameTitle'),
       editable: true,
-      placeholderText: '请输入新的昵称',
+      placeholderText: i18n.t('profilePage.editNicknamePlaceholder'),
       content: '',
       success: (result) => {
         if (!result.confirm) {
@@ -851,26 +916,29 @@ Page({
   handleFacultyChange: function(event) {
     const facultyIndex = Number(event.detail.value)
     const facultyOptions = this.data.facultyOptions || getFacultyOptions()
-    const faculty = facultyOptions[facultyIndex] || facultyOptions[0] || '未选择'
+    const faculty = facultyOptions[facultyIndex] || facultyOptions[0] || NOT_SELECTED
     const facultyCode = getFacultyCodeByLabel(faculty)
     const majorOptions = getMajorOptions(faculty)
     const profile = this.data.profile || {}
     const currentMajor = String((this.data.form && this.data.form.major) || profile.major || '')
     const nextMajor = String(profile.faculty || '') === faculty && majorOptions.indexOf(currentMajor) !== -1
       ? currentMajor
-      : (majorOptions[0] || '未选择')
+      : (majorOptions[0] || NOT_SELECTED)
 
     this.setData({
       facultyIndex: facultyIndex,
       majorOptions: majorOptions,
+      majorDisplayOptions: toDisplayOptions(majorOptions),
       majorIndex: getSafeIndex(majorOptions, nextMajor),
       majorDisabled: !canSelectMajor(faculty),
       'form.faculty': faculty,
-      'form.major': nextMajor
+      'form.major': nextMajor,
+      displayFaculty: displayValue(faculty),
+      displayMajor: displayValue(nextMajor)
     })
 
     if (facultyCode === null) {
-      pageUtils.showTopTips(this, '院系选项无效，请刷新后重试')
+      pageUtils.showTopTips(this, i18n.t('profilePage.facultyInvalid'))
       return
     }
 
@@ -882,7 +950,7 @@ Page({
       return buildInteractionPromise(function() {
         return userApi.updateFaculty(facultyCode)
       }).then(function() {
-        if (nextMajor && nextMajor !== '未选择') {
+        if (nextMajor && nextMajor !== NOT_SELECTED) {
           return buildInteractionPromise(function() {
             return userApi.updateMajor(nextMajor)
           })
@@ -896,11 +964,12 @@ Page({
 
   handleMajorChange: function(event) {
     const majorIndex = Number(event.detail.value)
-    const major = (this.data.majorOptions || [])[majorIndex] || '未选择'
+    const major = (this.data.majorOptions || [])[majorIndex] || NOT_SELECTED
 
     this.setData({
       majorIndex: majorIndex,
-      'form.major': major
+      'form.major': major,
+      displayMajor: displayValue(major)
     })
 
     if (major === String((this.data.profile && this.data.profile.major) || '')) {
@@ -916,8 +985,8 @@ Page({
 
   handleEnrollmentChange: function(event) {
     const enrollmentIndex = Number(event.detail.value)
-    const enrollmentValue = (this.data.enrollmentOptions || [])[enrollmentIndex] || '未选择'
-    const nextEnrollment = enrollmentValue === '未选择' ? '' : enrollmentValue
+    const enrollmentValue = (this.data.enrollmentOptions || [])[enrollmentIndex] || NOT_SELECTED
+    const nextEnrollment = enrollmentValue === NOT_SELECTED ? '' : enrollmentValue
 
     this.setData({
       enrollmentIndex: enrollmentIndex,
@@ -1028,7 +1097,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '个人中心',
+      title: i18n.t('profilePage.shareTitle'),
       path: '/pages/profile/profile'
     }
   }

@@ -1,4 +1,4 @@
-<view class="container {{themeClass}}">
+<view class="container {{themeClass}}" style="{{fontStyle}}">
 
 <official-account></official-account>
 
@@ -7,8 +7,8 @@
       <image class="userinfo-avatar" src="{{avatar}}" background-size="cover"></image>
       <view class="userinfo_meta">
         <text class="userinfo-nickname">{{nickname}}</text>
-        <text class="userinfo-source">当前数据源：{{dataSourceLabel}}</text>
-        <text class="userinfo-entry" bindtap="openProfile">查看个人资料</text>
+        <text class="userinfo-source">{{t.dataSourceLabel}}</text>
+        <text class="userinfo-entry" bindtap="openProfile">{{t.viewProfile}}</text>
       </view>
     </view>
 
@@ -30,7 +30,7 @@
         </view>
       </block>
 
-      <view class="section_title">功能设置</view>
+      <view class="section_title">{{t.settingsSection}}</view>
       <view class="weui-grids">
         <block wx:for="{{systemActions}}" wx:key="id" wx:for-item="actionItem">
           <navigator wx:if="{{actionItem.page}}" open-type="navigate" url="{{actionItem.page}}" class="weui-grid" hover-class="weui-grid_active">

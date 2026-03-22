@@ -1,4 +1,4 @@
-<view class="page__bd {{themeClass}}">
+<view class="page__bd {{themeClass}}" style="{{fontStyle}}">
   <view class="weui-cells__title">选择查询项目</view>
   <view class="weui-cells weui-cells_after-title">
     <navigator url="/pages/electricity/electricity" class="weui-cell weui-cell_access" hover-class="weui-cell_active">

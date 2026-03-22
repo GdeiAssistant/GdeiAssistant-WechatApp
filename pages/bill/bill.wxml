@@ -1,4 +1,4 @@
-<view class="page__bd {{themeClass}}">
+<view class="page__bd {{themeClass}}" style="{{fontStyle}}">
 
   <view class="container">
 
