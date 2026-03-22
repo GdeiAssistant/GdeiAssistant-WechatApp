@@ -189,14 +189,20 @@ function normalizeProfileOptions(payload) {
 function normalizeFacultyOptions(options, fallbackOptions) {
   const normalizedOptions = (Array.isArray(options) ? options : []).map(function(option) {
     const code = typeof option.code === 'number' ? option.code : null
-    const label = String(option.label || '').trim()
+    var label = String(option.label || '').trim()
     if (code === null || !label) {
       return null
     }
 
+    // Normalize remote Chinese sentinel to internal constant
+    if (label === '未选择') {
+      label = NOT_SELECTED
+    }
+
     const majors = (Array.isArray(option.majors) ? option.majors : [])
       .map(function(major) {
-        return String(major || '').trim()
+        var m = String(major || '').trim()
+        return m === '未选择' ? NOT_SELECTED : m
       })
       .filter(function(major) {
         return !!major

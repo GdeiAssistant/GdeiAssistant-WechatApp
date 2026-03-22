@@ -47,13 +47,15 @@ test('remote profile options drive faculty and community dictionaries together',
 
   const options = await profile.fetchProfileOptions(true)
 
+  // Remote '未选择' should be normalized to the internal NOT_SELECTED sentinel
+  var NS = '__not_selected__'
   assert.deepEqual(options.faculties, [
-    { code: 0, label: '未选择', majors: ['未选择'] },
-    { code: 3, label: '中文系', majors: ['未选择', '汉语言文学'] }
+    { code: 0, label: NS, majors: [NS] },
+    { code: 3, label: '中文系', majors: [NS, '汉语言文学'] }
   ])
-  assert.deepEqual(profile.getFacultyOptions(), ['未选择', '中文系'])
+  assert.deepEqual(profile.getFacultyOptions(), [NS, '中文系'])
   assert.equal(profile.getFacultyCodeByLabel(' 中文系 '), 3)
-  assert.deepEqual(profile.getMajorOptions('中文系'), ['未选择', '汉语言文学'])
+  assert.deepEqual(profile.getMajorOptions('中文系'), [NS, '汉语言文学'])
   assert.deepEqual(
     community.getSecondhandCategoryOptions(),
     [
@@ -87,7 +89,7 @@ test('invalid remote profile options fall back to canonical defaults', async fun
   const options = await profile.fetchProfileOptions(true)
 
   assert.equal(options.faculties[1].label, '教育学院')
-  assert.deepEqual(profile.getMajorOptions('教育学院'), ['未选择', '教育学', '学前教育', '小学教育', '特殊教育'])
+  assert.deepEqual(profile.getMajorOptions('教育学院'), ['__not_selected__', '教育学', '学前教育', '小学教育', '特殊教育'])
   assert.equal(community.getSecondhandCategoryOptions()[1].label, '校园代步')
   assert.equal(community.getLostFoundModeDictionaryOptions()[1].label, '失物招领')
 })
