@@ -11,7 +11,19 @@ Page({
   refreshI18n: function () {
     this.setData({
       t: {
-        navTitle: i18n.t('collectionPage.navTitle')
+        navTitle: i18n.t('collectionPage.navTitle'),
+        myLoans: i18n.t('collectionPage.myLoans'),
+        myLoansDesc: i18n.t('collectionPage.myLoansDesc'),
+        bookNameLabel: i18n.t('collectionPage.bookNameLabel'),
+        bookNamePlaceholder: i18n.t('collectionPage.bookNamePlaceholder'),
+        bookNameValidation: i18n.t('collectionPage.bookNameValidation'),
+        queryButton: i18n.t('collectionPage.queryButton'),
+        noBooks: i18n.t('collectionPage.noBooks'),
+        queryResult: i18n.t('collectionPage.queryResult'),
+        loadMore: i18n.t('collectionPage.loadMore'),
+        noMoreBooks: i18n.t('collectionPage.noMoreBooks'),
+        loadingData: i18n.t('collectionPage.loadingData'),
+        shareTitle: i18n.t('collectionPage.shareTitle')
       }
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
@@ -31,7 +43,7 @@ Page({
   formSubmit: function(e) {
     const keyword = e.detail.value.keyword
     if (!keyword) {
-      pageUtils.showTopTips(this, '请填写要查询的书名')
+      pageUtils.showTopTips(this, i18n.t('collectionPage.bookNameValidation'))
       return
     }
 
@@ -51,7 +63,7 @@ Page({
       }
 
       if (!result.collectionList || result.collectionList.length === 0) {
-        pageUtils.showTopTips(this, '没有找到对应的图书信息')
+        pageUtils.showTopTips(this, i18n.t('collectionPage.noBooks'))
         return
       }
 
@@ -68,11 +80,11 @@ Page({
 
   loadMore: function() {
     if (!this.data.keyword || this.data.currentPage >= this.data.sumPage) {
-      pageUtils.showTopTips(this, '没有更多图书信息')
+      pageUtils.showTopTips(this, i18n.t('collectionPage.noMoreBooks'))
       return
     }
 
-    wx.showLoading({ title: '数据加载中', mask: true })
+    wx.showLoading({ title: i18n.t('collectionPage.loadingData'), mask: true })
     const nextPage = this.data.currentPage + 1
 
     libraryApi.queryCollection(this.data.keyword, nextPage).then((result) => {
@@ -83,7 +95,7 @@ Page({
       }
 
       if (!result.collectionList || result.collectionList.length === 0) {
-        pageUtils.showTopTips(this, '没有更多图书信息')
+        pageUtils.showTopTips(this, i18n.t('collectionPage.noMoreBooks'))
         return
       }
 
@@ -100,7 +112,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '图书馆',
+      title: i18n.t('collectionPage.shareTitle'),
       path: '/pages/collection/collection'
     }
   }

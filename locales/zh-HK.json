@@ -332,31 +332,87 @@
     }
   },
   "billPage": {
-    "navTitle": "校園卡消費"
+    "navTitle": "校園卡消費",
+    "selectDateHint": "請選擇查詢日期",
+    "dateLabel": "日期",
+    "notSelected": "未選擇",
+    "queryButton": "查詢",
+    "noRecords": "沒有消費記錄",
+    "recordsTitle": "消費記錄",
+    "yuan": "元",
+    "reQuery": "重新查詢",
+    "shareTitle": "校園卡消費"
   },
   "bookPage": {
     "navTitle": "我的借閱"
   },
   "graduateExamPage": {
-    "navTitle": "考研查詢"
+    "navTitle": "考研查詢",
+    "queryInfo": "查詢資訊",
+    "nameLabel": "姓名",
+    "namePlaceholder": "請輸入姓名",
+    "examNumberLabel": "考號",
+    "examNumberPlaceholder": "請輸入准考證號",
+    "idNumberLabel": "證件號",
+    "idNumberPlaceholder": "請輸入證件號",
+    "queryButton": "查詢",
+    "fillAllFields": "請完整填寫考研查詢資訊",
+    "resultTitle": "考研成績",
+    "resultName": "姓名",
+    "signUpNumber": "報名號",
+    "resultExamNumber": "准考證號",
+    "totalScore": "總分",
+    "firstScore": "科目一",
+    "secondScore": "科目二",
+    "thirdScore": "科目三",
+    "fourthScore": "科目四",
+    "reQuery": "重新查詢",
+    "shareTitle": "考研查詢"
   },
   "dataPage": {
     "navTitle": "數據查詢"
   },
   "cardLostPage": {
-    "navTitle": "校園卡掛失"
+    "navTitle": "校園卡掛失",
+    "passwordLabel": "密碼",
+    "passwordPlaceholder": "請輸入6位校園卡密碼",
+    "passwordValidation": "請輸入正確的校園卡查詢密碼",
+    "reportButton": "掛失",
+    "warning": "注意：掛失後需要到辦卡處進行補辦校園卡",
+    "successTitle": "掛失成功",
+    "successContent": "請儘快前往辦卡處進行校園卡補辦",
+    "shareTitle": "校園卡掛失"
   },
   "electricityPage": {
     "navTitle": "電費查詢"
   },
   "collectionPage": {
-    "navTitle": "圖書館"
+    "navTitle": "圖書館",
+    "myLoans": "我的借閱",
+    "myLoansDesc": "查詢借閱記錄並完成續借",
+    "bookNameLabel": "書名",
+    "bookNamePlaceholder": "請輸入圖書資訊",
+    "bookNameValidation": "請填寫要查詢的書名",
+    "queryButton": "查詢",
+    "noBooks": "沒有找到對應的圖書資訊",
+    "queryResult": "查詢結果",
+    "loadMore": "點擊載入更多資訊",
+    "noMoreBooks": "沒有更多圖書資訊",
+    "loadingData": "數據載入中",
+    "shareTitle": "圖書館"
   },
   "yellowPagePage": {
     "navTitle": "黃頁查詢"
   },
   "evaluatePage": {
-    "navTitle": "一鍵評教"
+    "navTitle": "一鍵評教",
+    "autoSubmitTitle": "自動提交",
+    "autoSubmitLabel": "直接提交評教資訊",
+    "submitButton": "提交",
+    "successTitle": "一鍵評教成功",
+    "successWithSubmit": "一鍵評教成功，評教資訊已提交",
+    "successWithoutSubmit": "一鍵評教成功，請登入教務系統進行最終確認",
+    "shareTitle": "教學評價"
   },
   "spare": {
     "campus": {

@@ -11,7 +11,15 @@ Page({
   refreshI18n: function () {
     this.setData({
       t: {
-        navTitle: i18n.t('cardLostPage.navTitle')
+        navTitle: i18n.t('cardLostPage.navTitle'),
+        passwordLabel: i18n.t('cardLostPage.passwordLabel'),
+        passwordPlaceholder: i18n.t('cardLostPage.passwordPlaceholder'),
+        passwordValidation: i18n.t('cardLostPage.passwordValidation'),
+        reportButton: i18n.t('cardLostPage.reportButton'),
+        warning: i18n.t('cardLostPage.warning'),
+        successTitle: i18n.t('cardLostPage.successTitle'),
+        successContent: i18n.t('cardLostPage.successContent'),
+        shareTitle: i18n.t('cardLostPage.shareTitle')
       }
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
@@ -26,7 +34,7 @@ Page({
   setCardLost: function(e) {
     const cardPassword = e.detail.value.password
     if (!(cardPassword && cardPassword.length === 6 && /^\d+$/.test(cardPassword))) {
-      pageUtils.showTopTips(this, '请输入正确的校园卡查询密码')
+      pageUtils.showTopTips(this, i18n.t('cardLostPage.passwordValidation'))
       return
     }
 
@@ -35,8 +43,8 @@ Page({
     }).then((result) => {
       if (result.success) {
         wx.showModal({
-          title: '挂失成功',
-          content: '请尽快前往办卡处进行校园卡补办',
+          title: i18n.t('cardLostPage.successTitle'),
+          content: i18n.t('cardLostPage.successContent'),
           showCancel: false
         })
       } else {
@@ -49,7 +57,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '校园卡挂失',
+      title: i18n.t('cardLostPage.shareTitle'),
       path: '/pages/cardLost/cardLost'
     }
   }

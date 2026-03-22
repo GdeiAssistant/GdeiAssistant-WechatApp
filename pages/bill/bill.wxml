@@ -6,17 +6,17 @@
 
     <view block class="page__bd" wx:if="{{!result}}">
 
-      <view class="weui-cells__title">请选择查询日期</view>
+      <view class="weui-cells__title">{{t.selectDateHint}}</view>
       <view class="weui-cells weui-cells_after-title">
 
         <view class="weui-cell weui-cell_input">
           <view class="weui-cell__hd">
-            <view class="weui-label">日期</view>
+            <view class="weui-label">{{t.dateLabel}}</view>
           </view>
           <view class="weui-cell__bd">
             <picker mode="date" value="{{date}}" start="{{start}}" end="{{end}}" bindchange="bindDateChange">
               <view class="weui-input" wx:if="{{date}}">{{date}}</view>
-              <view class="weui-input" wx:if="{{!date}}">未选择</view>
+              <view class="weui-input" wx:if="{{!date}}">{{t.notSelected}}</view>
             </picker>
           </view>
         </view>
@@ -24,24 +24,24 @@
       </view>
 
       <view class="weui-btn-area">
-        <button class="weui-btn" disabled="{{loading}}" type="primary" bindtap="submit">查询</button>
+        <button class="weui-btn" disabled="{{loading}}" type="primary" bindtap="submit">{{t.queryButton}}</button>
       </view>
 
     </view>
 
     <view block class="page__bd" wx:if="{{result}}">
-      <view class="weui-cells__title" wx:if="{{result.length==0}}">没有消费记录</view>
-      <view class="weui-cells__title" wx:if="{{result.length!=0}}">消费记录</view>
+      <view class="weui-cells__title" wx:if="{{result.length==0}}">{{t.noRecords}}</view>
+      <view class="weui-cells__title" wx:if="{{result.length!=0}}">{{t.recordsTitle}}</view>
       <view class="weui-cells weui-cells_after-title">
         <view class="weui-cell" wx:for="{{result}}" wx:for-item="item" wx:key="item-key">
           <view class="weui-cell__bd">{{item.merchantName}}{{item.tradeName}}</view>
-          <view class="weui-cell__ft" wx:if="{{item.tradePrice <  0}}">{{item.tradePrice}}元</view>
-          <view class="weui-cell__ft" wx:if="{{item.tradePrice >= 0}}">+{{item.tradePrice}}元</view>
+          <view class="weui-cell__ft" wx:if="{{item.tradePrice <  0}}">{{item.tradePrice}}{{t.yuan}}</view>
+          <view class="weui-cell__ft" wx:if="{{item.tradePrice >= 0}}">+{{item.tradePrice}}{{t.yuan}}</view>
           </view>
         </view>
 
         <view class="weui-btn-area">
-          <button class="weui-btn" type="primary" bindtap="reset">重新查询</button>
+          <button class="weui-btn" type="primary" bindtap="reset">{{t.reQuery}}</button>
         </view>
 
       </view>
