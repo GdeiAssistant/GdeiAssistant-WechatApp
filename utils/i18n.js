@@ -12,7 +12,8 @@ function loadLocale(lang) {
 }
 
 function t(key) {
-  const app = getApp()
+  var app = null
+  try { app = getApp() } catch (e) { /* Node test environment */ }
   const lang = (app && app.globalData && app.globalData.locale) || 'zh-CN'
   const messages = loadLocale(lang)
   return key.split('.').reduce(function (obj, k) {
