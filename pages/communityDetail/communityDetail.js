@@ -123,17 +123,6 @@ function buildDetail(moduleId, payload) {
         canLike: false
       }
     }
-    case 'topic':
-      return {
-        id: payload.id,
-        title: '#' + (payload.topic || i18n.t('community.list.campusTopic')),
-        subtitle: payload.publishTime || '',
-        description: payload.content || '',
-        images: payload.imageUrls || [],
-        likeCount: Number(payload.likeCount || 0),
-        liked: !!payload.liked,
-        canLike: true
-      }
     case 'delivery': {
       const order = payload.order || {}
       const detailType = Number(payload.detailType)
@@ -182,18 +171,6 @@ function buildDetail(moduleId, payload) {
         canLike: false
       }
     }
-    case 'photograph':
-      return {
-        id: payload.id,
-        title: payload.title || i18n.t('community.detail.workDetail'),
-        subtitle: payload.createTime || '',
-        description: payload.content || '',
-        images: payload.imageUrls || [],
-        likeCount: Number(payload.likeCount || 0),
-        commentCount: Number(payload.commentCount || 0),
-        liked: !!payload.liked,
-        canLike: true
-      }
     default:
       return {
         title: i18n.t('community.detail.detail'),

@@ -21,14 +21,6 @@ function getFeed(moduleId, options) {
   const keyword = String(config.keyword || '').trim()
 
   switch (moduleId) {
-    case 'topic':
-      return request({
-        url: keyword
-          ? endpoints.community.topic.keyword(encodeURIComponent(keyword), start, size)
-          : endpoints.community.topic.list(start, size),
-        method: 'GET',
-        authRequired: true
-      })
     case 'delivery':
       return request({
         url: endpoints.community.delivery.list(start, size),
@@ -38,12 +30,6 @@ function getFeed(moduleId, options) {
     case 'dating':
       return request({
         url: endpoints.community.dating.list(Number(config.area || 0), start),
-        method: 'GET',
-        authRequired: true
-      })
-    case 'photograph':
-      return request({
-        url: endpoints.community.photograph.list(Number(config.type || 1), start, size),
         method: 'GET',
         authRequired: true
       })
@@ -59,12 +45,6 @@ function getDetail(moduleId, id) {
   }
 
   switch (moduleId) {
-    case 'topic':
-      return request({
-        url: endpoints.community.topic.detail(id),
-        method: 'GET',
-        authRequired: true
-      })
     case 'delivery':
       return request({
         url: endpoints.community.delivery.detail(id),
@@ -74,12 +54,6 @@ function getDetail(moduleId, id) {
     case 'dating':
       return request({
         url: endpoints.community.dating.detail(id),
-        method: 'GET',
-        authRequired: true
-      })
-    case 'photograph':
-      return request({
-        url: endpoints.community.photograph.detail(id),
         method: 'GET',
         authRequired: true
       })
@@ -102,12 +76,6 @@ function getComments(moduleId, id) {
         method: 'GET',
         authRequired: true
       })
-    case 'photograph':
-      return request({
-        url: endpoints.community.photograph.comments(id),
-        method: 'GET',
-        authRequired: true
-      })
     default:
       return Promise.resolve({
         success: true,
@@ -127,12 +95,6 @@ function getCenter(moduleId, options) {
   const size = Number(config.size || 10)
 
   switch (moduleId) {
-    case 'topic':
-      return request({
-        url: endpoints.community.topic.profile(start, size),
-        method: 'GET',
-        authRequired: true
-      })
     case 'delivery':
       return request({
         url: endpoints.community.delivery.mine,
@@ -168,12 +130,6 @@ function getCenter(moduleId, options) {
       }).catch(function() {
         return { success: false, data: { profiles: [], sent: [], received: [] } }
       })
-    case 'photograph':
-      return request({
-        url: endpoints.community.photograph.profile(start, size),
-        method: 'GET',
-        authRequired: true
-      })
     default:
       return Promise.reject(new Error('未识别的社区模块'))
   }
@@ -186,13 +142,6 @@ function publish(moduleId, payload) {
   }
 
   switch (moduleId) {
-    case 'topic':
-      return requestForm({
-        url: endpoints.community.topic.publish,
-        method: 'POST',
-        authRequired: true,
-        data: encodeForm(payload)
-      })
     case 'delivery':
       return requestForm({
         url: endpoints.community.delivery.publish,
@@ -203,13 +152,6 @@ function publish(moduleId, payload) {
     case 'dating':
       return requestForm({
         url: endpoints.community.dating.publish,
-        method: 'POST',
-        authRequired: true,
-        data: encodeForm(payload)
-      })
-    case 'photograph':
-      return requestForm({
-        url: endpoints.community.photograph.publish,
         method: 'POST',
         authRequired: true,
         data: encodeForm(payload)
@@ -253,13 +195,6 @@ function submitComment(moduleId, id, comment) {
         authRequired: true,
         data: encodeForm({ comment: comment })
       })
-    case 'photograph':
-      return requestForm({
-        url: endpoints.community.photograph.comment(id),
-        method: 'POST',
-        authRequired: true,
-        data: encodeForm({ comment: comment })
-      })
     default:
       return Promise.reject(new Error('该模块暂不支持评论'))
   }
@@ -277,18 +212,6 @@ function toggleLike(moduleId, id, value) {
     case 'express':
       return request({
         url: endpoints.community.express.like(id),
-        method: 'POST',
-        authRequired: true
-      })
-    case 'topic':
-      return request({
-        url: endpoints.community.topic.like(id),
-        method: 'POST',
-        authRequired: true
-      })
-    case 'photograph':
-      return request({
-        url: endpoints.community.photograph.like(id),
         method: 'POST',
         authRequired: true
       })

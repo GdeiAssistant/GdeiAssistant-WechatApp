@@ -5,8 +5,7 @@ const {
   getLostFoundItemDictionaryOptions,
   getDeliveryStatusOptions,
   getDatingAreaOptions,
-  getDatingGradeOptions,
-  getPhotographTabOptions
+  getDatingGradeOptions
 } = require('../../constants/community.js')
 const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
@@ -45,16 +44,6 @@ function normalizeItem(moduleId, item) {
   const rawItem = item || {}
 
   switch (moduleId) {
-    case 'topic':
-      return {
-        id: rawItem.id,
-        title: '#' + (rawItem.topic || i18n.t('community.list.campusTopic')),
-        summary: rawItem.content || '',
-        cover: rawItem.imageUrls && rawItem.imageUrls.length ? rawItem.imageUrls[0] : '',
-        likeCount: Number(rawItem.likeCount || 0),
-        timeText: rawItem.publishTime || '',
-        raw: rawItem
-      }
     case 'delivery':
       return {
         id: rawItem.orderId,
@@ -75,17 +64,6 @@ function normalizeItem(moduleId, item) {
         badgeText: findLabel(getDatingGradeOptions(), rawItem.grade, i18n.t('community.list.unknownGrade')),
         metaText: rawItem.faculty || '',
         timeText: rawItem.hometown || '',
-        raw: rawItem
-      }
-    case 'photograph':
-      return {
-        id: rawItem.id,
-        title: rawItem.title || i18n.t('community.list.campusWork'),
-        summary: rawItem.content || '',
-        cover: rawItem.firstImageUrl || (rawItem.imageUrls && rawItem.imageUrls.length ? rawItem.imageUrls[0] : '/image/photograph.png'),
-        likeCount: Number(rawItem.likeCount || 0),
-        commentCount: Number(rawItem.commentCount || 0),
-        timeText: rawItem.createTime || '',
         raw: rawItem
       }
     default:
@@ -128,8 +106,6 @@ Page({
         return getDeliveryStatusOptions()
       case 'dating':
         return getDatingAreaOptions()
-      case 'photograph':
-        return getPhotographTabOptions()
       default:
         return []
     }
@@ -155,10 +131,6 @@ Page({
 
     if (moduleId === 'dating') {
       options.area = activeTab ? Number(activeTab.value) : 0
-    }
-
-    if (moduleId === 'photograph') {
-      options.type = activeTab ? Number(activeTab.feedValue) : 1
     }
 
     return options
