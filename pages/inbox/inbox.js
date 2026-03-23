@@ -149,6 +149,7 @@ Page({
     interactionCurrentPage: 1,
     interactionFinished: false,
     interactionUnreadCount: 0,
+    interactionLoaded: false,
     errorMessage: null
   },
 
@@ -225,6 +226,12 @@ Page({
     this.setData({
       activeTab: nextTab
     })
+
+    if (nextTab === 'interaction' && !this.data.interactionLoaded) {
+      this.loadInteractionList(1, true).then(() => {
+        this.setData({ interactionLoaded: true })
+      })
+    }
   },
 
   openAnnouncementDetail: function(event) {
@@ -327,7 +334,7 @@ Page({
 
   onLoad: function() {
     this.loadAnnouncementList(1, true)
-    this.refreshInteraction()
+    this.loadInteractionMeta()
   },
 
   onShow: function() {
@@ -339,9 +346,15 @@ Page({
   },
 
   onPullDownRefresh: function() {
-    const refreshTask = this.data.activeTab === 'announcement'
-      ? this.loadAnnouncementList(1, true)
-      : this.refreshInteraction()
+    var self = this
+    var refreshTask
+    if (this.data.activeTab === 'announcement') {
+      refreshTask = this.loadAnnouncementList(1, true)
+    } else {
+      refreshTask = this.refreshInteraction().then(function() {
+        self.setData({ interactionLoaded: true })
+      })
+    }
 
     refreshTask.finally(function() {
       wx.stopPullDownRefresh()
@@ -356,7 +369,7 @@ Page({
       return
     }
 
-    if (!this.data.interactionFinished && !this.data.interactionLoading) {
+    if (this.data.interactionLoaded && !this.data.interactionFinished && !this.data.interactionLoading) {
       this.loadInteractionList(this.data.interactionCurrentPage + 1, false)
     }
   },
