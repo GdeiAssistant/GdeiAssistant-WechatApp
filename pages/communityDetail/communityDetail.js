@@ -137,11 +137,30 @@ Page({
         return
       }
 
+      var payload = result.data || {}
       this.setData({
-        detail: buildDetail(this.data.moduleId, result.data || {}),
+        detail: buildDetail(this.data.moduleId, payload),
         loading: false,
         errorMessage: null
       })
+
+      // If the handler declares commentsInDetail, extract comments from the
+      // detail payload instead of making a separate getComments() request.
+      var handler = getModuleHandler(this.data.moduleId)
+      if (handler && handler.commentsInDetail) {
+        var embeddedComments = payload.photographCommentList || payload.commentList || []
+        var normalizedComments = (Array.isArray(embeddedComments) ? embeddedComments : []).map(function(item, index) {
+          return Object.assign({
+            id: item.id || item.commentId || 'comment_' + index,
+            nickname: item.nickname || i18n.t('community.list.anonStudent'),
+            comment: item.comment || '',
+            publishTime: item.publishTime || item.createTime || ''
+          }, item)
+        })
+        this.setData({ comments: normalizedComments })
+        return
+      }
+
       return this.loadComments()
     }).catch((error) => {
       this.setData({

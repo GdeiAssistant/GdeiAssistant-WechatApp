@@ -123,6 +123,10 @@ module.exports = {
 
   searchable: false,
 
+  // Detail response already includes photographCommentList from the backend,
+  // so communityDetail can skip the separate getComments() call.
+  commentsInDetail: true,
+
   // --- Publish: validate form ---
   validateForm: function(data) {
     var form = data.form || {}
