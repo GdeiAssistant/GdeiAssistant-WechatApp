@@ -148,11 +148,7 @@ Page({
   },
 
   onLoad: function() {
-    this.refreshI18n()
-    this.loadProfile()
-    this.loadInboxStatus()
     this.setData({ hiddenFeatureIds: [] })
-    this.loadHomeSections()
   },
 
   onShow: function() {
