@@ -344,7 +344,32 @@
     "shareTitle": "校园卡消费"
   },
   "bookPage": {
-    "navTitle": "我的借阅"
+    "navTitle": "我的借阅",
+    "passwordLabel": "图书馆密码",
+    "passwordPlaceholder": "请输入图书馆密码",
+    "passwordRequired": "请输入图书馆密码",
+    "queryFailed": "查询失败",
+    "tip": "我的借阅需要先输入图书馆密码查询，续借时会再次校验密码。",
+    "refreshBorrow": "刷新借阅",
+    "queryBorrow": "查询借阅",
+    "emptyHint": "输入图书馆密码后即可查看当前借阅记录。",
+    "emptyResult": "当前没有可展示的借阅记录。",
+    "borrowListTitle": "借阅列表",
+    "barcode": "条形码",
+    "snNumber": "SN号",
+    "author": "作者",
+    "borrowDate": "借阅时间",
+    "returnDate": "应还时间",
+    "renewCount": "续借次数",
+    "renewButton": "续借",
+    "renewDialogTitle": "图书续借",
+    "renewDialogMessage": "请输入图书馆密码完成续借校验，密码只用于本次请求。",
+    "renewFailed": "续借失败",
+    "renewRefreshFailed": "借阅记录刷新失败",
+    "renewSuccessTitle": "续借成功",
+    "renewSuccessContent": "已成功续借图书",
+    "confirmRenew": "确认续借",
+    "shareTitle": "图书馆"
   },
   "graduateExamPage": {
     "navTitle": "考研查询",
@@ -370,7 +395,11 @@
     "shareTitle": "考研查询"
   },
   "dataPage": {
-    "navTitle": "数据查询"
+    "navTitle": "数据查询",
+    "selectProject": "选择查询项目",
+    "electricityQuery": "电费查询",
+    "yellowPageQuery": "黄页查询",
+    "shareTitle": "数据查询"
   },
   "cardLostPage": {
     "navTitle": "校园卡挂失",
@@ -384,7 +413,28 @@
     "shareTitle": "校园卡挂失"
   },
   "electricityPage": {
-    "navTitle": "电费查询"
+    "navTitle": "电费查询",
+    "queryInfo": "查询信息",
+    "yearLabel": "年份",
+    "nameLabel": "姓名",
+    "namePlaceholder": "请输入姓名",
+    "studentIdLabel": "学号",
+    "studentIdPlaceholder": "请输入学号",
+    "fillAllFields": "请完整填写姓名和学号",
+    "invalidStudentId": "请输入正确的学号",
+    "queryButton": "查询",
+    "resultTitle": "电费信息",
+    "dormitory": "宿舍",
+    "occupants": "入住人数",
+    "department": "学院",
+    "usedAmount": "用电数额",
+    "freeAmount": "免费电额",
+    "chargedAmount": "计费电数",
+    "price": "电价",
+    "totalBill": "总电费",
+    "averageBill": "平均电费",
+    "reQuery": "重新查询",
+    "shareTitle": "电费查询"
   },
   "collectionPage": {
     "navTitle": "图书馆",
@@ -402,7 +452,39 @@
     "shareTitle": "图书馆"
   },
   "yellowPagePage": {
-    "navTitle": "黄页查询"
+    "navTitle": "黄页查询",
+    "shareTitle": "黄页查询"
+  },
+  "newsDetailPage": {
+    "loadingDetail": "正在加载详情",
+    "loadFailed": "加载详情失败",
+    "noContent": "暂无详细内容",
+    "announcement": "系统公告",
+    "news": "新闻"
+  },
+  "collectionDetailPage": {
+    "basicInfo": "基本信息",
+    "bookName": "书名",
+    "author": "作者",
+    "heading": "题名",
+    "responsible": "负责者",
+    "headingResponsible": "题名/负责者",
+    "publisher": "出版社",
+    "publishYear": "出版年",
+    "publisherYear": "出版社/出版年",
+    "isbn": "ISBN",
+    "fixedPrice": "定价",
+    "isbnPrice": "ISBN/定价",
+    "physicalDesc": "载体形态项",
+    "personalResp": "个人责任者",
+    "subjectTheme": "学科主题",
+    "clcNumber": "中图法分类号",
+    "collectionInfo": "馆藏信息",
+    "location": "馆藏地",
+    "callNumber": "索取号",
+    "barcodeNumber": "条码号",
+    "status": "状态",
+    "shareTitle": "馆藏详情"
   },
   "evaluatePage": {
     "navTitle": "一键评教",

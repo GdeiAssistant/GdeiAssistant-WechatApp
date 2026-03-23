@@ -42,9 +42,13 @@ module.exports = {
   },
 
   // --- Center ---
-  getCenter: function() {
+  getCenter: function(options) {
+    var config = options || {}
+    var start = Number(config.start || 0)
+    var size = Number(config.size || 20)
+
     return request({
-      url: endpoints.community.secret.profile,
+      url: endpoints.community.secret.profilePaged(start, size),
       method: 'GET',
       authRequired: true
     })

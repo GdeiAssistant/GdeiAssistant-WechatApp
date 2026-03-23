@@ -87,6 +87,17 @@
         </view>
       </view>
     </block>
+
+    <view class="load_more_box" wx:if="{{hasMore}}" bindtap="loadMoreCenter">
+      <text wx:if="{{!loadingMore}}">加载更多</text>
+      <view wx:else class="load_more_loading">
+        <i class="weui-loading"></i>
+        <text>加载中...</text>
+      </view>
+    </view>
+    <view class="load_more_box" wx:if="{{!hasMore && activeItems.length > 0}}">
+      <text class="load_more_end">没有更多了</text>
+    </view>
   </view>
 
   <view class="bottom_bar" wx:if="{{moduleConfig}}">

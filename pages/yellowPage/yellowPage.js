@@ -28,7 +28,8 @@ Page({
   refreshI18n: function () {
     this.setData({
       t: {
-        navTitle: i18n.t('yellowPagePage.navTitle')
+        navTitle: i18n.t('yellowPagePage.navTitle'),
+        shareTitle: i18n.t('yellowPagePage.shareTitle')
       }
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
@@ -74,7 +75,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '黄页查询',
+      title: this.data.t.shareTitle,
       path: '/pages/yellowPage/yellowPage'
     }
   }
