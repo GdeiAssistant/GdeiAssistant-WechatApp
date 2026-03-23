@@ -3,13 +3,33 @@ const infoApi = require('../../services/apis/info.js')
 const messagesApi = require('../../services/apis/messages.js')
 const pageUtils = require('../../utils/page.js')
 var themeUtil = require('../../utils/theme')
+var i18n = require('../../utils/i18n')
 
 Page({
   onShow: function () {
     themeUtil.applyTheme(this)
+    this.refreshI18n()
+  },
+  refreshI18n: function () {
+    this.setData({
+      t: {
+        loadingDetail: i18n.t('newsDetailPage.loadingDetail'),
+        loadFailed: i18n.t('newsDetailPage.loadFailed'),
+        noContent: i18n.t('newsDetailPage.noContent'),
+        announcement: i18n.t('newsDetailPage.announcement'),
+        news: i18n.t('newsDetailPage.news')
+      }
+    })
+    // Re-set navigation bar title based on mode
+    if (this.data.mode === 'announcement') {
+      wx.setNavigationBarTitle({ title: this.data.t.announcement })
+    } else {
+      wx.setNavigationBarTitle({ title: this.data.t.news })
+    }
   },
   data: {
     themeClass: '',
+    t: {},
     newsItem: null,
     loading: false,
     errorMessage: null,
@@ -29,7 +49,7 @@ Page({
       loadingKey: 'loading'
     }).then((result) => {
       if (!result.success) {
-        throw new Error(result.message || '加载详情失败')
+        throw new Error(result.message || this.data.t.loadFailed)
       }
 
       const payload = result.data || {}
@@ -37,14 +57,14 @@ Page({
       this.setData({
         newsItem: Object.assign({}, currentItem, payload, {
           publishDate: payload.publishDate || payload.publishTime || currentItem.publishDate || '',
-          navigationTitle: mode === 'announcement' ? '系统公告' : '新闻'
+          navigationTitle: mode === 'announcement' ? this.data.t.announcement : this.data.t.news
         }),
         errorMessage: null
       })
     }).catch((error) => {
-      pageUtils.showTopTips(this, error.message || '加载详情失败')
+      pageUtils.showTopTips(this, error.message || this.data.t.loadFailed)
       this.setData({
-        errorMessage: error.message || '加载详情失败'
+        errorMessage: error.message || this.data.t.loadFailed
       })
     })
   },
@@ -59,7 +79,7 @@ Page({
     })
 
     wx.setNavigationBarTitle({
-      title: mode === 'announcement' ? '系统公告' : '新闻'
+      title: mode === 'announcement' ? this.data.t.announcement : this.data.t.news
     })
 
     this.loadDetail(detailId || (newsItem && newsItem.id) || '', mode)
@@ -68,8 +88,8 @@ Page({
   onShareAppMessage: function() {
     const navigationTitle = this.data.newsItem && this.data.newsItem.navigationTitle
     return {
-      title: this.data.newsItem && this.data.newsItem.title ? this.data.newsItem.title : '新闻',
-      path: navigationTitle === '系统公告' ? '/pages/inbox/inbox' : '/pages/news/news'
+      title: this.data.newsItem && this.data.newsItem.title ? this.data.newsItem.title : this.data.t.news,
+      path: navigationTitle === this.data.t.announcement ? '/pages/inbox/inbox' : '/pages/news/news'
     }
   }
 })

@@ -344,7 +344,32 @@
     "shareTitle": "Card Transactions"
   },
   "bookPage": {
-    "navTitle": "My Loans"
+    "navTitle": "My Loans",
+    "passwordLabel": "Library Password",
+    "passwordPlaceholder": "Enter library password",
+    "passwordRequired": "Please enter library password",
+    "queryFailed": "Query failed",
+    "tip": "Enter your library password to view loans. The password will be re-verified when renewing.",
+    "refreshBorrow": "Refresh Loans",
+    "queryBorrow": "Query Loans",
+    "emptyHint": "Enter your library password to view current loan records.",
+    "emptyResult": "No loan records to display.",
+    "borrowListTitle": "Loan List",
+    "barcode": "Barcode",
+    "snNumber": "SN",
+    "author": "Author",
+    "borrowDate": "Borrow Date",
+    "returnDate": "Due Date",
+    "renewCount": "Renewals",
+    "renewButton": "Renew",
+    "renewDialogTitle": "Renew Book",
+    "renewDialogMessage": "Enter your library password to verify renewal. Password is only used for this request.",
+    "renewFailed": "Renewal failed",
+    "renewRefreshFailed": "Failed to refresh loan records",
+    "renewSuccessTitle": "Renewed Successfully",
+    "renewSuccessContent": "Book has been renewed",
+    "confirmRenew": "Confirm Renewal",
+    "shareTitle": "Library"
   },
   "graduateExamPage": {
     "navTitle": "Postgrad Exam",
@@ -370,7 +395,11 @@
     "shareTitle": "Postgrad Exam"
   },
   "dataPage": {
-    "navTitle": "Data Query"
+    "navTitle": "Data Query",
+    "selectProject": "Select Query",
+    "electricityQuery": "Electricity Bill",
+    "yellowPageQuery": "Yellow Pages",
+    "shareTitle": "Data Query"
   },
   "cardLostPage": {
     "navTitle": "Report Lost Card",
@@ -384,7 +413,28 @@
     "shareTitle": "Report Lost Card"
   },
   "electricityPage": {
-    "navTitle": "Electricity Bill"
+    "navTitle": "Electricity Bill",
+    "queryInfo": "Query Info",
+    "yearLabel": "Year",
+    "nameLabel": "Name",
+    "namePlaceholder": "Enter name",
+    "studentIdLabel": "Student ID",
+    "studentIdPlaceholder": "Enter student ID",
+    "fillAllFields": "Please enter name and student ID",
+    "invalidStudentId": "Please enter a valid student ID",
+    "queryButton": "Query",
+    "resultTitle": "Electricity Info",
+    "dormitory": "Dormitory",
+    "occupants": "Occupants",
+    "department": "Department",
+    "usedAmount": "Usage",
+    "freeAmount": "Free Allowance",
+    "chargedAmount": "Billed Usage",
+    "price": "Unit Price",
+    "totalBill": "Total Bill",
+    "averageBill": "Average Bill",
+    "reQuery": "Query Again",
+    "shareTitle": "Electricity Bill"
   },
   "collectionPage": {
     "navTitle": "Library",
@@ -402,7 +452,39 @@
     "shareTitle": "Library"
   },
   "yellowPagePage": {
-    "navTitle": "Yellow Pages"
+    "navTitle": "Yellow Pages",
+    "shareTitle": "Yellow Pages"
+  },
+  "newsDetailPage": {
+    "loadingDetail": "Loading details",
+    "loadFailed": "Failed to load details",
+    "noContent": "No content available",
+    "announcement": "Announcement",
+    "news": "News"
+  },
+  "collectionDetailPage": {
+    "basicInfo": "Basic Info",
+    "bookName": "Title",
+    "author": "Author",
+    "heading": "Heading",
+    "responsible": "Responsible",
+    "headingResponsible": "Heading / Responsible",
+    "publisher": "Publisher",
+    "publishYear": "Year",
+    "publisherYear": "Publisher / Year",
+    "isbn": "ISBN",
+    "fixedPrice": "Price",
+    "isbnPrice": "ISBN / Price",
+    "physicalDesc": "Physical Description",
+    "personalResp": "Personal Responsibility",
+    "subjectTheme": "Subject",
+    "clcNumber": "CLC Number",
+    "collectionInfo": "Collection Info",
+    "location": "Location",
+    "callNumber": "Call Number",
+    "barcodeNumber": "Barcode",
+    "status": "Status",
+    "shareTitle": "Collection Detail"
   },
   "evaluatePage": {
     "navTitle": "Evaluation",

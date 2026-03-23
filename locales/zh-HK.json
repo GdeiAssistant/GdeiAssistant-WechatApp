@@ -441,7 +441,32 @@
     "shareTitle": "校園卡消費"
   },
   "bookPage": {
-    "navTitle": "我的借閱"
+    "navTitle": "我的借閱",
+    "passwordLabel": "圖書館密碼",
+    "passwordPlaceholder": "請輸入圖書館密碼",
+    "passwordRequired": "請輸入圖書館密碼",
+    "queryFailed": "查詢失敗",
+    "tip": "我的借閱需要先輸入圖書館密碼查詢，續借時會再次校驗密碼。",
+    "refreshBorrow": "刷新借閱",
+    "queryBorrow": "查詢借閱",
+    "emptyHint": "輸入圖書館密碼後即可查看當前借閱記錄。",
+    "emptyResult": "當前沒有可展示的借閱記錄。",
+    "borrowListTitle": "借閱列表",
+    "barcode": "條形碼",
+    "snNumber": "SN號",
+    "author": "作者",
+    "borrowDate": "借閱時間",
+    "returnDate": "應還時間",
+    "renewCount": "續借次數",
+    "renewButton": "續借",
+    "renewDialogTitle": "圖書續借",
+    "renewDialogMessage": "請輸入圖書館密碼完成續借校驗，密碼只用於本次請求。",
+    "renewFailed": "續借失敗",
+    "renewRefreshFailed": "借閱記錄刷新失敗",
+    "renewSuccessTitle": "續借成功",
+    "renewSuccessContent": "已成功續借圖書",
+    "confirmRenew": "確認續借",
+    "shareTitle": "圖書館"
   },
   "graduateExamPage": {
     "navTitle": "考研查詢",
@@ -467,7 +492,11 @@
     "shareTitle": "考研查詢"
   },
   "dataPage": {
-    "navTitle": "數據查詢"
+    "navTitle": "數據查詢",
+    "selectProject": "選擇查詢項目",
+    "electricityQuery": "電費查詢",
+    "yellowPageQuery": "黃頁查詢",
+    "shareTitle": "數據查詢"
   },
   "cardLostPage": {
     "navTitle": "校園卡掛失",
@@ -481,7 +510,28 @@
     "shareTitle": "校園卡掛失"
   },
   "electricityPage": {
-    "navTitle": "電費查詢"
+    "navTitle": "電費查詢",
+    "queryInfo": "查詢資訊",
+    "yearLabel": "年份",
+    "nameLabel": "姓名",
+    "namePlaceholder": "請輸入姓名",
+    "studentIdLabel": "學號",
+    "studentIdPlaceholder": "請輸入學號",
+    "fillAllFields": "請完整填寫姓名和學號",
+    "invalidStudentId": "請輸入正確的學號",
+    "queryButton": "查詢",
+    "resultTitle": "電費資訊",
+    "dormitory": "宿舍",
+    "occupants": "入住人數",
+    "department": "學院",
+    "usedAmount": "用電數額",
+    "freeAmount": "免費電額",
+    "chargedAmount": "計費電數",
+    "price": "電價",
+    "totalBill": "總電費",
+    "averageBill": "平均電費",
+    "reQuery": "重新查詢",
+    "shareTitle": "電費查詢"
   },
   "collectionPage": {
     "navTitle": "圖書館",
@@ -499,7 +549,39 @@
     "shareTitle": "圖書館"
   },
   "yellowPagePage": {
-    "navTitle": "黃頁查詢"
+    "navTitle": "黃頁查詢",
+    "shareTitle": "黃頁查詢"
+  },
+  "newsDetailPage": {
+    "loadingDetail": "正在載入詳情",
+    "loadFailed": "載入詳情失敗",
+    "noContent": "暫無詳細內容",
+    "announcement": "系統公告",
+    "news": "新聞"
+  },
+  "collectionDetailPage": {
+    "basicInfo": "基本資訊",
+    "bookName": "書名",
+    "author": "作者",
+    "heading": "題名",
+    "responsible": "負責者",
+    "headingResponsible": "題名/負責者",
+    "publisher": "出版社",
+    "publishYear": "出版年",
+    "publisherYear": "出版社/出版年",
+    "isbn": "ISBN",
+    "fixedPrice": "定價",
+    "isbnPrice": "ISBN/定價",
+    "physicalDesc": "載體形態項",
+    "personalResp": "個人責任者",
+    "subjectTheme": "學科主題",
+    "clcNumber": "中圖法分類號",
+    "collectionInfo": "館藏資訊",
+    "location": "館藏地",
+    "callNumber": "索取號",
+    "barcodeNumber": "條碼號",
+    "status": "狀態",
+    "shareTitle": "館藏詳情"
   },
   "evaluatePage": {
     "navTitle": "一鍵評教",

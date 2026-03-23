@@ -20,7 +20,28 @@ Page({
   refreshI18n: function () {
     this.setData({
       t: {
-        navTitle: i18n.t('electricityPage.navTitle')
+        navTitle: i18n.t('electricityPage.navTitle'),
+        queryInfo: i18n.t('electricityPage.queryInfo'),
+        yearLabel: i18n.t('electricityPage.yearLabel'),
+        nameLabel: i18n.t('electricityPage.nameLabel'),
+        namePlaceholder: i18n.t('electricityPage.namePlaceholder'),
+        studentIdLabel: i18n.t('electricityPage.studentIdLabel'),
+        studentIdPlaceholder: i18n.t('electricityPage.studentIdPlaceholder'),
+        fillAllFields: i18n.t('electricityPage.fillAllFields'),
+        invalidStudentId: i18n.t('electricityPage.invalidStudentId'),
+        queryButton: i18n.t('electricityPage.queryButton'),
+        resultTitle: i18n.t('electricityPage.resultTitle'),
+        dormitory: i18n.t('electricityPage.dormitory'),
+        occupants: i18n.t('electricityPage.occupants'),
+        department: i18n.t('electricityPage.department'),
+        usedAmount: i18n.t('electricityPage.usedAmount'),
+        freeAmount: i18n.t('electricityPage.freeAmount'),
+        chargedAmount: i18n.t('electricityPage.chargedAmount'),
+        price: i18n.t('electricityPage.price'),
+        totalBill: i18n.t('electricityPage.totalBill'),
+        averageBill: i18n.t('electricityPage.averageBill'),
+        reQuery: i18n.t('electricityPage.reQuery'),
+        shareTitle: i18n.t('electricityPage.shareTitle')
       }
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
@@ -58,12 +79,12 @@ Page({
     }
 
     if (!payload.name || !payload.number) {
-      pageUtils.showTopTips(this, '请完整填写姓名和学号')
+      pageUtils.showTopTips(this, this.data.t.fillAllFields)
       return
     }
 
     if (!/^\d{8,12}$/.test(payload.number)) {
-      pageUtils.showTopTips(this, '请输入正确的学号')
+      pageUtils.showTopTips(this, this.data.t.invalidStudentId)
       return
     }
 
@@ -88,7 +109,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '电费查询',
+      title: this.data.t.shareTitle,
       path: '/pages/electricity/electricity'
     }
   }

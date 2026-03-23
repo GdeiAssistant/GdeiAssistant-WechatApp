@@ -441,7 +441,32 @@
     "shareTitle": "학생증 거래 내역"
   },
   "bookPage": {
-    "navTitle": "내 대출"
+    "navTitle": "내 대출",
+    "passwordLabel": "도서관 비밀번호",
+    "passwordPlaceholder": "도서관 비밀번호를 입력하세요",
+    "passwordRequired": "도서관 비밀번호를 입력하세요",
+    "queryFailed": "조회 실패",
+    "tip": "대출 조회를 위해 도서관 비밀번호를 입력하세요. 연장 시 다시 확인됩니다.",
+    "refreshBorrow": "대출 새로고침",
+    "queryBorrow": "대출 조회",
+    "emptyHint": "도서관 비밀번호를 입력하면 현재 대출 기록을 확인할 수 있습니다.",
+    "emptyResult": "표시할 대출 기록이 없습니다.",
+    "borrowListTitle": "대출 목록",
+    "barcode": "바코드",
+    "snNumber": "SN번호",
+    "author": "저자",
+    "borrowDate": "대출일",
+    "returnDate": "반납 기한",
+    "renewCount": "연장 횟수",
+    "renewButton": "연장",
+    "renewDialogTitle": "도서 연장",
+    "renewDialogMessage": "도서관 비밀번호를 입력하여 연장을 확인하세요. 비밀번호는 이번 요청에만 사용됩니다.",
+    "renewFailed": "연장 실패",
+    "renewRefreshFailed": "대출 기록 새로고침 실패",
+    "renewSuccessTitle": "연장 완료",
+    "renewSuccessContent": "도서 연장이 완료되었습니다",
+    "confirmRenew": "연장 확인",
+    "shareTitle": "도서관"
   },
   "graduateExamPage": {
     "navTitle": "대학원 시험 조회",
@@ -467,7 +492,11 @@
     "shareTitle": "대학원 시험 조회"
   },
   "dataPage": {
-    "navTitle": "데이터 조회"
+    "navTitle": "데이터 조회",
+    "selectProject": "조회 항목 선택",
+    "electricityQuery": "전기요금 조회",
+    "yellowPageQuery": "전화번호부 검색",
+    "shareTitle": "데이터 조회"
   },
   "cardLostPage": {
     "navTitle": "분실 신고",
@@ -481,7 +510,28 @@
     "shareTitle": "분실 신고"
   },
   "electricityPage": {
-    "navTitle": "전기요금 조회"
+    "navTitle": "전기요금 조회",
+    "queryInfo": "조회 정보",
+    "yearLabel": "연도",
+    "nameLabel": "이름",
+    "namePlaceholder": "이름을 입력하세요",
+    "studentIdLabel": "학번",
+    "studentIdPlaceholder": "학번을 입력하세요",
+    "fillAllFields": "이름과 학번을 모두 입력하세요",
+    "invalidStudentId": "올바른 학번을 입력하세요",
+    "queryButton": "조회",
+    "resultTitle": "전기요금 정보",
+    "dormitory": "기숙사",
+    "occupants": "입주 인원",
+    "department": "학과",
+    "usedAmount": "사용량",
+    "freeAmount": "무료 한도",
+    "chargedAmount": "과금 사용량",
+    "price": "단가",
+    "totalBill": "총 요금",
+    "averageBill": "평균 요금",
+    "reQuery": "다시 조회",
+    "shareTitle": "전기요금 조회"
   },
   "collectionPage": {
     "navTitle": "도서관",
@@ -499,7 +549,39 @@
     "shareTitle": "도서관"
   },
   "yellowPagePage": {
-    "navTitle": "전화번호부 검색"
+    "navTitle": "전화번호부 검색",
+    "shareTitle": "전화번호부 검색"
+  },
+  "newsDetailPage": {
+    "loadingDetail": "상세 정보 로딩 중",
+    "loadFailed": "상세 정보 로딩 실패",
+    "noContent": "상세 내용이 없습니다",
+    "announcement": "시스템 공지",
+    "news": "뉴스"
+  },
+  "collectionDetailPage": {
+    "basicInfo": "기본 정보",
+    "bookName": "도서명",
+    "author": "저자",
+    "heading": "표제",
+    "responsible": "책임자",
+    "headingResponsible": "표제/책임자",
+    "publisher": "출판사",
+    "publishYear": "출판년도",
+    "publisherYear": "출판사/출판년도",
+    "isbn": "ISBN",
+    "fixedPrice": "정가",
+    "isbnPrice": "ISBN/정가",
+    "physicalDesc": "형태사항",
+    "personalResp": "개인 책임자",
+    "subjectTheme": "주제",
+    "clcNumber": "분류번호",
+    "collectionInfo": "소장 정보",
+    "location": "소장처",
+    "callNumber": "청구기호",
+    "barcodeNumber": "바코드 번호",
+    "status": "상태",
+    "shareTitle": "소장 상세"
   },
   "evaluatePage": {
     "navTitle": "수업 평가",

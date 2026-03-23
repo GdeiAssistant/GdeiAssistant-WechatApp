@@ -50,6 +50,10 @@ Page({
     summaryProfile: null,
     hasShownOnce: false,
     loading: true,
+    loadingMore: false,
+    hasMore: true,
+    pageStart: 0,
+    pageSize: 20,
     errorMessage: null,
     t: {}
   },
@@ -101,31 +105,79 @@ Page({
   },
 
   loadCenter: function() {
+    var self = this
+    self.setData({ pageStart: 0, hasMore: true })
+
     return pageUtils.runWithNavigationLoading(this, () => {
       return Promise.all([
-        communityApi.getCenter(this.data.moduleId),
+        communityApi.getCenter(this.data.moduleId, { start: 0, size: this.data.pageSize }),
         this.loadSummaryProfile()
       ])
     }).then((resultList) => {
       const result = resultList[0]
       if (!result.success) {
-        pageUtils.showTopTips(this, result.message || i18n.t('common.loadFailed'))
+        pageUtils.showTopTips(self, result.message || i18n.t('common.loadFailed'))
         return
       }
 
-      const itemsByTab = this.normalizeCenterData(this.data.moduleId, result.data || [])
-      const defaultTab = this.data.tabs.length ? this.data.tabs[0].key : 'default'
-      this.setData({
+      var items = result.data || []
+      const itemsByTab = self.normalizeCenterData(self.data.moduleId, items)
+      const defaultTab = self.data.tabs.length ? self.data.tabs[0].key : 'default'
+      self.setData({
         itemsByTab: itemsByTab,
-        loading: false
+        loading: false,
+        pageStart: items.length,
+        hasMore: items.length >= self.data.pageSize
       })
-      this.setActiveTab(this.data.activeTabKey || defaultTab)
+      self.setActiveTab(self.data.activeTabKey || defaultTab)
     }).catch((error) => {
-      this.setData({
+      self.setData({
         loading: false
       })
-      pageUtils.showTopTips(this, error.message)
+      pageUtils.showTopTips(self, error.message)
     })
+  },
+
+  loadMoreCenter: function() {
+    var self = this
+    if (self.data.loadingMore || !self.data.hasMore) return
+
+    self.setData({ loadingMore: true })
+
+    communityApi.getCenter(self.data.moduleId, { start: self.data.pageStart, size: self.data.pageSize })
+      .then(function(result) {
+        if (!result.success) {
+          pageUtils.showTopTips(self, result.message || i18n.t('common.loadFailed'))
+          self.setData({ loadingMore: false })
+          return
+        }
+
+        var newItems = result.data || []
+        var normalized = self.normalizeCenterData(self.data.moduleId, newItems)
+        var currentItems = self.data.itemsByTab || {}
+        var mergedItems = {}
+
+        Object.keys(normalized).forEach(function(tabKey) {
+          mergedItems[tabKey] = (currentItems[tabKey] || []).concat(normalized[tabKey] || [])
+        })
+        Object.keys(currentItems).forEach(function(tabKey) {
+          if (!mergedItems[tabKey]) {
+            mergedItems[tabKey] = currentItems[tabKey]
+          }
+        })
+
+        self.setData({
+          itemsByTab: mergedItems,
+          loadingMore: false,
+          pageStart: self.data.pageStart + newItems.length,
+          hasMore: newItems.length >= self.data.pageSize
+        })
+        self.setActiveTab(self.data.activeTabKey)
+      })
+      .catch(function(error) {
+        self.setData({ loadingMore: false })
+        pageUtils.showTopTips(self, error.message)
+      })
   },
 
   switchTab: function(event) {

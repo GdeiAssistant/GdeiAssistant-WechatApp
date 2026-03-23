@@ -9,7 +9,11 @@ Page({
   refreshI18n: function () {
     this.setData({
       t: {
-        navTitle: i18n.t('dataPage.navTitle')
+        navTitle: i18n.t('dataPage.navTitle'),
+        selectProject: i18n.t('dataPage.selectProject'),
+        electricityQuery: i18n.t('dataPage.electricityQuery'),
+        yellowPageQuery: i18n.t('dataPage.yellowPageQuery'),
+        shareTitle: i18n.t('dataPage.shareTitle')
       }
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
@@ -19,7 +23,7 @@ Page({
   },
   onShareAppMessage: function() {
     return {
-      title: '数据查询',
+      title: this.data.t.shareTitle,
       path: '/pages/data/data'
     }
   }

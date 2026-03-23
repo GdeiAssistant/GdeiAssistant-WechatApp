@@ -2,11 +2,11 @@
   <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
   <view class="container detail-loading" wx:if="{{loading && !newsItem}}">
     <i class="weui-loading"></i>
-    <view>正在加载详情</view>
+    <view>{{t.loadingDetail}}</view>
   </view>
   <view class="container" wx:if="{{newsItem}}">
     <view class="detail_title">{{newsItem.title}}</view>
     <view class="detail_date">{{newsItem.publishDate || newsItem.publishTime}}</view>
-    <view class="detail_content">{{newsItem.content || '暂无详细内容'}}</view>
+    <view class="detail_content">{{newsItem.content || t.noContent}}</view>
   </view>
 </view>

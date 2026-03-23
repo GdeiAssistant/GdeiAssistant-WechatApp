@@ -204,3 +204,20 @@
   font-size: 24rpx;
   line-height: 1.7;
 }
+
+.load_more_box {
+  padding: 30rpx 0;
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 26rpx;
+}
+
+.load_more_loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.load_more_end {
+  color: var(--color-text-tertiary);
+}

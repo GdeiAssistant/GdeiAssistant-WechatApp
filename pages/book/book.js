@@ -12,7 +12,33 @@ Page({
   refreshI18n: function () {
     this.setData({
       t: {
-        navTitle: i18n.t('bookPage.navTitle')
+        navTitle: i18n.t('bookPage.navTitle'),
+        passwordLabel: i18n.t('bookPage.passwordLabel'),
+        passwordPlaceholder: i18n.t('bookPage.passwordPlaceholder'),
+        passwordRequired: i18n.t('bookPage.passwordRequired'),
+        queryFailed: i18n.t('bookPage.queryFailed'),
+        tip: i18n.t('bookPage.tip'),
+        refreshBorrow: i18n.t('bookPage.refreshBorrow'),
+        queryBorrow: i18n.t('bookPage.queryBorrow'),
+        emptyHint: i18n.t('bookPage.emptyHint'),
+        emptyResult: i18n.t('bookPage.emptyResult'),
+        borrowListTitle: i18n.t('bookPage.borrowListTitle'),
+        barcode: i18n.t('bookPage.barcode'),
+        snNumber: i18n.t('bookPage.snNumber'),
+        author: i18n.t('bookPage.author'),
+        borrowDate: i18n.t('bookPage.borrowDate'),
+        returnDate: i18n.t('bookPage.returnDate'),
+        renewCount: i18n.t('bookPage.renewCount'),
+        renewButton: i18n.t('bookPage.renewButton'),
+        renewDialogTitle: i18n.t('bookPage.renewDialogTitle'),
+        renewDialogMessage: i18n.t('bookPage.renewDialogMessage'),
+        renewFailed: i18n.t('bookPage.renewFailed'),
+        renewRefreshFailed: i18n.t('bookPage.renewRefreshFailed'),
+        renewSuccessTitle: i18n.t('bookPage.renewSuccessTitle'),
+        renewSuccessContent: i18n.t('bookPage.renewSuccessContent'),
+        confirmRenew: i18n.t('bookPage.confirmRenew'),
+        cancel: i18n.t('common.cancel'),
+        shareTitle: i18n.t('bookPage.shareTitle')
       }
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
@@ -43,7 +69,7 @@ Page({
   submit: function(e) {
     const password = String((e.detail.value && e.detail.value.password) || this.data.password || '').trim()
     if (!password) {
-      pageUtils.showTopTips(this, '请输入图书馆密码')
+      pageUtils.showTopTips(this, this.data.t.passwordRequired)
       return Promise.resolve()
     }
 
@@ -62,12 +88,12 @@ Page({
           errorMessage: null
         })
       } else {
-        throw new Error(result.message || '查询失败')
+        throw new Error(result.message || this.data.t.queryFailed)
       }
     }).catch((error) => {
-      pageUtils.showTopTips(this, error.message || '查询失败')
+      pageUtils.showTopTips(this, error.message || this.data.t.queryFailed)
       this.setData({
-        errorMessage: error.message || '查询失败'
+        errorMessage: error.message || this.data.t.queryFailed
       })
     })
   },
@@ -109,7 +135,7 @@ Page({
     const password = String(this.data.renewPassword || '').trim()
 
     if (!password) {
-      this.setData({ renewErrorMessage: '请输入图书馆密码' })
+      this.setData({ renewErrorMessage: this.data.t.passwordRequired })
       return
     }
 
@@ -125,10 +151,10 @@ Page({
         })
         return libraryApi.queryBook(password)
       }
-      throw new Error(result.message || '续借失败')
+      throw new Error(result.message || this.data.t.renewFailed)
     }).then((result) => {
       if (!result || !result.success) {
-        throw new Error((result && result.message) || '借阅记录刷新失败')
+        throw new Error((result && result.message) || this.data.t.renewRefreshFailed)
       }
 
       this.setData({
@@ -139,10 +165,10 @@ Page({
         renewCode: '',
         renewSn: ''
       })
-      utils.showNoActionModal('续借成功', '已成功续借图书')
+      utils.showNoActionModal(this.data.t.renewSuccessTitle, this.data.t.renewSuccessContent)
     }).catch((error) => {
       this.setData({
-        renewErrorMessage: error.message || '续借失败'
+        renewErrorMessage: error.message || this.data.t.renewFailed
       })
     })
   },
@@ -151,7 +177,7 @@ Page({
 
   onShareAppMessage: function() {
     return {
-      title: '图书馆',
+      title: this.data.t.shareTitle,
       path: '/pages/book/book'
     }
   }

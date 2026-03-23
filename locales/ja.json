@@ -441,7 +441,32 @@
     "shareTitle": "学生証利用履歴"
   },
   "bookPage": {
-    "navTitle": "マイ貸出"
+    "navTitle": "マイ貸出",
+    "passwordLabel": "図書館パスワード",
+    "passwordPlaceholder": "図書館パスワードを入力",
+    "passwordRequired": "図書館パスワードを入力してください",
+    "queryFailed": "検索に失敗しました",
+    "tip": "貸出照会には図書館パスワードが必要です。更新時に再度検証されます。",
+    "refreshBorrow": "貸出を更新",
+    "queryBorrow": "貸出を照会",
+    "emptyHint": "図書館パスワードを入力すると貸出記録を表示できます。",
+    "emptyResult": "表示できる貸出記録がありません。",
+    "borrowListTitle": "貸出一覧",
+    "barcode": "バーコード",
+    "snNumber": "SN番号",
+    "author": "著者",
+    "borrowDate": "貸出日",
+    "returnDate": "返却期限",
+    "renewCount": "更新回数",
+    "renewButton": "更新",
+    "renewDialogTitle": "図書更新",
+    "renewDialogMessage": "図書館パスワードを入力して更新を確認してください。パスワードは今回のみ使用されます。",
+    "renewFailed": "更新に失敗しました",
+    "renewRefreshFailed": "貸出記録の更新に失敗しました",
+    "renewSuccessTitle": "更新完了",
+    "renewSuccessContent": "図書の更新が完了しました",
+    "confirmRenew": "更新を確認",
+    "shareTitle": "図書館"
   },
   "graduateExamPage": {
     "navTitle": "大学院入試照会",
@@ -467,7 +492,11 @@
     "shareTitle": "大学院入試照会"
   },
   "dataPage": {
-    "navTitle": "データ照会"
+    "navTitle": "データ照会",
+    "selectProject": "照会項目を選択",
+    "electricityQuery": "電気料金照会",
+    "yellowPageQuery": "電話帳検索",
+    "shareTitle": "データ照会"
   },
   "cardLostPage": {
     "navTitle": "紛失届",
@@ -481,7 +510,28 @@
     "shareTitle": "紛失届"
   },
   "electricityPage": {
-    "navTitle": "電気料金照会"
+    "navTitle": "電気料金照会",
+    "queryInfo": "検索情報",
+    "yearLabel": "年度",
+    "nameLabel": "氏名",
+    "namePlaceholder": "氏名を入力",
+    "studentIdLabel": "学籍番号",
+    "studentIdPlaceholder": "学籍番号を入力",
+    "fillAllFields": "氏名と学籍番号を入力してください",
+    "invalidStudentId": "正しい学籍番号を入力してください",
+    "queryButton": "検索",
+    "resultTitle": "電気料金情報",
+    "dormitory": "寮",
+    "occupants": "入居人数",
+    "department": "学部",
+    "usedAmount": "使用量",
+    "freeAmount": "無料枠",
+    "chargedAmount": "課金対象量",
+    "price": "単価",
+    "totalBill": "合計料金",
+    "averageBill": "平均料金",
+    "reQuery": "再検索",
+    "shareTitle": "電気料金照会"
   },
   "collectionPage": {
     "navTitle": "図書館",
@@ -499,7 +549,39 @@
     "shareTitle": "図書館"
   },
   "yellowPagePage": {
-    "navTitle": "電話帳検索"
+    "navTitle": "電話帳検索",
+    "shareTitle": "電話帳検索"
+  },
+  "newsDetailPage": {
+    "loadingDetail": "詳細を読み込み中",
+    "loadFailed": "詳細の読み込みに失敗しました",
+    "noContent": "詳細内容がありません",
+    "announcement": "システム通知",
+    "news": "ニュース"
+  },
+  "collectionDetailPage": {
+    "basicInfo": "基本情報",
+    "bookName": "書名",
+    "author": "著者",
+    "heading": "題名",
+    "responsible": "責任者",
+    "headingResponsible": "題名/責任者",
+    "publisher": "出版社",
+    "publishYear": "出版年",
+    "publisherYear": "出版社/出版年",
+    "isbn": "ISBN",
+    "fixedPrice": "定価",
+    "isbnPrice": "ISBN/定価",
+    "physicalDesc": "形態",
+    "personalResp": "個人責任者",
+    "subjectTheme": "主題",
+    "clcNumber": "分類番号",
+    "collectionInfo": "所蔵情報",
+    "location": "所蔵場所",
+    "callNumber": "請求記号",
+    "barcodeNumber": "バーコード番号",
+    "status": "状態",
+    "shareTitle": "所蔵詳細"
   },
   "evaluatePage": {
     "navTitle": "授業評価",

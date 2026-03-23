@@ -2,11 +2,11 @@
   <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
 
   <view class="container" wx:if="{{!result}}">
-    <view class="weui-cells__title">查询信息</view>
+    <view class="weui-cells__title">{{t.queryInfo}}</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell">
         <view class="weui-cell__hd">
-          <view class="weui-label">年份</view>
+          <view class="weui-label">{{t.yearLabel}}</view>
         </view>
         <view class="weui-cell__bd">
           <picker range="{{yearOptions}}" value="{{yearIndex}}" bindchange="handlePickerChange">
@@ -16,74 +16,74 @@
       </view>
       <view class="weui-cell weui-cell_input">
         <view class="weui-cell__hd">
-          <view class="weui-label">姓名</view>
+          <view class="weui-label">{{t.nameLabel}}</view>
         </view>
         <view class="weui-cell__bd">
-          <input value="{{name}}" data-field="name" bindinput="setFieldValue" class="weui-input" placeholder="请输入姓名" />
+          <input value="{{name}}" data-field="name" bindinput="setFieldValue" class="weui-input" placeholder="{{t.namePlaceholder}}" />
         </view>
       </view>
       <view class="weui-cell weui-cell_input">
         <view class="weui-cell__hd">
-          <view class="weui-label">学号</view>
+          <view class="weui-label">{{t.studentIdLabel}}</view>
         </view>
         <view class="weui-cell__bd">
-          <input value="{{number}}" data-field="number" bindinput="setFieldValue" class="weui-input" placeholder="请输入学号" />
+          <input value="{{number}}" data-field="number" bindinput="setFieldValue" class="weui-input" placeholder="{{t.studentIdPlaceholder}}" />
         </view>
       </view>
     </view>
 
     <view class="btn-area">
-      <button type="primary" disabled="{{loading}}" bindtap="submitQuery">查询</button>
+      <button type="primary" disabled="{{loading}}" bindtap="submitQuery">{{t.queryButton}}</button>
     </view>
   </view>
 
   <view class="container" wx:if="{{result}}">
-    <view class="weui-cells__title">电费信息</view>
+    <view class="weui-cells__title">{{t.resultTitle}}</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell">
-        <view class="weui-cell__bd">年份</view>
+        <view class="weui-cell__bd">{{t.yearLabel}}</view>
         <view class="weui-cell__ft">{{result.year}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">宿舍</view>
+        <view class="weui-cell__bd">{{t.dormitory}}</view>
         <view class="weui-cell__ft">{{result.buildingNumber}}{{result.roomNumber}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">入住人数</view>
+        <view class="weui-cell__bd">{{t.occupants}}</view>
         <view class="weui-cell__ft">{{result.peopleNumber}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">学院</view>
+        <view class="weui-cell__bd">{{t.department}}</view>
         <view class="weui-cell__ft">{{result.department}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">用电数额</view>
+        <view class="weui-cell__bd">{{t.usedAmount}}</view>
         <view class="weui-cell__ft">{{result.usedElectricAmount}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">免费电额</view>
+        <view class="weui-cell__bd">{{t.freeAmount}}</view>
         <view class="weui-cell__ft">{{result.freeElectricAmount}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">计费电数</view>
+        <view class="weui-cell__bd">{{t.chargedAmount}}</view>
         <view class="weui-cell__ft">{{result.feeBasedElectricAmount}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">电价</view>
+        <view class="weui-cell__bd">{{t.price}}</view>
         <view class="weui-cell__ft">{{result.electricPrice}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">总电费</view>
+        <view class="weui-cell__bd">{{t.totalBill}}</view>
         <view class="weui-cell__ft">{{result.totalElectricBill}}</view>
       </view>
       <view class="weui-cell">
-        <view class="weui-cell__bd">平均电费</view>
+        <view class="weui-cell__bd">{{t.averageBill}}</view>
         <view class="weui-cell__ft">{{result.averageElectricBill}}</view>
       </view>
     </view>
 
     <view class="btn-area">
-      <button type="primary" bindtap="resetQuery">重新查询</button>
+      <button type="primary" bindtap="resetQuery">{{t.reQuery}}</button>
     </view>
   </view>
 </view>
