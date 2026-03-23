@@ -1,10 +1,7 @@
 const {
   getCommunityModule,
   getCommunityPageTitle,
-  getLostFoundItemDictionaryOptions,
-  getDatingGradeOptions,
-  getDeliveryStatusOptions,
-  DELIVERY_PLACEHOLDER_PICKUP_CODE
+  getLostFoundItemDictionaryOptions
 } = require('../../constants/community.js')
 const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
@@ -37,50 +34,6 @@ function formatSecretPublishText(publishTime, timer) {
     return baseText ? baseText + ' \u00b7 ' + autoDeleteText : autoDeleteText
   }
   return baseText
-}
-
-function maskSensitiveText(text) {
-  const value = String(text || '').trim()
-  if (!value) {
-    return ''
-  }
-  if (value.length <= 4) {
-    return '***'
-  }
-  return '*'.repeat(Math.max(value.length - 4, 3)) + value.slice(-4)
-}
-
-function buildDeliveryRoleTitle(detailType) {
-  switch (Number(detailType)) {
-    case 0:
-      return i18n.t('community.detail.rolePublisher')
-    case 3:
-      return i18n.t('community.detail.roleAcceptor')
-    default:
-      return i18n.t('community.detail.roleVisitor')
-  }
-}
-
-function buildDeliveryStatusDescription(status, detailType) {
-  const normalizedStatus = Number(status)
-  const normalizedType = Number(detailType)
-
-  if (normalizedStatus === 0 && normalizedType === 0) {
-    return i18n.t('community.detail.deliveryDesc00')
-  }
-  if (normalizedStatus === 0 && normalizedType === 1) {
-    return i18n.t('community.detail.deliveryDesc01')
-  }
-  if (normalizedStatus === 1 && normalizedType === 0) {
-    return i18n.t('community.detail.deliveryDesc10')
-  }
-  if (normalizedStatus === 1 && normalizedType === 3) {
-    return i18n.t('community.detail.deliveryDesc13')
-  }
-  if (normalizedStatus === 2) {
-    return i18n.t('community.detail.deliveryDesc2')
-  }
-  return ''
 }
 
 function buildDetail(moduleId, payload) {
@@ -120,54 +73,6 @@ function buildDetail(moduleId, payload) {
         phone: item.phone || '',
         typeLabel: findLabel(getLostFoundItemDictionaryOptions(), item.itemType, i18n.t('community.category.other')),
         badgeText: Number(item.lostType) === 0 ? i18n.t('community.lostFoundMode.lostNotice') : i18n.t('community.lostFoundMode.foundNotice'),
-        canLike: false
-      }
-    }
-    case 'delivery': {
-      const order = payload.order || {}
-      const detailType = Number(payload.detailType)
-      const orderState = Number(order.state || 0)
-      const canViewSensitiveInfo = detailType === 0 || detailType === 3 || orderState !== 0
-      const pickupCode = String(order.number || '').trim()
-      const phone = String(order.phone || '').trim()
-      const hasMeaningfulPickupCode = !!pickupCode && pickupCode !== DELIVERY_PLACEHOLDER_PICKUP_CODE
-
-      return {
-        id: order.orderId,
-        title: order.company || i18n.t('community.modules.delivery.title'),
-        subtitle: order.orderTime || '',
-        description: order.remarks || '',
-        pickupAddress: order.company || '',
-        deliveryAddress: order.address || '',
-        phone: canViewSensitiveInfo ? phone : '',
-        phoneText: phone ? (canViewSensitiveInfo ? phone : maskSensitiveText(phone)) : '',
-        pickupCode: canViewSensitiveInfo && hasMeaningfulPickupCode ? pickupCode : '',
-        pickupCodeText: hasMeaningfulPickupCode ? (canViewSensitiveInfo ? pickupCode : maskSensitiveText(pickupCode)) : '',
-        priceText: Number(order.price || 0).toFixed(2),
-        status: orderState,
-        detailType: detailType,
-        canViewSensitiveInfo: canViewSensitiveInfo,
-        userRoleTitle: buildDeliveryRoleTitle(detailType),
-        statusDescription: buildDeliveryStatusDescription(orderState, detailType),
-        sensitiveHint: !canViewSensitiveInfo && (hasMeaningfulPickupCode || phone) ? i18n.t('community.detail.sensitiveHint') : '',
-        tradeId: payload.trade && payload.trade.tradeId ? payload.trade.tradeId : null,
-        canAccept: detailType === 1 && orderState === 0,
-        canFinish: detailType === 0 && orderState === 1
-      }
-    }
-    case 'dating': {
-      const profile = payload.profile || {}
-      return {
-        id: profile.profileId,
-        title: profile.nickname || i18n.t('community.modules.dating.title'),
-        subtitle: findLabel(getDatingGradeOptions(), profile.grade, i18n.t('community.list.unknownGrade')) + ' \u00b7 ' + (profile.faculty || ''),
-        description: profile.content || '',
-        images: payload.pictureURL ? [payload.pictureURL] : [],
-        hometown: profile.hometown || '',
-        qq: payload.isContactVisible ? (profile.qq || '') : '',
-        wechat: payload.isContactVisible ? (profile.wechat || '') : '',
-        contactVisible: !!payload.isContactVisible,
-        canSubmitPick: !payload.isPickNotAvailable,
         canLike: false
       }
     }

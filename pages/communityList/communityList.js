@@ -1,11 +1,5 @@
 const {
-  getCommunityModule,
-  getSecondhandCategoryOptions,
-  getLostFoundModeDictionaryOptions,
-  getLostFoundItemDictionaryOptions,
-  getDeliveryStatusOptions,
-  getDatingAreaOptions,
-  getDatingGradeOptions
+  getCommunityModule
 } = require('../../constants/community.js')
 const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
@@ -13,27 +7,6 @@ const { getModuleHandler } = require('../../services/community/registry.js')
 const pageUtils = require('../../utils/page.js')
 const i18n = require('../../utils/i18n.js')
 var themeUtil = require('../../utils/theme')
-
-function findLabel(options, value, fallback) {
-  const item = (options || []).filter(function(optionItem) {
-    return Number(optionItem.value) === Number(value) || Number(optionItem.feedValue) === Number(value)
-  })[0]
-  return item ? item.label : (fallback || '')
-}
-
-function formatPrice(value) {
-  const price = Number(value || 0)
-  return price ? price.toFixed(2) : '0.00'
-}
-
-function formatSecretPublishText(publishTime, timer) {
-  const baseText = String(publishTime || '').trim()
-  if (Number(timer) === 1) {
-    var autoDeleteText = i18n.t('community.list.autoDelete24h')
-    return baseText ? baseText + ' \u00b7 ' + autoDeleteText : autoDeleteText
-  }
-  return baseText
-}
 
 function normalizeItem(moduleId, item) {
   var handler = getModuleHandler(moduleId)
@@ -43,36 +16,11 @@ function normalizeItem(moduleId, item) {
 
   const rawItem = item || {}
 
-  switch (moduleId) {
-    case 'delivery':
-      return {
-        id: rawItem.orderId,
-        title: rawItem.company || i18n.t('community.list.campusErrand'),
-        summary: rawItem.address || '',
-        priceText: formatPrice(rawItem.price),
-        badgeText: findLabel(getDeliveryStatusOptions(), rawItem.state, i18n.t('community.list.task')),
-        metaText: rawItem.remarks || '',
-        timeText: rawItem.orderTime || '',
-        raw: rawItem
-      }
-    case 'dating':
-      return {
-        id: rawItem.profileId,
-        title: rawItem.nickname || i18n.t('community.list.anonStudent'),
-        summary: rawItem.content || '',
-        cover: rawItem.pictureURL || '/image/dating.png',
-        badgeText: findLabel(getDatingGradeOptions(), rawItem.grade, i18n.t('community.list.unknownGrade')),
-        metaText: rawItem.faculty || '',
-        timeText: rawItem.hometown || '',
-        raw: rawItem
-      }
-    default:
-      return {
-        id: rawItem.id,
-        title: rawItem.title || i18n.t('community.list.unnamedContent'),
-        summary: rawItem.content || '',
-        raw: rawItem
-      }
+  return {
+    id: rawItem.id,
+    title: rawItem.title || i18n.t('community.list.unnamedContent'),
+    summary: rawItem.content || '',
+    raw: rawItem
   }
 }
 
@@ -101,14 +49,7 @@ Page({
       return handler.buildListTabs()
     }
 
-    switch (moduleId) {
-      case 'delivery':
-        return getDeliveryStatusOptions()
-      case 'dating':
-        return getDatingAreaOptions()
-      default:
-        return []
-    }
+    return []
   },
 
   getActiveTab: function() {
@@ -127,10 +68,6 @@ Page({
     var handler = getModuleHandler(moduleId)
     if (handler && handler.buildFeedOptions) {
       return handler.buildFeedOptions(options, activeTab)
-    }
-
-    if (moduleId === 'dating') {
-      options.area = activeTab ? Number(activeTab.value) : 0
     }
 
     return options
@@ -167,15 +104,10 @@ Page({
         return
       }
 
-      let list = Array.isArray(result.data) ? result.data : []
-      if (moduleId === 'delivery') {
-        const activeTab = this.getActiveTab()
-        const statusValue = activeTab ? Number(activeTab.value) : -1
-        if (statusValue >= 0) {
-          list = list.filter(function(item) {
-            return Number(item.state) === statusValue
-          })
-        }
+      var list = Array.isArray(result.data) ? result.data : []
+      var feedHandler = getModuleHandler(moduleId)
+      if (feedHandler && feedHandler.filterFeedResults) {
+        list = feedHandler.filterFeedResults(list, this.getActiveTab())
       }
 
       const normalizedList = list.map(function(item) {

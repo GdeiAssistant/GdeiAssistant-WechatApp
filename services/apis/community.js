@@ -15,27 +15,7 @@ function getFeed(moduleId, options) {
     return handler.getFeed(options)
   }
 
-  const config = options || {}
-  const start = Number(config.start || 0)
-  const size = Number(config.size || 10)
-  const keyword = String(config.keyword || '').trim()
-
-  switch (moduleId) {
-    case 'delivery':
-      return request({
-        url: endpoints.community.delivery.list(start, size),
-        method: 'GET',
-        authRequired: true
-      })
-    case 'dating':
-      return request({
-        url: endpoints.community.dating.list(Number(config.area || 0), start),
-        method: 'GET',
-        authRequired: true
-      })
-    default:
-      return Promise.reject(new Error('未识别的社区模块'))
-  }
+  return Promise.reject(new Error('未识别的社区模块'))
 }
 
 function getDetail(moduleId, id) {
@@ -44,22 +24,7 @@ function getDetail(moduleId, id) {
     return handler.getDetail(id)
   }
 
-  switch (moduleId) {
-    case 'delivery':
-      return request({
-        url: endpoints.community.delivery.detail(id),
-        method: 'GET',
-        authRequired: true
-      })
-    case 'dating':
-      return request({
-        url: endpoints.community.dating.detail(id),
-        method: 'GET',
-        authRequired: true
-      })
-    default:
-      return Promise.reject(new Error('未识别的社区模块'))
-  }
+  return Promise.reject(new Error('未识别的社区模块'))
 }
 
 function getComments(moduleId, id) {
@@ -90,49 +55,7 @@ function getCenter(moduleId, options) {
     return handler.getCenter(options)
   }
 
-  const config = options || {}
-  const start = Number(config.start || 0)
-  const size = Number(config.size || 10)
-
-  switch (moduleId) {
-    case 'delivery':
-      return request({
-        url: endpoints.community.delivery.mine,
-        method: 'GET',
-        authRequired: true
-      })
-    case 'dating':
-      return Promise.all([
-        request({
-          url: endpoints.community.dating.mine,
-          method: 'GET',
-          authRequired: true
-        }),
-        request({
-          url: endpoints.community.dating.picks.sent,
-          method: 'GET',
-          authRequired: true
-        }),
-        request({
-          url: endpoints.community.dating.picks.received,
-          method: 'GET',
-          authRequired: true
-        })
-      ]).then(function(resultList) {
-        return {
-          success: true,
-          data: {
-            profiles: resultList[0].data || [],
-            sent: resultList[1].data || [],
-            received: resultList[2].data || []
-          }
-        }
-      }).catch(function() {
-        return { success: false, data: { profiles: [], sent: [], received: [] } }
-      })
-    default:
-      return Promise.reject(new Error('未识别的社区模块'))
-  }
+  return Promise.reject(new Error('未识别的社区模块'))
 }
 
 function publish(moduleId, payload) {
@@ -141,24 +64,7 @@ function publish(moduleId, payload) {
     return handler.publish(payload)
   }
 
-  switch (moduleId) {
-    case 'delivery':
-      return requestForm({
-        url: endpoints.community.delivery.publish,
-        method: 'POST',
-        authRequired: true,
-        data: encodeForm(payload)
-      })
-    case 'dating':
-      return requestForm({
-        url: endpoints.community.dating.publish,
-        method: 'POST',
-        authRequired: true,
-        data: encodeForm(payload)
-      })
-    default:
-      return Promise.reject(new Error('未识别的社区模块'))
-  }
+  return Promise.reject(new Error('未识别的社区模块'))
 }
 
 function updateSecondhandItem(id, payload) {

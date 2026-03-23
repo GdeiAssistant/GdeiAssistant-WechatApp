@@ -12,21 +12,7 @@ function buildTabs(moduleId) {
     return handler.buildCenterTabs()
   }
 
-  switch (moduleId) {
-    case 'delivery':
-      return [
-        { key: 'published', label: i18n.t('community.center.tabMyPublished') },
-        { key: 'accepted', label: i18n.t('community.center.tabMyAccepted') }
-      ]
-    case 'dating':
-      return [
-        { key: 'received', label: i18n.t('community.center.tabReceivedPick') },
-        { key: 'sent', label: i18n.t('community.center.tabSentPick') },
-        { key: 'posts', label: i18n.t('community.center.tabMyPosts') }
-      ]
-    default:
-      return []
-  }
+  return []
 }
 
 function normalizeStandardItem(item, options) {
@@ -82,79 +68,8 @@ Page({
       return handler.normalizeCenterData(payload, normalizeStandardItem)
     }
 
-    switch (moduleId) {
-      case 'delivery':
-        return {
-          published: (payload.published || []).map(function(item) {
-            return normalizeStandardItem(item, {
-              id: item.orderId,
-              title: item.company || i18n.t('community.modules.delivery.title'),
-              subtitle: item.orderTime,
-              summary: item.address,
-              priceText: Number(item.price || 0).toFixed(2),
-              actions: []
-            })
-          }),
-          accepted: (payload.accepted || []).map(function(item) {
-            return normalizeStandardItem(item, {
-              id: item.orderId,
-              title: item.company || i18n.t('community.modules.delivery.title'),
-              subtitle: item.orderTime,
-              summary: item.address,
-              priceText: Number(item.price || 0).toFixed(2),
-              actions: []
-            })
-          })
-        }
-      case 'dating':
-        return {
-          received: (payload.received || []).map(function(item) {
-            const profile = item.roommateProfile || {}
-            return {
-              id: item.pickId,
-              title: profile.nickname || item.username || i18n.t('community.list.anonStudent'),
-              subtitle: item.createTime || '',
-              summary: item.content || '',
-              cover: profile.pictureURL || '/image/dating.png',
-              status: Number(item.state || 0),
-              actions: Number(item.state || 0) === 0 ? [
-                { id: 'acceptPick', label: i18n.t('community.center.actionAccept') },
-                { id: 'rejectPick', label: i18n.t('community.center.actionReject') }
-              ] : []
-            }
-          }),
-          sent: (payload.sent || []).map(function(item) {
-            const profile = item.roommateProfile || {}
-            return {
-              id: item.pickId,
-              title: profile.nickname || i18n.t('community.list.anonStudent'),
-              subtitle: item.createTime || '',
-              summary: item.content || '',
-              cover: profile.pictureURL || '/image/dating.png',
-              status: Number(item.state || 0),
-              qq: Number(item.state || 0) === 1 ? (profile.qq || '') : '',
-              wechat: Number(item.state || 0) === 1 ? (profile.wechat || '') : '',
-              actions: []
-            }
-          }),
-          posts: (payload.profiles || []).map(function(item) {
-            return {
-              id: item.profileId,
-              title: item.nickname || i18n.t('community.modules.dating.title'),
-              subtitle: item.createTime || '',
-              summary: item.content || '',
-              cover: item.pictureURL || '/image/dating.png',
-              status: Number(item.state || 0),
-              actions: [
-                { id: 'hideProfile', label: i18n.t('community.center.actionHide') }
-              ]
-            }
-          })
-        }
-      default:
-        return {
-          default: []
-        }
+    return {
+      default: []
     }
   },
 
