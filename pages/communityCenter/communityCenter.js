@@ -1,24 +1,18 @@
 const { getCommunityModule, getCommunityPageTitle } = require('../../constants/community.js')
 const communityApi = require('../../services/apis/community.js')
+const { getModuleHandler } = require('../../services/community/registry.js')
 const userApi = require('../../services/apis/user.js')
 const pageUtils = require('../../utils/page.js')
 const i18n = require('../../utils/i18n.js')
 var themeUtil = require('../../utils/theme')
 
 function buildTabs(moduleId) {
+  var handler = getModuleHandler(moduleId)
+  if (handler && handler.buildCenterTabs) {
+    return handler.buildCenterTabs()
+  }
+
   switch (moduleId) {
-    case 'ershou':
-      return [
-        { key: 'doing', label: i18n.t('community.center.tabSelling') },
-        { key: 'sold', label: i18n.t('community.center.tabSold') },
-        { key: 'off', label: i18n.t('community.center.tabOffShelf') }
-      ]
-    case 'lostandfound':
-      return [
-        { key: 'lost', label: i18n.t('community.center.tabLost') },
-        { key: 'found', label: i18n.t('community.center.tabFound') },
-        { key: 'didfound', label: i18n.t('community.center.tabRecovered') }
-      ]
     case 'delivery':
       return [
         { key: 'published', label: i18n.t('community.center.tabMyPublished') },
@@ -83,92 +77,12 @@ Page({
   },
 
   normalizeCenterData: function(moduleId, payload) {
+    var handler = getModuleHandler(moduleId)
+    if (handler && handler.normalizeCenterData) {
+      return handler.normalizeCenterData(payload, normalizeStandardItem)
+    }
+
     switch (moduleId) {
-      case 'ershou':
-        return {
-          doing: (payload.doing || []).map(function(item) {
-            return normalizeStandardItem(item, {
-              id: item.id,
-              title: item.name,
-              subtitle: item.publishTime,
-              summary: item.location,
-              cover: item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
-              priceText: Number(item.price || 0).toFixed(2),
-              actions: [
-                { id: 'edit', label: i18n.t('community.center.actionEdit') },
-                { id: 'state:0', label: i18n.t('community.center.actionOffShelf') },
-                { id: 'state:2', label: i18n.t('community.center.actionSold') }
-              ]
-            })
-          }),
-          sold: (payload.sold || []).map(function(item) {
-            return normalizeStandardItem(item, {
-              id: item.id,
-              title: item.name,
-              subtitle: item.publishTime,
-              summary: item.location,
-              cover: item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
-              priceText: Number(item.price || 0).toFixed(2),
-              actions: [],
-              canOpenDetail: false
-            })
-          }),
-          off: (payload.off || []).map(function(item) {
-            return normalizeStandardItem(item, {
-              id: item.id,
-              title: item.name,
-              subtitle: item.publishTime,
-              summary: item.location,
-              cover: item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
-              priceText: Number(item.price || 0).toFixed(2),
-              actions: [
-                { id: 'edit', label: i18n.t('community.center.actionEdit') },
-                { id: 'state:1', label: i18n.t('community.center.actionRelist') }
-              ],
-              canOpenDetail: false
-            })
-          })
-        }
-      case 'lostandfound':
-        return {
-          lost: (payload.lost || []).map(function(item) {
-            return normalizeStandardItem(item, {
-              id: item.id,
-              title: item.name,
-              subtitle: item.publishTime,
-              summary: item.location,
-              cover: item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/lostandfound.png',
-              actions: [
-                { id: 'edit', label: i18n.t('community.center.actionEdit') },
-                { id: 'didfound', label: i18n.t('community.center.actionConfirmFound') }
-              ]
-            })
-          }),
-          found: (payload.found || []).map(function(item) {
-            return normalizeStandardItem(item, {
-              id: item.id,
-              title: item.name,
-              subtitle: item.publishTime,
-              summary: item.location,
-              cover: item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/lostandfound.png',
-              actions: [
-                { id: 'edit', label: i18n.t('community.center.actionEdit') },
-                { id: 'didfound', label: i18n.t('community.center.actionConfirmFound') }
-              ]
-            })
-          }),
-          didfound: (payload.didfound || []).map(function(item) {
-            return normalizeStandardItem(item, {
-              id: item.id,
-              title: item.name,
-              subtitle: item.publishTime,
-              summary: item.location,
-              cover: item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/lostandfound.png',
-              actions: [],
-              canOpenDetail: false
-            })
-          })
-        }
       case 'secret':
         return {
           default: (payload || []).map(function(item) {
@@ -295,7 +209,10 @@ Page({
   },
 
   loadSummaryProfile: function() {
-    if (['ershou', 'lostandfound'].indexOf(this.data.moduleId) === -1) {
+    var handler = getModuleHandler(this.data.moduleId)
+    var shouldShowProfile = handler ? !!handler.showSummaryProfile : (['ershou', 'lostandfound'].indexOf(this.data.moduleId) !== -1)
+
+    if (!shouldShowProfile) {
       this.setData({
         summaryProfile: null
       })

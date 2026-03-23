@@ -1,6 +1,7 @@
 const endpoints = require('../endpoints.js')
 const { request } = require('../request.js')
 const { encodeForm } = require('../../utils/form.js')
+const { getModuleHandler } = require('../community/registry.js')
 
 function requestForm(options) {
   return request(Object.assign({}, options, {
@@ -9,48 +10,17 @@ function requestForm(options) {
 }
 
 function getFeed(moduleId, options) {
+  var handler = getModuleHandler(moduleId)
+  if (handler && handler.getFeed) {
+    return handler.getFeed(options)
+  }
+
   const config = options || {}
   const start = Number(config.start || 0)
   const size = Number(config.size || 10)
   const keyword = String(config.keyword || '').trim()
 
   switch (moduleId) {
-    case 'marketplace':
-      if (keyword) {
-        return request({
-          url: endpoints.community.secondhand.keyword(encodeURIComponent(keyword), start),
-          method: 'GET',
-          authRequired: true
-        })
-      }
-      if (typeof config.type === 'number' && config.type >= 0) {
-        return request({
-          url: endpoints.community.secondhand.type(config.type, start),
-          method: 'GET',
-          authRequired: true
-        })
-      }
-      return request({
-        url: endpoints.community.secondhand.list(start),
-        method: 'GET',
-        authRequired: true
-      })
-    case 'lostandfound':
-      if (keyword) {
-        return requestForm({
-          url: endpoints.community.lostAndFound.search(config.mode || 0, start),
-          method: 'POST',
-          authRequired: true,
-          data: encodeForm({ keyword: keyword })
-        })
-      }
-      return request({
-        url: Number(config.mode || 0) === 0
-          ? endpoints.community.lostAndFound.lost(start)
-          : endpoints.community.lostAndFound.found(start),
-        method: 'GET',
-        authRequired: true
-      })
     case 'secret':
       return request({
         url: endpoints.community.secret.list(start, size),
@@ -97,19 +67,12 @@ function getFeed(moduleId, options) {
 }
 
 function getDetail(moduleId, id) {
+  var handler = getModuleHandler(moduleId)
+  if (handler && handler.getDetail) {
+    return handler.getDetail(id)
+  }
+
   switch (moduleId) {
-    case 'marketplace':
-      return request({
-        url: endpoints.community.secondhand.detail(id),
-        method: 'GET',
-        authRequired: true
-      })
-    case 'lostandfound':
-      return request({
-        url: endpoints.community.lostAndFound.detail(id),
-        method: 'GET',
-        authRequired: true
-      })
     case 'secret':
       return request({
         url: endpoints.community.secret.detail(id),
@@ -180,23 +143,16 @@ function getComments(moduleId, id) {
 }
 
 function getCenter(moduleId, options) {
+  var handler = getModuleHandler(moduleId)
+  if (handler && handler.getCenter) {
+    return handler.getCenter(options)
+  }
+
   const config = options || {}
   const start = Number(config.start || 0)
   const size = Number(config.size || 10)
 
   switch (moduleId) {
-    case 'marketplace':
-      return request({
-        url: endpoints.community.secondhand.profile,
-        method: 'GET',
-        authRequired: true
-      })
-    case 'lostandfound':
-      return request({
-        url: endpoints.community.lostAndFound.profile,
-        method: 'GET',
-        authRequired: true
-      })
     case 'secret':
       return request({
         url: endpoints.community.secret.profile,
@@ -262,21 +218,12 @@ function getCenter(moduleId, options) {
 }
 
 function publish(moduleId, payload) {
+  var handler = getModuleHandler(moduleId)
+  if (handler && handler.publish) {
+    return handler.publish(payload)
+  }
+
   switch (moduleId) {
-    case 'marketplace':
-      return requestForm({
-        url: endpoints.community.secondhand.publish,
-        method: 'POST',
-        authRequired: true,
-        data: encodeForm(payload)
-      })
-    case 'lostandfound':
-      return requestForm({
-        url: endpoints.community.lostAndFound.publish,
-        method: 'POST',
-        authRequired: true,
-        data: encodeForm(payload)
-      })
     case 'secret':
       return requestForm({
         url: endpoints.community.secret.publish,
