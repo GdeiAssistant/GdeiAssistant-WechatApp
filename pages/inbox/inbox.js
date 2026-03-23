@@ -214,6 +214,7 @@ Page({
       })
     }).catch((error) => {
       pageUtils.showTopTips(this, error.message)
+      return Promise.reject(error)
     })
   },
 
@@ -228,8 +229,11 @@ Page({
     })
 
     if (nextTab === 'interaction' && !this.data.interactionLoaded) {
-      this.loadInteractionList(1, true).then(() => {
-        this.setData({ interactionLoaded: true })
+      var self = this
+      this.loadInteractionList(1, true).then(function() {
+        self.setData({ interactionLoaded: true })
+      }).catch(function() {
+        // Keep interactionLoaded false so next tab switch retries
       })
     }
   },
@@ -353,6 +357,8 @@ Page({
     } else {
       refreshTask = this.refreshInteraction().then(function() {
         self.setData({ interactionLoaded: true })
+      }).catch(function() {
+        // Keep interactionLoaded unchanged on refresh failure
       })
     }
 
