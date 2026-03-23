@@ -188,7 +188,7 @@ function createPageInstance() {
   return instance
 }
 
-test('photograph detail does NOT make separate getComments call', async function() {
+test('photograph detail makes no separate getComments call — comments are embedded in detail response', async function() {
   apiCallLog = []
   var page = createPageInstance()
   page.onLoad({ module: 'photograph', id: '42' })

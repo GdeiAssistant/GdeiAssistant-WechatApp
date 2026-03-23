@@ -94,7 +94,7 @@ function createPageInstance() {
   return instance
 }
 
-test('onLoad does NOT call getInteractionList', async function() {
+test('initial load does NOT call interaction list — zero getInteractionList requests on onLoad', async function() {
   apiCallLog = []
   var page = createPageInstance()
   page.onLoad()
