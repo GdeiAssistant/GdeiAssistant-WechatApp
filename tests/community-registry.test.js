@@ -26,6 +26,8 @@ clearModule(path.join(ROOT, 'services/community/module-handlers/secret.js'))
 clearModule(path.join(ROOT, 'services/community/module-handlers/express.js'))
 clearModule(path.join(ROOT, 'services/community/module-handlers/topic.js'))
 clearModule(path.join(ROOT, 'services/community/module-handlers/photograph.js'))
+clearModule(path.join(ROOT, 'services/community/module-handlers/delivery.js'))
+clearModule(path.join(ROOT, 'services/community/module-handlers/dating.js'))
 clearModule(path.join(ROOT, 'services/community/registry.js'))
 
 const { getModuleHandler } = require(path.join(ROOT, 'services/community/registry.js'))
@@ -306,4 +308,171 @@ test('photograph normalizeItem uses default cover when no images', function() {
   })
 
   assert.equal(result.cover, '/image/photograph.png')
+})
+
+test('delivery handler has expected shape', function() {
+  const handler = getModuleHandler('delivery')
+
+  assert.ok(handler, 'delivery handler should exist')
+  assert.equal(typeof handler.getFeed, 'function', 'should have getFeed')
+  assert.equal(typeof handler.buildListTabs, 'function', 'should have buildListTabs')
+  assert.equal(typeof handler.normalizeItem, 'function', 'should have normalizeItem')
+  assert.equal(typeof handler.getDetail, 'function', 'should have getDetail')
+  assert.equal(typeof handler.getCenter, 'function', 'should have getCenter')
+  assert.equal(typeof handler.publish, 'function', 'should have publish')
+  assert.equal(typeof handler.buildFeedOptions, 'function', 'should have buildFeedOptions')
+  assert.equal(typeof handler.buildCenterTabs, 'function', 'should have buildCenterTabs')
+  assert.equal(typeof handler.normalizeCenterData, 'function', 'should have normalizeCenterData')
+  assert.equal(typeof handler.filterFeedResults, 'function', 'should have filterFeedResults')
+})
+
+test('dating handler has expected shape', function() {
+  const handler = getModuleHandler('dating')
+
+  assert.ok(handler, 'dating handler should exist')
+  assert.equal(typeof handler.getFeed, 'function', 'should have getFeed')
+  assert.equal(typeof handler.buildListTabs, 'function', 'should have buildListTabs')
+  assert.equal(typeof handler.normalizeItem, 'function', 'should have normalizeItem')
+  assert.equal(typeof handler.getDetail, 'function', 'should have getDetail')
+  assert.equal(typeof handler.getCenter, 'function', 'should have getCenter')
+  assert.equal(typeof handler.publish, 'function', 'should have publish')
+  assert.equal(typeof handler.buildFeedOptions, 'function', 'should have buildFeedOptions')
+  assert.equal(typeof handler.buildCenterTabs, 'function', 'should have buildCenterTabs')
+  assert.equal(typeof handler.normalizeCenterData, 'function', 'should have normalizeCenterData')
+})
+
+test('delivery normalizeItem produces expected shape', function() {
+  const handler = getModuleHandler('delivery')
+  const result = handler.normalizeItem({
+    orderId: 50,
+    company: 'EMS',
+    address: 'Building A',
+    price: 5.5,
+    state: 0,
+    remarks: 'Handle with care',
+    orderTime: '2025-07-01'
+  })
+
+  assert.equal(result.id, 50)
+  assert.equal(result.title, 'EMS')
+  assert.equal(result.summary, 'Building A')
+  assert.equal(result.priceText, '5.50')
+  assert.ok(result.badgeText, 'should have a badge text')
+  assert.equal(result.metaText, 'Handle with care')
+  assert.equal(result.timeText, '2025-07-01')
+  assert.ok(result.raw, 'should preserve raw item')
+})
+
+test('dating normalizeItem produces expected shape', function() {
+  const handler = getModuleHandler('dating')
+  const result = handler.normalizeItem({
+    profileId: 60,
+    nickname: 'Alice',
+    content: 'Looking for roommate',
+    pictureURL: '/img/alice.png',
+    grade: 2,
+    faculty: 'Computer Science',
+    hometown: 'Beijing'
+  })
+
+  assert.equal(result.id, 60)
+  assert.equal(result.title, 'Alice')
+  assert.equal(result.summary, 'Looking for roommate')
+  assert.equal(result.cover, '/img/alice.png')
+  assert.ok(result.badgeText, 'should have a badge text')
+  assert.equal(result.metaText, 'Computer Science')
+  assert.equal(result.timeText, 'Beijing')
+  assert.ok(result.raw, 'should preserve raw item')
+})
+
+test('dating normalizeItem uses default cover when pictureURL is missing', function() {
+  const handler = getModuleHandler('dating')
+  const result = handler.normalizeItem({
+    profileId: 61,
+    nickname: 'Bob'
+  })
+
+  assert.equal(result.cover, '/image/dating.png')
+})
+
+test('delivery buildFeedOptions returns base options without modification', function() {
+  const handler = getModuleHandler('delivery')
+  const result = handler.buildFeedOptions(
+    { start: 0, size: 10, keyword: '' },
+    { value: 1 }
+  )
+  assert.equal(result.start, 0)
+  assert.equal(result.size, 10)
+})
+
+test('dating buildFeedOptions sets area from activeTab', function() {
+  const handler = getModuleHandler('dating')
+  const result = handler.buildFeedOptions(
+    { start: 0, size: 10, keyword: '' },
+    { value: 1 }
+  )
+  assert.equal(result.area, 1)
+})
+
+test('delivery filterFeedResults filters by status', function() {
+  const handler = getModuleHandler('delivery')
+  const list = [
+    { orderId: 1, state: 0 },
+    { orderId: 2, state: 1 },
+    { orderId: 3, state: 0 }
+  ]
+  const filtered = handler.filterFeedResults(list, { value: 0 })
+  assert.equal(filtered.length, 2)
+  assert.equal(filtered[0].orderId, 1)
+  assert.equal(filtered[1].orderId, 3)
+})
+
+test('delivery filterFeedResults returns all when no filter', function() {
+  const handler = getModuleHandler('delivery')
+  const list = [
+    { orderId: 1, state: 0 },
+    { orderId: 2, state: 1 }
+  ]
+  const filtered = handler.filterFeedResults(list, { value: -1 })
+  assert.equal(filtered.length, 2)
+})
+
+test('delivery normalizeCenterData produces published and accepted lists', function() {
+  const handler = getModuleHandler('delivery')
+  const normalizeStandardItem = function(item, options) {
+    return { id: options.id, title: options.title }
+  }
+  const result = handler.normalizeCenterData({
+    published: [{ orderId: 1, company: 'SF' }],
+    accepted: [{ orderId: 2, company: 'EMS' }]
+  }, normalizeStandardItem)
+
+  assert.ok(Array.isArray(result.published), 'should have published list')
+  assert.ok(Array.isArray(result.accepted), 'should have accepted list')
+  assert.equal(result.published.length, 1)
+  assert.equal(result.accepted.length, 1)
+  assert.equal(result.published[0].id, 1)
+  assert.equal(result.accepted[0].id, 2)
+})
+
+test('dating normalizeCenterData produces received, sent, and posts lists', function() {
+  const handler = getModuleHandler('dating')
+  const result = handler.normalizeCenterData({
+    received: [{ pickId: 10, roommateProfile: { nickname: 'A' }, state: 0, content: 'Hi' }],
+    sent: [{ pickId: 20, roommateProfile: { nickname: 'B' }, state: 1, content: 'Hello' }],
+    profiles: [{ profileId: 30, nickname: 'C', content: 'Intro' }]
+  })
+
+  assert.ok(Array.isArray(result.received), 'should have received list')
+  assert.ok(Array.isArray(result.sent), 'should have sent list')
+  assert.ok(Array.isArray(result.posts), 'should have posts list')
+  assert.equal(result.received.length, 1)
+  assert.equal(result.sent.length, 1)
+  assert.equal(result.posts.length, 1)
+  assert.equal(result.received[0].id, 10)
+  assert.equal(result.received[0].actions.length, 2, 'pending pick should have accept/reject actions')
+  assert.equal(result.sent[0].id, 20)
+  assert.ok(result.sent[0].qq !== undefined, 'accepted sent pick should expose qq')
+  assert.equal(result.posts[0].id, 30)
+  assert.equal(result.posts[0].actions.length, 1, 'post should have hide action')
 })
