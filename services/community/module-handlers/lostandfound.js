@@ -7,6 +7,21 @@ const {
   getLostFoundItemDictionaryOptions
 } = require('../../../constants/community.js')
 
+var LOST_FOUND_NAME_MAX_LENGTH = 25
+var LOST_FOUND_DESCRIPTION_MAX_LENGTH = 100
+var LOST_FOUND_LOCATION_MAX_LENGTH = 30
+var LOST_FOUND_QQ_MAX_LENGTH = 20
+var LOST_FOUND_WECHAT_MAX_LENGTH = 20
+var CONTACT_PHONE_MAX_LENGTH = 11
+
+function trimValue(value) {
+  return String(value || '').trim()
+}
+
+function getMaxLengthMessage(value, maxLength, message) {
+  return trimValue(value).length > maxLength ? message : ''
+}
+
 function findLabel(options, value, fallback) {
   const item = (options || []).filter(function(optionItem) {
     return Number(optionItem.value) === Number(value) || Number(optionItem.feedValue) === Number(value)
@@ -151,5 +166,108 @@ module.exports = {
   // --- Center page: show summary profile ---
   showSummaryProfile: true,
 
-  searchable: true
+  searchable: true,
+
+  // --- Publish: validate form ---
+  validateForm: function(data) {
+    var form = data.form || {}
+    var isEditMode = data.isEditMode
+    var images = data.images || []
+
+    var name = trimValue(form.name)
+    var description = trimValue(form.description)
+    var location = trimValue(form.location)
+    var qq = trimValue(form.qq)
+    var wechat = trimValue(form.wechat)
+    var phone = trimValue(form.phone)
+
+    if (!name) return i18n.t('community.publish.v.itemNameRequired')
+    if (getMaxLengthMessage(name, LOST_FOUND_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.itemNameTooLong', { max: LOST_FOUND_NAME_MAX_LENGTH }))) return getMaxLengthMessage(name, LOST_FOUND_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.itemNameTooLong', { max: LOST_FOUND_NAME_MAX_LENGTH }))
+    if (!description) return i18n.t('community.publish.v.itemDescRequired')
+    if (getMaxLengthMessage(description, LOST_FOUND_DESCRIPTION_MAX_LENGTH, i18n.tReplace('community.publish.v.itemDescTooLong', { max: LOST_FOUND_DESCRIPTION_MAX_LENGTH }))) return getMaxLengthMessage(description, LOST_FOUND_DESCRIPTION_MAX_LENGTH, i18n.tReplace('community.publish.v.itemDescTooLong', { max: LOST_FOUND_DESCRIPTION_MAX_LENGTH }))
+    if (!location) return i18n.t('community.publish.v.locationRequired2')
+    if (getMaxLengthMessage(location, LOST_FOUND_LOCATION_MAX_LENGTH, i18n.tReplace('community.publish.v.locationTooLong2', { max: LOST_FOUND_LOCATION_MAX_LENGTH }))) return getMaxLengthMessage(location, LOST_FOUND_LOCATION_MAX_LENGTH, i18n.tReplace('community.publish.v.locationTooLong2', { max: LOST_FOUND_LOCATION_MAX_LENGTH }))
+    if (getMaxLengthMessage(qq, LOST_FOUND_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong2', { max: LOST_FOUND_QQ_MAX_LENGTH }))) return getMaxLengthMessage(qq, LOST_FOUND_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong2', { max: LOST_FOUND_QQ_MAX_LENGTH }))
+    if (getMaxLengthMessage(wechat, LOST_FOUND_WECHAT_MAX_LENGTH, i18n.tReplace('community.publish.v.wechatTooLong', { max: LOST_FOUND_WECHAT_MAX_LENGTH }))) return getMaxLengthMessage(wechat, LOST_FOUND_WECHAT_MAX_LENGTH, i18n.tReplace('community.publish.v.wechatTooLong', { max: LOST_FOUND_WECHAT_MAX_LENGTH }))
+    if (getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.phoneTooLong2', { max: CONTACT_PHONE_MAX_LENGTH }))) return getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.phoneTooLong2', { max: CONTACT_PHONE_MAX_LENGTH }))
+    if (!qq && !wechat && !phone) {
+      return i18n.t('community.publish.v.contactRequired')
+    }
+    if (!isEditMode && !images.length) return i18n.t('community.publish.v.imageRequired')
+    return ''
+  },
+
+  // --- Publish: build payload ---
+  buildPublishPayload: function(data, uploadFiles) {
+    var form = data.form || {}
+    var isEditMode = data.isEditMode
+    var images = data.images || []
+    var lostFoundModeOptions = data.lostFoundModeOptions || []
+    var lostFoundModeIndex = data.lostFoundModeIndex || 0
+    var lostFoundItemOptions = data.lostFoundItemOptions || []
+    var lostFoundItemIndex = data.lostFoundItemIndex || 0
+
+    if (isEditMode) {
+      return Promise.resolve({
+        name: String(form.name || '').trim(),
+        description: String(form.description || '').trim(),
+        location: String(form.location || '').trim(),
+        lostType: lostFoundModeOptions[lostFoundModeIndex].value,
+        itemType: lostFoundItemOptions[lostFoundItemIndex].value,
+        qq: String(form.qq || '').trim(),
+        wechat: String(form.wechat || '').trim(),
+        phone: String(form.phone || '').trim()
+      })
+    }
+    return uploadFiles(images).then(function(imageKeys) {
+      return {
+        name: String(form.name || '').trim(),
+        description: String(form.description || '').trim(),
+        location: String(form.location || '').trim(),
+        lostType: lostFoundModeOptions[lostFoundModeIndex].value,
+        itemType: lostFoundItemOptions[lostFoundItemIndex].value,
+        qq: String(form.qq || '').trim(),
+        wechat: String(form.wechat || '').trim(),
+        phone: String(form.phone || '').trim(),
+        imageKeys: imageKeys
+      }
+    })
+  },
+
+  // --- Detail: build detail view ---
+  buildDetailView: function(payload) {
+    var item = payload.item || {}
+    var profile = payload.profile || {}
+    var locationLabel = Number(item.lostType) === 0 ? i18n.t('community.detail.lostLocation') : i18n.t('community.detail.foundLocation')
+    return {
+      images: item.pictureURL || [],
+      title: item.name || i18n.t('community.detail.lostDetail'),
+      subtitle: locationLabel + '\uff1a' + (item.location || i18n.t('community.detail.notFilled')),
+      description: item.description || '',
+      publishTime: item.publishTime || '',
+      sellerName: profile.nickname || profile.username || i18n.t('community.list.anonStudent'),
+      sellerAvatar: profile.avatarURL || '/image/default.png',
+      qq: item.qq || '',
+      wechat: item.wechat || '',
+      phone: item.phone || '',
+      typeLabel: findLabel(getLostFoundItemDictionaryOptions(), item.itemType, i18n.t('community.category.other')),
+      badgeText: Number(item.lostType) === 0 ? i18n.t('community.lostFoundMode.lostNotice') : i18n.t('community.lostFoundMode.foundNotice'),
+      canLike: false
+    }
+  },
+
+  // --- Comments ---
+  getComments: function() {
+    return Promise.resolve({ success: true, data: [] })
+  },
+
+  // --- Submit comment ---
+  submitComment: function() {
+    return Promise.reject(new Error('该模块暂不支持评论'))
+  },
+
+  // --- Toggle like ---
+  toggleLike: function() {
+    return Promise.reject(new Error('该模块暂不支持点赞'))
+  }
 }

@@ -3,8 +3,31 @@ const { request } = require('../../request.js')
 const { encodeForm } = require('../../../utils/form.js')
 const i18n = require('../../../utils/i18n.js')
 const {
-  getDeliveryStatusOptions
+  getDeliveryStatusOptions,
+  DELIVERY_DEFAULT_ORDER_NAME,
+  DELIVERY_PLACEHOLDER_PICKUP_CODE
 } = require('../../../constants/community.js')
+
+var DELIVERY_COMPANY_MAX_LENGTH = 10
+var DELIVERY_ADDRESS_MAX_LENGTH = 50
+var DELIVERY_REMARKS_MAX_LENGTH = 100
+var CONTACT_PHONE_MAX_LENGTH = 11
+
+function trimValue(value) {
+  return String(value || '').trim()
+}
+
+function getMaxLengthMessage(value, maxLength, message) {
+  return trimValue(value).length > maxLength ? message : ''
+}
+
+function getExactLengthMessage(value, expectedLength, message) {
+  var normalizedValue = trimValue(value)
+  if (!normalizedValue) {
+    return ''
+  }
+  return normalizedValue.length !== expectedLength ? message : ''
+}
 
 function findLabel(options, value, fallback) {
   var item = (options || []).filter(function(optionItem) {
@@ -134,5 +157,65 @@ module.exports = {
   // --- Center page: show summary profile ---
   showSummaryProfile: false,
 
-  searchable: false
+  searchable: false,
+
+  // --- Publish: validate form ---
+  validateForm: function(data) {
+    var form = data.form || {}
+
+    var pickupAddress = trimValue(form.pickupAddress)
+    var pickupCode = trimValue(form.pickupCode)
+    var deliveryAddress = trimValue(form.deliveryAddress)
+    var contactPhone = trimValue(form.contactPhone)
+    var description = trimValue(form.description)
+
+    if (!pickupAddress) return i18n.t('community.publish.v.pickupRequired')
+    if (getMaxLengthMessage(pickupAddress, DELIVERY_COMPANY_MAX_LENGTH, i18n.tReplace('community.publish.v.pickupTooLong', { max: DELIVERY_COMPANY_MAX_LENGTH }))) return getMaxLengthMessage(pickupAddress, DELIVERY_COMPANY_MAX_LENGTH, i18n.tReplace('community.publish.v.pickupTooLong', { max: DELIVERY_COMPANY_MAX_LENGTH }))
+    if (getExactLengthMessage(pickupCode, 11, i18n.t('community.publish.v.pickupCodeLength'))) return getExactLengthMessage(pickupCode, 11, i18n.t('community.publish.v.pickupCodeLength'))
+    if (!deliveryAddress) return i18n.t('community.publish.v.deliveryAddrRequired')
+    if (getMaxLengthMessage(deliveryAddress, DELIVERY_ADDRESS_MAX_LENGTH, i18n.tReplace('community.publish.v.deliveryAddrTooLong', { max: DELIVERY_ADDRESS_MAX_LENGTH }))) return getMaxLengthMessage(deliveryAddress, DELIVERY_ADDRESS_MAX_LENGTH, i18n.tReplace('community.publish.v.deliveryAddrTooLong', { max: DELIVERY_ADDRESS_MAX_LENGTH }))
+    if (!contactPhone) return i18n.t('community.publish.v.phoneRequired')
+    if (getMaxLengthMessage(contactPhone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.contactPhoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH }))) return getMaxLengthMessage(contactPhone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.contactPhoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH }))
+    if (getMaxLengthMessage(description, DELIVERY_REMARKS_MAX_LENGTH, i18n.tReplace('community.publish.v.remarksTooLong', { max: DELIVERY_REMARKS_MAX_LENGTH }))) return getMaxLengthMessage(description, DELIVERY_REMARKS_MAX_LENGTH, i18n.tReplace('community.publish.v.remarksTooLong', { max: DELIVERY_REMARKS_MAX_LENGTH }))
+    if (!(Number(form.reward || 0) > 0)) return i18n.t('community.publish.v.rewardInvalid')
+    return ''
+  },
+
+  // --- Publish: build payload ---
+  buildPublishPayload: function(data) {
+    var form = data.form || {}
+
+    return Promise.resolve({
+      name: DELIVERY_DEFAULT_ORDER_NAME,
+      number: String(form.pickupCode || '').trim() || DELIVERY_PLACEHOLDER_PICKUP_CODE,
+      phone: String(form.contactPhone || '').trim(),
+      price: Number(form.reward || 0),
+      company: String(form.pickupAddress || '').trim(),
+      address: String(form.deliveryAddress || '').trim(),
+      remarks: String(form.description || '').trim()
+    })
+  },
+
+  // --- Detail: build detail view ---
+  buildDetailView: function() {
+    return {
+      title: i18n.t('community.detail.detail'),
+      description: ''
+    }
+  },
+
+  // --- Comments ---
+  getComments: function() {
+    return Promise.resolve({ success: true, data: [] })
+  },
+
+  // --- Submit comment ---
+  submitComment: function() {
+    return Promise.reject(new Error('该模块暂不支持评论'))
+  },
+
+  // --- Toggle like ---
+  toggleLike: function() {
+    return Promise.reject(new Error('该模块暂不支持点赞'))
+  }
 }

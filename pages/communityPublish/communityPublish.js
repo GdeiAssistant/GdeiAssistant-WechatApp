@@ -9,12 +9,11 @@ const {
   getExpressGenderOptions,
   getDatingAreaOptions,
   getDatingGradeOptions,
-  getPhotographTabOptions,
-  DELIVERY_DEFAULT_ORDER_NAME,
-  DELIVERY_PLACEHOLDER_PICKUP_CODE
+  getPhotographTabOptions
 } = require('../../constants/community.js')
 const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
+const { getModuleHandler } = require('../../services/community/registry.js')
 const { uploadLocalFileByPresignedUrl, uploadLocalFilesByPresignedUrl } = require('../../services/upload.js')
 const pageUtils = require('../../utils/page.js')
 const i18n = require('../../utils/i18n.js')
@@ -24,49 +23,6 @@ const EDITABLE_MODULE_IDS = ['ershou', 'lostandfound']
 
 let recorderManager = null
 let secretAudioPlayer = null
-
-const SECONDHAND_NAME_MAX_LENGTH = 25
-const SECONDHAND_DESCRIPTION_MAX_LENGTH = 100
-const SECONDHAND_LOCATION_MAX_LENGTH = 30
-const SECONDHAND_QQ_MAX_LENGTH = 20
-const CONTACT_PHONE_MAX_LENGTH = 11
-const LOST_FOUND_NAME_MAX_LENGTH = 25
-const LOST_FOUND_DESCRIPTION_MAX_LENGTH = 100
-const LOST_FOUND_LOCATION_MAX_LENGTH = 30
-const LOST_FOUND_QQ_MAX_LENGTH = 20
-const LOST_FOUND_WECHAT_MAX_LENGTH = 20
-const SECRET_CONTENT_MAX_LENGTH = 100
-const EXPRESS_NAME_MAX_LENGTH = 10
-const EXPRESS_CONTENT_MAX_LENGTH = 250
-const TOPIC_KEYWORD_MAX_LENGTH = 15
-const TOPIC_CONTENT_MAX_LENGTH = 250
-const DELIVERY_COMPANY_MAX_LENGTH = 10
-const DELIVERY_ADDRESS_MAX_LENGTH = 50
-const DELIVERY_REMARKS_MAX_LENGTH = 100
-const DATING_NICKNAME_MAX_LENGTH = 15
-const DATING_FACULTY_MAX_LENGTH = 12
-const DATING_HOMETOWN_MAX_LENGTH = 10
-const DATING_QQ_MAX_LENGTH = 15
-const DATING_WECHAT_MAX_LENGTH = 20
-const DATING_CONTENT_MAX_LENGTH = 100
-const PHOTOGRAPH_TITLE_MAX_LENGTH = 25
-const PHOTOGRAPH_CONTENT_MAX_LENGTH = 50
-
-function trimValue(value) {
-  return String(value || '').trim()
-}
-
-function getMaxLengthMessage(value, maxLength, message) {
-  return trimValue(value).length > maxLength ? message : ''
-}
-
-function getExactLengthMessage(value, expectedLength, message) {
-  const normalizedValue = trimValue(value)
-  if (!normalizedValue) {
-    return ''
-  }
-  return normalizedValue.length !== expectedLength ? message : ''
-}
 
 function pickTempFileName(filePath, fallbackName) {
   if (!filePath) {
@@ -282,15 +238,9 @@ Page({
   },
 
   getImageLimit: function(moduleId) {
-    const currentModuleId = moduleId || this.data.moduleId
-    switch (currentModuleId) {
-      case 'topic':
-        return 9
-      case 'photograph':
-        return 4
-      default:
-        return 4
-    }
+    var currentModuleId = moduleId || this.data.moduleId
+    var handler = getModuleHandler(currentModuleId)
+    return (handler && handler.imageLimit) ? handler.imageLimit : 4
   },
 
   chooseImages: function() {
@@ -440,220 +390,19 @@ Page({
   },
 
   validateForm: function() {
-    const moduleId = this.data.moduleId
-    const form = this.data.form || {}
-
-    switch (moduleId) {
-      case 'ershou': {
-        const name = trimValue(form.name)
-        const description = trimValue(form.description)
-        const location = trimValue(form.location)
-        const qq = trimValue(form.qq)
-        const phone = trimValue(form.phone)
-
-        if (!name) return i18n.t('community.publish.v.productNameRequired')
-        if (getMaxLengthMessage(name, SECONDHAND_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.productNameTooLong', { max: SECONDHAND_NAME_MAX_LENGTH }))) return getMaxLengthMessage(name, SECONDHAND_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.productNameTooLong', { max: SECONDHAND_NAME_MAX_LENGTH }))
-        if (!description) return i18n.t('community.publish.v.productDescRequired')
-        if (getMaxLengthMessage(description, SECONDHAND_DESCRIPTION_MAX_LENGTH, i18n.tReplace('community.publish.v.productDescTooLong', { max: SECONDHAND_DESCRIPTION_MAX_LENGTH }))) return getMaxLengthMessage(description, SECONDHAND_DESCRIPTION_MAX_LENGTH, i18n.tReplace('community.publish.v.productDescTooLong', { max: SECONDHAND_DESCRIPTION_MAX_LENGTH }))
-        if (!(Number(form.price || 0) > 0)) return i18n.t('community.publish.v.priceInvalid')
-        if (!location) return i18n.t('community.publish.v.locationRequired')
-        if (getMaxLengthMessage(location, SECONDHAND_LOCATION_MAX_LENGTH, i18n.tReplace('community.publish.v.locationTooLong', { max: SECONDHAND_LOCATION_MAX_LENGTH }))) return getMaxLengthMessage(location, SECONDHAND_LOCATION_MAX_LENGTH, i18n.tReplace('community.publish.v.locationTooLong', { max: SECONDHAND_LOCATION_MAX_LENGTH }))
-        if (!qq) return i18n.t('community.publish.v.qqRequired')
-        if (getMaxLengthMessage(qq, SECONDHAND_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong', { max: SECONDHAND_QQ_MAX_LENGTH }))) return getMaxLengthMessage(qq, SECONDHAND_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong', { max: SECONDHAND_QQ_MAX_LENGTH }))
-        if (getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.phoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH }))) return getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.phoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH }))
-        if (!this.data.isEditMode && !this.data.images.length) return i18n.t('community.publish.v.imageRequired')
-        return ''
-      }
-      case 'lostandfound': {
-        const name = trimValue(form.name)
-        const description = trimValue(form.description)
-        const location = trimValue(form.location)
-        const qq = trimValue(form.qq)
-        const wechat = trimValue(form.wechat)
-        const phone = trimValue(form.phone)
-
-        if (!name) return i18n.t('community.publish.v.itemNameRequired')
-        if (getMaxLengthMessage(name, LOST_FOUND_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.itemNameTooLong', { max: LOST_FOUND_NAME_MAX_LENGTH }))) return getMaxLengthMessage(name, LOST_FOUND_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.itemNameTooLong', { max: LOST_FOUND_NAME_MAX_LENGTH }))
-        if (!description) return i18n.t('community.publish.v.itemDescRequired')
-        if (getMaxLengthMessage(description, LOST_FOUND_DESCRIPTION_MAX_LENGTH, i18n.tReplace('community.publish.v.itemDescTooLong', { max: LOST_FOUND_DESCRIPTION_MAX_LENGTH }))) return getMaxLengthMessage(description, LOST_FOUND_DESCRIPTION_MAX_LENGTH, i18n.tReplace('community.publish.v.itemDescTooLong', { max: LOST_FOUND_DESCRIPTION_MAX_LENGTH }))
-        if (!location) return i18n.t('community.publish.v.locationRequired2')
-        if (getMaxLengthMessage(location, LOST_FOUND_LOCATION_MAX_LENGTH, i18n.tReplace('community.publish.v.locationTooLong2', { max: LOST_FOUND_LOCATION_MAX_LENGTH }))) return getMaxLengthMessage(location, LOST_FOUND_LOCATION_MAX_LENGTH, i18n.tReplace('community.publish.v.locationTooLong2', { max: LOST_FOUND_LOCATION_MAX_LENGTH }))
-        if (getMaxLengthMessage(qq, LOST_FOUND_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong2', { max: LOST_FOUND_QQ_MAX_LENGTH }))) return getMaxLengthMessage(qq, LOST_FOUND_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong2', { max: LOST_FOUND_QQ_MAX_LENGTH }))
-        if (getMaxLengthMessage(wechat, LOST_FOUND_WECHAT_MAX_LENGTH, i18n.tReplace('community.publish.v.wechatTooLong', { max: LOST_FOUND_WECHAT_MAX_LENGTH }))) return getMaxLengthMessage(wechat, LOST_FOUND_WECHAT_MAX_LENGTH, i18n.tReplace('community.publish.v.wechatTooLong', { max: LOST_FOUND_WECHAT_MAX_LENGTH }))
-        if (getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.phoneTooLong2', { max: CONTACT_PHONE_MAX_LENGTH }))) return getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.phoneTooLong2', { max: CONTACT_PHONE_MAX_LENGTH }))
-        if (!qq && !wechat && !phone) {
-          return i18n.t('community.publish.v.contactRequired')
-        }
-        if (!this.data.isEditMode && !this.data.images.length) return i18n.t('community.publish.v.imageRequired')
-        return ''
-      }
-      case 'topic': {
-        const topic = trimValue(form.topic)
-        const content = trimValue(form.content)
-
-        if (!topic) return i18n.t('community.publish.v.topicRequired')
-        if (getMaxLengthMessage(topic, TOPIC_KEYWORD_MAX_LENGTH, i18n.tReplace('community.publish.v.topicTooLong', { max: TOPIC_KEYWORD_MAX_LENGTH }))) return getMaxLengthMessage(topic, TOPIC_KEYWORD_MAX_LENGTH, i18n.tReplace('community.publish.v.topicTooLong', { max: TOPIC_KEYWORD_MAX_LENGTH }))
-        if (!content) return i18n.t('community.publish.v.topicContentRequired')
-        if (getMaxLengthMessage(content, TOPIC_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.topicContentTooLong', { max: TOPIC_CONTENT_MAX_LENGTH }))) return getMaxLengthMessage(content, TOPIC_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.topicContentTooLong', { max: TOPIC_CONTENT_MAX_LENGTH }))
-        return ''
-      }
-      case 'delivery': {
-        const pickupAddress = trimValue(form.pickupAddress)
-        const pickupCode = trimValue(form.pickupCode)
-        const deliveryAddress = trimValue(form.deliveryAddress)
-        const contactPhone = trimValue(form.contactPhone)
-        const description = trimValue(form.description)
-
-        if (!pickupAddress) return i18n.t('community.publish.v.pickupRequired')
-        if (getMaxLengthMessage(pickupAddress, DELIVERY_COMPANY_MAX_LENGTH, i18n.tReplace('community.publish.v.pickupTooLong', { max: DELIVERY_COMPANY_MAX_LENGTH }))) return getMaxLengthMessage(pickupAddress, DELIVERY_COMPANY_MAX_LENGTH, i18n.tReplace('community.publish.v.pickupTooLong', { max: DELIVERY_COMPANY_MAX_LENGTH }))
-        if (getExactLengthMessage(pickupCode, 11, i18n.t('community.publish.v.pickupCodeLength'))) return getExactLengthMessage(pickupCode, 11, i18n.t('community.publish.v.pickupCodeLength'))
-        if (!deliveryAddress) return i18n.t('community.publish.v.deliveryAddrRequired')
-        if (getMaxLengthMessage(deliveryAddress, DELIVERY_ADDRESS_MAX_LENGTH, i18n.tReplace('community.publish.v.deliveryAddrTooLong', { max: DELIVERY_ADDRESS_MAX_LENGTH }))) return getMaxLengthMessage(deliveryAddress, DELIVERY_ADDRESS_MAX_LENGTH, i18n.tReplace('community.publish.v.deliveryAddrTooLong', { max: DELIVERY_ADDRESS_MAX_LENGTH }))
-        if (!contactPhone) return i18n.t('community.publish.v.phoneRequired')
-        if (getMaxLengthMessage(contactPhone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.contactPhoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH }))) return getMaxLengthMessage(contactPhone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.contactPhoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH }))
-        if (getMaxLengthMessage(description, DELIVERY_REMARKS_MAX_LENGTH, i18n.tReplace('community.publish.v.remarksTooLong', { max: DELIVERY_REMARKS_MAX_LENGTH }))) return getMaxLengthMessage(description, DELIVERY_REMARKS_MAX_LENGTH, i18n.tReplace('community.publish.v.remarksTooLong', { max: DELIVERY_REMARKS_MAX_LENGTH }))
-        if (!(Number(form.reward || 0) > 0)) return i18n.t('community.publish.v.rewardInvalid')
-        return ''
-      }
-      case 'dating': {
-        const nickname = trimValue(form.nickname)
-        const faculty = trimValue(form.faculty)
-        const hometown = trimValue(form.hometown)
-        const qq = trimValue(form.qq)
-        const wechat = trimValue(form.wechat)
-        const content = trimValue(form.content)
-
-        if (!nickname) return i18n.t('community.publish.v.nicknameRequired')
-        if (getMaxLengthMessage(nickname, DATING_NICKNAME_MAX_LENGTH, i18n.tReplace('community.publish.v.nicknameTooLong', { max: DATING_NICKNAME_MAX_LENGTH }))) return getMaxLengthMessage(nickname, DATING_NICKNAME_MAX_LENGTH, i18n.tReplace('community.publish.v.nicknameTooLong', { max: DATING_NICKNAME_MAX_LENGTH }))
-        if (!faculty) return i18n.t('community.publish.v.majorRequired')
-        if (getMaxLengthMessage(faculty, DATING_FACULTY_MAX_LENGTH, i18n.tReplace('community.publish.v.majorTooLong', { max: DATING_FACULTY_MAX_LENGTH }))) return getMaxLengthMessage(faculty, DATING_FACULTY_MAX_LENGTH, i18n.tReplace('community.publish.v.majorTooLong', { max: DATING_FACULTY_MAX_LENGTH }))
-        if (!hometown) return i18n.t('community.publish.v.hometownRequired')
-        if (getMaxLengthMessage(hometown, DATING_HOMETOWN_MAX_LENGTH, i18n.tReplace('community.publish.v.hometownTooLong', { max: DATING_HOMETOWN_MAX_LENGTH }))) return getMaxLengthMessage(hometown, DATING_HOMETOWN_MAX_LENGTH, i18n.tReplace('community.publish.v.hometownTooLong', { max: DATING_HOMETOWN_MAX_LENGTH }))
-        if (getMaxLengthMessage(qq, DATING_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong2', { max: DATING_QQ_MAX_LENGTH }))) return getMaxLengthMessage(qq, DATING_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong2', { max: DATING_QQ_MAX_LENGTH }))
-        if (getMaxLengthMessage(wechat, DATING_WECHAT_MAX_LENGTH, i18n.tReplace('community.publish.v.wechatTooLong', { max: DATING_WECHAT_MAX_LENGTH }))) return getMaxLengthMessage(wechat, DATING_WECHAT_MAX_LENGTH, i18n.tReplace('community.publish.v.wechatTooLong', { max: DATING_WECHAT_MAX_LENGTH }))
-        if (!qq && !wechat) {
-          return i18n.t('community.publish.v.qqWechatRequired')
-        }
-        if (!content) return i18n.t('community.publish.v.introRequired')
-        if (getMaxLengthMessage(content, DATING_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.introTooLong', { max: DATING_CONTENT_MAX_LENGTH }))) return getMaxLengthMessage(content, DATING_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.introTooLong', { max: DATING_CONTENT_MAX_LENGTH }))
-        return ''
-      }
-      case 'photograph': {
-        const title = trimValue(form.title)
-        const content = trimValue(form.content)
-
-        if (!title) return i18n.t('community.publish.v.workTitleRequired')
-        if (getMaxLengthMessage(title, PHOTOGRAPH_TITLE_MAX_LENGTH, i18n.tReplace('community.publish.v.workTitleTooLong', { max: PHOTOGRAPH_TITLE_MAX_LENGTH }))) return getMaxLengthMessage(title, PHOTOGRAPH_TITLE_MAX_LENGTH, i18n.tReplace('community.publish.v.workTitleTooLong', { max: PHOTOGRAPH_TITLE_MAX_LENGTH }))
-        if (getMaxLengthMessage(content, PHOTOGRAPH_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.shootingDescTooLong', { max: PHOTOGRAPH_CONTENT_MAX_LENGTH }))) return getMaxLengthMessage(content, PHOTOGRAPH_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.shootingDescTooLong', { max: PHOTOGRAPH_CONTENT_MAX_LENGTH }))
-        if (!this.data.images.length) return i18n.t('community.publish.v.imageRequired')
-        return ''
-      }
-      default:
-        return i18n.t('community.publish.v.moduleNotSupported')
+    var handler = getModuleHandler(this.data.moduleId)
+    if (handler && handler.validateForm) {
+      return handler.validateForm(this.data)
     }
+    return i18n.t('community.publish.v.moduleNotSupported')
   },
 
   buildPublishPayload: function() {
-    const moduleId = this.data.moduleId
-    const form = this.data.form || {}
-
-    switch (moduleId) {
-      case 'ershou':
-        if (this.data.isEditMode) {
-          return Promise.resolve({
-            name: String(form.name || '').trim(),
-            description: String(form.description || '').trim(),
-            price: Number(form.price || 0),
-            location: String(form.location || '').trim(),
-            type: this.data.secondhandTypeOptions[this.data.secondhandTypeIndex].value,
-            qq: String(form.qq || '').trim(),
-            phone: String(form.phone || '').trim()
-          })
-        }
-        return uploadLocalFilesByPresignedUrl(this.data.images).then((imageKeys) => {
-          return {
-            name: String(form.name || '').trim(),
-            description: String(form.description || '').trim(),
-            price: Number(form.price || 0),
-            location: String(form.location || '').trim(),
-            type: this.data.secondhandTypeOptions[this.data.secondhandTypeIndex].value,
-            qq: String(form.qq || '').trim(),
-            phone: String(form.phone || '').trim(),
-            imageKeys: imageKeys
-          }
-        })
-      case 'lostandfound':
-        if (this.data.isEditMode) {
-          return Promise.resolve({
-            name: String(form.name || '').trim(),
-            description: String(form.description || '').trim(),
-            location: String(form.location || '').trim(),
-            lostType: this.data.lostFoundModeOptions[this.data.lostFoundModeIndex].value,
-            itemType: this.data.lostFoundItemOptions[this.data.lostFoundItemIndex].value,
-            qq: String(form.qq || '').trim(),
-            wechat: String(form.wechat || '').trim(),
-            phone: String(form.phone || '').trim()
-          })
-        }
-        return uploadLocalFilesByPresignedUrl(this.data.images).then((imageKeys) => {
-          return {
-            name: String(form.name || '').trim(),
-            description: String(form.description || '').trim(),
-            location: String(form.location || '').trim(),
-            lostType: this.data.lostFoundModeOptions[this.data.lostFoundModeIndex].value,
-            itemType: this.data.lostFoundItemOptions[this.data.lostFoundItemIndex].value,
-            qq: String(form.qq || '').trim(),
-            wechat: String(form.wechat || '').trim(),
-            phone: String(form.phone || '').trim(),
-            imageKeys: imageKeys
-          }
-        })
-      case 'topic':
-        return uploadLocalFilesByPresignedUrl(this.data.images).then((imageKeys) => {
-          return {
-            topic: String(form.topic || '').trim(),
-            content: String(form.content || '').trim(),
-            count: imageKeys.length,
-            imageKeys: imageKeys
-          }
-        })
-      case 'delivery':
-        return Promise.resolve({
-          name: DELIVERY_DEFAULT_ORDER_NAME,
-          number: String(form.pickupCode || '').trim() || DELIVERY_PLACEHOLDER_PICKUP_CODE,
-          phone: String(form.contactPhone || '').trim(),
-          price: Number(form.reward || 0),
-          company: String(form.pickupAddress || '').trim(),
-          address: String(form.deliveryAddress || '').trim(),
-          remarks: String(form.description || '').trim()
-        })
-      case 'dating':
-        return (this.data.images.length ? uploadLocalFileByPresignedUrl(this.data.images[0]) : Promise.resolve('')).then((imageKey) => {
-          return {
-            nickname: String(form.nickname || '').trim(),
-            grade: this.data.datingGradeOptions[this.data.datingGradeIndex].value,
-            area: this.data.datingAreaOptions[this.data.datingAreaIndex].value,
-            faculty: String(form.faculty || '').trim(),
-            hometown: String(form.hometown || '').trim(),
-            qq: String(form.qq || '').trim(),
-            wechat: String(form.wechat || '').trim(),
-            content: String(form.content || '').trim(),
-            imageKey: imageKey
-          }
-        })
-      case 'photograph':
-        return uploadLocalFilesByPresignedUrl(this.data.images).then((imageKeys) => {
-          return {
-            title: String(form.title || '').trim(),
-            content: String(form.content || '').trim(),
-            count: imageKeys.length,
-            type: this.data.photographTypeOptions[this.data.photographTypeIndex].publishValue,
-            imageKeys: imageKeys
-          }
-        })
-      default:
-        return Promise.reject(new Error(i18n.t('community.publish.v.moduleNotSupported')))
+    var handler = getModuleHandler(this.data.moduleId)
+    if (handler && handler.buildPublishPayload) {
+      return handler.buildPublishPayload(this.data, uploadLocalFilesByPresignedUrl, uploadLocalFileByPresignedUrl)
     }
+    return Promise.reject(new Error(i18n.t('community.publish.v.moduleNotSupported')))
   },
 
   submitModulePayload: function(payload) {

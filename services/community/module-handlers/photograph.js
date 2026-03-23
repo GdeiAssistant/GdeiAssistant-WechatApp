@@ -6,6 +6,23 @@ const {
   getPhotographTabOptions
 } = require('../../../constants/community.js')
 
+var PHOTOGRAPH_TITLE_MAX_LENGTH = 25
+var PHOTOGRAPH_CONTENT_MAX_LENGTH = 50
+
+function trimValue(value) {
+  return String(value || '').trim()
+}
+
+function getMaxLengthMessage(value, maxLength, message) {
+  return trimValue(value).length > maxLength ? message : ''
+}
+
+function requestForm(options) {
+  return request(Object.assign({}, options, {
+    contentType: 'application/x-www-form-urlencoded'
+  }))
+}
+
 module.exports = {
   // --- Feed ---
   getFeed: function(options) {
@@ -104,5 +121,74 @@ module.exports = {
   // --- Center page: show summary profile ---
   showSummaryProfile: false,
 
-  searchable: false
+  searchable: false,
+
+  // --- Publish: validate form ---
+  validateForm: function(data) {
+    var form = data.form || {}
+    var images = data.images || []
+
+    var title = trimValue(form.title)
+    var content = trimValue(form.content)
+
+    if (!title) return i18n.t('community.publish.v.workTitleRequired')
+    if (getMaxLengthMessage(title, PHOTOGRAPH_TITLE_MAX_LENGTH, i18n.tReplace('community.publish.v.workTitleTooLong', { max: PHOTOGRAPH_TITLE_MAX_LENGTH }))) return getMaxLengthMessage(title, PHOTOGRAPH_TITLE_MAX_LENGTH, i18n.tReplace('community.publish.v.workTitleTooLong', { max: PHOTOGRAPH_TITLE_MAX_LENGTH }))
+    if (getMaxLengthMessage(content, PHOTOGRAPH_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.shootingDescTooLong', { max: PHOTOGRAPH_CONTENT_MAX_LENGTH }))) return getMaxLengthMessage(content, PHOTOGRAPH_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.shootingDescTooLong', { max: PHOTOGRAPH_CONTENT_MAX_LENGTH }))
+    if (!images.length) return i18n.t('community.publish.v.imageRequired')
+    return ''
+  },
+
+  // --- Publish: build payload ---
+  buildPublishPayload: function(data, uploadFiles) {
+    var form = data.form || {}
+    var images = data.images || []
+    var photographTypeOptions = data.photographTypeOptions || []
+    var photographTypeIndex = data.photographTypeIndex || 0
+
+    return uploadFiles(images).then(function(imageKeys) {
+      return {
+        title: String(form.title || '').trim(),
+        content: String(form.content || '').trim(),
+        count: imageKeys.length,
+        type: photographTypeOptions[photographTypeIndex].publishValue,
+        imageKeys: imageKeys
+      }
+    })
+  },
+
+  // --- Detail: build detail view ---
+  buildDetailView: function() {
+    return {
+      title: i18n.t('community.detail.detail'),
+      description: ''
+    }
+  },
+
+  // --- Comments ---
+  getComments: function(id) {
+    return request({
+      url: endpoints.community.photograph.comments(id),
+      method: 'GET',
+      authRequired: true
+    })
+  },
+
+  // --- Submit comment ---
+  submitComment: function(id, comment) {
+    return requestForm({
+      url: endpoints.community.photograph.comment(id),
+      method: 'POST',
+      authRequired: true,
+      data: encodeForm({ comment: comment })
+    })
+  },
+
+  // --- Toggle like ---
+  toggleLike: function(id) {
+    return request({
+      url: endpoints.community.photograph.like(id),
+      method: 'POST',
+      authRequired: true
+    })
+  }
 }

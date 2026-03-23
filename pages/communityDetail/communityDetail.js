@@ -1,10 +1,10 @@
 const {
   getCommunityModule,
-  getCommunityPageTitle,
-  getLostFoundItemDictionaryOptions
+  getCommunityPageTitle
 } = require('../../constants/community.js')
 const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
+const { getModuleHandler } = require('../../services/community/registry.js')
 const pageUtils = require('../../utils/page.js')
 const { createSubmitGuard } = require('../../utils/debounce.js')
 const i18n = require('../../utils/i18n.js')
@@ -20,67 +20,14 @@ const COMMENT_MAX_LENGTH = 50
 const EXPRESS_GUESS_MAX_LENGTH = 10
 const DATING_PICK_MAX_LENGTH = 50
 
-function findLabel(options, value, fallback) {
-  const item = (options || []).filter(function(optionItem) {
-    return Number(optionItem.value) === Number(value)
-  })[0]
-  return item ? item.label : (fallback || '')
-}
-
-function formatSecretPublishText(publishTime, timer) {
-  const baseText = String(publishTime || '').trim()
-  if (Number(timer) === 1) {
-    var autoDeleteText = i18n.t('community.list.autoDelete24h')
-    return baseText ? baseText + ' \u00b7 ' + autoDeleteText : autoDeleteText
-  }
-  return baseText
-}
-
 function buildDetail(moduleId, payload) {
-  switch (moduleId) {
-    case 'ershou': {
-      const item = payload.secondhandItem || {}
-      const profile = payload.profile || {}
-      return {
-        images: item.pictureURL || [],
-        title: item.name || i18n.t('community.detail.productDetail'),
-        subtitle: item.location || '',
-        description: item.description || '',
-        priceText: Number(item.price || 0).toFixed(2),
-        publishTime: item.publishTime || '',
-        sellerName: profile.nickname || profile.username || i18n.t('community.list.anonStudent'),
-        sellerAvatar: profile.avatarURL || '/image/default.png',
-        qq: item.qq || '',
-        wechat: '',
-        phone: item.phone || '',
-        canLike: false
-      }
-    }
-    case 'lostandfound': {
-      const item = payload.item || {}
-      const profile = payload.profile || {}
-      var locationLabel = Number(item.lostType) === 0 ? i18n.t('community.detail.lostLocation') : i18n.t('community.detail.foundLocation')
-      return {
-        images: item.pictureURL || [],
-        title: item.name || i18n.t('community.detail.lostDetail'),
-        subtitle: locationLabel + '\uff1a' + (item.location || i18n.t('community.detail.notFilled')),
-        description: item.description || '',
-        publishTime: item.publishTime || '',
-        sellerName: profile.nickname || profile.username || i18n.t('community.list.anonStudent'),
-        sellerAvatar: profile.avatarURL || '/image/default.png',
-        qq: item.qq || '',
-        wechat: item.wechat || '',
-        phone: item.phone || '',
-        typeLabel: findLabel(getLostFoundItemDictionaryOptions(), item.itemType, i18n.t('community.category.other')),
-        badgeText: Number(item.lostType) === 0 ? i18n.t('community.lostFoundMode.lostNotice') : i18n.t('community.lostFoundMode.foundNotice'),
-        canLike: false
-      }
-    }
-    default:
-      return {
-        title: i18n.t('community.detail.detail'),
-        description: ''
-      }
+  var handler = getModuleHandler(moduleId)
+  if (handler && handler.buildDetailView) {
+    return handler.buildDetailView(payload)
+  }
+  return {
+    title: i18n.t('community.detail.detail'),
+    description: ''
   }
 }
 
