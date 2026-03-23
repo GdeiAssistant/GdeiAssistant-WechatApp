@@ -123,36 +123,6 @@ function buildDetail(moduleId, payload) {
         canLike: false
       }
     }
-    case 'secret':
-      return {
-        id: payload.id,
-        title: i18n.t('community.modules.secret.title'),
-        subtitle: formatSecretPublishText(payload.publishTime, payload.timer),
-        description: Number(payload.type) === 1 ? i18n.t('community.detail.voiceSecretDesc') : (payload.content || ''),
-        content: payload.content || '',
-        type: Number(payload.type || 0),
-        theme: Number(payload.theme || 1),
-        timer: Number(payload.timer || 0),
-        voiceURL: payload.voiceURL || '',
-        likeCount: Number(payload.likeCount || 0),
-        commentCount: Number(payload.commentCount || 0),
-        liked: Number(payload.liked || 0) === 1,
-        canLike: true
-      }
-    case 'express':
-      return {
-        id: payload.id,
-        title: (payload.nickname || i18n.t('community.list.anonStudent')) + ' -> ' + (payload.name || 'TA'),
-        subtitle: payload.publishTime || '',
-        description: payload.content || '',
-        likeCount: Number(payload.likeCount || 0),
-        commentCount: Number(payload.commentCount || 0),
-        liked: !!payload.liked,
-        canGuess: !!payload.canGuess,
-        guessCount: Number(payload.guessSum || 0),
-        correctCount: Number(payload.guessCount || 0),
-        canLike: true
-      }
     case 'topic':
       return {
         id: payload.id,

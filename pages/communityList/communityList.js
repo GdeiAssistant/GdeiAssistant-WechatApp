@@ -45,26 +45,6 @@ function normalizeItem(moduleId, item) {
   const rawItem = item || {}
 
   switch (moduleId) {
-    case 'secret':
-      return {
-        id: rawItem.id,
-        title: Number(rawItem.type) === 1 ? i18n.t('community.list.voiceSecret') : i18n.t('community.list.anonSecret'),
-        summary: Number(rawItem.type) === 1 ? i18n.t('community.list.tapVoiceSecret') : (rawItem.content || ''),
-        likeCount: Number(rawItem.likeCount || 0),
-        commentCount: Number(rawItem.commentCount || 0),
-        timeText: formatSecretPublishText(rawItem.publishTime, rawItem.timer),
-        raw: rawItem
-      }
-    case 'express':
-      return {
-        id: rawItem.id,
-        title: (rawItem.nickname || i18n.t('community.list.anonStudent')) + ' -> ' + (rawItem.name || 'TA'),
-        summary: rawItem.content || '',
-        likeCount: Number(rawItem.likeCount || 0),
-        commentCount: Number(rawItem.commentCount || 0),
-        timeText: rawItem.publishTime || '',
-        raw: rawItem
-      }
     case 'topic':
       return {
         id: rawItem.id,
