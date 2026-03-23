@@ -10,6 +10,7 @@ const {
 } = require('../../constants/community.js')
 const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
+const { getModuleHandler } = require('../../services/community/registry.js')
 const pageUtils = require('../../utils/page.js')
 const i18n = require('../../utils/i18n.js')
 var themeUtil = require('../../utils/theme')
@@ -36,33 +37,14 @@ function formatSecretPublishText(publishTime, timer) {
 }
 
 function normalizeItem(moduleId, item) {
+  var handler = getModuleHandler(moduleId)
+  if (handler && handler.normalizeItem) {
+    return handler.normalizeItem(item)
+  }
+
   const rawItem = item || {}
 
   switch (moduleId) {
-    case 'ershou':
-      return {
-        id: rawItem.id,
-        title: rawItem.name || i18n.t('community.list.unnamedProduct'),
-        summary: rawItem.description || '',
-        cover: rawItem.pictureURL && rawItem.pictureURL.length ? rawItem.pictureURL[0] : '/image/ershou.png',
-        priceText: formatPrice(rawItem.price),
-        badgeText: findLabel(getSecondhandCategoryOptions(), rawItem.type, i18n.t('community.list.secondhand')),
-        metaText: rawItem.location || '',
-        timeText: rawItem.publishTime || '',
-        raw: rawItem
-      }
-    case 'lostandfound':
-      return {
-        id: rawItem.id,
-        title: rawItem.name || i18n.t('community.list.unnamedItem'),
-        summary: rawItem.description || '',
-        cover: rawItem.pictureURL && rawItem.pictureURL.length ? rawItem.pictureURL[0] : '/image/lostandfound.png',
-        badgeText: Number(rawItem.lostType) === 0 ? i18n.t('community.list.lost') : i18n.t('community.list.found'),
-        subBadgeText: findLabel(getLostFoundItemDictionaryOptions(), rawItem.itemType, i18n.t('community.category.other')),
-        metaText: rawItem.location || '',
-        timeText: rawItem.publishTime || '',
-        raw: rawItem
-      }
     case 'secret':
       return {
         id: rawItem.id,
@@ -156,11 +138,12 @@ Page({
   },
 
   buildTabs: function(moduleId) {
+    var handler = getModuleHandler(moduleId)
+    if (handler && handler.buildListTabs) {
+      return handler.buildListTabs()
+    }
+
     switch (moduleId) {
-      case 'ershou':
-        return getSecondhandCategoryOptions()
-      case 'lostandfound':
-        return getLostFoundModeDictionaryOptions()
       case 'delivery':
         return getDeliveryStatusOptions()
       case 'dating':
@@ -185,12 +168,9 @@ Page({
       keyword: this.data.searchKeyword
     }
 
-    if (moduleId === 'ershou') {
-      options.type = activeTab && Number(activeTab.value) >= 0 ? Number(activeTab.value) : null
-    }
-
-    if (moduleId === 'lostandfound') {
-      options.mode = activeTab ? Number(activeTab.value) : 0
+    var handler = getModuleHandler(moduleId)
+    if (handler && handler.buildFeedOptions) {
+      return handler.buildFeedOptions(options, activeTab)
     }
 
     if (moduleId === 'dating') {
