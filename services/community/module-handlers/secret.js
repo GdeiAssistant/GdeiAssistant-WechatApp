@@ -3,6 +3,12 @@ const { request } = require('../../request.js')
 const { encodeForm } = require('../../../utils/form.js')
 const i18n = require('../../../utils/i18n.js')
 
+function requestForm(options) {
+  return request(Object.assign({}, options, {
+    contentType: 'application/x-www-form-urlencoded'
+  }))
+}
+
 function formatSecretPublishText(publishTime, timer) {
   const baseText = String(publishTime || '').trim()
   if (Number(timer) === 1) {
@@ -102,5 +108,52 @@ module.exports = {
   // --- Center page: show summary profile ---
   showSummaryProfile: false,
 
-  searchable: false
+  searchable: false,
+
+  // --- Publish: validate form ---
+  validateForm: function() {
+    return i18n.t('community.publish.v.moduleNotSupported')
+  },
+
+  // --- Publish: build payload ---
+  buildPublishPayload: function() {
+    return Promise.reject(new Error(i18n.t('community.publish.v.moduleNotSupported')))
+  },
+
+  // --- Detail: build detail view ---
+  buildDetailView: function() {
+    return {
+      title: i18n.t('community.detail.detail'),
+      description: ''
+    }
+  },
+
+  // --- Comments ---
+  getComments: function(id) {
+    return request({
+      url: endpoints.community.secret.comments(id),
+      method: 'GET',
+      authRequired: true
+    })
+  },
+
+  // --- Submit comment ---
+  submitComment: function(id, comment) {
+    return requestForm({
+      url: endpoints.community.secret.comment(id),
+      method: 'POST',
+      authRequired: true,
+      data: encodeForm({ comment: comment })
+    })
+  },
+
+  // --- Toggle like ---
+  toggleLike: function(id, value) {
+    return requestForm({
+      url: endpoints.community.secret.like(id),
+      method: 'POST',
+      authRequired: true,
+      data: encodeForm({ like: value ? 1 : 0 })
+    })
+  }
 }

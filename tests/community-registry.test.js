@@ -476,3 +476,122 @@ test('dating normalizeCenterData produces received, sent, and posts lists', func
   assert.equal(result.posts[0].id, 30)
   assert.equal(result.posts[0].actions.length, 1, 'post should have hide action')
 })
+
+// --- New handler interface: validateForm, buildPublishPayload, buildDetailView, getComments, submitComment, toggleLike ---
+
+var ALL_MODULE_IDS = ['marketplace', 'lostandfound', 'secret', 'express', 'topic', 'photograph', 'delivery', 'dating']
+
+test('all handlers implement validateForm', function() {
+  ALL_MODULE_IDS.forEach(function(moduleId) {
+    var handler = getModuleHandler(moduleId)
+    assert.equal(typeof handler.validateForm, 'function', moduleId + ' should have validateForm')
+  })
+})
+
+test('all handlers implement buildPublishPayload', function() {
+  ALL_MODULE_IDS.forEach(function(moduleId) {
+    var handler = getModuleHandler(moduleId)
+    assert.equal(typeof handler.buildPublishPayload, 'function', moduleId + ' should have buildPublishPayload')
+  })
+})
+
+test('all handlers implement buildDetailView', function() {
+  ALL_MODULE_IDS.forEach(function(moduleId) {
+    var handler = getModuleHandler(moduleId)
+    assert.equal(typeof handler.buildDetailView, 'function', moduleId + ' should have buildDetailView')
+  })
+})
+
+test('all handlers implement getComments', function() {
+  ALL_MODULE_IDS.forEach(function(moduleId) {
+    var handler = getModuleHandler(moduleId)
+    assert.equal(typeof handler.getComments, 'function', moduleId + ' should have getComments')
+  })
+})
+
+test('all handlers implement submitComment', function() {
+  ALL_MODULE_IDS.forEach(function(moduleId) {
+    var handler = getModuleHandler(moduleId)
+    assert.equal(typeof handler.submitComment, 'function', moduleId + ' should have submitComment')
+  })
+})
+
+test('all handlers implement toggleLike', function() {
+  ALL_MODULE_IDS.forEach(function(moduleId) {
+    var handler = getModuleHandler(moduleId)
+    assert.equal(typeof handler.toggleLike, 'function', moduleId + ' should have toggleLike')
+  })
+})
+
+test('marketplace validateForm rejects empty product name', function() {
+  var handler = getModuleHandler('marketplace')
+  var result = handler.validateForm({ form: {}, images: [] })
+  assert.ok(result, 'should return validation error')
+  assert.notEqual(result, '', 'should not be empty')
+})
+
+test('marketplace validateForm passes with valid data', function() {
+  var handler = getModuleHandler('marketplace')
+  var result = handler.validateForm({
+    form: { name: 'Test', description: 'Desc', price: 10, location: 'A', qq: '123' },
+    images: [{ path: '/img/test.png' }],
+    isEditMode: false
+  })
+  assert.equal(result, '', 'should return empty string for valid form')
+})
+
+test('lostandfound validateForm rejects when no contact info', function() {
+  var handler = getModuleHandler('lostandfound')
+  var result = handler.validateForm({
+    form: { name: 'Phone', description: 'Lost phone', location: 'Library' },
+    images: [{ path: '/img/test.png' }],
+    isEditMode: false
+  })
+  assert.ok(result, 'should return validation error for missing contact')
+})
+
+test('marketplace buildDetailView produces expected shape', function() {
+  var handler = getModuleHandler('marketplace')
+  var result = handler.buildDetailView({
+    secondhandItem: { pictureURL: ['/img/a.png'], name: 'Widget', price: 50, location: 'Dorm' },
+    profile: { nickname: 'Alice' }
+  })
+  assert.equal(result.title, 'Widget')
+  assert.equal(result.sellerName, 'Alice')
+  assert.equal(result.priceText, '50.00')
+  assert.equal(result.canLike, false)
+})
+
+test('lostandfound buildDetailView produces expected shape', function() {
+  var handler = getModuleHandler('lostandfound')
+  var result = handler.buildDetailView({
+    item: { name: 'Keys', lostType: 0, location: 'Canteen' },
+    profile: { nickname: 'Bob' }
+  })
+  assert.equal(result.title, 'Keys')
+  assert.equal(result.sellerName, 'Bob')
+  assert.equal(result.canLike, false)
+})
+
+test('secret getComments returns a promise', function() {
+  var handler = getModuleHandler('secret')
+  var result = handler.getComments(1)
+  assert.ok(result && typeof result.then === 'function', 'should return a promise')
+})
+
+test('express getComments returns a promise', function() {
+  var handler = getModuleHandler('express')
+  var result = handler.getComments(1)
+  assert.ok(result && typeof result.then === 'function', 'should return a promise')
+})
+
+test('photograph getComments returns a promise', function() {
+  var handler = getModuleHandler('photograph')
+  var result = handler.getComments(1)
+  assert.ok(result && typeof result.then === 'function', 'should return a promise')
+})
+
+test('topic imageLimit is 9', function() {
+  var handler = getModuleHandler('topic')
+  assert.equal(handler.imageLimit, 9)
+})

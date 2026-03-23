@@ -28,25 +28,12 @@ function getDetail(moduleId, id) {
 }
 
 function getComments(moduleId, id) {
-  switch (moduleId) {
-    case 'secret':
-      return request({
-        url: endpoints.community.secret.comments(id),
-        method: 'GET',
-        authRequired: true
-      })
-    case 'express':
-      return request({
-        url: endpoints.community.express.comments(id),
-        method: 'GET',
-        authRequired: true
-      })
-    default:
-      return Promise.resolve({
-        success: true,
-        data: []
-      })
+  var handler = getModuleHandler(moduleId)
+  if (handler && handler.getComments) {
+    return handler.getComments(id)
   }
+
+  return Promise.resolve({ success: true, data: [] })
 }
 
 function getCenter(moduleId, options) {
@@ -86,44 +73,21 @@ function updateLostAndFoundItem(id, payload) {
 }
 
 function submitComment(moduleId, id, comment) {
-  switch (moduleId) {
-    case 'secret':
-      return requestForm({
-        url: endpoints.community.secret.comment(id),
-        method: 'POST',
-        authRequired: true,
-        data: encodeForm({ comment: comment })
-      })
-    case 'express':
-      return requestForm({
-        url: endpoints.community.express.comment(id),
-        method: 'POST',
-        authRequired: true,
-        data: encodeForm({ comment: comment })
-      })
-    default:
-      return Promise.reject(new Error('该模块暂不支持评论'))
+  var handler = getModuleHandler(moduleId)
+  if (handler && handler.submitComment) {
+    return handler.submitComment(id, comment)
   }
+
+  return Promise.reject(new Error('该模块暂不支持评论'))
 }
 
 function toggleLike(moduleId, id, value) {
-  switch (moduleId) {
-    case 'secret':
-      return requestForm({
-        url: endpoints.community.secret.like(id),
-        method: 'POST',
-        authRequired: true,
-        data: encodeForm({ like: value ? 1 : 0 })
-      })
-    case 'express':
-      return request({
-        url: endpoints.community.express.like(id),
-        method: 'POST',
-        authRequired: true
-      })
-    default:
-      return Promise.reject(new Error('该模块暂不支持点赞'))
+  var handler = getModuleHandler(moduleId)
+  if (handler && handler.toggleLike) {
+    return handler.toggleLike(id, value)
   }
+
+  return Promise.reject(new Error('该模块暂不支持点赞'))
 }
 
 function guessExpress(id, name) {

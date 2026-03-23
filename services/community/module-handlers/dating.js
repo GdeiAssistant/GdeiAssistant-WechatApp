@@ -7,6 +7,21 @@ const {
   getDatingGradeOptions
 } = require('../../../constants/community.js')
 
+var DATING_NICKNAME_MAX_LENGTH = 15
+var DATING_FACULTY_MAX_LENGTH = 12
+var DATING_HOMETOWN_MAX_LENGTH = 10
+var DATING_QQ_MAX_LENGTH = 15
+var DATING_WECHAT_MAX_LENGTH = 20
+var DATING_CONTENT_MAX_LENGTH = 100
+
+function trimValue(value) {
+  return String(value || '').trim()
+}
+
+function getMaxLengthMessage(value, maxLength, message) {
+  return trimValue(value).length > maxLength ? message : ''
+}
+
 function findLabel(options, value, fallback) {
   var item = (options || []).filter(function(optionItem) {
     return Number(optionItem.value) === Number(value)
@@ -167,5 +182,79 @@ module.exports = {
   // --- Center page: show summary profile ---
   showSummaryProfile: false,
 
-  searchable: false
+  searchable: false,
+
+  // --- Publish: validate form ---
+  validateForm: function(data) {
+    var form = data.form || {}
+
+    var nickname = trimValue(form.nickname)
+    var faculty = trimValue(form.faculty)
+    var hometown = trimValue(form.hometown)
+    var qq = trimValue(form.qq)
+    var wechat = trimValue(form.wechat)
+    var content = trimValue(form.content)
+
+    if (!nickname) return i18n.t('community.publish.v.nicknameRequired')
+    if (getMaxLengthMessage(nickname, DATING_NICKNAME_MAX_LENGTH, i18n.tReplace('community.publish.v.nicknameTooLong', { max: DATING_NICKNAME_MAX_LENGTH }))) return getMaxLengthMessage(nickname, DATING_NICKNAME_MAX_LENGTH, i18n.tReplace('community.publish.v.nicknameTooLong', { max: DATING_NICKNAME_MAX_LENGTH }))
+    if (!faculty) return i18n.t('community.publish.v.majorRequired')
+    if (getMaxLengthMessage(faculty, DATING_FACULTY_MAX_LENGTH, i18n.tReplace('community.publish.v.majorTooLong', { max: DATING_FACULTY_MAX_LENGTH }))) return getMaxLengthMessage(faculty, DATING_FACULTY_MAX_LENGTH, i18n.tReplace('community.publish.v.majorTooLong', { max: DATING_FACULTY_MAX_LENGTH }))
+    if (!hometown) return i18n.t('community.publish.v.hometownRequired')
+    if (getMaxLengthMessage(hometown, DATING_HOMETOWN_MAX_LENGTH, i18n.tReplace('community.publish.v.hometownTooLong', { max: DATING_HOMETOWN_MAX_LENGTH }))) return getMaxLengthMessage(hometown, DATING_HOMETOWN_MAX_LENGTH, i18n.tReplace('community.publish.v.hometownTooLong', { max: DATING_HOMETOWN_MAX_LENGTH }))
+    if (getMaxLengthMessage(qq, DATING_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong2', { max: DATING_QQ_MAX_LENGTH }))) return getMaxLengthMessage(qq, DATING_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong2', { max: DATING_QQ_MAX_LENGTH }))
+    if (getMaxLengthMessage(wechat, DATING_WECHAT_MAX_LENGTH, i18n.tReplace('community.publish.v.wechatTooLong', { max: DATING_WECHAT_MAX_LENGTH }))) return getMaxLengthMessage(wechat, DATING_WECHAT_MAX_LENGTH, i18n.tReplace('community.publish.v.wechatTooLong', { max: DATING_WECHAT_MAX_LENGTH }))
+    if (!qq && !wechat) {
+      return i18n.t('community.publish.v.qqWechatRequired')
+    }
+    if (!content) return i18n.t('community.publish.v.introRequired')
+    if (getMaxLengthMessage(content, DATING_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.introTooLong', { max: DATING_CONTENT_MAX_LENGTH }))) return getMaxLengthMessage(content, DATING_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.introTooLong', { max: DATING_CONTENT_MAX_LENGTH }))
+    return ''
+  },
+
+  // --- Publish: build payload ---
+  buildPublishPayload: function(data, _uploadFiles, uploadSingleFile) {
+    var form = data.form || {}
+    var images = data.images || []
+    var datingGradeOptions = data.datingGradeOptions || []
+    var datingGradeIndex = data.datingGradeIndex || 0
+    var datingAreaOptions = data.datingAreaOptions || []
+    var datingAreaIndex = data.datingAreaIndex || 0
+
+    return (images.length ? uploadSingleFile(images[0]) : Promise.resolve('')).then(function(imageKey) {
+      return {
+        nickname: String(form.nickname || '').trim(),
+        grade: datingGradeOptions[datingGradeIndex].value,
+        area: datingAreaOptions[datingAreaIndex].value,
+        faculty: String(form.faculty || '').trim(),
+        hometown: String(form.hometown || '').trim(),
+        qq: String(form.qq || '').trim(),
+        wechat: String(form.wechat || '').trim(),
+        content: String(form.content || '').trim(),
+        imageKey: imageKey
+      }
+    })
+  },
+
+  // --- Detail: build detail view ---
+  buildDetailView: function() {
+    return {
+      title: i18n.t('community.detail.detail'),
+      description: ''
+    }
+  },
+
+  // --- Comments ---
+  getComments: function() {
+    return Promise.resolve({ success: true, data: [] })
+  },
+
+  // --- Submit comment ---
+  submitComment: function() {
+    return Promise.reject(new Error('该模块暂不支持评论'))
+  },
+
+  // --- Toggle like ---
+  toggleLike: function() {
+    return Promise.reject(new Error('该模块暂不支持点赞'))
+  }
 }
