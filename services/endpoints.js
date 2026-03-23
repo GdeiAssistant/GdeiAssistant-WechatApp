@@ -134,7 +134,10 @@ module.exports = {
         return `/api/secret/id/${id}/like`
       },
       publish: '/api/secret/info',
-      profile: '/api/secret/profile'
+      profile: '/api/secret/profile',
+      profilePaged: function(start, size) {
+        return `/api/secret/profile/start/${start}/size/${size}`
+      }
     },
     express: {
       list: function(start, size) {
