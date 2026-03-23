@@ -487,33 +487,6 @@ Page({
         if (!this.data.isEditMode && !this.data.images.length) return i18n.t('community.publish.v.imageRequired')
         return ''
       }
-      case 'secret': {
-        const content = trimValue(form.content)
-
-        if (Number(this.data.secretTypeIndex) === 0 && !content) {
-          return i18n.t('community.publish.v.secretContentRequired')
-        }
-        if (getMaxLengthMessage(content, SECRET_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.secretContentTooLong', { max: SECRET_CONTENT_MAX_LENGTH }))) return getMaxLengthMessage(content, SECRET_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.secretContentTooLong', { max: SECRET_CONTENT_MAX_LENGTH }))
-        if (Number(this.data.secretTypeIndex) === 1 && !this.data.voiceFile) {
-          return i18n.t('community.publish.v.voiceRequired')
-        }
-        return ''
-      }
-      case 'express': {
-        const nickname = trimValue(form.nickname)
-        const realname = trimValue(form.realname)
-        const targetName = trimValue(form.targetName)
-        const content = trimValue(form.content)
-
-        if (!nickname) return i18n.t('community.publish.v.nicknameRequired')
-        if (getMaxLengthMessage(nickname, EXPRESS_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.nicknameTooLong', { max: EXPRESS_NAME_MAX_LENGTH }))) return getMaxLengthMessage(nickname, EXPRESS_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.nicknameTooLong', { max: EXPRESS_NAME_MAX_LENGTH }))
-        if (getMaxLengthMessage(realname, EXPRESS_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.realnameTooLong', { max: EXPRESS_NAME_MAX_LENGTH }))) return getMaxLengthMessage(realname, EXPRESS_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.realnameTooLong', { max: EXPRESS_NAME_MAX_LENGTH }))
-        if (!targetName) return i18n.t('community.publish.v.targetNameRequired')
-        if (getMaxLengthMessage(targetName, EXPRESS_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.targetNameTooLong', { max: EXPRESS_NAME_MAX_LENGTH }))) return getMaxLengthMessage(targetName, EXPRESS_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.targetNameTooLong', { max: EXPRESS_NAME_MAX_LENGTH }))
-        if (!content) return i18n.t('community.publish.v.confessionRequired')
-        if (getMaxLengthMessage(content, EXPRESS_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.confessionTooLong', { max: EXPRESS_CONTENT_MAX_LENGTH }))) return getMaxLengthMessage(content, EXPRESS_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.confessionTooLong', { max: EXPRESS_CONTENT_MAX_LENGTH }))
-        return ''
-      }
       case 'topic': {
         const topic = trimValue(form.topic)
         const content = trimValue(form.content)
@@ -634,35 +607,6 @@ Page({
             phone: String(form.phone || '').trim(),
             imageKeys: imageKeys
           }
-        })
-      case 'secret':
-        if (Number(this.data.secretTypeIndex) === 0) {
-          return Promise.resolve({
-            theme: this.data.secretThemeOptions[this.data.secretThemeIndex].value,
-            type: 0,
-            timer: this.data.secretDeleteAfter24Hours ? 1 : 0,
-            content: String(form.content || '').trim()
-          })
-        }
-        return uploadLocalFileByPresignedUrl(this.data.voiceFile, {
-          fileName: 'secret-voice-' + Date.now() + '.mp3'
-        }).then((voiceKey) => {
-          return {
-            theme: this.data.secretThemeOptions[this.data.secretThemeIndex].value,
-            type: 1,
-            timer: this.data.secretDeleteAfter24Hours ? 1 : 0,
-            content: '',
-            voiceKey: voiceKey
-          }
-        })
-      case 'express':
-        return Promise.resolve({
-          nickname: String(form.nickname || '').trim(),
-          realname: String(form.realname || '').trim(),
-          selfGender: this.data.expressGenderOptions[this.data.expressSelfGenderIndex].value,
-          name: String(form.targetName || '').trim(),
-          personGender: this.data.expressGenderOptions[this.data.expressTargetGenderIndex].value,
-          content: String(form.content || '').trim()
         })
       case 'topic':
         return uploadLocalFilesByPresignedUrl(this.data.images).then((imageKeys) => {

@@ -22,6 +22,8 @@ stubModule(REQUEST_MODULE, {
 // Clear registry and handler caches so they pick up our stubs
 clearModule(path.join(ROOT, 'services/community/module-handlers/marketplace.js'))
 clearModule(path.join(ROOT, 'services/community/module-handlers/lostandfound.js'))
+clearModule(path.join(ROOT, 'services/community/module-handlers/secret.js'))
+clearModule(path.join(ROOT, 'services/community/module-handlers/express.js'))
 clearModule(path.join(ROOT, 'services/community/registry.js'))
 
 const { getModuleHandler } = require(path.join(ROOT, 'services/community/registry.js'))
@@ -133,4 +135,77 @@ test('lostandfound buildFeedOptions sets mode from activeTab', function() {
     { value: 1 }
   )
   assert.equal(result.mode, 1)
+})
+
+test('secret handler has expected shape', function() {
+  const handler = getModuleHandler('secret')
+
+  assert.ok(handler, 'secret handler should exist')
+  assert.equal(typeof handler.getFeed, 'function', 'should have getFeed')
+  assert.equal(typeof handler.buildListTabs, 'function', 'should have buildListTabs')
+  assert.equal(typeof handler.normalizeItem, 'function', 'should have normalizeItem')
+  assert.equal(typeof handler.getDetail, 'function', 'should have getDetail')
+  assert.equal(typeof handler.getCenter, 'function', 'should have getCenter')
+  assert.equal(typeof handler.publish, 'function', 'should have publish')
+  assert.equal(typeof handler.buildFeedOptions, 'function', 'should have buildFeedOptions')
+  assert.equal(typeof handler.buildCenterTabs, 'function', 'should have buildCenterTabs')
+  assert.equal(typeof handler.normalizeCenterData, 'function', 'should have normalizeCenterData')
+})
+
+test('express handler has expected shape', function() {
+  const handler = getModuleHandler('express')
+
+  assert.ok(handler, 'express handler should exist')
+  assert.equal(typeof handler.getFeed, 'function', 'should have getFeed')
+  assert.equal(typeof handler.buildListTabs, 'function', 'should have buildListTabs')
+  assert.equal(typeof handler.normalizeItem, 'function', 'should have normalizeItem')
+  assert.equal(typeof handler.getDetail, 'function', 'should have getDetail')
+  assert.equal(typeof handler.getCenter, 'function', 'should have getCenter')
+  assert.equal(typeof handler.publish, 'function', 'should have publish')
+  assert.equal(typeof handler.buildFeedOptions, 'function', 'should have buildFeedOptions')
+  assert.equal(typeof handler.buildCenterTabs, 'function', 'should have buildCenterTabs')
+  assert.equal(typeof handler.normalizeCenterData, 'function', 'should have normalizeCenterData')
+  assert.equal(handler.searchable, true, 'express should be searchable')
+})
+
+test('secret normalizeItem produces expected shape', function() {
+  const handler = getModuleHandler('secret')
+  const result = handler.normalizeItem({
+    id: 10,
+    type: 0,
+    content: 'My secret message',
+    likeCount: 5,
+    commentCount: 3,
+    publishTime: '2025-03-01',
+    timer: 0
+  })
+
+  assert.equal(result.id, 10)
+  assert.ok(result.title, 'should have a title')
+  assert.equal(result.summary, 'My secret message')
+  assert.equal(result.likeCount, 5)
+  assert.equal(result.commentCount, 3)
+  assert.equal(result.timeText, '2025-03-01')
+  assert.ok(result.raw, 'should preserve raw item')
+})
+
+test('express normalizeItem produces expected shape', function() {
+  const handler = getModuleHandler('express')
+  const result = handler.normalizeItem({
+    id: 20,
+    nickname: 'Alice',
+    name: 'Bob',
+    content: 'I like you',
+    likeCount: 8,
+    commentCount: 2,
+    publishTime: '2025-04-01'
+  })
+
+  assert.equal(result.id, 20)
+  assert.ok(result.title, 'should have a title')
+  assert.equal(result.summary, 'I like you')
+  assert.equal(result.likeCount, 8)
+  assert.equal(result.commentCount, 2)
+  assert.equal(result.timeText, '2025-04-01')
+  assert.ok(result.raw, 'should preserve raw item')
 })

@@ -83,30 +83,6 @@ Page({
     }
 
     switch (moduleId) {
-      case 'secret':
-        return {
-          default: (payload || []).map(function(item) {
-            return normalizeStandardItem(item, {
-              id: item.id,
-              title: Number(item.type) === 1 ? i18n.t('community.center.voiceSecret') : i18n.t('community.center.textSecret'),
-              subtitle: formatSecretPublishText(item.publishTime, item.timer),
-              summary: Number(item.type) === 1 ? i18n.t('community.center.tapPlayVoice') : item.content,
-              actions: []
-            })
-          })
-        }
-      case 'express':
-        return {
-          default: (payload || []).map(function(item) {
-            return normalizeStandardItem(item, {
-              id: item.id,
-              title: (item.nickname || i18n.t('community.list.anonStudent')) + ' -> ' + (item.name || 'TA'),
-              subtitle: item.publishTime,
-              summary: item.content,
-              actions: []
-            })
-          })
-        }
       case 'topic':
         return {
           default: (payload || []).map(function(item) {

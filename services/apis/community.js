@@ -21,20 +21,6 @@ function getFeed(moduleId, options) {
   const keyword = String(config.keyword || '').trim()
 
   switch (moduleId) {
-    case 'secret':
-      return request({
-        url: endpoints.community.secret.list(start, size),
-        method: 'GET',
-        authRequired: true
-      })
-    case 'express':
-      return request({
-        url: keyword
-          ? endpoints.community.express.keyword(encodeURIComponent(keyword), start, size)
-          : endpoints.community.express.list(start, size),
-        method: 'GET',
-        authRequired: true
-      })
     case 'topic':
       return request({
         url: keyword
@@ -73,18 +59,6 @@ function getDetail(moduleId, id) {
   }
 
   switch (moduleId) {
-    case 'secret':
-      return request({
-        url: endpoints.community.secret.detail(id),
-        method: 'GET',
-        authRequired: true
-      })
-    case 'express':
-      return request({
-        url: endpoints.community.express.detail(id),
-        method: 'GET',
-        authRequired: true
-      })
     case 'topic':
       return request({
         url: endpoints.community.topic.detail(id),
@@ -153,18 +127,6 @@ function getCenter(moduleId, options) {
   const size = Number(config.size || 10)
 
   switch (moduleId) {
-    case 'secret':
-      return request({
-        url: endpoints.community.secret.profile,
-        method: 'GET',
-        authRequired: true
-      })
-    case 'express':
-      return request({
-        url: endpoints.community.express.profile(start, size),
-        method: 'GET',
-        authRequired: true
-      })
     case 'topic':
       return request({
         url: endpoints.community.topic.profile(start, size),
@@ -224,20 +186,6 @@ function publish(moduleId, payload) {
   }
 
   switch (moduleId) {
-    case 'secret':
-      return requestForm({
-        url: endpoints.community.secret.publish,
-        method: 'POST',
-        authRequired: true,
-        data: encodeForm(payload)
-      })
-    case 'express':
-      return requestForm({
-        url: endpoints.community.express.publish,
-        method: 'POST',
-        authRequired: true,
-        data: encodeForm(payload)
-      })
     case 'topic':
       return requestForm({
         url: endpoints.community.topic.publish,
