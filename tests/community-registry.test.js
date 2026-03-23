@@ -24,6 +24,8 @@ clearModule(path.join(ROOT, 'services/community/module-handlers/marketplace.js')
 clearModule(path.join(ROOT, 'services/community/module-handlers/lostandfound.js'))
 clearModule(path.join(ROOT, 'services/community/module-handlers/secret.js'))
 clearModule(path.join(ROOT, 'services/community/module-handlers/express.js'))
+clearModule(path.join(ROOT, 'services/community/module-handlers/topic.js'))
+clearModule(path.join(ROOT, 'services/community/module-handlers/photograph.js'))
 clearModule(path.join(ROOT, 'services/community/registry.js'))
 
 const { getModuleHandler } = require(path.join(ROOT, 'services/community/registry.js'))
@@ -208,4 +210,100 @@ test('express normalizeItem produces expected shape', function() {
   assert.equal(result.commentCount, 2)
   assert.equal(result.timeText, '2025-04-01')
   assert.ok(result.raw, 'should preserve raw item')
+})
+
+test('topic handler has expected shape', function() {
+  const handler = getModuleHandler('topic')
+
+  assert.ok(handler, 'topic handler should exist')
+  assert.equal(typeof handler.getFeed, 'function', 'should have getFeed')
+  assert.equal(typeof handler.buildListTabs, 'function', 'should have buildListTabs')
+  assert.equal(typeof handler.normalizeItem, 'function', 'should have normalizeItem')
+  assert.equal(typeof handler.getDetail, 'function', 'should have getDetail')
+  assert.equal(typeof handler.getCenter, 'function', 'should have getCenter')
+  assert.equal(typeof handler.publish, 'function', 'should have publish')
+  assert.equal(typeof handler.buildFeedOptions, 'function', 'should have buildFeedOptions')
+  assert.equal(typeof handler.buildCenterTabs, 'function', 'should have buildCenterTabs')
+  assert.equal(typeof handler.normalizeCenterData, 'function', 'should have normalizeCenterData')
+  assert.equal(handler.searchable, true, 'topic should be searchable')
+})
+
+test('photograph handler has expected shape', function() {
+  const handler = getModuleHandler('photograph')
+
+  assert.ok(handler, 'photograph handler should exist')
+  assert.equal(typeof handler.getFeed, 'function', 'should have getFeed')
+  assert.equal(typeof handler.buildListTabs, 'function', 'should have buildListTabs')
+  assert.equal(typeof handler.normalizeItem, 'function', 'should have normalizeItem')
+  assert.equal(typeof handler.getDetail, 'function', 'should have getDetail')
+  assert.equal(typeof handler.getCenter, 'function', 'should have getCenter')
+  assert.equal(typeof handler.publish, 'function', 'should have publish')
+  assert.equal(typeof handler.buildFeedOptions, 'function', 'should have buildFeedOptions')
+  assert.equal(typeof handler.buildCenterTabs, 'function', 'should have buildCenterTabs')
+  assert.equal(typeof handler.normalizeCenterData, 'function', 'should have normalizeCenterData')
+})
+
+test('topic normalizeItem produces expected shape', function() {
+  const handler = getModuleHandler('topic')
+  const result = handler.normalizeItem({
+    id: 30,
+    topic: 'Campus Life',
+    content: 'Great day on campus',
+    imageUrls: ['/img/topic1.png', '/img/topic2.png'],
+    likeCount: 12,
+    publishTime: '2025-05-01'
+  })
+
+  assert.equal(result.id, 30)
+  assert.ok(result.title, 'should have a title')
+  assert.equal(result.title, '#Campus Life')
+  assert.equal(result.summary, 'Great day on campus')
+  assert.equal(result.cover, '/img/topic1.png')
+  assert.equal(result.likeCount, 12)
+  assert.equal(result.timeText, '2025-05-01')
+  assert.ok(result.raw, 'should preserve raw item')
+})
+
+test('photograph normalizeItem produces expected shape', function() {
+  const handler = getModuleHandler('photograph')
+  const result = handler.normalizeItem({
+    id: 40,
+    title: 'Sunset Photo',
+    content: 'Beautiful sunset',
+    firstImageUrl: '/img/sunset.png',
+    imageUrls: ['/img/sunset.png'],
+    likeCount: 20,
+    commentCount: 5,
+    createTime: '2025-06-01'
+  })
+
+  assert.equal(result.id, 40)
+  assert.equal(result.title, 'Sunset Photo')
+  assert.equal(result.summary, 'Beautiful sunset')
+  assert.equal(result.cover, '/img/sunset.png')
+  assert.equal(result.likeCount, 20)
+  assert.equal(result.commentCount, 5)
+  assert.equal(result.timeText, '2025-06-01')
+  assert.ok(result.raw, 'should preserve raw item')
+})
+
+test('photograph normalizeItem falls back to imageUrls when firstImageUrl is missing', function() {
+  const handler = getModuleHandler('photograph')
+  const result = handler.normalizeItem({
+    id: 41,
+    title: 'No First Image',
+    imageUrls: ['/img/fallback.png']
+  })
+
+  assert.equal(result.cover, '/img/fallback.png')
+})
+
+test('photograph normalizeItem uses default cover when no images', function() {
+  const handler = getModuleHandler('photograph')
+  const result = handler.normalizeItem({
+    id: 42,
+    title: 'No Images'
+  })
+
+  assert.equal(result.cover, '/image/photograph.png')
 })

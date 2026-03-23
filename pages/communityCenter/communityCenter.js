@@ -83,19 +83,6 @@ Page({
     }
 
     switch (moduleId) {
-      case 'topic':
-        return {
-          default: (payload || []).map(function(item) {
-            return normalizeStandardItem(item, {
-              id: item.id,
-              title: '#' + (item.topic || i18n.t('community.list.campusTopic')),
-              subtitle: item.publishTime,
-              summary: item.content,
-              cover: item.imageUrls && item.imageUrls.length ? item.imageUrls[0] : '',
-              actions: []
-            })
-          })
-        }
       case 'delivery':
         return {
           published: (payload.published || []).map(function(item) {
@@ -162,19 +149,6 @@ Page({
                 { id: 'hideProfile', label: i18n.t('community.center.actionHide') }
               ]
             }
-          })
-        }
-      case 'photograph':
-        return {
-          default: (payload || []).map(function(item) {
-            return normalizeStandardItem(item, {
-              id: item.id,
-              title: item.title || i18n.t('community.list.campusWork'),
-              subtitle: item.createTime || '',
-              summary: item.content || '',
-              cover: item.firstImageUrl || (item.imageUrls && item.imageUrls.length ? item.imageUrls[0] : '/image/photograph.png'),
-              actions: []
-            })
           })
         }
       default:
