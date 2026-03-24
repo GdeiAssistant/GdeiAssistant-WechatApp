@@ -4,6 +4,7 @@ const endpoints = require('./endpoints.js')
 const dataSource = require('./data-source.js')
 const mock = require('../mock/index.js')
 const { normalizePayload } = require('./response.js')
+const { generateRequestId } = require('./request-id.js')
 let reLaunching = false
 const SESSION_STORAGE_KEYS = [storageKeys.sessionToken, storageKeys.username, 'accessToken', 'refreshToken']
 
@@ -73,16 +74,23 @@ function logout() {
     return mock.handleLogout(token)
   }
 
+  var requestId = generateRequestId()
+  var startTime = Date.now()
+
   return new Promise((resolve) => {
     wx.request({
       url: config.resourceDomain + endpoints.auth.logout,
       method: 'POST',
       header: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-Request-ID': requestId
       },
       timeout: config.requestTimeout,
-      complete: function() {
+      complete: function(res) {
+        var elapsed = Date.now() - startTime
+        var status = (res && res.statusCode) || 'FAILED'
+        console.debug('rid:' + requestId + ' | POST ' + endpoints.auth.logout + ' | ' + status + ' | ' + elapsed + 'ms')
         resolve()
       }
     })
@@ -99,15 +107,22 @@ function validateSessionToken() {
     return Promise.resolve(mock.isSessionTokenValid(token))
   }
 
+  var requestId = generateRequestId()
+  var startTime = Date.now()
+
   return new Promise((resolve) => {
     wx.request({
-      url: config.resourceDomain + endpoints.user.profile,
+      url: config.resourceDomain + endpoints.auth.validate,
       method: 'GET',
       header: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        'X-Request-ID': requestId
       },
       timeout: config.requestTimeout,
       success: function(result) {
+        var elapsed = Date.now() - startTime
+        console.debug('rid:' + requestId + ' | GET ' + endpoints.auth.validate + ' | ' + result.statusCode + ' | ' + elapsed + 'ms')
+
         if (result.statusCode === 200) {
           const payload = normalizePayload(result.data)
           resolve(!!payload.success)
@@ -117,6 +132,8 @@ function validateSessionToken() {
         resolve(false)
       },
       fail: function() {
+        var elapsed = Date.now() - startTime
+        console.debug('rid:' + requestId + ' | GET ' + endpoints.auth.validate + ' | FAILED | ' + elapsed + 'ms')
         resolve(false)
       }
     })

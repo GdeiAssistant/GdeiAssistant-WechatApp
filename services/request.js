@@ -3,6 +3,7 @@ const auth = require('./auth.js')
 const dataSource = require('./data-source.js')
 const mock = require('../mock/index.js')
 const { normalizePayload, pickMessage } = require('./response.js')
+const { generateRequestId } = require('./request-id.js')
 
 const DEVICE_ID_STORAGE_KEY = '__gdei_device_id'
 
@@ -49,6 +50,7 @@ function request(options) {
     const app = getApp()
     header['Accept-Language'] = (app && app.globalData && app.globalData.locale) || 'zh-CN'
     header['X-Device-ID'] = getDeviceId()
+    header['X-Request-ID'] = options.requestId || generateRequestId()
 
     if (showLoading) {
       wx.showNavigationBarLoading()
@@ -77,6 +79,9 @@ function request(options) {
       reject(new Error(error && error.message ? error.message : '服务暂不可用，请稍后再试'))
     }
 
+    const requestId = header['X-Request-ID']
+    const startTime = Date.now()
+
     if (dataSource.isMockMode()) {
       mock.handleRequest({
         url,
@@ -96,6 +101,9 @@ function request(options) {
       timeout: config.requestTimeout,
       data,
       success: function(res) {
+        var elapsed = Date.now() - startTime
+        console.debug('rid:' + requestId + ' | ' + method + ' ' + url + ' | ' + res.statusCode + ' | ' + elapsed + 'ms')
+
         if (res.statusCode === 200) {
           resolvePayload(res.data)
         } else if (res.statusCode === 401) {
@@ -107,6 +115,8 @@ function request(options) {
         }
       },
       fail: function() {
+        var elapsed = Date.now() - startTime
+        console.debug('rid:' + requestId + ' | ' + method + ' ' + url + ' | FAILED | ' + elapsed + 'ms')
         reject(new Error('网络连接超时，请重试'))
       },
       complete: finishLoading
@@ -121,5 +131,6 @@ function request(options) {
 }
 
 module.exports = {
-  request
+  request,
+  generateRequestId
 }

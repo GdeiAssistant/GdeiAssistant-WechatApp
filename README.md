@@ -123,6 +123,7 @@ GdeiAssistant-WechatApp/
 
 - 微信开发者工具
 - 微信小程序基础库 `>= 2.32.3`
+- Node.js `>= 18`（运行测试）
 
 ## 快速开始
 
@@ -137,6 +138,15 @@ GdeiAssistant-WechatApp/
 ### 3. 编译运行
 
 在微信开发者工具中编译并预览页面。
+
+### 4. 运行测试
+
+```bash
+npm install
+npm test
+```
+
+测试使用 Node 内建 test runner，无需额外依赖。`npm test` 会运行 `tests/` 下所有 `*.test.js` 文件。
 
 ## Mock 模式说明
 
