@@ -1085,7 +1085,7 @@ icon {
     bottom: 0;
     width: 6em;
     height: 3px;
-    background-color: #1aad19;
+    background-color: #047857;
     -webkit-transition: -webkit-transform 0.3s;
     transition: -webkit-transform 0.3s;
     transition: transform 0.3s;
