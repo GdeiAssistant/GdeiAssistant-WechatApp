@@ -1,7 +1,8 @@
 module.exports = {
   auth: {
     login: '/api/auth/login',
-    logout: '/api/auth/logout'
+    logout: '/api/auth/logout',
+    validate: '/api/auth/validate'
   },
   user: {
     avatar: '/api/profile/avatar',
