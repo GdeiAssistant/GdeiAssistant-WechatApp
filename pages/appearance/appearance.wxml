@@ -17,7 +17,7 @@
 
   <view class="section-title">{{t.fontLabel}}</view>
   <view class="font-card">
-    <slider min="0" max="3" step="1" value="{{fontScaleStep}}" activeColor="{{themeClass === 'theme-dark' ? '#34D399' : '#1AAD19'}}" bindchange="onFontChange" />
+    <slider min="0" max="3" step="1" value="{{fontScaleStep}}" activeColor="{{themeClass === 'theme-dark' ? '#34D399' : '#047857'}}" bindchange="onFontChange" />
     <view class="font-labels">
       <text>{{t.fontSmall}}</text>
       <text>{{t.fontStandard}}</text>
