@@ -10,6 +10,7 @@ const {
   getFacultyCodeByLabel,
   getFacultyOptions,
   getEnrollmentYearOptions,
+  getMajorCodeByLabel,
   getMajorOptions,
   canSelectMajor,
   formatLocationDisplay
@@ -278,22 +279,28 @@ function findLocationIndices(locationTree, codes, text) {
 
 function normalizeProfile(profile, avatar) {
   const safeProfile = profile || {}
+  const faculty = safeProfile.faculty || {}
+  const major = safeProfile.major || {}
+  const location = safeProfile.location || {}
+  const hometown = safeProfile.hometown || {}
   return {
     username: safeProfile.username || '',
     nickname: safeProfile.nickname || '',
     avatar: avatar || safeProfile.avatar || '/image/default.png',
     birthday: safeProfile.birthday || '',
-    faculty: safeProfile.faculty || NOT_SELECTED,
-    major: safeProfile.major || NOT_SELECTED,
+    faculty: faculty.label || NOT_SELECTED,
+    facultyCode: typeof faculty.code === 'number' ? faculty.code : null,
+    major: major.label || NOT_SELECTED,
+    majorCode: major.code || '',
     enrollment: safeProfile.enrollment ? String(safeProfile.enrollment) : '',
-    location: safeProfile.location || '',
-    locationRegion: safeProfile.locationRegion || '',
-    locationState: safeProfile.locationState || '',
-    locationCity: safeProfile.locationCity || '',
-    hometown: safeProfile.hometown || '',
-    hometownRegion: safeProfile.hometownRegion || '',
-    hometownState: safeProfile.hometownState || '',
-    hometownCity: safeProfile.hometownCity || '',
+    location: location.displayName || '',
+    locationRegion: location.region || '',
+    locationState: location.state || '',
+    locationCity: location.city || '',
+    hometown: hometown.displayName || '',
+    hometownRegion: hometown.region || '',
+    hometownState: hometown.state || '',
+    hometownCity: hometown.city || '',
     introduction: safeProfile.introduction || '',
     ipArea: safeProfile.ipArea || ''
   }
@@ -380,7 +387,9 @@ function buildEditableState(profile, locationTree) {
       nickname: normalizedProfile.nickname,
       birthday: normalizedProfile.birthday,
       faculty: normalizedProfile.faculty,
+      facultyCode: normalizedProfile.facultyCode,
       major: normalizedProfile.major,
+      majorCode: normalizedProfile.majorCode,
       enrollment: normalizedProfile.enrollment,
       location: normalizedProfile.location,
       locationCodes: {
@@ -932,7 +941,9 @@ Page({
       majorIndex: getSafeIndex(majorOptions, nextMajor),
       majorDisabled: !canSelectMajor(faculty),
       'form.faculty': faculty,
+      'form.facultyCode': facultyCode,
       'form.major': nextMajor,
+      'form.majorCode': getMajorCodeByLabel(faculty, nextMajor) || '',
       displayFaculty: displayValue(faculty),
       displayMajor: displayValue(nextMajor)
     })
@@ -952,23 +963,32 @@ Page({
       }).then(function() {
         if (nextMajor && nextMajor !== NOT_SELECTED) {
           return buildInteractionPromise(function() {
-            return userApi.updateMajor(nextMajor)
+            return userApi.updateMajor(getMajorCodeByLabel(faculty, nextMajor) || '')
           })
         }
       })
     }, {
-      faculty: faculty,
-      major: nextMajor
+      faculty: {
+        code: facultyCode,
+        label: faculty
+      },
+      major: {
+        code: getMajorCodeByLabel(faculty, nextMajor) || 'unselected',
+        label: nextMajor
+      }
     })
   },
 
   handleMajorChange: function(event) {
     const majorIndex = Number(event.detail.value)
     const major = (this.data.majorOptions || [])[majorIndex] || NOT_SELECTED
+    const faculty = String((this.data.form && this.data.form.faculty) || '')
+    const majorCode = getMajorCodeByLabel(faculty, major) || ''
 
     this.setData({
       majorIndex: majorIndex,
       'form.major': major,
+      'form.majorCode': majorCode,
       displayMajor: displayValue(major)
     })
 
@@ -977,9 +997,12 @@ Page({
     }
 
     this.queueProfileSave('major', function() {
-      return userApi.updateMajor(major)
+      return userApi.updateMajor(majorCode)
     }, {
-      major: major
+      major: {
+        code: majorCode || 'unselected',
+        label: major
+      }
     })
   },
 
@@ -1065,15 +1088,19 @@ Page({
         ? userApi.updateHometown(selection.codes)
         : userApi.updateLocation(selection.codes)
     }, target === 'hometown' ? {
-      hometown: selection.display,
-      hometownRegion: selection.codes.region,
-      hometownState: selection.codes.state,
-      hometownCity: selection.codes.city
+      hometown: {
+        region: selection.codes.region,
+        state: selection.codes.state,
+        city: selection.codes.city,
+        displayName: selection.display
+      }
     } : {
-      location: selection.display,
-      locationRegion: selection.codes.region,
-      locationState: selection.codes.state,
-      locationCity: selection.codes.city
+      location: {
+        region: selection.codes.region,
+        state: selection.codes.state,
+        city: selection.codes.city,
+        displayName: selection.display
+      }
     })
   },
 

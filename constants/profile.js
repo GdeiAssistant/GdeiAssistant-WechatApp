@@ -43,12 +43,64 @@ const MAJOR_OPTIONS_BY_FACULTY = {
   马克思主义学院: [NOT_SELECTED, '思想政治教育', '马克思主义理论']
 }
 
+const MAJOR_CODE_MAP = {
+  未选择: 'unselected',
+  教育学: 'education',
+  学前教育: 'preschool_education',
+  小学教育: 'primary_education',
+  特殊教育: 'special_education',
+  法学: 'law',
+  思想政治教育: 'ideological_political_education',
+  社会工作: 'social_work',
+  汉语言文学: 'chinese_language_literature',
+  历史学: 'history',
+  秘书学: 'secretarial_studies',
+  数学与应用数学: 'mathematics_applied_mathematics',
+  信息与计算科学: 'information_computing_science',
+  统计学: 'statistics',
+  英语: 'english',
+  商务英语: 'business_english',
+  日语: 'japanese',
+  翻译: 'translation',
+  物理学: 'physics',
+  电子信息工程: 'electronic_information_engineering',
+  通信工程: 'communication_engineering',
+  化学: 'chemistry',
+  应用化学: 'applied_chemistry',
+  材料化学: 'materials_chemistry',
+  生物科学: 'biological_science',
+  生物技术: 'biotechnology',
+  食品科学与工程: 'food_science_engineering',
+  体育教育: 'physical_education',
+  社会体育指导与管理: 'social_sports_guidance_management',
+  美术学: 'fine_arts',
+  视觉传达设计: 'visual_communication_design',
+  环境设计: 'environmental_design',
+  软件工程: 'software_engineering',
+  网络工程: 'network_engineering',
+  计算机科学与技术: 'computer_science_technology',
+  物联网工程: 'internet_of_things_engineering',
+  音乐学: 'musicology',
+  音乐表演: 'music_performance',
+  舞蹈学: 'dance',
+  教育技术学: 'educational_technology',
+  行政管理: 'public_administration',
+  工商管理: 'business_administration',
+  会计学: 'accounting',
+  马克思主义理论: 'marxist_theory'
+}
+
 const DEFAULT_PROFILE_OPTIONS_PAYLOAD = {
   faculties: FACULTY_OPTIONS.map(function(label, index) {
     return {
       code: index,
       label: label,
-      majors: MAJOR_OPTIONS_BY_FACULTY[label] || [NOT_SELECTED]
+      majors: (MAJOR_OPTIONS_BY_FACULTY[label] || [NOT_SELECTED]).map(function(majorLabel) {
+        return {
+          code: MAJOR_CODE_MAP[majorLabel] || normalizeOptionLookup(majorLabel),
+          label: majorLabel
+        }
+      })
     }
   }),
   marketplaceItemTypes: [
@@ -148,7 +200,36 @@ function getMajorOptions(faculty) {
   const matchedOption = getCachedProfileOptions().faculties.filter(function(option) {
     return normalizeOptionLookup(option.label) === normalizedFaculty
   })[0]
-  return matchedOption ? matchedOption.majors.slice() : [NOT_SELECTED]
+  return matchedOption ? matchedOption.majors.map(function(option) { return option.label }) : [NOT_SELECTED]
+}
+
+function getMajorCodeByLabel(faculty, majorLabel) {
+  const normalizedFaculty = normalizeOptionLookup(faculty)
+  const normalizedMajor = normalizeOptionLookup(majorLabel)
+  const matchedOption = getCachedProfileOptions().faculties.filter(function(option) {
+    return normalizeOptionLookup(option.label) === normalizedFaculty
+  })[0]
+  if (!matchedOption) {
+    return null
+  }
+  const matchedMajor = matchedOption.majors.filter(function(option) {
+    return normalizeOptionLookup(option.label) === normalizedMajor
+  })[0]
+  return matchedMajor ? matchedMajor.code : null
+}
+
+function getMajorLabelByCode(faculty, majorCode) {
+  const normalizedFaculty = normalizeOptionLookup(faculty)
+  const matchedOption = getCachedProfileOptions().faculties.filter(function(option) {
+    return normalizeOptionLookup(option.label) === normalizedFaculty
+  })[0]
+  if (!matchedOption) {
+    return ''
+  }
+  const matchedMajor = matchedOption.majors.filter(function(option) {
+    return option.code === majorCode
+  })[0]
+  return matchedMajor ? matchedMajor.label : ''
 }
 
 function canSelectMajor(faculty) {
@@ -201,8 +282,34 @@ function normalizeFacultyOptions(options, fallbackOptions) {
 
     const majors = (Array.isArray(option.majors) ? option.majors : [])
       .map(function(major) {
-        var m = String(major || '').trim()
-        return m === '未选择' ? NOT_SELECTED : m
+        if (typeof major === 'string') {
+          var majorLabelFromString = String(major || '').trim()
+          if (!majorLabelFromString) {
+            return null
+          }
+          if (majorLabelFromString === '未选择') {
+            majorLabelFromString = NOT_SELECTED
+          }
+          return {
+            code: MAJOR_CODE_MAP[majorLabelFromString === NOT_SELECTED ? '未选择' : majorLabelFromString] || normalizeOptionLookup(majorLabelFromString),
+            label: majorLabelFromString
+          }
+        }
+        if (!major || typeof major !== 'object') {
+          return null
+        }
+        var majorCode = String(major.code || '').trim()
+        var majorLabel = String(major.label || '').trim()
+        if (!majorCode || !majorLabel) {
+          return null
+        }
+        if (majorLabel === '未选择') {
+          majorLabel = NOT_SELECTED
+        }
+        return {
+          code: majorCode,
+          label: majorLabel
+        }
       })
       .filter(function(major) {
         return !!major
@@ -256,6 +363,8 @@ module.exports = {
   getFacultyCodeByLabel,
   getEnrollmentYearOptions,
   getMajorOptions,
+  getMajorCodeByLabel,
+  getMajorLabelByCode,
   canSelectMajor,
   getMarketplaceItemOptions,
   getLostFoundItemOptions,

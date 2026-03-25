@@ -1,5 +1,10 @@
 var LOCATION_REGIONS = require('../constants/location-regions.js')
-var { FACULTY_OPTIONS, getMajorOptions, formatLocationDisplay } = require('../constants/profile.js')
+var {
+  FACULTY_OPTIONS,
+  getMajorLabelByCode,
+  getMajorOptions,
+  formatLocationDisplay
+} = require('../constants/profile.js')
 
 function getLocationNodeName(node) {
   if (!node || typeof node !== 'object') {
@@ -129,19 +134,33 @@ function handleFacultyUpdate(token, payload, utils) {
   var faculty = FACULTY_OPTIONS[facultyIndex] || FACULTY_OPTIONS[0]
 
   return applyProfileUpdate(token, function(profile) {
-    profile.faculty = faculty
-    if (getMajorOptions(faculty).indexOf(profile.major) === -1) {
-      profile.major = '未选择'
+    var currentMajorLabel = String(((profile.major || {}).label) || '').trim()
+    profile.faculty = {
+      code: facultyIndex,
+      label: faculty
+    }
+    if (getMajorOptions(faculty).indexOf(currentMajorLabel) === -1) {
+      profile.major = {
+        code: 'unselected',
+        label: '未选择'
+      }
     }
   }, utils)
 }
 
 function handleMajorUpdate(token, payload, utils) {
-  var major = String(payload.major || '').trim()
+  var majorCode = String(payload.major || '').trim()
 
   return applyProfileUpdate(token, function(profile) {
-    var majorOptions = getMajorOptions(profile.faculty)
-    profile.major = majorOptions.indexOf(major) !== -1 ? major : '未选择'
+    var facultyLabel = String(((profile.faculty || {}).label) || '').trim()
+    var majorLabel = getMajorLabelByCode(facultyLabel, majorCode)
+    profile.major = majorLabel ? {
+      code: majorCode,
+      label: majorLabel
+    } : {
+      code: 'unselected',
+      label: '未选择'
+    }
   }, utils)
 }
 
@@ -166,17 +185,21 @@ function handleLocationUpdate(token, payload, type, utils) {
   return applyProfileUpdate(token, function(profile) {
     var displayText = buildLocationDisplay(locationNode.region, locationNode.state, locationNode.city)
     if (type === 'hometown') {
-      profile.hometownRegion = locationNode.region.code
-      profile.hometownState = locationNode.state ? locationNode.state.code : ''
-      profile.hometownCity = locationNode.city ? locationNode.city.code : ''
-      profile.hometown = displayText
+      profile.hometown = {
+        region: locationNode.region.code,
+        state: locationNode.state ? locationNode.state.code : '',
+        city: locationNode.city ? locationNode.city.code : '',
+        displayName: displayText
+      }
       return
     }
 
-    profile.locationRegion = locationNode.region.code
-    profile.locationState = locationNode.state ? locationNode.state.code : ''
-    profile.locationCity = locationNode.city ? locationNode.city.code : ''
-    profile.location = displayText
+    profile.location = {
+      region: locationNode.region.code,
+      state: locationNode.state ? locationNode.state.code : '',
+      city: locationNode.city ? locationNode.city.code : '',
+      displayName: displayText
+    }
   }, utils)
 }
 
