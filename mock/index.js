@@ -6,6 +6,7 @@ var profileHandlers = require('./profile-handlers.js')
 var campusHandlers = require('./campus-handlers.js')
 var infoHandlers = require('./info-handlers.js')
 var messageHandlers = require('./message-handlers.js')
+var i18n = require('../utils/i18n.js')
 
 // ---------------------------------------------------------------------------
 // Shared utilities — passed to handler modules via the `utils` object
@@ -156,6 +157,9 @@ function handleRequest(options) {
   var payload = requestOptions.data || {}
   var query = requestParts.query
   var token = requestOptions.sessionToken || requestOptions.token || ''
+  utils.currentLocale = function() {
+    return i18n.normalizeLocale(requestOptions.header && requestOptions.header['Accept-Language'])
+  }
 
   // --- Auth ---
   if (path === '/api/auth/login' && method === 'POST') {
