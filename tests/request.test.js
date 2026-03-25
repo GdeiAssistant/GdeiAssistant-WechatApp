@@ -198,3 +198,18 @@ test('request includes Accept-Language and X-Device-ID headers', async function(
   assert.equal(capturedHeader['Accept-Language'], 'zh-CN')
   assert.equal(capturedHeader['X-Device-ID'], 'test-device-id')
 })
+
+test('request normalizes unsupported locale before sending Accept-Language', async function() {
+  let capturedHeader = null
+  const { request } = setup(function(opts) {
+    capturedHeader = opts.header
+    opts.success({ statusCode: 200, data: { code: 200, data: null } })
+  })
+  global.getApp = function() {
+    return { globalData: { locale: 'fr-FR' } }
+  }
+
+  await request({ url: '/api/test' })
+
+  assert.equal(capturedHeader['Accept-Language'], 'zh-CN')
+})

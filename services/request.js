@@ -4,6 +4,7 @@ const dataSource = require('./data-source.js')
 const mock = require('../mock/index.js')
 const { normalizePayload, pickMessage } = require('./response.js')
 const { generateRequestId } = require('./request-id.js')
+const i18n = require('../utils/i18n.js')
 
 const DEVICE_ID_STORAGE_KEY = '__gdei_device_id'
 
@@ -48,7 +49,7 @@ function request(options) {
       header.Authorization = `Bearer ${sessionToken}`
     }
     const app = getApp()
-    header['Accept-Language'] = (app && app.globalData && app.globalData.locale) || 'zh-CN'
+    header['Accept-Language'] = i18n.normalizeLocale((app && app.globalData && app.globalData.locale) || 'zh-CN')
     header['X-Device-ID'] = getDeviceId()
     header['X-Request-ID'] = options.requestId || generateRequestId()
 

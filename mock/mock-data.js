@@ -1,38 +1,62 @@
-var { formatLocationDisplay } = require('../constants/profile.js')
+var { formatLocationDisplay, getDefaultProfileOptionsPayload } = require('../constants/profile.js')
+var i18n = require('../utils/i18n.js')
 
 var MOCK_ACCOUNT_DATA = {
   username: require('../constants/mock.js').MOCK_ACCOUNT_USERNAME,
   password: require('../constants/mock.js').MOCK_ACCOUNT_PASSWORD
 }
 
-var BASE_PROFILE = {
-  username: 'gdeiassistant',
-  nickname: '林知远',
-  avatar: '',
-  birthday: '2004-09-16',
-  faculty: {
-    code: 11,
-    label: '计算机科学系'
-  },
-  major: {
-    code: 'software_engineering',
-    label: '软件工程'
-  },
-  enrollment: '2023',
-  location: {
-    region: 'CN',
-    state: '44',
-    city: '1',
-    displayName: formatLocationDisplay('中国', '广东', '广州')
-  },
-  hometown: {
-    region: 'CN',
-    state: '44',
-    city: '5',
-    displayName: formatLocationDisplay('中国', '广东', '汕头')
-  },
-  introduction: '喜欢做实用的小工具，也在准备移动端开发实习。',
-  ipArea: '广东'
+function localizedProfileText(simplifiedChinese, traditionalChinese, english, japanese, korean, locale) {
+  var normalizedLocale = i18n.normalizeLocale(locale)
+  if (normalizedLocale === 'zh-HK' || normalizedLocale === 'zh-TW') return traditionalChinese
+  if (normalizedLocale === 'en') return english
+  if (normalizedLocale === 'ja') return japanese
+  if (normalizedLocale === 'ko') return korean
+  return simplifiedChinese
+}
+
+function buildBaseProfile(locale) {
+  var normalizedLocale = i18n.normalizeLocale(locale || i18n.getCurrentLocale())
+  var options = getDefaultProfileOptionsPayload(normalizedLocale)
+  var computerFaculty = options.faculties.filter(function(item) { return item.code === 11 })[0] || { label: '', majors: [] }
+  var softwareEngineering = computerFaculty.majors.filter(function(item) { return item.code === 'software_engineering' })[0] || { label: '' }
+
+  return {
+    username: 'gdeiassistant',
+    nickname: localizedProfileText('林知远', '林知遠', 'Lin Zhiyuan', 'リン・ジーユエン', '린즈위안', normalizedLocale),
+    avatar: '',
+    birthday: '2004-09-16',
+    faculty: {
+      code: 11,
+      label: computerFaculty.label
+    },
+    major: {
+      code: 'software_engineering',
+      label: softwareEngineering.label
+    },
+    enrollment: '2023',
+    location: {
+      region: 'CN',
+      state: '44',
+      city: '1',
+      displayName: localizedProfileText('中国 广东 广州', '中國 廣東 廣州', 'China Guangdong Guangzhou', '中国 広東 広州', '중국 광둥 광저우', normalizedLocale)
+    },
+    hometown: {
+      region: 'CN',
+      state: '44',
+      city: '5',
+      displayName: localizedProfileText('中国 广东 汕头', '中國 廣東 汕頭', 'China Guangdong Shantou', '中国 広東 汕頭', '중국 광둥 산터우', normalizedLocale)
+    },
+    introduction: localizedProfileText(
+      '喜欢做实用的小工具，也在准备移动端开发实习。',
+      '喜歡做實用的小工具，也在準備流動端開發實習。',
+      'Enjoys building practical tools and is preparing for a mobile development internship.',
+      '実用的な小さなツールを作るのが好きで、モバイル開発インターンの準備もしています。',
+      '실용적인 작은 도구를 만드는 것을 좋아하고, 모바일 개발 인턴을 준비하고 있습니다.',
+      normalizedLocale
+    ),
+    ipArea: localizedProfileText('广东', '廣東', 'Guangdong', '広東', '광둥', normalizedLocale)
+  }
 }
 
 var GRADE_REPORTS = [
@@ -273,7 +297,8 @@ var SPARE_ROOMS = [
 
 module.exports = {
   MOCK_ACCOUNT_DATA: MOCK_ACCOUNT_DATA,
-  BASE_PROFILE: BASE_PROFILE,
+  get BASE_PROFILE() { return buildBaseProfile() },
+  buildBaseProfile: buildBaseProfile,
   GRADE_REPORTS: GRADE_REPORTS,
   SCHEDULE_TEMPLATE: SCHEDULE_TEMPLATE,
   CARD_TRANSACTIONS: CARD_TRANSACTIONS,

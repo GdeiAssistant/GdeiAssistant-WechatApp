@@ -1,10 +1,12 @@
 var LOCATION_REGIONS = require('../constants/location-regions.js')
 var {
-  FACULTY_OPTIONS,
+  getDefaultProfileOptionsPayload,
+  getFacultyDictionaryOptions,
   getMajorLabelByCode,
   getMajorOptions,
   formatLocationDisplay
 } = require('../constants/profile.js')
+var mockData = require('./mock-data.js')
 
 function getLocationNodeName(node) {
   if (!node || typeof node !== 'object') {
@@ -67,7 +69,19 @@ function handleProfile(token, utils) {
   }
 
   var state = utils.readState()
-  return utils.resolveWithDelay(utils.buildSuccess(Object.assign({}, state.profile)))
+  var locale = utils.currentLocale ? utils.currentLocale() : 'zh-CN'
+  var localizedProfile = mockData.buildBaseProfile(locale)
+  var mergedProfile = Object.assign({}, localizedProfile, state.profile || {})
+  mergedProfile.faculty = (state.profile && state.profile.faculty && state.profile.faculty.code !== undefined)
+    ? (getDefaultProfileOptionsPayload(locale).faculties.filter(function(item) { return item.code === Number(state.profile.faculty.code) })[0] || localizedProfile.faculty)
+    : localizedProfile.faculty
+  mergedProfile.major = mergedProfile.faculty && state.profile && state.profile.major
+    ? (function() {
+        var majorLabel = getMajorLabelByCode(mergedProfile.faculty.label, state.profile.major.code)
+        return { code: state.profile.major.code, label: majorLabel || localizedProfile.major.label }
+      })()
+    : localizedProfile.major
+  return utils.resolveWithDelay(utils.buildSuccess(mergedProfile))
 }
 
 function handleAvatar(token, utils) {
@@ -131,7 +145,8 @@ function handleBirthdayUpdate(token, payload, utils) {
 
 function handleFacultyUpdate(token, payload, utils) {
   var facultyIndex = Number(payload.faculty)
-  var faculty = FACULTY_OPTIONS[facultyIndex] || FACULTY_OPTIONS[0]
+  var options = getFacultyDictionaryOptions()
+  var faculty = (options.filter(function(item) { return item.code === facultyIndex })[0] || options[0] || { label: '' }).label
 
   return applyProfileUpdate(token, function(profile) {
     var currentMajorLabel = String(((profile.major || {}).label) || '').trim()
@@ -142,7 +157,7 @@ function handleFacultyUpdate(token, payload, utils) {
     if (getMajorOptions(faculty).indexOf(currentMajorLabel) === -1) {
       profile.major = {
         code: 'unselected',
-        label: '未选择'
+        label: getDefaultProfileOptionsPayload(utils.currentLocale ? utils.currentLocale() : 'zh-CN').faculties[0].label
       }
     }
   }, utils)
@@ -159,7 +174,7 @@ function handleMajorUpdate(token, payload, utils) {
       label: majorLabel
     } : {
       code: 'unselected',
-      label: '未选择'
+      label: getDefaultProfileOptionsPayload(utils.currentLocale ? utils.currentLocale() : 'zh-CN').faculties[0].label
     }
   }, utils)
 }
