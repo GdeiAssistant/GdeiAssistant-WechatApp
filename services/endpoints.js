@@ -42,7 +42,7 @@ module.exports = {
     yellowPage: '/api/data/yellowpage'
   },
   info: {
-    graduateExam: '/api/kaoyan/query',
+    graduateExam: '/api/graduate-exam/query',
     spareRoom: '/api/spare/query',
     news: function(type, start, size) {
       return `/api/information/news/type/${type}/start/${start}/size/${size}`
