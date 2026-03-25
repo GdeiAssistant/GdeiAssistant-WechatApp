@@ -285,7 +285,7 @@ function handleRequest(options) {
   }
 
   // --- Info / Data ---
-  if (path === '/api/kaoyan/query' && method === 'POST') {
+  if (path === '/api/graduate-exam/query' && method === 'POST') {
     return infoHandlers.handleGraduateExam(payload, utils)
   }
 
