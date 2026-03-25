@@ -50,12 +50,24 @@ test('remote profile options drive faculty and community dictionaries together',
   // Remote '未选择' should be normalized to the internal NOT_SELECTED sentinel
   var NS = '__not_selected__'
   assert.deepEqual(options.faculties, [
-    { code: 0, label: NS, majors: [NS] },
-    { code: 3, label: '中文系', majors: [NS, '汉语言文学'] }
+    {
+      code: 0,
+      label: NS,
+      majors: [{ code: 'unselected', label: NS }]
+    },
+    {
+      code: 3,
+      label: '中文系',
+      majors: [
+        { code: 'unselected', label: NS },
+        { code: 'chinese_language_literature', label: '汉语言文学' }
+      ]
+    }
   ])
   assert.deepEqual(profile.getFacultyOptions(), [NS, '中文系'])
   assert.equal(profile.getFacultyCodeByLabel(' 中文系 '), 3)
   assert.deepEqual(profile.getMajorOptions('中文系'), [NS, '汉语言文学'])
+  assert.equal(profile.getMajorCodeByLabel('中文系', '汉语言文学'), 'chinese_language_literature')
   // Community options are now i18n-resolved from static definitions, not remote profile data
   var secondhandOptions = community.getSecondhandCategoryOptions()
   assert.ok(secondhandOptions.length > 0, 'secondhand category options should not be empty')

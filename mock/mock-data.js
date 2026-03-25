@@ -10,17 +10,27 @@ var BASE_PROFILE = {
   nickname: '林知远',
   avatar: '',
   birthday: '2004-09-16',
-  faculty: '计算机科学系',
-  major: '软件工程',
+  faculty: {
+    code: 11,
+    label: '计算机科学系'
+  },
+  major: {
+    code: 'software_engineering',
+    label: '软件工程'
+  },
   enrollment: '2023',
-  location: formatLocationDisplay('中国', '广东', '广州'),
-  locationRegion: 'CN',
-  locationState: '44',
-  locationCity: '1',
-  hometown: formatLocationDisplay('中国', '广东', '汕头'),
-  hometownRegion: 'CN',
-  hometownState: '44',
-  hometownCity: '5',
+  location: {
+    region: 'CN',
+    state: '44',
+    city: '1',
+    displayName: formatLocationDisplay('中国', '广东', '广州')
+  },
+  hometown: {
+    region: 'CN',
+    state: '44',
+    city: '5',
+    displayName: formatLocationDisplay('中国', '广东', '汕头')
+  },
   introduction: '喜欢做实用的小工具，也在准备移动端开发实习。',
   ipArea: '广东'
 }
