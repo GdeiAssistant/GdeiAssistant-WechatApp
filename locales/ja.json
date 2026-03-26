@@ -189,6 +189,12 @@
     "facultyInvalid": "学部オプションが無効です。更新してからやり直してください",
     "shareTitle": "マイページ"
   },
+  "upload": {
+    "readLocalFileFailed": "ローカルファイルの読み込みに失敗しました",
+    "fileUploadFailed": "ファイルのアップロードに失敗しました",
+    "missingFile": "アップロードするファイルがありません",
+    "missingPresignedUrl": "アップロード先の URL を取得できませんでした"
+  },
   "cardPage": {
     "navTitle": "学生証",
     "transactionHistory": "利用履歴",

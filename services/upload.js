@@ -1,5 +1,10 @@
 const dataSource = require('./data-source.js')
 const uploadApi = require('./apis/upload.js')
+const i18n = require('../utils/i18n.js')
+
+function buildUploadError(key) {
+  return new Error(i18n.t(key))
+}
 
 function getExtensionByType(contentType) {
   if (!contentType || typeof contentType !== 'string') {
@@ -75,7 +80,7 @@ function readLocalFile(filePath) {
         resolve(result.data)
       },
       fail: function() {
-        reject(new Error('读取本地文件失败'))
+        reject(buildUploadError('upload.readLocalFileFailed'))
       }
     })
   })
@@ -97,10 +102,10 @@ function putToPresignedUrl(uploadUrl, contentType, data) {
           return
         }
 
-        reject(new Error('文件上传失败'))
+        reject(buildUploadError('upload.fileUploadFailed'))
       },
       fail: function() {
-        reject(new Error('文件上传失败'))
+        reject(buildUploadError('upload.fileUploadFailed'))
       }
     })
   })
@@ -108,7 +113,7 @@ function putToPresignedUrl(uploadUrl, contentType, data) {
 
 function uploadLocalFileByPresignedUrl(file, options) {
   if (!file || !file.path) {
-    return Promise.reject(new Error('缺少待上传文件'))
+    return Promise.reject(buildUploadError('upload.missingFile'))
   }
 
   if (dataSource.isMockMode()) {
@@ -123,7 +128,7 @@ function uploadLocalFileByPresignedUrl(file, options) {
     const uploadUrl = result && result.data ? result.data.url : ''
     const objectKey = result && result.data ? result.data.objectKey : ''
     if (!uploadUrl || !objectKey) {
-      throw new Error('未获取到上传地址')
+      throw buildUploadError('upload.missingPresignedUrl')
     }
 
     return readLocalFile(file.path).then(function(buffer) {

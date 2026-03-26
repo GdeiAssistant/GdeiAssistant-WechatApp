@@ -189,6 +189,12 @@
     "facultyInvalid": "院系選項無效，請重新整理後重試",
     "shareTitle": "個人中心"
   },
+  "upload": {
+    "readLocalFileFailed": "讀取本機檔案失敗",
+    "fileUploadFailed": "檔案上傳失敗",
+    "missingFile": "缺少待上傳檔案",
+    "missingPresignedUrl": "未取得上傳地址"
+  },
   "cardPage": {
     "navTitle": "校園卡",
     "transactionHistory": "消費紀錄",

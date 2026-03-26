@@ -164,6 +164,12 @@
     "facultyInvalid": "院系选项无效，请刷新后重试",
     "shareTitle": "个人中心"
   },
+  "upload": {
+    "readLocalFileFailed": "读取本地文件失败",
+    "fileUploadFailed": "文件上传失败",
+    "missingFile": "缺少待上传文件",
+    "missingPresignedUrl": "未获取到上传地址"
+  },
   "cardPage": {
     "navTitle": "校园卡",
     "transactionHistory": "消费记录",

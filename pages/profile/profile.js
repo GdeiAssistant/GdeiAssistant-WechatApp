@@ -19,89 +19,43 @@ const {
 const NICKNAME_MAX_LENGTH = 32
 const INTRODUCTION_MAX_LENGTH = 80
 
-function getLocationNodeName(node) {
+function getLocationNodeName(node, locale) {
   if (!node || typeof node !== 'object') {
     return ''
+  }
+
+  var normalizedLocale = typeof i18n.normalizeLocale === 'function'
+    ? i18n.normalizeLocale(locale || (typeof i18n.getCurrentLocale === 'function' ? i18n.getCurrentLocale() : 'zh-CN'))
+    : 'zh-CN'
+
+  if (normalizedLocale === 'en' || normalizedLocale === 'ja' || normalizedLocale === 'ko') {
+    var localizedNames = node.localizedNames || {}
+    if (localizedNames[normalizedLocale]) {
+      return String(localizedNames[normalizedLocale]).trim()
+    }
+    if (node.latinName) {
+      return String(node.latinName).trim()
+    }
   }
 
   return String(node.aliasesName || node.name || '').trim()
 }
 
-function buildLocationDisplay(region, state, city) {
+function buildLocationDisplay(region, state, city, locale) {
   return formatLocationDisplay(
-    getLocationNodeName(region),
-    getLocationNodeName(state),
-    getLocationNodeName(city)
+    getLocationNodeName(region, locale),
+    getLocationNodeName(state, locale),
+    getLocationNodeName(city, locale),
+    locale
   )
 }
 
-function normalizeLocationText(text) {
-  return String(text || '')
-    .replace(/(?:[\uD83C][\uDDE6-\uDDFF])+/g, '')
-    .replace(/\uFE0F/g, '')
-    .replace(/\s+/g, '')
-}
-
-function collectLocationNodeNames(node) {
-  const names = []
-
-  function pushName(value) {
-    const nextValue = String(value || '').trim()
-    if (nextValue && names.indexOf(nextValue) === -1) {
-      names.push(nextValue)
-    }
-  }
-
-  pushName(node && node.name)
-  pushName(node && node.aliasesName)
-
-  return names
-}
-
-function buildLocationCandidates(region, state, city) {
-  const candidates = []
-  const regionNames = collectLocationNodeNames(region)
-  const stateNames = collectLocationNodeNames(state)
-  const cityNames = collectLocationNodeNames(city)
-
-  function pushCandidate(value) {
-    const nextValue = String(value || '').trim()
-    if (nextValue && candidates.indexOf(nextValue) === -1) {
-      candidates.push(nextValue)
-    }
-  }
-
-  regionNames.forEach(function(regionName) {
-    pushCandidate(regionName)
-    stateNames.forEach(function(stateName) {
-      pushCandidate(formatLocationDisplay(regionName, stateName, ''))
-      cityNames.forEach(function(cityName) {
-        pushCandidate(formatLocationDisplay(regionName, stateName, cityName))
-      })
-    })
-  })
-
-  stateNames.forEach(function(stateName) {
-    pushCandidate(stateName)
-    cityNames.forEach(function(cityName) {
-      pushCandidate(formatLocationDisplay('', stateName, cityName))
-    })
-  })
-
-  cityNames.forEach(function(cityName) {
-    pushCandidate(cityName)
-  })
-
-  return candidates
-}
-
-function hasLocationValue(codes, text) {
+function hasLocationValue(codes) {
   const locationCodes = codes || {}
   return !!(
     String(locationCodes.region || '').trim() ||
     String(locationCodes.state || '').trim() ||
-    String(locationCodes.city || '').trim() ||
-    normalizeLocationText(text)
+    String(locationCodes.city || '').trim()
   )
 }
 
@@ -143,9 +97,9 @@ function buildLocationRanges(locationTree, sourceIndices) {
   return {
     indices: safeIndices,
     ranges: [
-      locationTree.map(function(item) { return item.name }),
-      (region.states || []).map(function(item) { return item.name }),
-      (state.cities || []).map(function(item) { return item.name })
+      locationTree.map(function(item) { return getLocationNodeName(item) }),
+      (region.states || []).map(function(item) { return getLocationNodeName(item) }),
+      (state.cities || []).map(function(item) { return getLocationNodeName(item) })
     ]
   }
 }
@@ -165,7 +119,7 @@ function buildLocationSelection(locationTree, sourceIndices) {
   }
 
   return {
-    display: buildLocationDisplay(region, state, city),
+    display: buildLocationDisplay(region, state, city, typeof i18n.getCurrentLocale === 'function' ? i18n.getCurrentLocale() : 'zh-CN'),
     codes: {
       region: region.code,
       state: state ? state.code : '',
@@ -175,63 +129,7 @@ function buildLocationSelection(locationTree, sourceIndices) {
   }
 }
 
-function findLocationIndicesByText(locationTree, text) {
-  const normalizedText = normalizeLocationText(text)
-
-  if (!normalizedText) {
-    return null
-  }
-
-  let partialMatch = null
-
-  for (let regionIndex = 0; regionIndex < locationTree.length; regionIndex += 1) {
-    const region = locationTree[regionIndex]
-    const states = region.states || []
-    const regionCandidates = buildLocationCandidates(region, null, null)
-
-    if (regionCandidates.some(function(candidate) {
-      return normalizeLocationText(candidate) === normalizedText
-    })) {
-      return [regionIndex, 0, 0]
-    }
-
-    for (let stateIndex = 0; stateIndex < states.length; stateIndex += 1) {
-      const state = states[stateIndex]
-      const cities = state.cities || []
-      const stateCandidates = buildLocationCandidates(region, state, null)
-
-      if (stateCandidates.some(function(candidate) {
-        return normalizeLocationText(candidate) === normalizedText
-      })) {
-        return [regionIndex, stateIndex, 0]
-      }
-
-      for (let cityIndex = 0; cityIndex < cities.length; cityIndex += 1) {
-        const city = cities[cityIndex]
-        const candidates = buildLocationCandidates(region, state, city)
-
-        if (candidates.some(function(candidate) {
-          return normalizeLocationText(candidate) === normalizedText
-        })) {
-          return [regionIndex, stateIndex, cityIndex]
-        }
-
-        if (!partialMatch) {
-          const cityNames = collectLocationNodeNames(city)
-          if (cityNames.some(function(cityName) {
-            return normalizedText.indexOf(normalizeLocationText(cityName)) !== -1
-          })) {
-            partialMatch = [regionIndex, stateIndex, cityIndex]
-          }
-        }
-      }
-    }
-  }
-
-  return partialMatch
-}
-
-function findLocationIndices(locationTree, codes, text) {
+function findLocationIndices(locationTree, codes) {
   if (!Array.isArray(locationTree) || !locationTree.length) {
     return null
   }
@@ -273,8 +171,7 @@ function findLocationIndices(locationTree, codes, text) {
       }
     }
   }
-
-  return findLocationIndicesByText(locationTree, text)
+  return null
 }
 
 function normalizeProfile(profile, avatar) {
@@ -316,23 +213,23 @@ function syncProfileLocationDisplay(profile, locationTree) {
     region: nextProfile.locationRegion,
     state: nextProfile.locationState,
     city: nextProfile.locationCity
-  }, nextProfile.location)
+  })
     ? findLocationIndices(locationTree, {
       region: nextProfile.locationRegion,
       state: nextProfile.locationState,
       city: nextProfile.locationCity
-    }, nextProfile.location)
+    })
     : null
   const hometownIndices = hasLocationValue({
     region: nextProfile.hometownRegion,
     state: nextProfile.hometownState,
     city: nextProfile.hometownCity
-  }, nextProfile.hometown)
+  })
     ? findLocationIndices(locationTree, {
       region: nextProfile.hometownRegion,
       state: nextProfile.hometownState,
       city: nextProfile.hometownCity
-    }, nextProfile.hometown)
+    })
     : null
   const locationSelection = locationIndices ? buildLocationSelection(locationTree, locationIndices) : null
   const hometownSelection = hometownIndices ? buildLocationSelection(locationTree, hometownIndices) : null
@@ -373,12 +270,12 @@ function buildEditableState(profile, locationTree) {
     region: normalizedProfile.locationRegion,
     state: normalizedProfile.locationState,
     city: normalizedProfile.locationCity
-  }, normalizedProfile.location) || [0, 0, 0]
+  }) || [0, 0, 0]
   const hometownIndices = findLocationIndices(locationTree, {
     region: normalizedProfile.hometownRegion,
     state: normalizedProfile.hometownState,
     city: normalizedProfile.hometownCity
-  }, normalizedProfile.hometown) || [0, 0, 0]
+  }) || [0, 0, 0]
   const locationPickerState = buildLocationRanges(locationTree, locationIndices)
   const hometownPickerState = buildLocationRanges(locationTree, hometownIndices)
 
