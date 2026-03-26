@@ -5,6 +5,7 @@ const dataSource = require('./data-source.js')
 const mock = require('../mock/index.js')
 const { normalizePayload } = require('./response.js')
 const { generateRequestId } = require('./request-id.js')
+const i18n = require('../utils/i18n.js')
 let reLaunching = false
 const SESSION_STORAGE_KEYS = [storageKeys.sessionToken, storageKeys.username, 'accessToken', 'refreshToken']
 
@@ -58,10 +59,10 @@ function ensureSessionToken(options) {
 
   if (interactive) {
     clearSession()
-    reLaunchToLogin('登录失效', '未检测到登录凭证，请重新登录')
+    reLaunchToLogin(i18n.t('auth.loginRequiredTitle'), i18n.t('auth.loginRequiredMessage'))
   }
 
-  return Promise.reject(new Error('未检测到登录凭证'))
+  return Promise.reject(new Error(i18n.t('auth.loginRequiredError')))
 }
 
 function logout() {

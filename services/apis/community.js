@@ -2,6 +2,7 @@ const endpoints = require('../endpoints.js')
 const { request } = require('../request.js')
 const { encodeForm } = require('../../utils/form.js')
 const { getModuleHandler } = require('../community/registry.js')
+const i18n = require('../../utils/i18n.js')
 
 function requestForm(options) {
   return request(Object.assign({}, options, {
@@ -15,7 +16,7 @@ function getFeed(moduleId, options) {
     return handler.getFeed(options)
   }
 
-  return Promise.reject(new Error('未识别的社区模块'))
+  return Promise.reject(new Error(i18n.t('community.common.unknownModule')))
 }
 
 function getDetail(moduleId, id) {
@@ -24,7 +25,7 @@ function getDetail(moduleId, id) {
     return handler.getDetail(id)
   }
 
-  return Promise.reject(new Error('未识别的社区模块'))
+  return Promise.reject(new Error(i18n.t('community.common.unknownModule')))
 }
 
 function getComments(moduleId, id) {
@@ -42,7 +43,7 @@ function getCenter(moduleId, options) {
     return handler.getCenter(options)
   }
 
-  return Promise.reject(new Error('未识别的社区模块'))
+  return Promise.reject(new Error(i18n.t('community.common.unknownModule')))
 }
 
 function publish(moduleId, payload) {
@@ -51,7 +52,7 @@ function publish(moduleId, payload) {
     return handler.publish(payload)
   }
 
-  return Promise.reject(new Error('未识别的社区模块'))
+  return Promise.reject(new Error(i18n.t('community.common.unknownModule')))
 }
 
 function updateSecondhandItem(id, payload) {
@@ -78,7 +79,7 @@ function submitComment(moduleId, id, comment) {
     return handler.submitComment(id, comment)
   }
 
-  return Promise.reject(new Error('该模块暂不支持评论'))
+  return Promise.reject(new Error(i18n.t('community.common.commentUnsupported')))
 }
 
 function toggleLike(moduleId, id, value) {
@@ -87,7 +88,7 @@ function toggleLike(moduleId, id, value) {
     return handler.toggleLike(id, value)
   }
 
-  return Promise.reject(new Error('该模块暂不支持点赞'))
+  return Promise.reject(new Error(i18n.t('community.common.likeUnsupported')))
 }
 
 function guessExpress(id, name) {

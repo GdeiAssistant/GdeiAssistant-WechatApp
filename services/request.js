@@ -37,7 +37,7 @@ function request(options) {
     authRequired = false,
     contentType = 'application/json',
     showLoading = false,
-    loadingTitle = '加载中'
+    loadingTitle = i18n.t('common.loading')
   } = options
 
   const execute = (sessionToken) => new Promise((resolve, reject) => {
@@ -72,12 +72,12 @@ function request(options) {
     const rejectPayload = function(error) {
       if (error && error.statusCode === 401) {
         auth.clearSession()
-        auth.reLaunchToLogin('登录过期', '登录凭证已过期，请重新登录')
-        reject(new Error('登录凭证已过期，请重新登录'))
+        auth.reLaunchToLogin(i18n.t('auth.loginExpiredTitle'), i18n.t('auth.loginExpiredMessage'))
+        reject(new Error(i18n.t('auth.loginExpiredMessage')))
         return
       }
 
-      reject(new Error(error && error.message ? error.message : '服务暂不可用，请稍后再试'))
+      reject(new Error(error && error.message ? error.message : i18n.t('common.serviceUnavailable')))
     }
 
     const requestId = header['X-Request-ID']
@@ -109,8 +109,8 @@ function request(options) {
           resolvePayload(res.data)
         } else if (res.statusCode === 401) {
           auth.clearSession()
-          auth.reLaunchToLogin('登录过期', '登录凭证已过期，请重新登录')
-          reject(new Error('登录凭证已过期，请重新登录'))
+          auth.reLaunchToLogin(i18n.t('auth.loginExpiredTitle'), i18n.t('auth.loginExpiredMessage'))
+          reject(new Error(i18n.t('auth.loginExpiredMessage')))
         } else {
           reject(new Error(pickMessage(res.data)))
         }
@@ -118,7 +118,7 @@ function request(options) {
       fail: function() {
         var elapsed = Date.now() - startTime
         console.debug('rid:' + requestId + ' | ' + method + ' ' + url + ' | FAILED | ' + elapsed + 'ms')
-        reject(new Error('网络连接超时，请重试'))
+        reject(new Error(i18n.t('common.networkTimeout')))
       },
       complete: finishLoading
     })

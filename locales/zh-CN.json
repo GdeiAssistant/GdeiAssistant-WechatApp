@@ -11,7 +11,9 @@
     "more": "更多",
     "noData": "暂无数据",
     "networkError": "网络异常，请稍后再试",
+    "networkTimeout": "网络连接超时，请重试",
     "loadFailed": "加载失败",
+    "serviceUnavailable": "服务暂不可用，请稍后再试",
     "publishSuccess": "发布成功",
     "publishFailed": "发布失败",
     "queryFailed": "查询失败"
@@ -59,6 +61,13 @@
     "debugSettings": "调试设置",
     "useMockData": "使用模拟测试数据",
     "moreSettings": "更多功能设置"
+  },
+  "auth": {
+    "loginExpiredTitle": "登录过期",
+    "loginExpiredMessage": "登录凭证已过期，请重新登录",
+    "loginRequiredTitle": "登录失效",
+    "loginRequiredMessage": "未检测到登录凭证，请重新登录",
+    "loginRequiredError": "未检测到登录凭证"
   },
   "schedule": {
     "navTitle": "我的课表",
@@ -593,7 +602,9 @@
       "notice": "提示",
       "unknownModule": "未识别的社区模块",
       "campusCommunity": "校园社区",
-      "operationFailed": "操作失败"
+      "operationFailed": "操作失败",
+      "commentUnsupported": "该模块暂不支持评论",
+      "likeUnsupported": "该模块暂不支持点赞"
     },
     "category": {
       "all": "全部",

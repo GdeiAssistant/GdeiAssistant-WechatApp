@@ -1,16 +1,22 @@
+const i18n = require('../utils/i18n.js')
+
+function getServiceUnavailableMessage() {
+  return i18n.t('common.serviceUnavailable')
+}
+
 function pickMessage(payload) {
   if (!payload) {
-    return '服务暂不可用，请稍后再试'
+    return getServiceUnavailableMessage()
   }
 
-  return payload.message || payload.msg || payload.error || payload.errorMsg || '服务暂不可用，请稍后再试'
+  return payload.message || payload.msg || payload.error || payload.errorMsg || getServiceUnavailableMessage()
 }
 
 function normalizePayload(rawPayload) {
   if (!rawPayload) {
     return {
       success: false,
-      message: '服务暂不可用，请稍后再试',
+      message: getServiceUnavailableMessage(),
       data: null
     }
   }
@@ -27,7 +33,7 @@ function normalizePayload(rawPayload) {
   if (typeof rawPayload !== 'object') {
     return {
       success: false,
-      message: '服务暂不可用，请稍后再试',
+      message: getServiceUnavailableMessage(),
       data: null,
       raw: rawPayload
     }

@@ -48,6 +48,7 @@ Page({
         langLabel: i18n.t('appearance.language.label')
       }
     })
+    wx.setNavigationBarTitle({ title: i18n.t('appearance.title') })
   },
 
   onThemeSelect: function (e) {

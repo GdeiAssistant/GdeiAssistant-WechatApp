@@ -21,7 +21,7 @@ Page({
   refreshI18n: function () {
     var tabs = i18n.t('grade.tabs')
     if (!Array.isArray(tabs)) {
-      tabs = ['大一', '大二', '大三', '大四']
+      tabs = []
     }
     this.setData({
       tabs: tabs,
@@ -32,7 +32,7 @@ Page({
         secondTerm: i18n.t('grade.secondTerm')
       }
     })
-    wx.setNavigationBarTitle({ title: this.data.t.navTitle })
+    wx.setNavigationBarTitle({ title: i18n.t('grade.navTitle') })
   },
 
   tabClick: function(e) {

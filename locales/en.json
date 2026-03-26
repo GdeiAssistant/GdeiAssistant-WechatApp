@@ -11,7 +11,9 @@
     "more": "More",
     "noData": "No data available",
     "networkError": "Network error, please try again",
+    "networkTimeout": "Network timed out. Please try again",
     "loadFailed": "Failed to load",
+    "serviceUnavailable": "Service temporarily unavailable. Please try again later",
     "publishSuccess": "Published",
     "publishFailed": "Publish failed",
     "queryFailed": "Query failed"
@@ -59,6 +61,13 @@
     "debugSettings": "Debug Settings",
     "useMockData": "Use mock test data",
     "moreSettings": "More settings"
+  },
+  "auth": {
+    "loginExpiredTitle": "Session expired",
+    "loginExpiredMessage": "Your session has expired. Please log in again.",
+    "loginRequiredTitle": "Login required",
+    "loginRequiredMessage": "No valid session was found. Please log in again.",
+    "loginRequiredError": "No valid session was found."
   },
   "schedule": {
     "navTitle": "My Schedule",
@@ -593,7 +602,9 @@
       "notice": "Notice",
       "unknownModule": "Unrecognized community module",
       "campusCommunity": "Campus Community",
-      "operationFailed": "Operation failed"
+      "operationFailed": "Operation failed",
+      "commentUnsupported": "Comments are not supported for this module",
+      "likeUnsupported": "Likes are not supported for this module"
     },
     "category": {
       "all": "All",

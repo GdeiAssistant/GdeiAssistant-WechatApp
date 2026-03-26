@@ -282,6 +282,9 @@ Page({
 
     var tData = {
       loading: i18n.t('community.list.loading'),
+      loadMore: i18n.t('community.list.loadMore'),
+      loadingMore: i18n.t('community.list.loading'),
+      noMore: i18n.t('community.list.noMore'),
       emptyTitle: i18n.t('community.list.emptyTitle'),
       emptySummaryCenter: i18n.t('community.center.emptySummary'),
       continuePublish: i18n.t('community.center.continuePublish'),

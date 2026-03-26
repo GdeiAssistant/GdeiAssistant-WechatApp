@@ -91,7 +91,41 @@ const PHOTOGRAPH_TAB_DEFS = [
   { labelKey: 'community.photographTab.campus', feedValue: 0, publishValue: 2 }
 ]
 
-const DELIVERY_DEFAULT_ORDER_NAME = '代收'
+function normalizeCommunityLocale(locale) {
+  if (typeof i18n.normalizeLocale === 'function') {
+    return i18n.normalizeLocale(locale)
+  }
+
+  const lang = String(locale || '').trim().replace(/_/g, '-').toLowerCase()
+  if (!lang) return 'zh-CN'
+  if (lang === 'zh-cn' || lang === 'zh-hans' || lang === 'zh-hans-cn' || lang === 'zh') return 'zh-CN'
+  if (lang === 'zh-hk' || lang === 'zh-hant-hk') return 'zh-HK'
+  if (lang === 'zh-tw' || lang === 'zh-hant' || lang === 'zh-hant-tw') return 'zh-TW'
+  if (lang.indexOf('zh-hk') === 0) return 'zh-HK'
+  if (lang.indexOf('zh-tw') === 0 || lang.indexOf('zh-hant') === 0) return 'zh-TW'
+  if (lang.indexOf('zh') === 0) return 'zh-CN'
+  if (lang.indexOf('en') === 0) return 'en'
+  if (lang.indexOf('ja') === 0) return 'ja'
+  if (lang.indexOf('ko') === 0) return 'ko'
+  return 'zh-CN'
+}
+
+function getDeliveryDefaultOrderName(locale) {
+  const currentLocale = typeof i18n.getCurrentLocale === 'function'
+    ? i18n.getCurrentLocale()
+    : 'zh-CN'
+  const normalizedLocale = normalizeCommunityLocale(locale || currentLocale)
+
+  return normalizedLocale === 'zh-CN'
+    ? '代收'
+    : normalizedLocale === 'zh-HK' || normalizedLocale === 'zh-TW'
+      ? '代收'
+      : normalizedLocale === 'en'
+        ? 'Parcel pickup'
+        : normalizedLocale === 'ja'
+          ? '代理受取'
+          : '대리수령'
+}
 const DELIVERY_PLACEHOLDER_PICKUP_CODE = '00000000000'
 
 const COMMUNITY_PAGE_TITLE_KEYS = {
@@ -358,7 +392,8 @@ module.exports = {
   getPhotographTabOptions,
   getCommunityModules,
   getCommunityModuleMap,
-  DELIVERY_DEFAULT_ORDER_NAME,
+  DELIVERY_DEFAULT_ORDER_NAME: getDeliveryDefaultOrderName(),
+  getDeliveryDefaultOrderName,
   DELIVERY_PLACEHOLDER_PICKUP_CODE,
   getCommunityModule,
   getCommunityPageTitle

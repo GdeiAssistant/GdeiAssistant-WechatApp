@@ -9,7 +9,8 @@ function handleAnnouncementList(token, path, utils) {
   var matched = /^\/api\/information\/announcement\/start\/(\d+)\/size\/(\d+)$/.exec(path)
   var start = matched ? Number(matched[1]) : 0
   var size = matched ? Number(matched[2]) : 10
-  return utils.resolveWithDelay(utils.buildSuccess(data.ANNOUNCEMENT_LIST.slice(start, start + size)))
+  var announcements = data.getAnnouncementList(utils.currentLocale && utils.currentLocale())
+  return utils.resolveWithDelay(utils.buildSuccess(announcements.slice(start, start + size)))
 }
 
 function handleAnnouncementDetail(token, path, utils) {
@@ -20,12 +21,12 @@ function handleAnnouncementDetail(token, path, utils) {
 
   var matched = /^\/api\/information\/announcement\/id\/(.+)$/.exec(path)
   var targetId = matched ? matched[1] : ''
-  var detail = data.ANNOUNCEMENT_LIST.filter(function(item) {
+  var detail = data.getAnnouncementList(utils.currentLocale && utils.currentLocale()).filter(function(item) {
     return item.id === targetId
   })[0]
 
   if (!detail) {
-    return utils.rejectWithMessage('系统通知不存在')
+    return utils.rejectWithMessage(data.localizedMockText('系统通知不存在', '系統通知不存在', 'System notification not found', 'システム通知が見つかりません', '시스템 알림을 찾을 수 없습니다', utils.currentLocale && utils.currentLocale()))
   }
 
   return utils.resolveWithDelay(utils.buildSuccess(detail))
@@ -65,7 +66,7 @@ function handleMessageRead(token, path, utils) {
 
   var messageId = /^\/api\/information\/message\/id\/(.+)\/read$/.exec(path)
   if (!messageId) {
-    return utils.rejectWithMessage('消息不存在')
+    return utils.rejectWithMessage(data.localizedMockText('消息不存在', '消息不存在', 'Message not found', 'メッセージが見つかりません', '메시지를 찾을 수 없습니다', utils.currentLocale && utils.currentLocale()))
   }
 
   var nextState = utils.readState()
