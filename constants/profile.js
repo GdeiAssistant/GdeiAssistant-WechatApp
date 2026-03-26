@@ -125,10 +125,19 @@ function getLostFoundModeOptions() {
   return getCachedProfileOptions().lostFoundModes.slice()
 }
 
-function formatLocationDisplay(regionName, stateName, cityName) {
-  return [regionName, stateName, cityName].filter(function(item, index, list) {
+function formatLocationDisplay(regionName, stateName, cityName, locale) {
+  var normalizedLocale = typeof i18n.normalizeLocale === 'function'
+    ? i18n.normalizeLocale(locale || getCurrentLocale())
+    : 'zh-CN'
+  var parts = [regionName, stateName, cityName].filter(function(item, index, list) {
     return !!item && item !== list[index - 1]
-  }).join(' ')
+  })
+
+  if (normalizedLocale === 'en' || normalizedLocale === 'ja' || normalizedLocale === 'ko') {
+    return parts.reverse().join(', ')
+  }
+
+  return parts.join(' ')
 }
 
 function normalizeProfileOptions(payload) {

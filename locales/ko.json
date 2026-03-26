@@ -189,6 +189,12 @@
     "facultyInvalid": "학과 옵션이 유효하지 않습니다. 새로고침 후 다시 시도하세요",
     "shareTitle": "마이페이지"
   },
+  "upload": {
+    "readLocalFileFailed": "로컬 파일을 읽지 못했습니다",
+    "fileUploadFailed": "파일 업로드에 실패했습니다",
+    "missingFile": "업로드할 파일이 없습니다",
+    "missingPresignedUrl": "업로드 주소를 가져오지 못했습니다"
+  },
   "cardPage": {
     "navTitle": "학생증",
     "transactionHistory": "거래 내역",

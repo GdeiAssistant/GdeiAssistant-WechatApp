@@ -8,18 +8,40 @@ var {
 } = require('../constants/profile.js')
 var mockData = require('./mock-data.js')
 
-function getLocationNodeName(node) {
+function getLocationNodeName(node, locale) {
   if (!node || typeof node !== 'object') {
     return ''
   }
+  var normalizedLocale = typeof utilsNormalizeLocale === 'function'
+    ? utilsNormalizeLocale(locale)
+    : (i18n && typeof i18n.normalizeLocale === 'function' ? i18n.normalizeLocale(locale) : 'zh-CN')
+
+  if (normalizedLocale === 'en' || normalizedLocale === 'ja' || normalizedLocale === 'ko') {
+    var localizedNames = node.localizedNames || {}
+    if (localizedNames[normalizedLocale]) {
+      return String(localizedNames[normalizedLocale]).trim()
+    }
+    if (node.latinName) {
+      return String(node.latinName).trim()
+    }
+  }
+
   return String(node.aliasesName || node.name || '').trim()
 }
 
-function buildLocationDisplay(region, state, city) {
+function utilsNormalizeLocale(locale) {
+  if (i18n && typeof i18n.normalizeLocale === 'function') {
+    return i18n.normalizeLocale(locale)
+  }
+  return 'zh-CN'
+}
+
+function buildLocationDisplay(region, state, city, locale) {
   return formatLocationDisplay(
-    getLocationNodeName(region),
-    getLocationNodeName(state),
-    getLocationNodeName(city)
+    getLocationNodeName(region, locale),
+    getLocationNodeName(state, locale),
+    getLocationNodeName(city, locale),
+    locale
   )
 }
 
@@ -194,11 +216,19 @@ function handleLocationUpdate(token, payload, type, utils) {
   var locationNode = findLocationNodeByCodes(regionCode, stateCode, cityCode)
 
   if (!locationNode) {
-    return utils.rejectWithMessage('Location option was not found')
+    return utils.rejectWithMessage(mockData.localizedMockText(
+      '未找到对应的地区选项',
+      '未找到對應的地區選項',
+      'The selected location option was not found',
+      '選択した地域オプションが見つかりませんでした',
+      '선택한 지역 옵션을 찾을 수 없습니다',
+      utils.currentLocale && utils.currentLocale()
+    ))
   }
 
   return applyProfileUpdate(token, function(profile) {
-    var displayText = buildLocationDisplay(locationNode.region, locationNode.state, locationNode.city)
+    var currentLocale = utils.currentLocale ? utils.currentLocale() : 'zh-CN'
+    var displayText = buildLocationDisplay(locationNode.region, locationNode.state, locationNode.city, currentLocale)
     if (type === 'hometown') {
       profile.hometown = {
         region: locationNode.region.code,

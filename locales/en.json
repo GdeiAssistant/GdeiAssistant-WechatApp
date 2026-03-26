@@ -164,6 +164,12 @@
     "facultyInvalid": "Invalid faculty option, please refresh and try again",
     "shareTitle": "Profile"
   },
+  "upload": {
+    "readLocalFileFailed": "Failed to read the local file",
+    "fileUploadFailed": "File upload failed",
+    "missingFile": "No file was provided for upload",
+    "missingPresignedUrl": "Failed to obtain the upload URL"
+  },
   "cardPage": {
     "navTitle": "Campus Card",
     "transactionHistory": "Transaction History",
