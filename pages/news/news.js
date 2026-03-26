@@ -5,12 +5,6 @@ var themeUtil = require('../../utils/theme')
 var i18n = require('../../utils/i18n')
 
 const PAGE_SIZE = 10
-const DEFAULT_NEWS_TABS = [
-  { type: 1, label: '学校要闻' },
-  { type: 2, label: '院部通知' },
-  { type: 3, label: '通知公告' },
-  { type: 4, label: '学术动态' }
-]
 
 Page({
   onShow: function () {
@@ -33,7 +27,7 @@ Page({
   refreshI18n: function () {
     var tabs = i18n.t('info.newsTabs')
     if (!Array.isArray(tabs)) {
-      tabs = DEFAULT_NEWS_TABS
+      tabs = []
     }
     this.setData({
       tabs: tabs,
@@ -44,7 +38,7 @@ Page({
         noNews: i18n.t('info.noNews')
       }
     })
-    wx.setNavigationBarTitle({ title: this.data.t.navTitle })
+    wx.setNavigationBarTitle({ title: i18n.t('info.navTitle') })
   },
 
   loadNews: function(pageNumber, reset) {

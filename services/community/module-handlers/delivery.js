@@ -4,7 +4,7 @@ const { encodeForm } = require('../../../utils/form.js')
 const i18n = require('../../../utils/i18n.js')
 const {
   getDeliveryStatusOptions,
-  DELIVERY_DEFAULT_ORDER_NAME,
+  getDeliveryDefaultOrderName,
   DELIVERY_PLACEHOLDER_PICKUP_CODE
 } = require('../../../constants/community.js')
 
@@ -186,7 +186,7 @@ module.exports = {
     var form = data.form || {}
 
     return Promise.resolve({
-      name: DELIVERY_DEFAULT_ORDER_NAME,
+      name: getDeliveryDefaultOrderName(),
       number: String(form.pickupCode || '').trim() || DELIVERY_PLACEHOLDER_PICKUP_CODE,
       phone: String(form.contactPhone || '').trim(),
       price: Number(form.reward || 0),
@@ -211,11 +211,11 @@ module.exports = {
 
   // --- Submit comment ---
   submitComment: function() {
-    return Promise.reject(new Error('该模块暂不支持评论'))
+    return Promise.reject(new Error(i18n.t('community.common.commentUnsupported')))
   },
 
   // --- Toggle like ---
   toggleLike: function() {
-    return Promise.reject(new Error('该模块暂不支持点赞'))
+    return Promise.reject(new Error(i18n.t('community.common.likeUnsupported')))
   }
 }

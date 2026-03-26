@@ -194,7 +194,7 @@ function handleLocationUpdate(token, payload, type, utils) {
   var locationNode = findLocationNodeByCodes(regionCode, stateCode, cityCode)
 
   if (!locationNode) {
-    return utils.rejectWithMessage('未找到对应的地区信息')
+    return utils.rejectWithMessage('Location option was not found')
   }
 
   return applyProfileUpdate(token, function(profile) {

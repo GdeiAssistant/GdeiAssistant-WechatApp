@@ -11,7 +11,9 @@
     "more": "更多",
     "noData": "暫無數據",
     "networkError": "網絡異常，請稍後再試",
+    "networkTimeout": "網絡連接超時，請重試",
     "loadFailed": "載入失敗",
+    "serviceUnavailable": "服務暫不可用，請稍後再試",
     "publishSuccess": "發佈成功",
     "publishFailed": "發佈失敗",
     "queryFailed": "查詢失敗"
@@ -59,6 +61,13 @@
     "debugSettings": "調試設定",
     "useMockData": "使用模擬測試數據",
     "moreSettings": "更多功能設定"
+  },
+  "auth": {
+    "loginExpiredTitle": "登入過期",
+    "loginExpiredMessage": "登入憑證已過期，請重新登入",
+    "loginRequiredTitle": "登入失效",
+    "loginRequiredMessage": "未檢測到登入憑證，請重新登入",
+    "loginRequiredError": "未檢測到登入憑證"
   },
   "schedule": {
     "navTitle": "我的課表",
@@ -690,7 +699,9 @@
       "notice": "提示",
       "unknownModule": "未識別的社區模塊",
       "campusCommunity": "校園社區",
-      "operationFailed": "操作失敗"
+      "operationFailed": "操作失敗",
+      "commentUnsupported": "該模組暫不支援評論",
+      "likeUnsupported": "該模組暫不支援點讚"
     },
     "category": {
       "all": "全部",

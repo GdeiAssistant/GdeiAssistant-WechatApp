@@ -16,16 +16,37 @@ function cloneValue(value) {
   return JSON.parse(JSON.stringify(value))
 }
 
-function readState() {
-  var defaultState = {
+function buildDefaultState(locale) {
+  var normalizedLocale = i18n.normalizeLocale(locale || i18n.getCurrentLocale())
+  return {
     token: '',
     savedCetNumber: '',
     savedCetName: '',
-    cardLostState: '正常',
+    cardLostState: 'normal',
     renewedBookCodes: [],
-    profile: cloneValue(data.BASE_PROFILE),
-    interactionMessages: cloneValue(data.INTERACTION_MESSAGES)
+    profile: cloneValue(data.buildBaseProfile(normalizedLocale)),
+    interactionMessages: cloneValue(data.getInteractionMessages(normalizedLocale))
   }
+}
+
+function localizeInteractionMessages(messages, locale) {
+  var localizedMessages = data.getInteractionMessages(locale)
+  var readStateById = {}
+  ;(messages || []).forEach(function(item) {
+    if (item && item.id) {
+      readStateById[item.id] = !!item.isRead
+    }
+  })
+  return localizedMessages.map(function(item) {
+    return Object.assign({}, item, {
+      isRead: readStateById[item.id] !== undefined ? readStateById[item.id] : item.isRead
+    })
+  })
+}
+
+function readState() {
+  var currentLocale = i18n.getCurrentLocale()
+  var defaultState = buildDefaultState(currentLocale)
 
   try {
     var state = wx.getStorageSync(storageKeys.mockState)
@@ -34,10 +55,12 @@ function readState() {
         token: state.token || '',
         savedCetNumber: state.savedCetNumber || '',
         savedCetName: state.savedCetName || '',
-        cardLostState: state.cardLostState || '正常',
+        cardLostState: data.normalizeCardLostState(state.cardLostState),
         renewedBookCodes: Array.isArray(state.renewedBookCodes) ? state.renewedBookCodes : [],
-        profile: Object.assign({}, cloneValue(data.BASE_PROFILE), state.profile || {}),
-        interactionMessages: Array.isArray(state.interactionMessages) ? state.interactionMessages : cloneValue(data.INTERACTION_MESSAGES)
+        profile: Object.assign({}, cloneValue(data.buildBaseProfile(currentLocale)), state.profile || {}),
+        interactionMessages: localizeInteractionMessages(state.interactionMessages, currentLocale),
+        community: state.community,
+        communityLocale: state.communityLocale || ''
       }
     }
   } catch (error) {
@@ -90,7 +113,7 @@ function isSessionTokenValid(token) {
 
 function ensureAuthorized(token) {
   if (!isSessionTokenValid(token)) {
-    return rejectWithMessage('登录凭证已过期，请重新登录', { statusCode: 401 })
+    return rejectWithMessage(i18n.t('auth.loginExpiredMessage'), { statusCode: 401 })
   }
   return null
 }
@@ -352,7 +375,7 @@ function handleRequest(options) {
     return communityResponse
   }
 
-  return rejectWithMessage('该模拟接口暂未实现')
+  return rejectWithMessage(i18n.t('common.serviceUnavailable'))
 }
 
 module.exports = {

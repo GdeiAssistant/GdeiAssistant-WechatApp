@@ -250,11 +250,11 @@ module.exports = {
 
   // --- Submit comment ---
   submitComment: function() {
-    return Promise.reject(new Error('该模块暂不支持评论'))
+    return Promise.reject(new Error(i18n.t('community.common.commentUnsupported')))
   },
 
   // --- Toggle like ---
   toggleLike: function() {
-    return Promise.reject(new Error('该模块暂不支持点赞'))
+    return Promise.reject(new Error(i18n.t('community.common.likeUnsupported')))
   }
 }

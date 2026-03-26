@@ -11,7 +11,9 @@
     "more": "もっと見る",
     "noData": "データがありません",
     "networkError": "ネットワークエラー、後でお試しください",
+    "networkTimeout": "ネットワークがタイムアウトしました。再試行してください",
     "loadFailed": "読み込み失敗",
+    "serviceUnavailable": "サービスを一時的に利用できません。しばらくしてから再度お試しください",
     "publishSuccess": "投稿しました",
     "publishFailed": "投稿に失敗しました",
     "queryFailed": "検索に失敗しました"
@@ -59,6 +61,13 @@
     "debugSettings": "デバッグ設定",
     "useMockData": "モックテストデータを使用",
     "moreSettings": "その他の設定"
+  },
+  "auth": {
+    "loginExpiredTitle": "ログイン期限切れ",
+    "loginExpiredMessage": "ログイン情報の有効期限が切れました。再度ログインしてください。",
+    "loginRequiredTitle": "再ログインが必要です",
+    "loginRequiredMessage": "有効なログイン情報が見つかりません。再度ログインしてください。",
+    "loginRequiredError": "有効なログイン情報が見つかりません。"
   },
   "schedule": {
     "navTitle": "マイ時間割",
@@ -690,7 +699,9 @@
       "notice": "お知らせ",
       "unknownModule": "不明なコミュニティモジュール",
       "campusCommunity": "キャンパスコミュニティ",
-      "operationFailed": "操作に失敗しました"
+      "operationFailed": "操作に失敗しました",
+      "commentUnsupported": "このモジュールではコメントに対応していません",
+      "likeUnsupported": "このモジュールではいいねに対応していません"
     },
     "category": {
       "all": "すべて",
