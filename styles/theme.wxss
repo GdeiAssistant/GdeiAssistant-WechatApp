@@ -11,8 +11,8 @@ page {
   --color-text-tertiary: #999999;
   --color-border: #e5e7eb;
   --color-divider: #ececec;
-  --color-primary: #047857;
-  --color-primary-hover: #065F46;
+  --color-primary: #07C160;
+  --color-primary-hover: #06AD56;
   --color-danger: #e94747;
   --color-link: #576b95;
 }
