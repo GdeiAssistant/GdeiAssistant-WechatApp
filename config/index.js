@@ -8,7 +8,7 @@ const ENV_CONFIG = {
     requestTimeout: 15000
   },
   prod: {
-    resourceDomain: 'https://gdeiassistant.azurewebsites.net/',
+    resourceDomain: 'https://gdeiassistant.cn/',
     requestTimeout: 15000
   }
 }
@@ -25,6 +25,10 @@ function resolveCurrentEnv() {
     if (typeof wx !== 'undefined' && wx.getAccountInfoSync) {
       const accountInfo = wx.getAccountInfoSync()
       const envVersion = accountInfo && accountInfo.miniProgram ? accountInfo.miniProgram.envVersion : ''
+      // WeChat runtime mapping:
+      // develop -> local development
+      // trial -> staging
+      // release -> production
       if (envVersion === 'develop') {
         return 'dev'
       }
