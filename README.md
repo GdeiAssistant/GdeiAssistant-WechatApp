@@ -123,7 +123,7 @@ GdeiAssistant-WechatApp/
 
 - 微信开发者工具
 - 微信小程序基础库 `>= 2.32.3`
-- Node.js `>= 18`（运行测试）
+- Node.js `>= 24.14.1`（运行测试）
 
 ## 快速开始
 
@@ -133,7 +133,19 @@ GdeiAssistant-WechatApp/
 
 ### 2. 配置环境
 
-按需修改 `config/index.js` 中的接口域名配置。
+`config/index.js` 已内置三套环境：
+
+- `dev`：`http://localhost:8080/`
+- `staging`：`https://gdeiassistant.azurewebsites.net/`
+- `prod`：`https://gdeiassistant.cn/`
+
+其中微信运行环境会自动映射：
+
+- `develop -> dev`
+- `trial -> staging`
+- `release -> prod`
+
+真机 `develop` 默认会回退到 `staging`，避免直接访问 `localhost` 失败。
 
 ### 3. 编译运行
 
