@@ -1,0 +1,6 @@
+node_modules/
+miniprogram_npm/
+dist/
+build/
+coverage/
+.cache/

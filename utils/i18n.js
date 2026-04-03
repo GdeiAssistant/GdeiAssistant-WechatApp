@@ -14,12 +14,18 @@ function loadLocale(lang) {
 
 function t(key) {
   var app = null
-  try { app = getApp() } catch (e) { /* Node test environment */ }
+  try {
+    app = getApp()
+  } catch (e) {
+    /* Node test environment */
+  }
   const lang = normalizeLocale((app && app.globalData && app.globalData.locale) || 'zh-CN')
   const messages = loadLocale(lang)
-  return key.split('.').reduce(function (obj, k) {
-    return (obj && obj[k] !== undefined) ? obj[k] : null
-  }, messages) || key
+  return (
+    key.split('.').reduce(function (obj, k) {
+      return obj && obj[k] !== undefined ? obj[k] : null
+    }, messages) || key
+  )
 }
 
 /**
@@ -40,16 +46,22 @@ function detectSystemLocale() {
   try {
     var info = wx.getSystemInfoSync()
     return normalizeLocale(info.language)
-  } catch (e) { /* ignore */ }
+  } catch (e) {
+    /* ignore */
+  }
   return 'zh-CN'
 }
 
 function normalizeLocale(locale) {
-  var lang = String(locale || '').trim().replace(/_/g, '-').toLowerCase()
+  var lang = String(locale || '')
+    .trim()
+    .replace(/_/g, '-')
+    .toLowerCase()
   if (!lang) {
     return 'zh-CN'
   }
-  if (lang === 'zh-cn' || lang === 'zh-hans' || lang === 'zh-hans-cn' || lang === 'zh') return 'zh-CN'
+  if (lang === 'zh-cn' || lang === 'zh-hans' || lang === 'zh-hans-cn' || lang === 'zh')
+    return 'zh-CN'
   if (lang === 'zh-hk' || lang === 'zh-hant-hk') return 'zh-HK'
   if (lang === 'zh-tw' || lang === 'zh-hant' || lang === 'zh-hant-tw') return 'zh-TW'
   if (lang.indexOf('zh-hk') === 0) return 'zh-HK'
@@ -64,7 +76,11 @@ function normalizeLocale(locale) {
 function setLocale(locale) {
   var normalizedLocale = normalizeLocale(locale)
   var app = null
-  try { app = getApp() } catch (e) { /* Node test environment */ }
+  try {
+    app = getApp()
+  } catch (e) {
+    /* Node test environment */
+  }
   if (app && app.globalData) {
     app.globalData.locale = normalizedLocale
   }

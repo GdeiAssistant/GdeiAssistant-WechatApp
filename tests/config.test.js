@@ -24,13 +24,13 @@ function loadConfig(options = {}) {
   return freshRequire(CONFIG_MODULE)
 }
 
-test('develop in devtools uses localhost resource domain', function() {
+test('develop in devtools uses localhost resource domain', function () {
   const config = loadConfig({
     wx: {
-      getAccountInfoSync: function() {
+      getAccountInfoSync: function () {
         return { miniProgram: { envVersion: 'develop' } }
       },
-      getDeviceInfo: function() {
+      getDeviceInfo: function () {
         return { platform: 'devtools' }
       }
     }
@@ -40,13 +40,13 @@ test('develop in devtools uses localhost resource domain', function() {
   assert.equal(config.resourceDomain, 'http://localhost:8080/')
 })
 
-test('develop on real device falls back to staging domain', function() {
+test('develop on real device falls back to staging domain', function () {
   const config = loadConfig({
     wx: {
-      getAccountInfoSync: function() {
+      getAccountInfoSync: function () {
         return { miniProgram: { envVersion: 'develop' } }
       },
-      getDeviceInfo: function() {
+      getDeviceInfo: function () {
         return { platform: 'ios' }
       }
     }
@@ -56,13 +56,13 @@ test('develop on real device falls back to staging domain', function() {
   assert.equal(config.resourceDomain, 'https://gdeiassistant.azurewebsites.net/')
 })
 
-test('release runtime uses production domain', function() {
+test('release runtime uses production domain', function () {
   const config = loadConfig({
     wx: {
-      getAccountInfoSync: function() {
+      getAccountInfoSync: function () {
         return { miniProgram: { envVersion: 'release' } }
       },
-      getDeviceInfo: function() {
+      getDeviceInfo: function () {
         return { platform: 'ios' }
       }
     }
@@ -72,7 +72,7 @@ test('release runtime uses production domain', function() {
   assert.equal(config.resourceDomain, 'https://gdeiassistant.cn/')
 })
 
-test('node staging environment resolves to staging config', function() {
+test('node staging environment resolves to staging config', function () {
   const config = loadConfig({ nodeEnv: 'staging' })
 
   assert.equal(config.currentEnv, 'staging')

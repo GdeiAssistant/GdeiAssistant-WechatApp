@@ -13,7 +13,7 @@ function showTopTips(page, content, options) {
   }
 
   page.setData({ [dataKey]: content })
-  page.__topTipsTimer = setTimeout(function() {
+  page.__topTipsTimer = setTimeout(function () {
     page.setData({ [dataKey]: null })
     page.__topTipsTimer = null
   }, duration)
@@ -30,10 +30,10 @@ function runWithNavigationLoading(page, task, options) {
   wx.showNavigationBarLoading()
 
   return Promise.resolve()
-    .then(function() {
+    .then(function () {
       return typeof task === 'function' ? task() : task
     })
-    .finally(function() {
+    .finally(function () {
       wx.hideNavigationBarLoading()
       if (manageLoading && page && typeof page.setData === 'function') {
         page.setData({ [loadingKey]: false })

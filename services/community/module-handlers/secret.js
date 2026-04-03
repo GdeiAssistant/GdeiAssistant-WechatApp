@@ -4,9 +4,11 @@ const { encodeForm } = require('../../../utils/form.js')
 const i18n = require('../../../utils/i18n.js')
 
 function requestForm(options) {
-  return request(Object.assign({}, options, {
-    contentType: 'application/x-www-form-urlencoded'
-  }))
+  return request(
+    Object.assign({}, options, {
+      contentType: 'application/x-www-form-urlencoded'
+    })
+  )
 }
 
 function formatSecretPublishText(publishTime, timer) {
@@ -20,7 +22,7 @@ function formatSecretPublishText(publishTime, timer) {
 
 module.exports = {
   // --- Feed ---
-  getFeed: function(options) {
+  getFeed: function (options) {
     var config = options || {}
     var start = Number(config.start || 0)
     var size = Number(config.size || 10)
@@ -33,7 +35,7 @@ module.exports = {
   },
 
   // --- Detail ---
-  getDetail: function(id) {
+  getDetail: function (id) {
     return request({
       url: endpoints.community.secret.detail(id),
       method: 'GET',
@@ -42,7 +44,7 @@ module.exports = {
   },
 
   // --- Center ---
-  getCenter: function(options) {
+  getCenter: function (options) {
     var config = options || {}
     var start = Number(config.start || 0)
     var size = Number(config.size || 20)
@@ -55,28 +57,39 @@ module.exports = {
   },
 
   // --- Publish ---
-  publish: function(payload) {
-    return request(Object.assign({}, {
-      url: endpoints.community.secret.publish,
-      method: 'POST',
-      authRequired: true,
-      data: encodeForm(payload),
-      contentType: 'application/x-www-form-urlencoded'
-    }))
+  publish: function (payload) {
+    return request(
+      Object.assign(
+        {},
+        {
+          url: endpoints.community.secret.publish,
+          method: 'POST',
+          authRequired: true,
+          data: encodeForm(payload),
+          contentType: 'application/x-www-form-urlencoded'
+        }
+      )
+    )
   },
 
   // --- List page: tabs ---
-  buildListTabs: function() {
+  buildListTabs: function () {
     return []
   },
 
   // --- List page: normalize ---
-  normalizeItem: function(item) {
+  normalizeItem: function (item) {
     var rawItem = item || {}
     return {
       id: rawItem.id,
-      title: Number(rawItem.type) === 1 ? i18n.t('community.list.voiceSecret') : i18n.t('community.list.anonSecret'),
-      summary: Number(rawItem.type) === 1 ? i18n.t('community.list.tapVoiceSecret') : (rawItem.content || ''),
+      title:
+        Number(rawItem.type) === 1
+          ? i18n.t('community.list.voiceSecret')
+          : i18n.t('community.list.anonSecret'),
+      summary:
+        Number(rawItem.type) === 1
+          ? i18n.t('community.list.tapVoiceSecret')
+          : rawItem.content || '',
       likeCount: Number(rawItem.likeCount || 0),
       commentCount: Number(rawItem.commentCount || 0),
       timeText: formatSecretPublishText(rawItem.publishTime, rawItem.timer),
@@ -85,22 +98,25 @@ module.exports = {
   },
 
   // --- List page: build feed options ---
-  buildFeedOptions: function(baseOptions) {
+  buildFeedOptions: function (baseOptions) {
     return Object.assign({}, baseOptions)
   },
 
   // --- Center page: tabs ---
-  buildCenterTabs: function() {
+  buildCenterTabs: function () {
     return []
   },
 
   // --- Center page: normalize ---
-  normalizeCenterData: function(payload, normalizeStandardItem) {
+  normalizeCenterData: function (payload, normalizeStandardItem) {
     return {
-      default: (payload || []).map(function(item) {
+      default: (payload || []).map(function (item) {
         return normalizeStandardItem(item, {
           id: item.id,
-          title: Number(item.type) === 1 ? i18n.t('community.center.voiceSecret') : i18n.t('community.center.textSecret'),
+          title:
+            Number(item.type) === 1
+              ? i18n.t('community.center.voiceSecret')
+              : i18n.t('community.center.textSecret'),
           subtitle: formatSecretPublishText(item.publishTime, item.timer),
           summary: Number(item.type) === 1 ? i18n.t('community.center.tapPlayVoice') : item.content,
           actions: []
@@ -115,17 +131,17 @@ module.exports = {
   searchable: false,
 
   // --- Publish: validate form ---
-  validateForm: function() {
+  validateForm: function () {
     return i18n.t('community.publish.v.moduleNotSupported')
   },
 
   // --- Publish: build payload ---
-  buildPublishPayload: function() {
+  buildPublishPayload: function () {
     return Promise.reject(new Error(i18n.t('community.publish.v.moduleNotSupported')))
   },
 
   // --- Detail: build detail view ---
-  buildDetailView: function() {
+  buildDetailView: function () {
     return {
       title: i18n.t('community.detail.detail'),
       description: ''
@@ -133,7 +149,7 @@ module.exports = {
   },
 
   // --- Comments ---
-  getComments: function(id) {
+  getComments: function (id) {
     return request({
       url: endpoints.community.secret.comments(id),
       method: 'GET',
@@ -142,7 +158,7 @@ module.exports = {
   },
 
   // --- Submit comment ---
-  submitComment: function(id, comment) {
+  submitComment: function (id, comment) {
     return requestForm({
       url: endpoints.community.secret.comment(id),
       method: 'POST',
@@ -152,7 +168,7 @@ module.exports = {
   },
 
   // --- Toggle like ---
-  toggleLike: function(id, value) {
+  toggleLike: function (id, value) {
     return requestForm({
       url: endpoints.community.secret.like(id),
       method: 'POST',

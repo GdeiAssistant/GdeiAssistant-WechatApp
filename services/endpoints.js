@@ -44,25 +44,25 @@ module.exports = {
   info: {
     graduateExam: '/api/graduate-exam/query',
     spareRoom: '/api/spare/query',
-    news: function(type, start, size) {
+    news: function (type, start, size) {
       return `/api/information/news/type/${type}/start/${start}/size/${size}`
     },
-    newsDetail: function(id) {
+    newsDetail: function (id) {
       return `/api/information/news/id/${id}`
     }
   },
   messages: {
-    announcements: function(start, size) {
+    announcements: function (start, size) {
       return `/api/information/announcement/start/${start}/size/${size}`
     },
-    announcementDetail: function(id) {
+    announcementDetail: function (id) {
       return `/api/information/announcement/id/${id}`
     },
-    interactionList: function(start, size) {
+    interactionList: function (start, size) {
       return `/api/information/message/interaction/start/${start}/size/${size}`
     },
     unreadCount: '/api/information/message/unread',
-    markRead: function(id) {
+    markRead: function (id) {
       return `/api/information/message/id/${id}/read`
     },
     markAllRead: '/api/information/message/readall'
@@ -75,169 +75,169 @@ module.exports = {
   },
   community: {
     secondhand: {
-      list: function(start) {
+      list: function (start) {
         return `/api/ershou/item/start/${start}`
       },
-      keyword: function(keyword, start) {
+      keyword: function (keyword, start) {
         return `/api/ershou/keyword/${keyword}/start/${start}`
       },
-      type: function(type, start) {
+      type: function (type, start) {
         return `/api/ershou/item/type/${type}/start/${start}`
       },
-      detail: function(id) {
+      detail: function (id) {
         return `/api/ershou/item/id/${id}`
       },
-      update: function(id) {
+      update: function (id) {
         return `/api/ershou/item/id/${id}`
       },
       publish: '/api/ershou/item',
       profile: '/api/ershou/profile',
-      state: function(id) {
+      state: function (id) {
         return `/api/ershou/item/state/id/${id}`
       }
     },
     lostAndFound: {
-      lost: function(start) {
+      lost: function (start) {
         return `/api/lostandfound/lostitem/start/${start}`
       },
-      found: function(start) {
+      found: function (start) {
         return `/api/lostandfound/founditem/start/${start}`
       },
-      search: function(type, start) {
+      search: function (type, start) {
         return `/api/lostandfound/lostitem/type/${type}/start/${start}`
       },
-      detail: function(id) {
+      detail: function (id) {
         return `/api/lostandfound/item/id/${id}`
       },
-      update: function(id) {
+      update: function (id) {
         return `/api/lostandfound/item/id/${id}`
       },
       publish: '/api/lostandfound/item',
       profile: '/api/lostandfound/profile',
-      didFound: function(id) {
+      didFound: function (id) {
         return `/api/lostandfound/item/id/${id}/didfound`
       }
     },
     secret: {
-      list: function(start, size) {
+      list: function (start, size) {
         return `/api/secret/info/start/${start}/size/${size}`
       },
-      detail: function(id) {
+      detail: function (id) {
         return `/api/secret/id/${id}`
       },
-      comments: function(id) {
+      comments: function (id) {
         return `/api/secret/id/${id}/comments`
       },
-      comment: function(id) {
+      comment: function (id) {
         return `/api/secret/id/${id}/comment`
       },
-      like: function(id) {
+      like: function (id) {
         return `/api/secret/id/${id}/like`
       },
       publish: '/api/secret/info',
       profile: '/api/secret/profile',
-      profilePaged: function(start, size) {
+      profilePaged: function (start, size) {
         return `/api/secret/profile/start/${start}/size/${size}`
       }
     },
     express: {
-      list: function(start, size) {
+      list: function (start, size) {
         return `/api/express/start/${start}/size/${size}`
       },
-      keyword: function(keyword, start, size) {
+      keyword: function (keyword, start, size) {
         return `/api/express/keyword/${keyword}/start/${start}/size/${size}`
       },
-      detail: function(id) {
+      detail: function (id) {
         return `/api/express/id/${id}`
       },
-      comments: function(id) {
+      comments: function (id) {
         return `/api/express/id/${id}/comment`
       },
-      comment: function(id) {
+      comment: function (id) {
         return `/api/express/id/${id}/comment`
       },
-      like: function(id) {
+      like: function (id) {
         return `/api/express/id/${id}/like`
       },
-      guess: function(id) {
+      guess: function (id) {
         return `/api/express/id/${id}/guess`
       },
       publish: '/api/express',
-      profile: function(start, size) {
+      profile: function (start, size) {
         return `/api/express/profile/start/${start}/size/${size}`
       }
     },
     topic: {
-      list: function(start, size) {
+      list: function (start, size) {
         return `/api/topic/start/${start}/size/${size}`
       },
-      keyword: function(keyword, start, size) {
+      keyword: function (keyword, start, size) {
         return `/api/topic/keyword/${keyword}/start/${start}/size/${size}`
       },
-      detail: function(id) {
+      detail: function (id) {
         return `/api/topic/id/${id}`
       },
-      like: function(id) {
+      like: function (id) {
         return `/api/topic/id/${id}/like`
       },
       publish: '/api/topic',
-      profile: function(start, size) {
+      profile: function (start, size) {
         return `/api/topic/profile/start/${start}/size/${size}`
       }
     },
     delivery: {
-      list: function(start, size) {
+      list: function (start, size) {
         return `/api/delivery/order/start/${start}/size/${size}`
       },
-      detail: function(id) {
+      detail: function (id) {
         return `/api/delivery/order/id/${id}`
       },
       publish: '/api/delivery/order',
       mine: '/api/delivery/mine',
       accept: '/api/delivery/acceptorder',
-      finish: function(id) {
+      finish: function (id) {
         return `/api/delivery/trade/id/${id}/finishtrade`
       }
     },
     dating: {
-      list: function(area, start) {
+      list: function (area, start) {
         return `/api/dating/profile/area/${area}/start/${start}`
       },
-      detail: function(id) {
+      detail: function (id) {
         return `/api/dating/profile/id/${id}`
       },
       publish: '/api/dating/profile',
       mine: '/api/dating/profile/my',
       pick: '/api/dating/pick',
-      pickDetail: function(id) {
+      pickDetail: function (id) {
         return `/api/dating/pick/id/${id}`
       },
       picks: {
         sent: '/api/dating/pick/my/sent',
         received: '/api/dating/pick/my/received'
       },
-      profileState: function(id) {
+      profileState: function (id) {
         return `/api/dating/profile/id/${id}/state`
       }
     },
     photograph: {
-      list: function(type, start, size) {
+      list: function (type, start, size) {
         return `/api/photograph/type/${type}/start/${start}/size/${size}`
       },
-      detail: function(id) {
+      detail: function (id) {
         return `/api/photograph/id/${id}`
       },
-      comments: function(id) {
+      comments: function (id) {
         return `/api/photograph/id/${id}/comment`
       },
-      comment: function(id) {
+      comment: function (id) {
         return `/api/photograph/id/${id}/comment`
       },
-      like: function(id) {
+      like: function (id) {
         return `/api/photograph/id/${id}/like`
       },
       publish: '/api/photograph',
-      profile: function(start, size) {
+      profile: function (start, size) {
         return `/api/photograph/profile/start/${start}/size/${size}`
       },
       stats: {

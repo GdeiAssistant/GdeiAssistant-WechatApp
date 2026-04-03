@@ -14,9 +14,9 @@ function loadLibraryApi(requestImpl) {
   return require(LIBRARY_MODULE)
 }
 
-test('library api uses canonical borrow and renew contracts', async function() {
+test('library api uses canonical borrow and renew contracts', async function () {
   const calls = []
-  const libraryApi = loadLibraryApi(function(options) {
+  const libraryApi = loadLibraryApi(function (options) {
     calls.push(options)
     return Promise.resolve({ success: true })
   })
@@ -44,8 +44,8 @@ test('library api uses canonical borrow and renew contracts', async function() {
   ])
 })
 
-test('queryCollection normalizes nested collection payloads', async function() {
-  const libraryApi = loadLibraryApi(function() {
+test('queryCollection normalizes nested collection payloads', async function () {
+  const libraryApi = loadLibraryApi(function () {
     return Promise.resolve({
       success: true,
       message: 'ok',
@@ -66,9 +66,9 @@ test('queryCollection normalizes nested collection payloads', async function() {
   })
 })
 
-test('queryCollectionDetail builds detailURL from canonical payload fields', async function() {
+test('queryCollectionDetail builds detailURL from canonical payload fields', async function () {
   const calls = []
-  const libraryApi = loadLibraryApi(function(options) {
+  const libraryApi = loadLibraryApi(function (options) {
     calls.push(options)
     return Promise.resolve({
       success: true,
@@ -89,7 +89,8 @@ test('queryCollectionDetail builds detailURL from canonical payload fields', asy
   assert.equal(calls[0].url, '/api/library/detail')
   assert.equal(calls[0].method, 'GET')
   assert.deepEqual(calls[0].data, {
-    detailURL: 'opacUrl=https://example.test/opac&page=2&schoolId=3&search=math&searchtype=title&xc=0'
+    detailURL:
+      'opacUrl=https://example.test/opac&page=2&schoolId=3&search=math&searchtype=title&xc=0'
   })
   assert.deepEqual(result, {
     success: true,

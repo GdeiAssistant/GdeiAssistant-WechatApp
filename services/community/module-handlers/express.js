@@ -4,14 +4,16 @@ const { encodeForm } = require('../../../utils/form.js')
 const i18n = require('../../../utils/i18n.js')
 
 function requestForm(options) {
-  return request(Object.assign({}, options, {
-    contentType: 'application/x-www-form-urlencoded'
-  }))
+  return request(
+    Object.assign({}, options, {
+      contentType: 'application/x-www-form-urlencoded'
+    })
+  )
 }
 
 module.exports = {
   // --- Feed ---
-  getFeed: function(options) {
+  getFeed: function (options) {
     var config = options || {}
     var start = Number(config.start || 0)
     var size = Number(config.size || 10)
@@ -27,7 +29,7 @@ module.exports = {
   },
 
   // --- Detail ---
-  getDetail: function(id) {
+  getDetail: function (id) {
     return request({
       url: endpoints.community.express.detail(id),
       method: 'GET',
@@ -36,7 +38,7 @@ module.exports = {
   },
 
   // --- Center ---
-  getCenter: function(options) {
+  getCenter: function (options) {
     var config = options || {}
     var start = Number(config.start || 0)
     var size = Number(config.size || 10)
@@ -49,27 +51,35 @@ module.exports = {
   },
 
   // --- Publish ---
-  publish: function(payload) {
-    return request(Object.assign({}, {
-      url: endpoints.community.express.publish,
-      method: 'POST',
-      authRequired: true,
-      data: encodeForm(payload),
-      contentType: 'application/x-www-form-urlencoded'
-    }))
+  publish: function (payload) {
+    return request(
+      Object.assign(
+        {},
+        {
+          url: endpoints.community.express.publish,
+          method: 'POST',
+          authRequired: true,
+          data: encodeForm(payload),
+          contentType: 'application/x-www-form-urlencoded'
+        }
+      )
+    )
   },
 
   // --- List page: tabs ---
-  buildListTabs: function() {
+  buildListTabs: function () {
     return []
   },
 
   // --- List page: normalize ---
-  normalizeItem: function(item) {
+  normalizeItem: function (item) {
     var rawItem = item || {}
     return {
       id: rawItem.id,
-      title: (rawItem.nickname || i18n.t('community.list.anonStudent')) + ' -> ' + (rawItem.name || 'TA'),
+      title:
+        (rawItem.nickname || i18n.t('community.list.anonStudent')) +
+        ' -> ' +
+        (rawItem.name || 'TA'),
       summary: rawItem.content || '',
       likeCount: Number(rawItem.likeCount || 0),
       commentCount: Number(rawItem.commentCount || 0),
@@ -79,22 +89,23 @@ module.exports = {
   },
 
   // --- List page: build feed options ---
-  buildFeedOptions: function(baseOptions) {
+  buildFeedOptions: function (baseOptions) {
     return Object.assign({}, baseOptions)
   },
 
   // --- Center page: tabs ---
-  buildCenterTabs: function() {
+  buildCenterTabs: function () {
     return []
   },
 
   // --- Center page: normalize ---
-  normalizeCenterData: function(payload, normalizeStandardItem) {
+  normalizeCenterData: function (payload, normalizeStandardItem) {
     return {
-      default: (payload || []).map(function(item) {
+      default: (payload || []).map(function (item) {
         return normalizeStandardItem(item, {
           id: item.id,
-          title: (item.nickname || i18n.t('community.list.anonStudent')) + ' -> ' + (item.name || 'TA'),
+          title:
+            (item.nickname || i18n.t('community.list.anonStudent')) + ' -> ' + (item.name || 'TA'),
           subtitle: item.publishTime,
           summary: item.content,
           actions: []
@@ -109,17 +120,17 @@ module.exports = {
   searchable: true,
 
   // --- Publish: validate form ---
-  validateForm: function() {
+  validateForm: function () {
     return i18n.t('community.publish.v.moduleNotSupported')
   },
 
   // --- Publish: build payload ---
-  buildPublishPayload: function() {
+  buildPublishPayload: function () {
     return Promise.reject(new Error(i18n.t('community.publish.v.moduleNotSupported')))
   },
 
   // --- Detail: build detail view ---
-  buildDetailView: function() {
+  buildDetailView: function () {
     return {
       title: i18n.t('community.detail.detail'),
       description: ''
@@ -127,7 +138,7 @@ module.exports = {
   },
 
   // --- Comments ---
-  getComments: function(id) {
+  getComments: function (id) {
     return request({
       url: endpoints.community.express.comments(id),
       method: 'GET',
@@ -136,7 +147,7 @@ module.exports = {
   },
 
   // --- Submit comment ---
-  submitComment: function(id, comment) {
+  submitComment: function (id, comment) {
     return requestForm({
       url: endpoints.community.express.comment(id),
       method: 'POST',
@@ -146,7 +157,7 @@ module.exports = {
   },
 
   // --- Toggle like ---
-  toggleLike: function(id) {
+  toggleLike: function (id) {
     return request({
       url: endpoints.community.express.like(id),
       method: 'POST',
