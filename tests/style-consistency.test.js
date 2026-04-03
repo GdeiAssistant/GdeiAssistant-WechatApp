@@ -15,17 +15,19 @@ var pages = [
   'pages/inbox/inbox.wxss'
 ]
 
-pages.forEach(function(pagePath) {
-  test(path.basename(pagePath) + ' uses standard background', function() {
+pages.forEach(function (pagePath) {
+  test(path.basename(pagePath) + ' uses standard background', function () {
     var fullPath = path.join(ROOT, pagePath)
     var content = fs.readFileSync(fullPath, 'utf8')
     if (content.includes('background')) {
       var bgMatches = content.match(/background(?:-color)?:\s*([^;]+)/g) || []
-      bgMatches.forEach(function(match) {
+      bgMatches.forEach(function (match) {
         var nonStandard = ['#f5f5f5', '#f7f7f7', '#eee', '#eeeeee']
-        nonStandard.forEach(function(bad) {
-          assert.ok(!match.toLowerCase().includes(bad),
-            pagePath + ' uses non-standard background ' + bad + ': ' + match)
+        nonStandard.forEach(function (bad) {
+          assert.ok(
+            !match.toLowerCase().includes(bad),
+            pagePath + ' uses non-standard background ' + bad + ': ' + match
+          )
         })
       })
     }

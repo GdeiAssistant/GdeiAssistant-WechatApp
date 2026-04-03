@@ -4,9 +4,17 @@
   "private": true,
   "description": "广东二师助手微信小程序",
   "scripts": {
+    "lint": "eslint services utils tests",
+    "format": "prettier --write \"services/**/*.js\" \"utils/**/*.js\" \"tests/**/*.js\"",
+    "format:check": "prettier --check \"services/**/*.js\" \"utils/**/*.js\" \"tests/**/*.js\"",
+    "smoke": "node scripts/ci-smoke.js",
     "test": "node --test tests/*.test.js"
   },
   "engines": {
-    "node": ">=24.14.1"
+    "node": "24.14.1"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.4",
+    "prettier": "^3.8.1"
   }
 }

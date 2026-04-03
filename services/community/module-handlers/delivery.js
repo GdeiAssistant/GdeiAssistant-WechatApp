@@ -30,10 +30,10 @@ function getExactLengthMessage(value, expectedLength, message) {
 }
 
 function findLabel(options, value, fallback) {
-  var item = (options || []).filter(function(optionItem) {
+  var item = (options || []).filter(function (optionItem) {
     return Number(optionItem.value) === Number(value)
   })[0]
-  return item ? item.label : (fallback || '')
+  return item ? item.label : fallback || ''
 }
 
 function formatPrice(value) {
@@ -43,7 +43,7 @@ function formatPrice(value) {
 
 module.exports = {
   // --- Feed ---
-  getFeed: function(options) {
+  getFeed: function (options) {
     var config = options || {}
     var start = Number(config.start || 0)
     var size = Number(config.size || 10)
@@ -56,7 +56,7 @@ module.exports = {
   },
 
   // --- Detail ---
-  getDetail: function(id) {
+  getDetail: function (id) {
     return request({
       url: endpoints.community.delivery.detail(id),
       method: 'GET',
@@ -65,7 +65,7 @@ module.exports = {
   },
 
   // --- Center ---
-  getCenter: function(options) {
+  getCenter: function (options) {
     return request({
       url: endpoints.community.delivery.mine,
       method: 'GET',
@@ -74,30 +74,39 @@ module.exports = {
   },
 
   // --- Publish ---
-  publish: function(payload) {
-    return request(Object.assign({}, {
-      url: endpoints.community.delivery.publish,
-      method: 'POST',
-      authRequired: true,
-      data: encodeForm(payload),
-      contentType: 'application/x-www-form-urlencoded'
-    }))
+  publish: function (payload) {
+    return request(
+      Object.assign(
+        {},
+        {
+          url: endpoints.community.delivery.publish,
+          method: 'POST',
+          authRequired: true,
+          data: encodeForm(payload),
+          contentType: 'application/x-www-form-urlencoded'
+        }
+      )
+    )
   },
 
   // --- List page: tabs ---
-  buildListTabs: function() {
+  buildListTabs: function () {
     return getDeliveryStatusOptions()
   },
 
   // --- List page: normalize ---
-  normalizeItem: function(item) {
+  normalizeItem: function (item) {
     var rawItem = item || {}
     return {
       id: rawItem.orderId,
       title: rawItem.company || i18n.t('community.list.campusErrand'),
       summary: rawItem.address || '',
       priceText: formatPrice(rawItem.price),
-      badgeText: findLabel(getDeliveryStatusOptions(), rawItem.state, i18n.t('community.list.task')),
+      badgeText: findLabel(
+        getDeliveryStatusOptions(),
+        rawItem.state,
+        i18n.t('community.list.task')
+      ),
       metaText: rawItem.remarks || '',
       timeText: rawItem.orderTime || '',
       raw: rawItem
@@ -105,15 +114,15 @@ module.exports = {
   },
 
   // --- List page: build feed options ---
-  buildFeedOptions: function(baseOptions) {
+  buildFeedOptions: function (baseOptions) {
     return Object.assign({}, baseOptions)
   },
 
   // --- List page: filter feed results ---
-  filterFeedResults: function(list, activeTab) {
+  filterFeedResults: function (list, activeTab) {
     var statusValue = activeTab ? Number(activeTab.value) : -1
     if (statusValue >= 0) {
-      return list.filter(function(item) {
+      return list.filter(function (item) {
         return Number(item.state) === statusValue
       })
     }
@@ -121,7 +130,7 @@ module.exports = {
   },
 
   // --- Center page: tabs ---
-  buildCenterTabs: function() {
+  buildCenterTabs: function () {
     return [
       { key: 'published', label: i18n.t('community.center.tabMyPublished') },
       { key: 'accepted', label: i18n.t('community.center.tabMyAccepted') }
@@ -129,9 +138,9 @@ module.exports = {
   },
 
   // --- Center page: normalize ---
-  normalizeCenterData: function(payload, normalizeStandardItem) {
+  normalizeCenterData: function (payload, normalizeStandardItem) {
     return {
-      published: (payload.published || []).map(function(item) {
+      published: (payload.published || []).map(function (item) {
         return normalizeStandardItem(item, {
           id: item.orderId,
           title: item.company || i18n.t('community.modules.delivery.title'),
@@ -141,7 +150,7 @@ module.exports = {
           actions: []
         })
       }),
-      accepted: (payload.accepted || []).map(function(item) {
+      accepted: (payload.accepted || []).map(function (item) {
         return normalizeStandardItem(item, {
           id: item.orderId,
           title: item.company || i18n.t('community.modules.delivery.title'),
@@ -160,7 +169,7 @@ module.exports = {
   searchable: false,
 
   // --- Publish: validate form ---
-  validateForm: function(data) {
+  validateForm: function (data) {
     var form = data.form || {}
 
     var pickupAddress = trimValue(form.pickupAddress)
@@ -170,19 +179,68 @@ module.exports = {
     var description = trimValue(form.description)
 
     if (!pickupAddress) return i18n.t('community.publish.v.pickupRequired')
-    if (getMaxLengthMessage(pickupAddress, DELIVERY_COMPANY_MAX_LENGTH, i18n.tReplace('community.publish.v.pickupTooLong', { max: DELIVERY_COMPANY_MAX_LENGTH }))) return getMaxLengthMessage(pickupAddress, DELIVERY_COMPANY_MAX_LENGTH, i18n.tReplace('community.publish.v.pickupTooLong', { max: DELIVERY_COMPANY_MAX_LENGTH }))
-    if (getExactLengthMessage(pickupCode, 11, i18n.t('community.publish.v.pickupCodeLength'))) return getExactLengthMessage(pickupCode, 11, i18n.t('community.publish.v.pickupCodeLength'))
+    if (
+      getMaxLengthMessage(
+        pickupAddress,
+        DELIVERY_COMPANY_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.pickupTooLong', { max: DELIVERY_COMPANY_MAX_LENGTH })
+      )
+    )
+      return getMaxLengthMessage(
+        pickupAddress,
+        DELIVERY_COMPANY_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.pickupTooLong', { max: DELIVERY_COMPANY_MAX_LENGTH })
+      )
+    if (getExactLengthMessage(pickupCode, 11, i18n.t('community.publish.v.pickupCodeLength')))
+      return getExactLengthMessage(pickupCode, 11, i18n.t('community.publish.v.pickupCodeLength'))
     if (!deliveryAddress) return i18n.t('community.publish.v.deliveryAddrRequired')
-    if (getMaxLengthMessage(deliveryAddress, DELIVERY_ADDRESS_MAX_LENGTH, i18n.tReplace('community.publish.v.deliveryAddrTooLong', { max: DELIVERY_ADDRESS_MAX_LENGTH }))) return getMaxLengthMessage(deliveryAddress, DELIVERY_ADDRESS_MAX_LENGTH, i18n.tReplace('community.publish.v.deliveryAddrTooLong', { max: DELIVERY_ADDRESS_MAX_LENGTH }))
+    if (
+      getMaxLengthMessage(
+        deliveryAddress,
+        DELIVERY_ADDRESS_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.deliveryAddrTooLong', {
+          max: DELIVERY_ADDRESS_MAX_LENGTH
+        })
+      )
+    )
+      return getMaxLengthMessage(
+        deliveryAddress,
+        DELIVERY_ADDRESS_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.deliveryAddrTooLong', {
+          max: DELIVERY_ADDRESS_MAX_LENGTH
+        })
+      )
     if (!contactPhone) return i18n.t('community.publish.v.phoneRequired')
-    if (getMaxLengthMessage(contactPhone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.contactPhoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH }))) return getMaxLengthMessage(contactPhone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.contactPhoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH }))
-    if (getMaxLengthMessage(description, DELIVERY_REMARKS_MAX_LENGTH, i18n.tReplace('community.publish.v.remarksTooLong', { max: DELIVERY_REMARKS_MAX_LENGTH }))) return getMaxLengthMessage(description, DELIVERY_REMARKS_MAX_LENGTH, i18n.tReplace('community.publish.v.remarksTooLong', { max: DELIVERY_REMARKS_MAX_LENGTH }))
+    if (
+      getMaxLengthMessage(
+        contactPhone,
+        CONTACT_PHONE_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.contactPhoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH })
+      )
+    )
+      return getMaxLengthMessage(
+        contactPhone,
+        CONTACT_PHONE_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.contactPhoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH })
+      )
+    if (
+      getMaxLengthMessage(
+        description,
+        DELIVERY_REMARKS_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.remarksTooLong', { max: DELIVERY_REMARKS_MAX_LENGTH })
+      )
+    )
+      return getMaxLengthMessage(
+        description,
+        DELIVERY_REMARKS_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.remarksTooLong', { max: DELIVERY_REMARKS_MAX_LENGTH })
+      )
     if (!(Number(form.reward || 0) > 0)) return i18n.t('community.publish.v.rewardInvalid')
     return ''
   },
 
   // --- Publish: build payload ---
-  buildPublishPayload: function(data) {
+  buildPublishPayload: function (data) {
     var form = data.form || {}
 
     return Promise.resolve({
@@ -197,7 +255,7 @@ module.exports = {
   },
 
   // --- Detail: build detail view ---
-  buildDetailView: function() {
+  buildDetailView: function () {
     return {
       title: i18n.t('community.detail.detail'),
       description: ''
@@ -205,17 +263,17 @@ module.exports = {
   },
 
   // --- Comments ---
-  getComments: function() {
+  getComments: function () {
     return Promise.resolve({ success: true, data: [] })
   },
 
   // --- Submit comment ---
-  submitComment: function() {
+  submitComment: function () {
     return Promise.reject(new Error(i18n.t('community.common.commentUnsupported')))
   },
 
   // --- Toggle like ---
-  toggleLike: function() {
+  toggleLike: function () {
     return Promise.reject(new Error(i18n.t('community.common.likeUnsupported')))
   }
 }

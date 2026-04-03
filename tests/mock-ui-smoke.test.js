@@ -13,7 +13,7 @@ const COMMUNITY_LIST_PAGE_MODULE = path.join(ROOT, 'pages/communityList/communit
 const STORAGE_MODULE = path.join(ROOT, 'constants/storage.js')
 
 function waitForSettled() {
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     setTimeout(resolve, 20)
   })
 }
@@ -29,7 +29,7 @@ function setupWxRuntime(initialStorage) {
     showTopTips: [],
     stopPullDownRefresh: 0,
     showNavigationBarLoading: 0,
-    hideNavigationBarLoading: 0,
+    hideNavigationBarLoading: 0
   }
 
   global.wx = {
@@ -71,10 +71,10 @@ function setupWxRuntime(initialStorage) {
     },
     getAccountInfoSync() {
       return { miniProgram: { version: '1.2.3' } }
-    },
+    }
   }
 
-  global.getApp = function() {
+  global.getApp = function () {
     return { globalData: { locale: 'zh-CN' } }
   }
 
@@ -82,56 +82,59 @@ function setupWxRuntime(initialStorage) {
 }
 
 function stubCommonModules(options) {
-  const translations = Object.assign({
-    'dataSource.mock': '模拟数据',
-    'dataSource.remote': '真实接口',
-    'login.navTitle': '登录',
-    'login.appName': '广东二师助手',
-    'login.dataSourceLabel': '数据源：',
-    'login.usernamePlaceholder': '请输入学号',
-    'login.passwordPlaceholder': '请输入密码',
-    'login.button': '登录',
-    'login.debugSettings': '调试设置',
-    'login.useMockData': '使用模拟数据',
-    'login.moreSettings': '更多设置',
-    'login.fillCredentials': '请补全信息',
-    'login.usernameEmpty': '请输入账号',
-    'login.passwordEmpty': '请输入密码',
-    'login.loginFailed': '登录失败',
-    'login.defaultError': '请稍后再试',
-    'index.appName': '广东二师助手',
-    'index.navTitle': '首页',
-    'index.dataSourceLabel': '数据源：',
-    'index.viewProfile': '查看资料',
-    'index.settingsSection': '系统功能',
-    'index.defaultNickname': '校园用户',
-    'index.unreadFailed': '消息加载失败',
-    'info.navTitle': '资讯',
-    'info.loadingNews': '加载中',
-    'info.noMoreNews': '没有更多了',
-    'info.noNews': '暂无资讯',
-    'info.news': '校园新闻',
-    'info.loadNewsFailed': '新闻加载失败',
-    'info.newsTabs': [
-      { type: 1, label: '校园新闻' },
-      { type: 2, label: '通知公告' },
-    ],
-    'community.list.search': '搜索',
-    'community.list.clear': '清空',
-    'community.list.loading': '加载中',
-    'community.list.noMore': '没有更多了',
-    'community.list.emptyTitle': '暂无内容',
-    'community.list.emptySummary': '去发布第一条吧',
-    'community.list.like': '点赞',
-    'community.list.comment': '评论',
-    'community.list.myBtn': '我的',
-    'community.list.statPhotos': '照片',
-    'community.list.statComments': '评论',
-    'community.list.statLikes': '点赞',
-    'community.common.notice': '提示',
-    'community.common.unknownModule': '未知模块',
-    'community.common.campusCommunity': '校园社区',
-  }, (options && options.translations) || {})
+  const translations = Object.assign(
+    {
+      'dataSource.mock': '模拟数据',
+      'dataSource.remote': '真实接口',
+      'login.navTitle': '登录',
+      'login.appName': '广东二师助手',
+      'login.dataSourceLabel': '数据源：',
+      'login.usernamePlaceholder': '请输入学号',
+      'login.passwordPlaceholder': '请输入密码',
+      'login.button': '登录',
+      'login.debugSettings': '调试设置',
+      'login.useMockData': '使用模拟数据',
+      'login.moreSettings': '更多设置',
+      'login.fillCredentials': '请补全信息',
+      'login.usernameEmpty': '请输入账号',
+      'login.passwordEmpty': '请输入密码',
+      'login.loginFailed': '登录失败',
+      'login.defaultError': '请稍后再试',
+      'index.appName': '广东二师助手',
+      'index.navTitle': '首页',
+      'index.dataSourceLabel': '数据源：',
+      'index.viewProfile': '查看资料',
+      'index.settingsSection': '系统功能',
+      'index.defaultNickname': '校园用户',
+      'index.unreadFailed': '消息加载失败',
+      'info.navTitle': '资讯',
+      'info.loadingNews': '加载中',
+      'info.noMoreNews': '没有更多了',
+      'info.noNews': '暂无资讯',
+      'info.news': '校园新闻',
+      'info.loadNewsFailed': '新闻加载失败',
+      'info.newsTabs': [
+        { type: 1, label: '校园新闻' },
+        { type: 2, label: '通知公告' }
+      ],
+      'community.list.search': '搜索',
+      'community.list.clear': '清空',
+      'community.list.loading': '加载中',
+      'community.list.noMore': '没有更多了',
+      'community.list.emptyTitle': '暂无内容',
+      'community.list.emptySummary': '去发布第一条吧',
+      'community.list.like': '点赞',
+      'community.list.comment': '评论',
+      'community.list.myBtn': '我的',
+      'community.list.statPhotos': '照片',
+      'community.list.statComments': '评论',
+      'community.list.statLikes': '点赞',
+      'community.common.notice': '提示',
+      'community.common.unknownModule': '未知模块',
+      'community.common.campusCommunity': '校园社区'
+    },
+    (options && options.translations) || {}
+  )
 
   stubModule(path.join(ROOT, 'utils/i18n.js'), {
     t(key) {
@@ -142,11 +145,11 @@ function stubCommonModules(options) {
         return '发布' + ((params && params.title) || '')
       }
       return Object.prototype.hasOwnProperty.call(translations, key) ? translations[key] : key
-    },
+    }
   })
 
   stubModule(path.join(ROOT, 'utils/theme.js'), {
-    applyTheme() {},
+    applyTheme() {}
   })
 
   stubModule(path.join(ROOT, 'utils/page.js'), {
@@ -156,7 +159,7 @@ function stubCommonModules(options) {
       }
       return Promise.resolve()
         .then(fn)
-        .finally(function() {
+        .finally(function () {
           if (runtimeOptions && runtimeOptions.loadingKey) {
             ctx.data[runtimeOptions.loadingKey] = false
           }
@@ -166,27 +169,29 @@ function stubCommonModules(options) {
       if (ctx && ctx.__wxCalls) {
         ctx.__wxCalls.showTopTips.push(message)
       }
-    },
+    }
   })
 
   stubModule(path.join(ROOT, 'utils/util.js'), {
     showModal() {},
-    showNoActionModal() {},
+    showNoActionModal() {}
   })
 
   stubModule(path.join(ROOT, 'utils/debounce.js'), {
     createSubmitGuard() {
       return {
-        acquire() { return true },
-        release() {},
+        acquire() {
+          return true
+        },
+        release() {}
       }
-    },
+    }
   })
 }
 
 function loadPage(modulePath) {
   let capturedPageConfig = null
-  global.Page = function(config) {
+  global.Page = function (config) {
     capturedPageConfig = config
   }
 
@@ -199,14 +204,14 @@ function loadPage(modulePath) {
 function createPageInstance(pageConfig, wxCalls) {
   const instance = Object.create(pageConfig)
   instance.data = JSON.parse(JSON.stringify(pageConfig.data || {}))
-  instance.setData = function(patch) {
+  instance.setData = function (patch) {
     Object.assign(instance.data, patch)
   }
   instance.__wxCalls = wxCalls
   return instance
 }
 
-test('mock UI smoke covers login page bootstrap and submit flow', async function() {
+test('mock UI smoke covers login page bootstrap and submit flow', async function () {
   const storageKeys = require(STORAGE_MODULE)
   const runtime = setupWxRuntime({ [storageKeys.dataSourceMode]: 'mock' })
   stubCommonModules()
@@ -216,7 +221,7 @@ test('mock UI smoke covers login page bootstrap and submit flow', async function
   stubModule(path.join(ROOT, 'constants/features.js'), {
     getMockCredentialsHint() {
       return '账号：gdeiassistant / 密码：gdeiassistant'
-    },
+    }
   })
 
   stubModule(path.join(ROOT, 'services/auth.js'), {
@@ -228,7 +233,7 @@ test('mock UI smoke covers login page bootstrap and submit flow', async function
     },
     validateSessionToken() {
       return Promise.resolve(false)
-    },
+    }
   })
 
   stubModule(path.join(ROOT, 'services/apis/auth.js'), {
@@ -236,14 +241,20 @@ test('mock UI smoke covers login page bootstrap and submit flow', async function
       assert.equal(payload.username, 'gdeiassistant')
       assert.equal(payload.password, 'gdeiassistant')
       return Promise.resolve({ success: true, data: { token: 'mock-session-token' } })
-    },
+    }
   })
 
   stubModule(path.join(ROOT, 'services/data-source.js'), {
     DATA_SOURCE_MODES: { remote: 'remote', mock: 'mock' },
-    isMockMode() { return true },
-    setDataSourceMode() { return 'mock' },
-    getDataSourceLabel() { return '模拟数据' },
+    isMockMode() {
+      return true
+    },
+    setDataSourceMode() {
+      return 'mock'
+    },
+    getDataSourceLabel() {
+      return '模拟数据'
+    }
   })
 
   const pageConfig = loadPage(LOGIN_PAGE_MODULE)
@@ -262,9 +273,9 @@ test('mock UI smoke covers login page bootstrap and submit flow', async function
     detail: {
       value: {
         username: 'gdeiassistant',
-        password: 'gdeiassistant',
-      },
-    },
+        password: 'gdeiassistant'
+      }
+    }
   })
   await waitForSettled()
 
@@ -276,7 +287,7 @@ test('mock UI smoke covers login page bootstrap and submit flow', async function
   assert.equal(runtime.calls.hideNavigationBarLoading, 1)
 })
 
-test('mock UI smoke covers index page profile, inbox badge and feature actions', async function() {
+test('mock UI smoke covers index page profile, inbox badge and feature actions', async function () {
   const runtime = setupWxRuntime()
   stubCommonModules()
 
@@ -284,9 +295,9 @@ test('mock UI smoke covers index page profile, inbox badge and feature actions',
     getSystemActions() {
       return [
         { id: 'settings', title: '设置', page: '/pages/settings/settings' },
-        { id: 'logout', title: '退出登录', action: 'logout' },
+        { id: 'logout', title: '退出登录', action: 'logout' }
       ]
-    },
+    }
   })
 
   let logoutCalls = 0
@@ -298,13 +309,13 @@ test('mock UI smoke covers index page profile, inbox badge and feature actions',
     },
     clearSession() {
       clearCalls += 1
-    },
+    }
   })
 
   stubModule(path.join(ROOT, 'services/apis/messages.js'), {
     getUnreadCount() {
       return Promise.resolve({ success: true, data: 7 })
-    },
+    }
   })
 
   stubModule(path.join(ROOT, 'services/apis/user.js'), {
@@ -313,7 +324,7 @@ test('mock UI smoke covers index page profile, inbox badge and feature actions',
     },
     getProfile() {
       return Promise.resolve({ success: true, data: { nickname: '测试用户' } })
-    },
+    }
   })
 
   stubModule(path.join(ROOT, 'services/feature-config.js'), {
@@ -324,15 +335,17 @@ test('mock UI smoke covers index page profile, inbox badge and feature actions',
           title: '校园服务',
           features: [
             { id: 'grade', title: '成绩查询', page: '/pages/grade/grade' },
-            { id: 'news', title: '校园新闻', page: '/pages/news/news' },
-          ],
-        },
+            { id: 'news', title: '校园新闻', page: '/pages/news/news' }
+          ]
+        }
       ]
-    },
+    }
   })
 
   stubModule(path.join(ROOT, 'services/data-source.js'), {
-    getDataSourceLabel() { return '模拟数据' },
+    getDataSourceLabel() {
+      return '模拟数据'
+    }
   })
 
   const pageConfig = loadPage(INDEX_PAGE_MODULE)
@@ -366,7 +379,7 @@ test('mock UI smoke covers index page profile, inbox badge and feature actions',
   assert.equal(runtime.calls.reLaunch[0].url, '/pages/login/login')
 })
 
-test('mock UI smoke covers news list loading, tab switching and detail navigation', async function() {
+test('mock UI smoke covers news list loading, tab switching and detail navigation', async function () {
   const storageKeys = require(STORAGE_MODULE)
   const runtime = setupWxRuntime()
   stubCommonModules()
@@ -378,19 +391,17 @@ test('mock UI smoke covers news list loading, tab switching and detail navigatio
       if (type === 2) {
         return Promise.resolve({
           success: true,
-          data: [
-            { id: 'announcement-1', title: '公告一', summary: '最新公告' },
-          ],
+          data: [{ id: 'announcement-1', title: '公告一', summary: '最新公告' }]
         })
       }
       return Promise.resolve({
         success: true,
         data: [
           { id: 'news-1', title: '新闻一', summary: '最新动态' },
-          { id: 'news-2', title: '新闻二', summary: '更多内容' },
-        ],
+          { id: 'news-2', title: '新闻二', summary: '更多内容' }
+        ]
       })
-    },
+    }
   })
 
   const pageConfig = loadPage(NEWS_PAGE_MODULE)
@@ -416,16 +427,19 @@ test('mock UI smoke covers news list loading, tab switching and detail navigatio
   page.openNewsDetail({ currentTarget: { dataset: { index: 0 } } })
   assert.equal(runtime.storage[storageKeys.newsDetailItem].id, 'announcement-1')
   assert.equal(runtime.calls.navigateTo.length, 1)
-  assert.equal(runtime.calls.navigateTo[0].url, '/pages/newsDetail/newsDetail?mode=news&id=announcement-1')
+  assert.equal(
+    runtime.calls.navigateTo[0].url,
+    '/pages/newsDetail/newsDetail?mode=news&id=announcement-1'
+  )
   assert.ok(runtime.calls.stopPullDownRefresh >= 2)
 })
 
-test('mock UI smoke covers community list loading, search and navigation actions', async function() {
+test('mock UI smoke covers community list loading, search and navigation actions', async function () {
   const runtime = setupWxRuntime()
   stubCommonModules({
     translations: {
-      'community.marketplace.title': '闲置市场',
-    },
+      'community.marketplace.title': '闲置市场'
+    }
   })
 
   const feedCalls = []
@@ -435,13 +449,13 @@ test('mock UI smoke covers community list loading, search and navigation actions
         return null
       }
       return { moduleId: 'marketplace', title: '闲置市场' }
-    },
+    }
   })
 
   stubModule(path.join(ROOT, 'constants/profile.js'), {
     fetchProfileOptions() {
       return Promise.resolve()
-    },
+    }
   })
 
   stubModule(path.join(ROOT, 'services/community/registry.js'), {
@@ -453,16 +467,16 @@ test('mock UI smoke covers community list loading, search and navigation actions
         buildListTabs() {
           return [
             { id: 'all', title: '全部' },
-            { id: 'latest', title: '最新' },
+            { id: 'latest', title: '最新' }
           ]
         },
         buildFeedOptions(options, activeTab) {
           return Object.assign({}, options, {
-            tab: activeTab ? activeTab.id : 'all',
+            tab: activeTab ? activeTab.id : 'all'
           })
-        },
+        }
       }
-    },
+    }
   })
 
   stubModule(path.join(ROOT, 'services/apis/community.js'), {
@@ -472,13 +486,13 @@ test('mock UI smoke covers community list loading, search and navigation actions
         success: true,
         data: [
           { id: 'market-1', title: '95 新蓝牙耳机', content: '支持校内自提' },
-          { id: 'market-2', title: '二手平板', content: '成色很好' },
-        ],
+          { id: 'market-2', title: '二手平板', content: '成色很好' }
+        ]
       })
     },
     getPhotographStats() {
       return Promise.resolve({ success: true, data: null })
-    },
+    }
   })
 
   const pageConfig = loadPage(COMMUNITY_LIST_PAGE_MODULE)
@@ -509,7 +523,16 @@ test('mock UI smoke covers community list loading, search and navigation actions
   page.openCenter()
 
   assert.equal(runtime.calls.navigateTo.length, 3)
-  assert.equal(runtime.calls.navigateTo[0].url, '/pages/communityDetail/communityDetail?module=marketplace&id=market-1')
-  assert.equal(runtime.calls.navigateTo[1].url, '/pages/communityPublish/communityPublish?module=marketplace')
-  assert.equal(runtime.calls.navigateTo[2].url, '/pages/communityCenter/communityCenter?module=marketplace')
+  assert.equal(
+    runtime.calls.navigateTo[0].url,
+    '/pages/communityDetail/communityDetail?module=marketplace&id=market-1'
+  )
+  assert.equal(
+    runtime.calls.navigateTo[1].url,
+    '/pages/communityPublish/communityPublish?module=marketplace'
+  )
+  assert.equal(
+    runtime.calls.navigateTo[2].url,
+    '/pages/communityCenter/communityCenter?module=marketplace'
+  )
 })

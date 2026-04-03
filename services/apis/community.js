@@ -5,9 +5,11 @@ const { getModuleHandler } = require('../community/registry.js')
 const i18n = require('../../utils/i18n.js')
 
 function requestForm(options) {
-  return request(Object.assign({}, options, {
-    contentType: 'application/x-www-form-urlencoded'
-  }))
+  return request(
+    Object.assign({}, options, {
+      contentType: 'application/x-www-form-urlencoded'
+    })
+  )
 }
 
 function getFeed(moduleId, options) {
@@ -181,18 +183,20 @@ function getPhotographStats() {
       method: 'GET',
       authRequired: true
     })
-  ]).then(function(resultList) {
-    return {
-      success: true,
-      data: {
-        photos: resultList[0].data || 0,
-        comments: resultList[1].data || 0,
-        likes: resultList[2].data || 0
+  ])
+    .then(function (resultList) {
+      return {
+        success: true,
+        data: {
+          photos: resultList[0].data || 0,
+          comments: resultList[1].data || 0,
+          likes: resultList[2].data || 0
+        }
       }
-    }
-  }).catch(function() {
-    return { success: false, data: { photos: 0, comments: 0, likes: 0 } }
-  })
+    })
+    .catch(function () {
+      return { success: false, data: { photos: 0, comments: 0, likes: 0 } }
+    })
 }
 
 module.exports = {

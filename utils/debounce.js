@@ -63,7 +63,9 @@ function guardSubmit(fn, cooldownMs) {
     try {
       var result = fn.apply(self, args)
       if (result && typeof result.then === 'function') {
-        result.finally(function () { guard.release() })
+        result.finally(function () {
+          guard.release()
+        })
       } else {
         guard.release()
       }

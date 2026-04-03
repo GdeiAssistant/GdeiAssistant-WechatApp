@@ -24,8 +24,9 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version-file: '.nvmrc'
           cache: 'npm'
+          cache-dependency-path: package-lock.json
 
       - name: Print Node version
         run: node --version
@@ -33,5 +34,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run lint
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
+
       - name: Run tests
         run: npm test
+
+      - name: Run config smoke checks
+        run: npm run smoke

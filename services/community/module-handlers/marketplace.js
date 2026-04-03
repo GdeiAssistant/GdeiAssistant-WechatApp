@@ -2,9 +2,7 @@ const endpoints = require('../../endpoints.js')
 const { request } = require('../../request.js')
 const { encodeForm } = require('../../../utils/form.js')
 const i18n = require('../../../utils/i18n.js')
-const {
-  getSecondhandCategoryOptions
-} = require('../../../constants/community.js')
+const { getSecondhandCategoryOptions } = require('../../../constants/community.js')
 
 var SECONDHAND_NAME_MAX_LENGTH = 25
 var SECONDHAND_DESCRIPTION_MAX_LENGTH = 100
@@ -21,10 +19,12 @@ function getMaxLengthMessage(value, maxLength, message) {
 }
 
 function findLabel(options, value, fallback) {
-  const item = (options || []).filter(function(optionItem) {
-    return Number(optionItem.value) === Number(value) || Number(optionItem.feedValue) === Number(value)
+  const item = (options || []).filter(function (optionItem) {
+    return (
+      Number(optionItem.value) === Number(value) || Number(optionItem.feedValue) === Number(value)
+    )
   })[0]
-  return item ? item.label : (fallback || '')
+  return item ? item.label : fallback || ''
 }
 
 function formatPrice(value) {
@@ -34,7 +34,7 @@ function formatPrice(value) {
 
 module.exports = {
   // --- Feed ---
-  getFeed: function(options) {
+  getFeed: function (options) {
     var config = options || {}
     var start = Number(config.start || 0)
     var keyword = String(config.keyword || '').trim()
@@ -61,7 +61,7 @@ module.exports = {
   },
 
   // --- Detail ---
-  getDetail: function(id) {
+  getDetail: function (id) {
     return request({
       url: endpoints.community.secondhand.detail(id),
       method: 'GET',
@@ -70,7 +70,7 @@ module.exports = {
   },
 
   // --- Center ---
-  getCenter: function() {
+  getCenter: function () {
     return request({
       url: endpoints.community.secondhand.profile,
       method: 'GET',
@@ -79,31 +79,43 @@ module.exports = {
   },
 
   // --- Publish ---
-  publish: function(payload) {
-    return request(Object.assign({}, {
-      url: endpoints.community.secondhand.publish,
-      method: 'POST',
-      authRequired: true,
-      data: encodeForm(payload),
-      contentType: 'application/x-www-form-urlencoded'
-    }))
+  publish: function (payload) {
+    return request(
+      Object.assign(
+        {},
+        {
+          url: endpoints.community.secondhand.publish,
+          method: 'POST',
+          authRequired: true,
+          data: encodeForm(payload),
+          contentType: 'application/x-www-form-urlencoded'
+        }
+      )
+    )
   },
 
   // --- List page: tabs ---
-  buildListTabs: function() {
+  buildListTabs: function () {
     return getSecondhandCategoryOptions()
   },
 
   // --- List page: normalize ---
-  normalizeItem: function(item) {
+  normalizeItem: function (item) {
     var rawItem = item || {}
     return {
       id: rawItem.id,
       title: rawItem.name || i18n.t('community.list.unnamedProduct'),
       summary: rawItem.description || '',
-      cover: rawItem.pictureURL && rawItem.pictureURL.length ? rawItem.pictureURL[0] : '/image/ershou.png',
+      cover:
+        rawItem.pictureURL && rawItem.pictureURL.length
+          ? rawItem.pictureURL[0]
+          : '/image/ershou.png',
       priceText: formatPrice(rawItem.price),
-      badgeText: findLabel(getSecondhandCategoryOptions(), rawItem.type, i18n.t('community.list.secondhand')),
+      badgeText: findLabel(
+        getSecondhandCategoryOptions(),
+        rawItem.type,
+        i18n.t('community.list.secondhand')
+      ),
       metaText: rawItem.location || '',
       timeText: rawItem.publishTime || '',
       raw: rawItem
@@ -111,14 +123,14 @@ module.exports = {
   },
 
   // --- List page: build feed options ---
-  buildFeedOptions: function(baseOptions, activeTab) {
+  buildFeedOptions: function (baseOptions, activeTab) {
     var options = Object.assign({}, baseOptions)
     options.type = activeTab && Number(activeTab.value) >= 0 ? Number(activeTab.value) : null
     return options
   },
 
   // --- Center page: tabs ---
-  buildCenterTabs: function() {
+  buildCenterTabs: function () {
     return [
       { key: 'doing', label: i18n.t('community.center.tabSelling') },
       { key: 'sold', label: i18n.t('community.center.tabSold') },
@@ -127,15 +139,16 @@ module.exports = {
   },
 
   // --- Center page: normalize ---
-  normalizeCenterData: function(payload, normalizeStandardItem) {
+  normalizeCenterData: function (payload, normalizeStandardItem) {
     return {
-      doing: (payload.doing || []).map(function(item) {
+      doing: (payload.doing || []).map(function (item) {
         return normalizeStandardItem(item, {
           id: item.id,
           title: item.name,
           subtitle: item.publishTime,
           summary: item.location,
-          cover: item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
+          cover:
+            item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
           priceText: Number(item.price || 0).toFixed(2),
           actions: [
             { id: 'edit', label: i18n.t('community.center.actionEdit') },
@@ -144,25 +157,27 @@ module.exports = {
           ]
         })
       }),
-      sold: (payload.sold || []).map(function(item) {
+      sold: (payload.sold || []).map(function (item) {
         return normalizeStandardItem(item, {
           id: item.id,
           title: item.name,
           subtitle: item.publishTime,
           summary: item.location,
-          cover: item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
+          cover:
+            item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
           priceText: Number(item.price || 0).toFixed(2),
           actions: [],
           canOpenDetail: false
         })
       }),
-      off: (payload.off || []).map(function(item) {
+      off: (payload.off || []).map(function (item) {
         return normalizeStandardItem(item, {
           id: item.id,
           title: item.name,
           subtitle: item.publishTime,
           summary: item.location,
-          cover: item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
+          cover:
+            item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
           priceText: Number(item.price || 0).toFixed(2),
           actions: [
             { id: 'edit', label: i18n.t('community.center.actionEdit') },
@@ -180,7 +195,7 @@ module.exports = {
   searchable: true,
 
   // --- Publish: validate form ---
-  validateForm: function(data) {
+  validateForm: function (data) {
     var form = data.form || {}
     var isEditMode = data.isEditMode
     var images = data.images || []
@@ -192,21 +207,84 @@ module.exports = {
     var phone = trimValue(form.phone)
 
     if (!name) return i18n.t('community.publish.v.productNameRequired')
-    if (getMaxLengthMessage(name, SECONDHAND_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.productNameTooLong', { max: SECONDHAND_NAME_MAX_LENGTH }))) return getMaxLengthMessage(name, SECONDHAND_NAME_MAX_LENGTH, i18n.tReplace('community.publish.v.productNameTooLong', { max: SECONDHAND_NAME_MAX_LENGTH }))
+    if (
+      getMaxLengthMessage(
+        name,
+        SECONDHAND_NAME_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.productNameTooLong', { max: SECONDHAND_NAME_MAX_LENGTH })
+      )
+    )
+      return getMaxLengthMessage(
+        name,
+        SECONDHAND_NAME_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.productNameTooLong', { max: SECONDHAND_NAME_MAX_LENGTH })
+      )
     if (!description) return i18n.t('community.publish.v.productDescRequired')
-    if (getMaxLengthMessage(description, SECONDHAND_DESCRIPTION_MAX_LENGTH, i18n.tReplace('community.publish.v.productDescTooLong', { max: SECONDHAND_DESCRIPTION_MAX_LENGTH }))) return getMaxLengthMessage(description, SECONDHAND_DESCRIPTION_MAX_LENGTH, i18n.tReplace('community.publish.v.productDescTooLong', { max: SECONDHAND_DESCRIPTION_MAX_LENGTH }))
+    if (
+      getMaxLengthMessage(
+        description,
+        SECONDHAND_DESCRIPTION_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.productDescTooLong', {
+          max: SECONDHAND_DESCRIPTION_MAX_LENGTH
+        })
+      )
+    )
+      return getMaxLengthMessage(
+        description,
+        SECONDHAND_DESCRIPTION_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.productDescTooLong', {
+          max: SECONDHAND_DESCRIPTION_MAX_LENGTH
+        })
+      )
     if (!(Number(form.price || 0) > 0)) return i18n.t('community.publish.v.priceInvalid')
     if (!location) return i18n.t('community.publish.v.locationRequired')
-    if (getMaxLengthMessage(location, SECONDHAND_LOCATION_MAX_LENGTH, i18n.tReplace('community.publish.v.locationTooLong', { max: SECONDHAND_LOCATION_MAX_LENGTH }))) return getMaxLengthMessage(location, SECONDHAND_LOCATION_MAX_LENGTH, i18n.tReplace('community.publish.v.locationTooLong', { max: SECONDHAND_LOCATION_MAX_LENGTH }))
+    if (
+      getMaxLengthMessage(
+        location,
+        SECONDHAND_LOCATION_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.locationTooLong', {
+          max: SECONDHAND_LOCATION_MAX_LENGTH
+        })
+      )
+    )
+      return getMaxLengthMessage(
+        location,
+        SECONDHAND_LOCATION_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.locationTooLong', {
+          max: SECONDHAND_LOCATION_MAX_LENGTH
+        })
+      )
     if (!qq) return i18n.t('community.publish.v.qqRequired')
-    if (getMaxLengthMessage(qq, SECONDHAND_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong', { max: SECONDHAND_QQ_MAX_LENGTH }))) return getMaxLengthMessage(qq, SECONDHAND_QQ_MAX_LENGTH, i18n.tReplace('community.publish.v.qqTooLong', { max: SECONDHAND_QQ_MAX_LENGTH }))
-    if (getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.phoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH }))) return getMaxLengthMessage(phone, CONTACT_PHONE_MAX_LENGTH, i18n.tReplace('community.publish.v.phoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH }))
+    if (
+      getMaxLengthMessage(
+        qq,
+        SECONDHAND_QQ_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.qqTooLong', { max: SECONDHAND_QQ_MAX_LENGTH })
+      )
+    )
+      return getMaxLengthMessage(
+        qq,
+        SECONDHAND_QQ_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.qqTooLong', { max: SECONDHAND_QQ_MAX_LENGTH })
+      )
+    if (
+      getMaxLengthMessage(
+        phone,
+        CONTACT_PHONE_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.phoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH })
+      )
+    )
+      return getMaxLengthMessage(
+        phone,
+        CONTACT_PHONE_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.phoneTooLong', { max: CONTACT_PHONE_MAX_LENGTH })
+      )
     if (!isEditMode && !images.length) return i18n.t('community.publish.v.imageRequired')
     return ''
   },
 
   // --- Publish: build payload ---
-  buildPublishPayload: function(data, uploadFiles) {
+  buildPublishPayload: function (data, uploadFiles) {
     var form = data.form || {}
     var isEditMode = data.isEditMode
     var images = data.images || []
@@ -224,7 +302,7 @@ module.exports = {
         phone: String(form.phone || '').trim()
       })
     }
-    return uploadFiles(images).then(function(imageKeys) {
+    return uploadFiles(images).then(function (imageKeys) {
       return {
         name: String(form.name || '').trim(),
         description: String(form.description || '').trim(),
@@ -239,7 +317,7 @@ module.exports = {
   },
 
   // --- Detail: build detail view ---
-  buildDetailView: function(payload) {
+  buildDetailView: function (payload) {
     var item = payload.secondhandItem || {}
     var profile = payload.profile || {}
     return {
@@ -259,17 +337,17 @@ module.exports = {
   },
 
   // --- Comments ---
-  getComments: function() {
+  getComments: function () {
     return Promise.resolve({ success: true, data: [] })
   },
 
   // --- Submit comment ---
-  submitComment: function() {
+  submitComment: function () {
     return Promise.reject(new Error(i18n.t('community.common.commentUnsupported')))
   },
 
   // --- Toggle like ---
-  toggleLike: function() {
+  toggleLike: function () {
     return Promise.reject(new Error(i18n.t('community.common.likeUnsupported')))
   }
 }

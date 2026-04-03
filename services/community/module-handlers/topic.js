@@ -16,7 +16,7 @@ function getMaxLengthMessage(value, maxLength, message) {
 
 module.exports = {
   // --- Feed ---
-  getFeed: function(options) {
+  getFeed: function (options) {
     var config = options || {}
     var start = Number(config.start || 0)
     var size = Number(config.size || 10)
@@ -32,7 +32,7 @@ module.exports = {
   },
 
   // --- Detail ---
-  getDetail: function(id) {
+  getDetail: function (id) {
     return request({
       url: endpoints.community.topic.detail(id),
       method: 'GET',
@@ -41,7 +41,7 @@ module.exports = {
   },
 
   // --- Center ---
-  getCenter: function(options) {
+  getCenter: function (options) {
     var config = options || {}
     var start = Number(config.start || 0)
     var size = Number(config.size || 10)
@@ -54,23 +54,28 @@ module.exports = {
   },
 
   // --- Publish ---
-  publish: function(payload) {
-    return request(Object.assign({}, {
-      url: endpoints.community.topic.publish,
-      method: 'POST',
-      authRequired: true,
-      data: encodeForm(payload),
-      contentType: 'application/x-www-form-urlencoded'
-    }))
+  publish: function (payload) {
+    return request(
+      Object.assign(
+        {},
+        {
+          url: endpoints.community.topic.publish,
+          method: 'POST',
+          authRequired: true,
+          data: encodeForm(payload),
+          contentType: 'application/x-www-form-urlencoded'
+        }
+      )
+    )
   },
 
   // --- List page: tabs ---
-  buildListTabs: function() {
+  buildListTabs: function () {
     return []
   },
 
   // --- List page: normalize ---
-  normalizeItem: function(item) {
+  normalizeItem: function (item) {
     var rawItem = item || {}
     return {
       id: rawItem.id,
@@ -84,19 +89,19 @@ module.exports = {
   },
 
   // --- List page: build feed options ---
-  buildFeedOptions: function(baseOptions) {
+  buildFeedOptions: function (baseOptions) {
     return Object.assign({}, baseOptions)
   },
 
   // --- Center page: tabs ---
-  buildCenterTabs: function() {
+  buildCenterTabs: function () {
     return []
   },
 
   // --- Center page: normalize ---
-  normalizeCenterData: function(payload, normalizeStandardItem) {
+  normalizeCenterData: function (payload, normalizeStandardItem) {
     return {
-      default: (payload || []).map(function(item) {
+      default: (payload || []).map(function (item) {
         return normalizeStandardItem(item, {
           id: item.id,
           title: '#' + (item.topic || i18n.t('community.list.campusTopic')),
@@ -117,25 +122,47 @@ module.exports = {
   imageLimit: 9,
 
   // --- Publish: validate form ---
-  validateForm: function(data) {
+  validateForm: function (data) {
     var form = data.form || {}
 
     var topic = trimValue(form.topic)
     var content = trimValue(form.content)
 
     if (!topic) return i18n.t('community.publish.v.topicRequired')
-    if (getMaxLengthMessage(topic, TOPIC_KEYWORD_MAX_LENGTH, i18n.tReplace('community.publish.v.topicTooLong', { max: TOPIC_KEYWORD_MAX_LENGTH }))) return getMaxLengthMessage(topic, TOPIC_KEYWORD_MAX_LENGTH, i18n.tReplace('community.publish.v.topicTooLong', { max: TOPIC_KEYWORD_MAX_LENGTH }))
+    if (
+      getMaxLengthMessage(
+        topic,
+        TOPIC_KEYWORD_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.topicTooLong', { max: TOPIC_KEYWORD_MAX_LENGTH })
+      )
+    )
+      return getMaxLengthMessage(
+        topic,
+        TOPIC_KEYWORD_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.topicTooLong', { max: TOPIC_KEYWORD_MAX_LENGTH })
+      )
     if (!content) return i18n.t('community.publish.v.topicContentRequired')
-    if (getMaxLengthMessage(content, TOPIC_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.topicContentTooLong', { max: TOPIC_CONTENT_MAX_LENGTH }))) return getMaxLengthMessage(content, TOPIC_CONTENT_MAX_LENGTH, i18n.tReplace('community.publish.v.topicContentTooLong', { max: TOPIC_CONTENT_MAX_LENGTH }))
+    if (
+      getMaxLengthMessage(
+        content,
+        TOPIC_CONTENT_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.topicContentTooLong', { max: TOPIC_CONTENT_MAX_LENGTH })
+      )
+    )
+      return getMaxLengthMessage(
+        content,
+        TOPIC_CONTENT_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.topicContentTooLong', { max: TOPIC_CONTENT_MAX_LENGTH })
+      )
     return ''
   },
 
   // --- Publish: build payload ---
-  buildPublishPayload: function(data, uploadFiles) {
+  buildPublishPayload: function (data, uploadFiles) {
     var form = data.form || {}
     var images = data.images || []
 
-    return uploadFiles(images).then(function(imageKeys) {
+    return uploadFiles(images).then(function (imageKeys) {
       return {
         topic: String(form.topic || '').trim(),
         content: String(form.content || '').trim(),
@@ -146,7 +173,7 @@ module.exports = {
   },
 
   // --- Detail: build detail view ---
-  buildDetailView: function() {
+  buildDetailView: function () {
     return {
       title: i18n.t('community.detail.detail'),
       description: ''
@@ -154,17 +181,17 @@ module.exports = {
   },
 
   // --- Comments ---
-  getComments: function() {
+  getComments: function () {
     return Promise.resolve({ success: true, data: [] })
   },
 
   // --- Submit comment ---
-  submitComment: function() {
+  submitComment: function () {
     return Promise.reject(new Error(i18n.t('community.common.commentUnsupported')))
   },
 
   // --- Toggle like ---
-  toggleLike: function() {
+  toggleLike: function () {
     return Promise.reject(new Error(i18n.t('community.common.likeUnsupported')))
   }
 }

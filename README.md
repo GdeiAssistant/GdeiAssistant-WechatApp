@@ -123,7 +123,7 @@ GdeiAssistant-WechatApp/
 
 - 微信开发者工具
 - 微信小程序基础库 `>= 2.32.3`
-- Node.js `>= 24.14.1`（运行测试）
+- Node.js `24.14.1`（仓库 `.nvmrc` 与 CI 对齐）
 
 ## 快速开始
 
@@ -154,11 +154,22 @@ GdeiAssistant-WechatApp/
 ### 4. 运行测试
 
 ```bash
-npm install
+npm ci
+npm run lint
 npm test
+npm run smoke
 ```
 
 测试使用 Node 内建 test runner，无需额外依赖。`npm test` 会运行 `tests/` 下所有 `*.test.js` 文件。
+
+可选命令：
+
+```bash
+npm run format:check
+npm run format
+```
+
+CI 默认会执行 `lint -> format:check -> test -> smoke`。
 
 ## Mock 模式说明
 

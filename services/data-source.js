@@ -20,7 +20,8 @@ function getDataSourceMode() {
 }
 
 function setDataSourceMode(mode) {
-  const nextMode = mode === DATA_SOURCE_MODES.mock ? DATA_SOURCE_MODES.mock : DATA_SOURCE_MODES.remote
+  const nextMode =
+    mode === DATA_SOURCE_MODES.mock ? DATA_SOURCE_MODES.mock : DATA_SOURCE_MODES.remote
   try {
     wx.setStorageSync(storageKeys.dataSourceMode, nextMode)
   } catch (error) {

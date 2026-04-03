@@ -3,11 +3,19 @@ var FONT_SCALE_KEY = 'font_scale_step'
 var FONT_SCALES = [0.85, 1.0, 1.15, 1.3]
 
 function getStoredThemeMode() {
-  try { return wx.getStorageSync(THEME_KEY) || 'system' } catch (e) { return 'system' }
+  try {
+    return wx.getStorageSync(THEME_KEY) || 'system'
+  } catch (e) {
+    return 'system'
+  }
 }
 
 function getSystemTheme() {
-  try { return wx.getSystemInfoSync().theme || 'light' } catch (e) { return 'light' }
+  try {
+    return wx.getSystemInfoSync().theme || 'light'
+  } catch (e) {
+    return 'light'
+  }
 }
 
 function resolveEffective(mode) {
@@ -18,8 +26,10 @@ function resolveEffective(mode) {
 function getStoredFontScaleStep() {
   try {
     var v = parseInt(wx.getStorageSync(FONT_SCALE_KEY), 10)
-    return (v >= 0 && v <= 3) ? v : 1
-  } catch (e) { return 1 }
+    return v >= 0 && v <= 3 ? v : 1
+  } catch (e) {
+    return 1
+  }
 }
 
 /**

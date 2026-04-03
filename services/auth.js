@@ -7,7 +7,12 @@ const { normalizePayload } = require('./response.js')
 const { generateRequestId } = require('./request-id.js')
 const i18n = require('../utils/i18n.js')
 let reLaunching = false
-const SESSION_STORAGE_KEYS = [storageKeys.sessionToken, storageKeys.username, 'accessToken', 'refreshToken']
+const SESSION_STORAGE_KEYS = [
+  storageKeys.sessionToken,
+  storageKeys.username,
+  'accessToken',
+  'refreshToken'
+]
 
 function getSessionToken() {
   return wx.getStorageSync(storageKeys.sessionToken)
@@ -18,7 +23,7 @@ function setSessionToken(token) {
 }
 
 function clearSession() {
-  SESSION_STORAGE_KEYS.forEach(function(key) {
+  SESSION_STORAGE_KEYS.forEach(function (key) {
     try {
       wx.removeStorageSync(key)
     } catch (error) {
@@ -37,13 +42,13 @@ function reLaunchToLogin(title, content) {
     title,
     content,
     showCancel: false,
-    success: function(res) {
+    success: function (res) {
       reLaunching = false
       if (res.confirm) {
         wx.reLaunch({ url: '/pages/login/login' })
       }
     },
-    fail: function() {
+    fail: function () {
       reLaunching = false
     }
   })
@@ -88,10 +93,20 @@ function logout() {
         'X-Request-ID': requestId
       },
       timeout: config.requestTimeout,
-      complete: function(res) {
+      complete: function (res) {
         var elapsed = Date.now() - startTime
         var status = (res && res.statusCode) || 'FAILED'
-        console.debug('rid:' + requestId + ' | POST ' + endpoints.auth.logout + ' | ' + status + ' | ' + elapsed + 'ms')
+        console.debug(
+          'rid:' +
+            requestId +
+            ' | POST ' +
+            endpoints.auth.logout +
+            ' | ' +
+            status +
+            ' | ' +
+            elapsed +
+            'ms'
+        )
         resolve()
       }
     })
@@ -120,9 +135,19 @@ function validateSessionToken() {
         'X-Request-ID': requestId
       },
       timeout: config.requestTimeout,
-      success: function(result) {
+      success: function (result) {
         var elapsed = Date.now() - startTime
-        console.debug('rid:' + requestId + ' | GET ' + endpoints.auth.validate + ' | ' + result.statusCode + ' | ' + elapsed + 'ms')
+        console.debug(
+          'rid:' +
+            requestId +
+            ' | GET ' +
+            endpoints.auth.validate +
+            ' | ' +
+            result.statusCode +
+            ' | ' +
+            elapsed +
+            'ms'
+        )
 
         if (result.statusCode === 200) {
           const payload = normalizePayload(result.data)
@@ -132,9 +157,11 @@ function validateSessionToken() {
 
         resolve(false)
       },
-      fail: function() {
+      fail: function () {
         var elapsed = Date.now() - startTime
-        console.debug('rid:' + requestId + ' | GET ' + endpoints.auth.validate + ' | FAILED | ' + elapsed + 'ms')
+        console.debug(
+          'rid:' + requestId + ' | GET ' + endpoints.auth.validate + ' | FAILED | ' + elapsed + 'ms'
+        )
         resolve(false)
       }
     })

@@ -15,19 +15,27 @@ function setup(wxRequestImpl) {
   // Stub wx global
   const storage = {}
   global.wx = {
-    getDeviceInfo: function() { return { deviceId: 'test-device-id' } },
-    getStorageSync: function(key) { return storage[key] || '' },
-    setStorageSync: function(key, val) { storage[key] = val },
-    removeStorageSync: function(key) { delete storage[key] },
-    showNavigationBarLoading: function() {},
-    hideNavigationBarLoading: function() {},
-    showLoading: function() {},
-    hideLoading: function() {},
-    showModal: function() {},
-    reLaunch: function() {},
-    request: wxRequestImpl || function() {}
+    getDeviceInfo: function () {
+      return { deviceId: 'test-device-id' }
+    },
+    getStorageSync: function (key) {
+      return storage[key] || ''
+    },
+    setStorageSync: function (key, val) {
+      storage[key] = val
+    },
+    removeStorageSync: function (key) {
+      delete storage[key]
+    },
+    showNavigationBarLoading: function () {},
+    hideNavigationBarLoading: function () {},
+    showLoading: function () {},
+    hideLoading: function () {},
+    showModal: function () {},
+    reLaunch: function () {},
+    request: wxRequestImpl || function () {}
   }
-  global.getApp = function() {
+  global.getApp = function () {
     return { globalData: { locale: 'zh-CN' } }
   }
 
@@ -38,18 +46,26 @@ function setup(wxRequestImpl) {
     currentEnv: 'prod'
   })
   stubModule(AUTH_MODULE, {
-    getSessionToken: function() { return storage.sessionToken || '' },
-    setSessionToken: function(t) { storage.sessionToken = t },
-    clearSession: function() { delete storage.sessionToken },
-    reLaunchToLogin: function() {},
-    ensureSessionToken: function() {
+    getSessionToken: function () {
+      return storage.sessionToken || ''
+    },
+    setSessionToken: function (t) {
+      storage.sessionToken = t
+    },
+    clearSession: function () {
+      delete storage.sessionToken
+    },
+    reLaunchToLogin: function () {},
+    ensureSessionToken: function () {
       const token = storage.sessionToken
       if (token) return Promise.resolve(token)
       return Promise.reject(new Error('no token'))
     }
   })
   stubModule(DATA_SOURCE_MODULE, {
-    isMockMode: function() { return false }
+    isMockMode: function () {
+      return false
+    }
   })
   stubModule(MOCK_MODULE, {})
 
@@ -59,14 +75,14 @@ function setup(wxRequestImpl) {
 
 // ---- generateRequestId ----
 
-test('generateRequestId returns a non-empty UUID-shaped string', function() {
+test('generateRequestId returns a non-empty UUID-shaped string', function () {
   const { generateRequestId } = setup()
   const id = generateRequestId()
   assert.ok(id.length > 0, 'should be non-empty')
   assert.match(id, /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)
 })
 
-test('generateRequestId returns unique values', function() {
+test('generateRequestId returns unique values', function () {
   const { generateRequestId } = setup()
   const ids = new Set()
   for (let i = 0; i < 50; i++) {
@@ -77,10 +93,10 @@ test('generateRequestId returns unique values', function() {
 
 // ---- X-Request-ID header ----
 
-test('request includes X-Request-ID header in outbound calls', async function() {
+test('request includes X-Request-ID header in outbound calls', async function () {
   let capturedHeader = null
 
-  const { request } = setup(function(opts) {
+  const { request } = setup(function (opts) {
     capturedHeader = opts.header
     opts.success({ statusCode: 200, data: { code: 200, data: null } })
   })
@@ -91,10 +107,10 @@ test('request includes X-Request-ID header in outbound calls', async function() 
   assert.match(capturedHeader['X-Request-ID'], /^[0-9a-f-]+$/)
 })
 
-test('request preserves caller-supplied requestId', async function() {
+test('request preserves caller-supplied requestId', async function () {
   let capturedHeader = null
 
-  const { request } = setup(function(opts) {
+  const { request } = setup(function (opts) {
     capturedHeader = opts.header
     opts.success({ statusCode: 200, data: { code: 200, data: null } })
   })
@@ -106,10 +122,10 @@ test('request preserves caller-supplied requestId', async function() {
 
 // ---- Auth header injection ----
 
-test('request injects Authorization header when authRequired', async function() {
+test('request injects Authorization header when authRequired', async function () {
   let capturedHeader = null
 
-  const { request } = setup(function(opts) {
+  const { request } = setup(function (opts) {
     capturedHeader = opts.header
     opts.success({ statusCode: 200, data: { code: 200, data: null } })
   })
@@ -118,10 +134,14 @@ test('request injects Authorization header when authRequired', async function() 
   global.wx.setStorageSync('sessionToken', 'my-jwt-token')
   clearModule(AUTH_MODULE)
   stubModule(AUTH_MODULE, {
-    getSessionToken: function() { return 'my-jwt-token' },
-    clearSession: function() {},
-    reLaunchToLogin: function() {},
-    ensureSessionToken: function() { return Promise.resolve('my-jwt-token') }
+    getSessionToken: function () {
+      return 'my-jwt-token'
+    },
+    clearSession: function () {},
+    reLaunchToLogin: function () {},
+    ensureSessionToken: function () {
+      return Promise.resolve('my-jwt-token')
+    }
   })
   clearModule(REQUEST_MODULE)
   const mod = require(REQUEST_MODULE)
@@ -131,10 +151,10 @@ test('request injects Authorization header when authRequired', async function() 
   assert.equal(capturedHeader.Authorization, 'Bearer my-jwt-token')
 })
 
-test('request omits Authorization header when not authRequired', async function() {
+test('request omits Authorization header when not authRequired', async function () {
   let capturedHeader = null
 
-  const { request } = setup(function(opts) {
+  const { request } = setup(function (opts) {
     capturedHeader = opts.header
     opts.success({ statusCode: 200, data: { code: 200, data: null } })
   })
@@ -146,34 +166,37 @@ test('request omits Authorization header when not authRequired', async function(
 
 // ---- 401 handling ----
 
-test('request rejects and clears session on 401 response', async function() {
+test('request rejects and clears session on 401 response', async function () {
   let sessionCleared = false
 
-  const { request } = setup(function(opts) {
+  const { request } = setup(function (opts) {
     opts.success({ statusCode: 401, data: {} })
   })
 
   // Override auth stub to track clearSession
   stubModule(AUTH_MODULE, {
-    getSessionToken: function() { return '' },
-    clearSession: function() { sessionCleared = true },
-    reLaunchToLogin: function() {},
-    ensureSessionToken: function() { return Promise.resolve(null) }
+    getSessionToken: function () {
+      return ''
+    },
+    clearSession: function () {
+      sessionCleared = true
+    },
+    reLaunchToLogin: function () {},
+    ensureSessionToken: function () {
+      return Promise.resolve(null)
+    }
   })
   clearModule(REQUEST_MODULE)
   const mod = require(REQUEST_MODULE)
 
-  await assert.rejects(
-    mod.request({ url: '/api/test' }),
-    { message: '登录凭证已过期，请重新登录' }
-  )
+  await assert.rejects(mod.request({ url: '/api/test' }), { message: '登录凭证已过期，请重新登录' })
   assert.ok(sessionCleared, 'clearSession should have been called')
 })
 
 // ---- Payload normalization ----
 
-test('request normalizes successful response through normalizePayload', async function() {
-  const { request } = setup(function(opts) {
+test('request normalizes successful response through normalizePayload', async function () {
+  const { request } = setup(function (opts) {
     opts.success({ statusCode: 200, data: { code: 200, msg: 'ok', data: { id: 1 } } })
   })
 
@@ -185,10 +208,10 @@ test('request normalizes successful response through normalizePayload', async fu
 
 // ---- Default headers ----
 
-test('request includes Accept-Language and X-Device-ID headers', async function() {
+test('request includes Accept-Language and X-Device-ID headers', async function () {
   let capturedHeader = null
 
-  const { request } = setup(function(opts) {
+  const { request } = setup(function (opts) {
     capturedHeader = opts.header
     opts.success({ statusCode: 200, data: { code: 200, data: null } })
   })
@@ -199,13 +222,13 @@ test('request includes Accept-Language and X-Device-ID headers', async function(
   assert.equal(capturedHeader['X-Device-ID'], 'test-device-id')
 })
 
-test('request normalizes unsupported locale before sending Accept-Language', async function() {
+test('request normalizes unsupported locale before sending Accept-Language', async function () {
   let capturedHeader = null
-  const { request } = setup(function(opts) {
+  const { request } = setup(function (opts) {
     capturedHeader = opts.header
     opts.success({ statusCode: 200, data: { code: 200, data: null } })
   })
-  global.getApp = function() {
+  global.getApp = function () {
     return { globalData: { locale: 'fr-FR' } }
   }
 

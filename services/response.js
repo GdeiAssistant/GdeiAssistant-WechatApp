@@ -9,7 +9,13 @@ function pickMessage(payload) {
     return getServiceUnavailableMessage()
   }
 
-  return payload.message || payload.msg || payload.error || payload.errorMsg || getServiceUnavailableMessage()
+  return (
+    payload.message ||
+    payload.msg ||
+    payload.error ||
+    payload.errorMsg ||
+    getServiceUnavailableMessage()
+  )
 }
 
 function normalizePayload(rawPayload) {

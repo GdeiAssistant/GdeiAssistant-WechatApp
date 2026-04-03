@@ -9,7 +9,7 @@ var datingHandler = require('./module-handlers/dating.js')
 
 var COMMUNITY_MODULES = {
   marketplace: marketplaceHandler,
-  ershou: marketplaceHandler,       // legacy alias used by some pages
+  ershou: marketplaceHandler, // legacy alias used by some pages
   lostandfound: lostandfoundHandler,
   secret: secretHandler,
   express: expressHandler,

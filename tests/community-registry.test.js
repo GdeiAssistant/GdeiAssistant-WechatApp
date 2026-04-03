@@ -9,14 +9,20 @@ const ROOT = path.resolve(__dirname, '..')
 // Stub i18n so handler modules can load without the full WeChat environment
 const I18N_MODULE = path.join(ROOT, 'utils/i18n.js')
 stubModule(I18N_MODULE, {
-  t: function(key) { return key },
-  tReplace: function(key) { return key }
+  t: function (key) {
+    return key
+  },
+  tReplace: function (key) {
+    return key
+  }
 })
 
 // Stub request module
 const REQUEST_MODULE = path.join(ROOT, 'services/request.js')
 stubModule(REQUEST_MODULE, {
-  request: function() { return Promise.resolve({ success: true }) }
+  request: function () {
+    return Promise.resolve({ success: true })
+  }
 })
 
 // Clear registry and handler caches so they pick up our stubs
@@ -32,7 +38,7 @@ clearModule(path.join(ROOT, 'services/community/registry.js'))
 
 const { getModuleHandler } = require(path.join(ROOT, 'services/community/registry.js'))
 
-test('marketplace handler has feedEndpoint, tabs, and normalizeItem', function() {
+test('marketplace handler has feedEndpoint, tabs, and normalizeItem', function () {
   const handler = getModuleHandler('marketplace')
 
   assert.ok(handler, 'marketplace handler should exist')
@@ -48,7 +54,7 @@ test('marketplace handler has feedEndpoint, tabs, and normalizeItem', function()
   assert.equal(handler.searchable, true, 'should be searchable')
 })
 
-test('lostandfound handler has feedEndpoint, tabs, and normalizeItem', function() {
+test('lostandfound handler has feedEndpoint, tabs, and normalizeItem', function () {
   const handler = getModuleHandler('lostandfound')
 
   assert.ok(handler, 'lostandfound handler should exist')
@@ -64,13 +70,13 @@ test('lostandfound handler has feedEndpoint, tabs, and normalizeItem', function(
   assert.equal(handler.searchable, true, 'should be searchable')
 })
 
-test('getModuleHandler returns null for unknown moduleId', function() {
+test('getModuleHandler returns null for unknown moduleId', function () {
   assert.equal(getModuleHandler('nonexistent'), null)
   assert.equal(getModuleHandler(''), null)
   assert.equal(getModuleHandler(undefined), null)
 })
 
-test('ershou alias resolves to same handler as marketplace', function() {
+test('ershou alias resolves to same handler as marketplace', function () {
   const marketplace = getModuleHandler('marketplace')
   const ershou = getModuleHandler('ershou')
   assert.ok(marketplace, 'marketplace handler should exist')
@@ -78,7 +84,7 @@ test('ershou alias resolves to same handler as marketplace', function() {
   assert.equal(marketplace, ershou, 'ershou should be the same handler as marketplace')
 })
 
-test('marketplace normalizeItem produces expected shape', function() {
+test('marketplace normalizeItem produces expected shape', function () {
   const handler = getModuleHandler('marketplace')
   const result = handler.normalizeItem({
     id: 42,
@@ -101,7 +107,7 @@ test('marketplace normalizeItem produces expected shape', function() {
   assert.ok(result.raw, 'should preserve raw item')
 })
 
-test('lostandfound normalizeItem produces expected shape', function() {
+test('lostandfound normalizeItem produces expected shape', function () {
   const handler = getModuleHandler('lostandfound')
   const result = handler.normalizeItem({
     id: 99,
@@ -123,25 +129,19 @@ test('lostandfound normalizeItem produces expected shape', function() {
   assert.ok(result.raw, 'should preserve raw item')
 })
 
-test('marketplace buildFeedOptions sets type from activeTab', function() {
+test('marketplace buildFeedOptions sets type from activeTab', function () {
   const handler = getModuleHandler('marketplace')
-  const result = handler.buildFeedOptions(
-    { start: 0, size: 10, keyword: '' },
-    { value: 3 }
-  )
+  const result = handler.buildFeedOptions({ start: 0, size: 10, keyword: '' }, { value: 3 })
   assert.equal(result.type, 3)
 })
 
-test('lostandfound buildFeedOptions sets mode from activeTab', function() {
+test('lostandfound buildFeedOptions sets mode from activeTab', function () {
   const handler = getModuleHandler('lostandfound')
-  const result = handler.buildFeedOptions(
-    { start: 0, size: 10, keyword: '' },
-    { value: 1 }
-  )
+  const result = handler.buildFeedOptions({ start: 0, size: 10, keyword: '' }, { value: 1 })
   assert.equal(result.mode, 1)
 })
 
-test('secret handler has expected shape', function() {
+test('secret handler has expected shape', function () {
   const handler = getModuleHandler('secret')
 
   assert.ok(handler, 'secret handler should exist')
@@ -156,7 +156,7 @@ test('secret handler has expected shape', function() {
   assert.equal(typeof handler.normalizeCenterData, 'function', 'should have normalizeCenterData')
 })
 
-test('express handler has expected shape', function() {
+test('express handler has expected shape', function () {
   const handler = getModuleHandler('express')
 
   assert.ok(handler, 'express handler should exist')
@@ -172,7 +172,7 @@ test('express handler has expected shape', function() {
   assert.equal(handler.searchable, true, 'express should be searchable')
 })
 
-test('secret normalizeItem produces expected shape', function() {
+test('secret normalizeItem produces expected shape', function () {
   const handler = getModuleHandler('secret')
   const result = handler.normalizeItem({
     id: 10,
@@ -193,7 +193,7 @@ test('secret normalizeItem produces expected shape', function() {
   assert.ok(result.raw, 'should preserve raw item')
 })
 
-test('express normalizeItem produces expected shape', function() {
+test('express normalizeItem produces expected shape', function () {
   const handler = getModuleHandler('express')
   const result = handler.normalizeItem({
     id: 20,
@@ -214,7 +214,7 @@ test('express normalizeItem produces expected shape', function() {
   assert.ok(result.raw, 'should preserve raw item')
 })
 
-test('topic handler has expected shape', function() {
+test('topic handler has expected shape', function () {
   const handler = getModuleHandler('topic')
 
   assert.ok(handler, 'topic handler should exist')
@@ -230,7 +230,7 @@ test('topic handler has expected shape', function() {
   assert.equal(handler.searchable, true, 'topic should be searchable')
 })
 
-test('photograph handler has expected shape', function() {
+test('photograph handler has expected shape', function () {
   const handler = getModuleHandler('photograph')
 
   assert.ok(handler, 'photograph handler should exist')
@@ -245,7 +245,7 @@ test('photograph handler has expected shape', function() {
   assert.equal(typeof handler.normalizeCenterData, 'function', 'should have normalizeCenterData')
 })
 
-test('topic normalizeItem produces expected shape', function() {
+test('topic normalizeItem produces expected shape', function () {
   const handler = getModuleHandler('topic')
   const result = handler.normalizeItem({
     id: 30,
@@ -266,7 +266,7 @@ test('topic normalizeItem produces expected shape', function() {
   assert.ok(result.raw, 'should preserve raw item')
 })
 
-test('photograph normalizeItem produces expected shape', function() {
+test('photograph normalizeItem produces expected shape', function () {
   const handler = getModuleHandler('photograph')
   const result = handler.normalizeItem({
     id: 40,
@@ -289,7 +289,7 @@ test('photograph normalizeItem produces expected shape', function() {
   assert.ok(result.raw, 'should preserve raw item')
 })
 
-test('photograph normalizeItem falls back to imageUrls when firstImageUrl is missing', function() {
+test('photograph normalizeItem falls back to imageUrls when firstImageUrl is missing', function () {
   const handler = getModuleHandler('photograph')
   const result = handler.normalizeItem({
     id: 41,
@@ -300,7 +300,7 @@ test('photograph normalizeItem falls back to imageUrls when firstImageUrl is mis
   assert.equal(result.cover, '/img/fallback.png')
 })
 
-test('photograph normalizeItem uses default cover when no images', function() {
+test('photograph normalizeItem uses default cover when no images', function () {
   const handler = getModuleHandler('photograph')
   const result = handler.normalizeItem({
     id: 42,
@@ -310,7 +310,7 @@ test('photograph normalizeItem uses default cover when no images', function() {
   assert.equal(result.cover, '/image/photograph.png')
 })
 
-test('delivery handler has expected shape', function() {
+test('delivery handler has expected shape', function () {
   const handler = getModuleHandler('delivery')
 
   assert.ok(handler, 'delivery handler should exist')
@@ -326,7 +326,7 @@ test('delivery handler has expected shape', function() {
   assert.equal(typeof handler.filterFeedResults, 'function', 'should have filterFeedResults')
 })
 
-test('dating handler has expected shape', function() {
+test('dating handler has expected shape', function () {
   const handler = getModuleHandler('dating')
 
   assert.ok(handler, 'dating handler should exist')
@@ -341,7 +341,7 @@ test('dating handler has expected shape', function() {
   assert.equal(typeof handler.normalizeCenterData, 'function', 'should have normalizeCenterData')
 })
 
-test('delivery normalizeItem produces expected shape', function() {
+test('delivery normalizeItem produces expected shape', function () {
   const handler = getModuleHandler('delivery')
   const result = handler.normalizeItem({
     orderId: 50,
@@ -363,7 +363,7 @@ test('delivery normalizeItem produces expected shape', function() {
   assert.ok(result.raw, 'should preserve raw item')
 })
 
-test('dating normalizeItem produces expected shape', function() {
+test('dating normalizeItem produces expected shape', function () {
   const handler = getModuleHandler('dating')
   const result = handler.normalizeItem({
     profileId: 60,
@@ -385,7 +385,7 @@ test('dating normalizeItem produces expected shape', function() {
   assert.ok(result.raw, 'should preserve raw item')
 })
 
-test('dating normalizeItem uses default cover when pictureURL is missing', function() {
+test('dating normalizeItem uses default cover when pictureURL is missing', function () {
   const handler = getModuleHandler('dating')
   const result = handler.normalizeItem({
     profileId: 61,
@@ -395,26 +395,20 @@ test('dating normalizeItem uses default cover when pictureURL is missing', funct
   assert.equal(result.cover, '/image/dating.png')
 })
 
-test('delivery buildFeedOptions returns base options without modification', function() {
+test('delivery buildFeedOptions returns base options without modification', function () {
   const handler = getModuleHandler('delivery')
-  const result = handler.buildFeedOptions(
-    { start: 0, size: 10, keyword: '' },
-    { value: 1 }
-  )
+  const result = handler.buildFeedOptions({ start: 0, size: 10, keyword: '' }, { value: 1 })
   assert.equal(result.start, 0)
   assert.equal(result.size, 10)
 })
 
-test('dating buildFeedOptions sets area from activeTab', function() {
+test('dating buildFeedOptions sets area from activeTab', function () {
   const handler = getModuleHandler('dating')
-  const result = handler.buildFeedOptions(
-    { start: 0, size: 10, keyword: '' },
-    { value: 1 }
-  )
+  const result = handler.buildFeedOptions({ start: 0, size: 10, keyword: '' }, { value: 1 })
   assert.equal(result.area, 1)
 })
 
-test('delivery filterFeedResults filters by status', function() {
+test('delivery filterFeedResults filters by status', function () {
   const handler = getModuleHandler('delivery')
   const list = [
     { orderId: 1, state: 0 },
@@ -427,7 +421,7 @@ test('delivery filterFeedResults filters by status', function() {
   assert.equal(filtered[1].orderId, 3)
 })
 
-test('delivery filterFeedResults returns all when no filter', function() {
+test('delivery filterFeedResults returns all when no filter', function () {
   const handler = getModuleHandler('delivery')
   const list = [
     { orderId: 1, state: 0 },
@@ -437,15 +431,18 @@ test('delivery filterFeedResults returns all when no filter', function() {
   assert.equal(filtered.length, 2)
 })
 
-test('delivery normalizeCenterData produces published and accepted lists', function() {
+test('delivery normalizeCenterData produces published and accepted lists', function () {
   const handler = getModuleHandler('delivery')
-  const normalizeStandardItem = function(item, options) {
+  const normalizeStandardItem = function (item, options) {
     return { id: options.id, title: options.title }
   }
-  const result = handler.normalizeCenterData({
-    published: [{ orderId: 1, company: 'SF' }],
-    accepted: [{ orderId: 2, company: 'EMS' }]
-  }, normalizeStandardItem)
+  const result = handler.normalizeCenterData(
+    {
+      published: [{ orderId: 1, company: 'SF' }],
+      accepted: [{ orderId: 2, company: 'EMS' }]
+    },
+    normalizeStandardItem
+  )
 
   assert.ok(Array.isArray(result.published), 'should have published list')
   assert.ok(Array.isArray(result.accepted), 'should have accepted list')
@@ -455,7 +452,7 @@ test('delivery normalizeCenterData produces published and accepted lists', funct
   assert.equal(result.accepted[0].id, 2)
 })
 
-test('dating normalizeCenterData produces received, sent, and posts lists', function() {
+test('dating normalizeCenterData produces received, sent, and posts lists', function () {
   const handler = getModuleHandler('dating')
   const result = handler.normalizeCenterData({
     received: [{ pickId: 10, roommateProfile: { nickname: 'A' }, state: 0, content: 'Hi' }],
@@ -470,7 +467,11 @@ test('dating normalizeCenterData produces received, sent, and posts lists', func
   assert.equal(result.sent.length, 1)
   assert.equal(result.posts.length, 1)
   assert.equal(result.received[0].id, 10)
-  assert.equal(result.received[0].actions.length, 2, 'pending pick should have accept/reject actions')
+  assert.equal(
+    result.received[0].actions.length,
+    2,
+    'pending pick should have accept/reject actions'
+  )
   assert.equal(result.sent[0].id, 20)
   assert.ok(result.sent[0].qq !== undefined, 'accepted sent pick should expose qq')
   assert.equal(result.posts[0].id, 30)
@@ -479,58 +480,75 @@ test('dating normalizeCenterData produces received, sent, and posts lists', func
 
 // --- New handler interface: validateForm, buildPublishPayload, buildDetailView, getComments, submitComment, toggleLike ---
 
-var ALL_MODULE_IDS = ['marketplace', 'lostandfound', 'secret', 'express', 'topic', 'photograph', 'delivery', 'dating']
+var ALL_MODULE_IDS = [
+  'marketplace',
+  'lostandfound',
+  'secret',
+  'express',
+  'topic',
+  'photograph',
+  'delivery',
+  'dating'
+]
 
-test('all handlers implement validateForm', function() {
-  ALL_MODULE_IDS.forEach(function(moduleId) {
+test('all handlers implement validateForm', function () {
+  ALL_MODULE_IDS.forEach(function (moduleId) {
     var handler = getModuleHandler(moduleId)
     assert.equal(typeof handler.validateForm, 'function', moduleId + ' should have validateForm')
   })
 })
 
-test('all handlers implement buildPublishPayload', function() {
-  ALL_MODULE_IDS.forEach(function(moduleId) {
+test('all handlers implement buildPublishPayload', function () {
+  ALL_MODULE_IDS.forEach(function (moduleId) {
     var handler = getModuleHandler(moduleId)
-    assert.equal(typeof handler.buildPublishPayload, 'function', moduleId + ' should have buildPublishPayload')
+    assert.equal(
+      typeof handler.buildPublishPayload,
+      'function',
+      moduleId + ' should have buildPublishPayload'
+    )
   })
 })
 
-test('all handlers implement buildDetailView', function() {
-  ALL_MODULE_IDS.forEach(function(moduleId) {
+test('all handlers implement buildDetailView', function () {
+  ALL_MODULE_IDS.forEach(function (moduleId) {
     var handler = getModuleHandler(moduleId)
-    assert.equal(typeof handler.buildDetailView, 'function', moduleId + ' should have buildDetailView')
+    assert.equal(
+      typeof handler.buildDetailView,
+      'function',
+      moduleId + ' should have buildDetailView'
+    )
   })
 })
 
-test('all handlers implement getComments', function() {
-  ALL_MODULE_IDS.forEach(function(moduleId) {
+test('all handlers implement getComments', function () {
+  ALL_MODULE_IDS.forEach(function (moduleId) {
     var handler = getModuleHandler(moduleId)
     assert.equal(typeof handler.getComments, 'function', moduleId + ' should have getComments')
   })
 })
 
-test('all handlers implement submitComment', function() {
-  ALL_MODULE_IDS.forEach(function(moduleId) {
+test('all handlers implement submitComment', function () {
+  ALL_MODULE_IDS.forEach(function (moduleId) {
     var handler = getModuleHandler(moduleId)
     assert.equal(typeof handler.submitComment, 'function', moduleId + ' should have submitComment')
   })
 })
 
-test('all handlers implement toggleLike', function() {
-  ALL_MODULE_IDS.forEach(function(moduleId) {
+test('all handlers implement toggleLike', function () {
+  ALL_MODULE_IDS.forEach(function (moduleId) {
     var handler = getModuleHandler(moduleId)
     assert.equal(typeof handler.toggleLike, 'function', moduleId + ' should have toggleLike')
   })
 })
 
-test('marketplace validateForm rejects empty product name', function() {
+test('marketplace validateForm rejects empty product name', function () {
   var handler = getModuleHandler('marketplace')
   var result = handler.validateForm({ form: {}, images: [] })
   assert.ok(result, 'should return validation error')
   assert.notEqual(result, '', 'should not be empty')
 })
 
-test('marketplace validateForm passes with valid data', function() {
+test('marketplace validateForm passes with valid data', function () {
   var handler = getModuleHandler('marketplace')
   var result = handler.validateForm({
     form: { name: 'Test', description: 'Desc', price: 10, location: 'A', qq: '123' },
@@ -540,7 +558,7 @@ test('marketplace validateForm passes with valid data', function() {
   assert.equal(result, '', 'should return empty string for valid form')
 })
 
-test('lostandfound validateForm rejects when no contact info', function() {
+test('lostandfound validateForm rejects when no contact info', function () {
   var handler = getModuleHandler('lostandfound')
   var result = handler.validateForm({
     form: { name: 'Phone', description: 'Lost phone', location: 'Library' },
@@ -550,7 +568,7 @@ test('lostandfound validateForm rejects when no contact info', function() {
   assert.ok(result, 'should return validation error for missing contact')
 })
 
-test('marketplace buildDetailView produces expected shape', function() {
+test('marketplace buildDetailView produces expected shape', function () {
   var handler = getModuleHandler('marketplace')
   var result = handler.buildDetailView({
     secondhandItem: { pictureURL: ['/img/a.png'], name: 'Widget', price: 50, location: 'Dorm' },
@@ -562,7 +580,7 @@ test('marketplace buildDetailView produces expected shape', function() {
   assert.equal(result.canLike, false)
 })
 
-test('lostandfound buildDetailView produces expected shape', function() {
+test('lostandfound buildDetailView produces expected shape', function () {
   var handler = getModuleHandler('lostandfound')
   var result = handler.buildDetailView({
     item: { name: 'Keys', lostType: 0, location: 'Canteen' },
@@ -573,25 +591,25 @@ test('lostandfound buildDetailView produces expected shape', function() {
   assert.equal(result.canLike, false)
 })
 
-test('secret getComments returns a promise', function() {
+test('secret getComments returns a promise', function () {
   var handler = getModuleHandler('secret')
   var result = handler.getComments(1)
   assert.ok(result && typeof result.then === 'function', 'should return a promise')
 })
 
-test('express getComments returns a promise', function() {
+test('express getComments returns a promise', function () {
   var handler = getModuleHandler('express')
   var result = handler.getComments(1)
   assert.ok(result && typeof result.then === 'function', 'should return a promise')
 })
 
-test('photograph getComments returns a promise', function() {
+test('photograph getComments returns a promise', function () {
   var handler = getModuleHandler('photograph')
   var result = handler.getComments(1)
   assert.ok(result && typeof result.then === 'function', 'should return a promise')
 })
 
-test('topic imageLimit is 9', function() {
+test('topic imageLimit is 9', function () {
   var handler = getModuleHandler('topic')
   assert.equal(handler.imageLimit, 9)
 })

@@ -73,13 +73,13 @@ function resolveContentType(file) {
 }
 
 function readLocalFile(filePath) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     wx.getFileSystemManager().readFile({
       filePath: filePath,
-      success: function(result) {
+      success: function (result) {
         resolve(result.data)
       },
-      fail: function() {
+      fail: function () {
         reject(buildUploadError('upload.readLocalFileFailed'))
       }
     })
@@ -87,7 +87,7 @@ function readLocalFile(filePath) {
 }
 
 function putToPresignedUrl(uploadUrl, contentType, data) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     wx.request({
       url: uploadUrl,
       method: 'PUT',
@@ -96,7 +96,7 @@ function putToPresignedUrl(uploadUrl, contentType, data) {
       header: {
         'Content-Type': contentType
       },
-      success: function(result) {
+      success: function (result) {
         if (result.statusCode >= 200 && result.statusCode < 300) {
           resolve()
           return
@@ -104,7 +104,7 @@ function putToPresignedUrl(uploadUrl, contentType, data) {
 
         reject(buildUploadError('upload.fileUploadFailed'))
       },
-      fail: function() {
+      fail: function () {
         reject(buildUploadError('upload.fileUploadFailed'))
       }
     })
@@ -124,15 +124,15 @@ function uploadLocalFileByPresignedUrl(file, options) {
   const fileName = resolveFileName(file, config.fileName)
   const contentType = resolveContentType(file)
 
-  return uploadApi.getPresignedUploadUrl(fileName, contentType).then(function(result) {
+  return uploadApi.getPresignedUploadUrl(fileName, contentType).then(function (result) {
     const uploadUrl = result && result.data ? result.data.url : ''
     const objectKey = result && result.data ? result.data.objectKey : ''
     if (!uploadUrl || !objectKey) {
       throw buildUploadError('upload.missingPresignedUrl')
     }
 
-    return readLocalFile(file.path).then(function(buffer) {
-      return putToPresignedUrl(uploadUrl, contentType, buffer).then(function() {
+    return readLocalFile(file.path).then(function (buffer) {
+      return putToPresignedUrl(uploadUrl, contentType, buffer).then(function () {
         return objectKey
       })
     })
@@ -141,9 +141,11 @@ function uploadLocalFileByPresignedUrl(file, options) {
 
 function uploadLocalFilesByPresignedUrl(files) {
   const list = Array.isArray(files) ? files.filter(Boolean) : []
-  return Promise.all(list.map(function(fileItem) {
-    return uploadLocalFileByPresignedUrl(fileItem)
-  }))
+  return Promise.all(
+    list.map(function (fileItem) {
+      return uploadLocalFileByPresignedUrl(fileItem)
+    })
+  )
 }
 
 module.exports = {

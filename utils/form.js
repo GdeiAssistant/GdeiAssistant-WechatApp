@@ -4,7 +4,7 @@ function appendFormValue(result, key, value) {
   }
 
   if (Array.isArray(value)) {
-    value.forEach(function(item) {
+    value.forEach(function (item) {
       appendFormValue(result, key, item)
     })
     return result
@@ -19,9 +19,11 @@ function encodeForm(data) {
     return ''
   }
 
-  return Object.keys(data).reduce(function(result, key) {
-    return appendFormValue(result, key, data[key])
-  }, []).join('&')
+  return Object.keys(data)
+    .reduce(function (result, key) {
+      return appendFormValue(result, key, data[key])
+    }, [])
+    .join('&')
 }
 
 module.exports = {

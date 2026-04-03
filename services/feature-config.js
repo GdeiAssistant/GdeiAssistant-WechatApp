@@ -1,5 +1,11 @@
 const storageKeys = require('../constants/storage.js')
-const { FEATURE_DEFS, getFeatureList, getFeatureSections, getFeatureMap, getDefaultFeatureVisibility } = require('../constants/features.js')
+const {
+  FEATURE_DEFS,
+  getFeatureList,
+  getFeatureSections,
+  getFeatureMap,
+  getDefaultFeatureVisibility
+} = require('../constants/features.js')
 
 function normalizeFeatureVisibility(rawValue) {
   const defaults = getDefaultFeatureVisibility()
@@ -7,7 +13,7 @@ function normalizeFeatureVisibility(rawValue) {
     return defaults
   }
 
-  FEATURE_DEFS.forEach(function(def) {
+  FEATURE_DEFS.forEach(function (def) {
     if (typeof rawValue[def.id] === 'boolean') {
       defaults[def.id] = rawValue[def.id]
     }
@@ -47,21 +53,23 @@ function getHomeSections() {
   const featureVisibility = getFeatureVisibility()
   const featureMap = getFeatureMap()
 
-  return getFeatureSections().map(function(section) {
-    return {
-      id: section.id,
-      title: section.title,
-      features: section.featureIds
-        .filter(function(featureId) {
-          return featureVisibility[featureId] !== false
-        })
-        .map(function(featureId) {
-          return featureMap[featureId]
-        })
-    }
-  }).filter(function(section) {
-    return section.features.length > 0
-  })
+  return getFeatureSections()
+    .map(function (section) {
+      return {
+        id: section.id,
+        title: section.title,
+        features: section.featureIds
+          .filter(function (featureId) {
+            return featureVisibility[featureId] !== false
+          })
+          .map(function (featureId) {
+            return featureMap[featureId]
+          })
+      }
+    })
+    .filter(function (section) {
+      return section.features.length > 0
+    })
 }
 
 module.exports = {
