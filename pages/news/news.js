@@ -5,6 +5,7 @@ var themeUtil = require('../../utils/theme')
 var i18n = require('../../utils/i18n')
 
 const PAGE_SIZE = 10
+const DEFAULT_NEWS_TABS = []
 
 Page({
   onShow: function () {
