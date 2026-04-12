@@ -29,7 +29,6 @@ const COLOR_MAP = {
   '#e3e3e3': 'var(--color-divider)',
   '#dfdfdf': 'var(--color-border)',
   '#047857': 'var(--color-primary)',
-  '#047857': 'var(--color-primary)',
   '#09bb07': 'var(--color-primary)',
   '#e94747': 'var(--color-danger)',
   '#576b95': 'var(--color-link)',
