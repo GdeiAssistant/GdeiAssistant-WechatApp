@@ -578,6 +578,26 @@ test('marketplace validateForm rejects price above backend maximum', function ()
   assert.equal(result, 'community.publish.v.priceInvalid')
 })
 
+test('topic buildPublishPayload lets backend derive image count', async function () {
+  var handler = getModuleHandler('topic')
+  var result = await handler.buildPublishPayload(
+    {
+      form: { topic: 'Campus', content: 'Topic content' },
+      images: [{ path: '/img/topic.png' }]
+    },
+    function () {
+      return Promise.resolve(['upload/topic.jpg'])
+    }
+  )
+
+  assert.deepEqual(result, {
+    topic: 'Campus',
+    content: 'Topic content',
+    imageKeys: ['upload/topic.jpg']
+  })
+  assert.equal(Object.prototype.hasOwnProperty.call(result, 'count'), false)
+})
+
 test('photograph buildPublishPayload lets backend derive image count', async function () {
   var handler = getModuleHandler('photograph')
   var result = await handler.buildPublishPayload(
