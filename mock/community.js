@@ -871,6 +871,18 @@ function handleSecret(path, method, data, token, utils) {
     return utils.resolveWithDelay(utils.buildSuccess(list))
   }
 
+  if (/^\/api\/secret\/profile\/start\/\d+\/size\/\d+$/.test(path) && method === 'GET') {
+    const matched = /^\/api\/secret\/profile\/start\/(\d+)\/size\/(\d+)$/.exec(path)
+    const start = Number(matched[1])
+    const size = Math.min(Number(matched[2]), 50)
+    const list = communityState.secrets.filter(function(item) {
+      return item.owner === username
+    }).slice(start, start + size).map(function(item) {
+      return buildSecretPayload(item, username, communityState.secretComments[item.id] || [])
+    })
+    return utils.resolveWithDelay(utils.buildSuccess(list))
+  }
+
   if (path === '/api/secret/profile' && method === 'GET') {
     const list = communityState.secrets.filter(function(item) {
       return item.owner === username

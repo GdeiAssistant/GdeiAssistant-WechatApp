@@ -266,6 +266,9 @@ test('mock smoke covers community feature flows', async function () {
     token
   })
   assert.ok(Array.isArray(secretComments.data))
+  const secretProfile = await request(router, '/api/secret/profile/start/0/size/10', { token })
+  assert.ok(Array.isArray(secretProfile.data))
+  assert.ok(secretProfile.data.length <= 10)
 
   const dating = await request(router, '/api/dating/profile/area/0/start/0', { token })
   assert.ok(Array.isArray(dating.data) && dating.data.length > 0)
