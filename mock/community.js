@@ -974,7 +974,7 @@ function handleSecret(path, method, data, token, utils) {
 }
 
 function handleExpress(path, method, data, token, utils) {
-  if (!/^\/api\/express\//.test(path)) {
+  if (!/^\/api\/express(\/|$)/.test(path)) {
     return null
   }
 
@@ -1106,7 +1106,7 @@ function handleExpress(path, method, data, token, utils) {
 }
 
 function handleTopic(path, method, data, token, utils) {
-  if (!/^\/api\/topic\//.test(path)) {
+  if (!/^\/api\/topic(\/|$)/.test(path)) {
     return null
   }
 
@@ -1447,7 +1447,7 @@ function handleDating(path, method, data, token, utils) {
 }
 
 function handlePhotograph(path, method, data, token, utils) {
-  if (!/^\/api\/photograph\//.test(path)) {
+  if (!/^\/api\/photograph(\/|$)/.test(path)) {
     return null
   }
 

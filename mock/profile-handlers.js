@@ -139,6 +139,16 @@ function handleLocationList(token, utils) {
   return utils.resolveWithDelay(utils.buildSuccess(utils.cloneValue(LOCATION_REGIONS)))
 }
 
+function handleProfileOptions(token, utils) {
+  var authError = utils.ensureAuthorized(token)
+  if (authError) {
+    return authError
+  }
+
+  var locale = utils.currentLocale ? utils.currentLocale() : 'zh-CN'
+  return utils.resolveWithDelay(utils.buildSuccess(getDefaultProfileOptionsPayload(locale)))
+}
+
 function handleNicknameUpdate(token, payload, utils) {
   var nickname = String(payload.nickname || '').trim()
   return applyProfileUpdate(token, function(profile) {
@@ -255,6 +265,7 @@ module.exports = {
   handleAvatarUpdate: handleAvatarUpdate,
   handleAvatarDelete: handleAvatarDelete,
   handleLocationList: handleLocationList,
+  handleProfileOptions: handleProfileOptions,
   handleNicknameUpdate: handleNicknameUpdate,
   handleIntroductionUpdate: handleIntroductionUpdate,
   handleBirthdayUpdate: handleBirthdayUpdate,
