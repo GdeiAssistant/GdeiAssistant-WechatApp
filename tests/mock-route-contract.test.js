@@ -297,7 +297,7 @@ function buildRouteContracts(endpoints) {
     routeContract('delivery.publish', 'POST', endpoints.community.delivery.publish, {
       data: form({
         name: '快递代拿',
-        number: 'C001',
+        number: '00000000000',
         phone: '13612340001',
         price: 4,
         company: '菜鸟驿站',
