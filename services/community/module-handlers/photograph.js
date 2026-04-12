@@ -190,7 +190,6 @@ module.exports = {
       return {
         title: String(form.title || '').trim(),
         content: String(form.content || '').trim(),
-        count: imageKeys.length,
         type: photographTypeOptions[photographTypeIndex].publishValue,
         imageKeys: imageKeys
       }
