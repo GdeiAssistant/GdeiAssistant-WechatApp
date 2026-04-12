@@ -177,7 +177,9 @@ function handleRequest(options) {
   var method = String(requestOptions.method || 'GET').toUpperCase()
   var requestParts = parseRequestParts(requestOptions.path || requestOptions.url || '', requestOptions.data)
   var path = requestParts.path
-  var payload = requestOptions.data || {}
+  var payload = typeof requestOptions.data === 'string'
+    ? parseQueryString(requestOptions.data)
+    : requestOptions.data || {}
   var query = requestParts.query
   var token = requestOptions.sessionToken || requestOptions.token || ''
   utils.currentLocale = function() {
@@ -190,6 +192,16 @@ function handleRequest(options) {
   }
 
   if (path === '/api/auth/logout' && method === 'POST') {
+    return authHandlers.handleLogout(token, utils).then(function() {
+      return buildSuccess(null)
+    })
+  }
+
+  if (path === '/api/auth/validate' && method === 'GET') {
+    var authError = ensureAuthorized(token)
+    if (authError) {
+      return authError
+    }
     return resolveWithDelay(buildSuccess(null))
   }
 
@@ -216,6 +228,10 @@ function handleRequest(options) {
 
   if (path === '/api/profile/locations' && method === 'GET') {
     return profileHandlers.handleLocationList(token, utils)
+  }
+
+  if (path === '/api/profile/options' && method === 'GET') {
+    return profileHandlers.handleProfileOptions(token, utils)
   }
 
   if (path === '/api/profile/nickname' && method === 'POST') {
