@@ -8,6 +8,7 @@ var SECONDHAND_NAME_MAX_LENGTH = 25
 var SECONDHAND_DESCRIPTION_MAX_LENGTH = 100
 var SECONDHAND_LOCATION_MAX_LENGTH = 30
 var SECONDHAND_QQ_MAX_LENGTH = 20
+var SECONDHAND_PRICE_MAX = 9999.99
 var CONTACT_PHONE_MAX_LENGTH = 11
 
 function trimValue(value) {
@@ -30,6 +31,11 @@ function findLabel(options, value, fallback) {
 function formatPrice(value) {
   const price = Number(value || 0)
   return price ? price.toFixed(2) : '0.00'
+}
+
+function isValidSecondhandPrice(value) {
+  var price = Number(value || 0)
+  return Number.isFinite(price) && price > 0 && price <= SECONDHAND_PRICE_MAX
 }
 
 module.exports = {
@@ -236,7 +242,7 @@ module.exports = {
           max: SECONDHAND_DESCRIPTION_MAX_LENGTH
         })
       )
-    if (!(Number(form.price || 0) > 0)) return i18n.t('community.publish.v.priceInvalid')
+    if (!isValidSecondhandPrice(form.price)) return i18n.t('community.publish.v.priceInvalid')
     if (!location) return i18n.t('community.publish.v.locationRequired')
     if (
       getMaxLengthMessage(

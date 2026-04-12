@@ -558,6 +558,26 @@ test('marketplace validateForm passes with valid data', function () {
   assert.equal(result, '', 'should return empty string for valid form')
 })
 
+test('marketplace validateForm accepts backend maximum price', function () {
+  var handler = getModuleHandler('marketplace')
+  var result = handler.validateForm({
+    form: { name: 'Test', description: 'Desc', price: 9999.99, location: 'A', qq: '123' },
+    images: [{ path: '/img/test.png' }],
+    isEditMode: false
+  })
+  assert.equal(result, '', 'should return empty string for backend maximum price')
+})
+
+test('marketplace validateForm rejects price above backend maximum', function () {
+  var handler = getModuleHandler('marketplace')
+  var result = handler.validateForm({
+    form: { name: 'Test', description: 'Desc', price: 10000, location: 'A', qq: '123' },
+    images: [{ path: '/img/test.png' }],
+    isEditMode: false
+  })
+  assert.equal(result, 'community.publish.v.priceInvalid')
+})
+
 test('lostandfound validateForm rejects when no contact info', function () {
   var handler = getModuleHandler('lostandfound')
   var result = handler.validateForm({
