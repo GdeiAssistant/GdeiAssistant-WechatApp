@@ -578,6 +578,29 @@ test('marketplace validateForm rejects price above backend maximum', function ()
   assert.equal(result, 'community.publish.v.priceInvalid')
 })
 
+test('photograph buildPublishPayload lets backend derive image count', async function () {
+  var handler = getModuleHandler('photograph')
+  var result = await handler.buildPublishPayload(
+    {
+      form: { title: 'Campus', content: 'Photo' },
+      images: [{ path: '/img/photo.png' }],
+      photographTypeOptions: [{ publishValue: 1 }],
+      photographTypeIndex: 0
+    },
+    function () {
+      return Promise.resolve(['upload/photo.jpg'])
+    }
+  )
+
+  assert.deepEqual(result, {
+    title: 'Campus',
+    content: 'Photo',
+    type: 1,
+    imageKeys: ['upload/photo.jpg']
+  })
+  assert.equal(Object.prototype.hasOwnProperty.call(result, 'count'), false)
+})
+
 test('lostandfound validateForm rejects when no contact info', function () {
   var handler = getModuleHandler('lostandfound')
   var result = handler.validateForm({
