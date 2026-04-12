@@ -1,4 +1,5 @@
 var LOCATION_REGIONS = require('../constants/location-regions.js')
+var i18n = require('../utils/i18n.js')
 var {
   getDefaultProfileOptionsPayload,
   getFacultyDictionaryOptions,

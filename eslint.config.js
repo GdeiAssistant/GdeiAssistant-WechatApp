@@ -1,6 +1,16 @@
 module.exports = [
   {
-    files: ['services/**/*.js', 'utils/**/*.js', 'tests/**/*.js'],
+    files: [
+      'app.js',
+      'config/**/*.js',
+      'constants/**/*.js',
+      'mock/**/*.js',
+      'pages/**/*.js',
+      'services/**/*.js',
+      'utils/**/*.js',
+      'tests/**/*.js',
+      'scripts/**/*.js'
+    ],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'commonjs',

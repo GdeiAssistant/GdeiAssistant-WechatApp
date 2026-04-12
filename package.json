@@ -4,7 +4,7 @@
   "private": true,
   "description": "广东二师助手微信小程序",
   "scripts": {
-    "lint": "eslint services utils tests",
+    "lint": "eslint app.js config constants mock pages services utils tests scripts",
     "format": "prettier --write \"services/**/*.js\" \"utils/**/*.js\" \"tests/**/*.js\"",
     "format:check": "prettier --check \"services/**/*.js\" \"utils/**/*.js\" \"tests/**/*.js\"",
     "smoke": "node scripts/ci-smoke.js",
