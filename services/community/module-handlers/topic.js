@@ -166,7 +166,6 @@ module.exports = {
       return {
         topic: String(form.topic || '').trim(),
         content: String(form.content || '').trim(),
-        count: imageKeys.length,
         imageKeys: imageKeys
       }
     })
