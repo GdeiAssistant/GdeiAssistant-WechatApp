@@ -1,6 +1,7 @@
 const endpoints = require('../../endpoints.js')
 const { request } = require('../../request.js')
 const { encodeForm } = require('../../../utils/form.js')
+const { maskAddress, maskContactId, maskPhone } = require('../../../utils/mask.js')
 const i18n = require('../../../utils/i18n.js')
 const {
   getLostFoundModeDictionaryOptions,
@@ -121,7 +122,7 @@ module.exports = {
         rawItem.itemType,
         i18n.t('community.category.other')
       ),
-      metaText: rawItem.location || '',
+      metaText: maskAddress(rawItem.location || ''),
       timeText: rawItem.publishTime || '',
       raw: rawItem
     }
@@ -151,7 +152,7 @@ module.exports = {
           id: item.id,
           title: item.name,
           subtitle: item.publishTime,
-          summary: item.location,
+          summary: maskAddress(item.location),
           cover:
             item.pictureURL && item.pictureURL.length
               ? item.pictureURL[0]
@@ -167,7 +168,7 @@ module.exports = {
           id: item.id,
           title: item.name,
           subtitle: item.publishTime,
-          summary: item.location,
+          summary: maskAddress(item.location),
           cover:
             item.pictureURL && item.pictureURL.length
               ? item.pictureURL[0]
@@ -183,7 +184,7 @@ module.exports = {
           id: item.id,
           title: item.name,
           subtitle: item.publishTime,
-          summary: item.location,
+          summary: maskAddress(item.location),
           cover:
             item.pictureURL && item.pictureURL.length
               ? item.pictureURL[0]
@@ -351,14 +352,18 @@ module.exports = {
     return {
       images: item.pictureURL || [],
       title: item.name || i18n.t('community.detail.lostDetail'),
-      subtitle: locationLabel + '\uff1a' + (item.location || i18n.t('community.detail.notFilled')),
+      subtitle:
+        locationLabel +
+        '\uff1a' +
+        (maskAddress(item.location || '') || i18n.t('community.detail.notFilled')),
       description: item.description || '',
       publishTime: item.publishTime || '',
       sellerName: profile.nickname || profile.username || i18n.t('community.list.anonStudent'),
       sellerAvatar: profile.avatarURL || '/image/default.png',
-      qq: item.qq || '',
-      wechat: item.wechat || '',
+      qqText: maskContactId(item.qq || ''),
+      wechatText: maskContactId(item.wechat || ''),
       phone: item.phone || '',
+      phoneText: maskPhone(item.phone || ''),
       typeLabel: findLabel(
         getLostFoundItemDictionaryOptions(),
         item.itemType,

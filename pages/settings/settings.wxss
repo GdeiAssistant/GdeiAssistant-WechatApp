@@ -14,3 +14,20 @@
   text-align: center;
   font-size: 26rpx;
 }
+
+.status_hint {
+  margin: 18rpx 30rpx 0;
+  color: var(--color-text-secondary);
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+.action_group {
+  display: flex;
+  gap: 20rpx;
+  padding: 20rpx 30rpx 0;
+}
+
+.action_group button {
+  flex: 1;
+}

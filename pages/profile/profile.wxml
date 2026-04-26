@@ -15,7 +15,7 @@
 
       <view class="profile_meta">
         <view class="profile_name">{{profile.nickname || t.notFilled}}</view>
-        <view class="profile_subtitle">{{t.usernameLabel}}{{profile.username || t.notFilled}}</view>
+        <view class="profile_subtitle">{{t.usernameLabel}}{{profile.maskedUsername || t.notFilled}}</view>
         <view class="profile_subtitle">{{t.ipAreaLabel}}{{profile.ipArea || t.empty}}</view>
         <view class="profile_status" wx:if="{{avatarUploading || savingField || saveStatusText}}">
           {{avatarUploading ? t.updatingAvatar : (savingField ? t.savingProfile : saveStatusText)}}

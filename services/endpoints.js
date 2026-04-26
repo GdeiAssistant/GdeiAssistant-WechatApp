@@ -4,6 +4,13 @@ module.exports = {
     logout: '/api/auth/logout',
     validate: '/api/auth/validate'
   },
+  campusCredential: {
+    status: '/api/campus-credential/status',
+    consent: '/api/campus-credential/consent',
+    revoke: '/api/campus-credential/revoke',
+    credential: '/api/campus-credential',
+    quickAuth: '/api/campus-credential/quick-auth'
+  },
   user: {
     avatar: '/api/profile/avatar',
     profile: '/api/user/profile',

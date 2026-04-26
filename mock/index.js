@@ -2,6 +2,7 @@ var storageKeys = require('../constants/storage.js')
 var data = require('./mock-data.js')
 var communityMock = require('./community.js')
 var authHandlers = require('./auth-handlers.js')
+var campusCredentialHandlers = require('./campus-credential-handlers.js')
 var profileHandlers = require('./profile-handlers.js')
 var campusHandlers = require('./campus-handlers.js')
 var infoHandlers = require('./info-handlers.js')
@@ -24,6 +25,9 @@ function buildDefaultState(locale) {
     savedCetName: '',
     cardLostState: 'normal',
     renewedBookCodes: [],
+    campusCredential: campusCredentialHandlers.createDefaultCampusCredentialState(
+      data.buildBaseProfile(normalizedLocale).username
+    ),
     profile: cloneValue(data.buildBaseProfile(normalizedLocale)),
     interactionMessages: cloneValue(data.getInteractionMessages(normalizedLocale))
   }
@@ -57,6 +61,7 @@ function readState() {
         savedCetName: state.savedCetName || '',
         cardLostState: data.normalizeCardLostState(state.cardLostState),
         renewedBookCodes: Array.isArray(state.renewedBookCodes) ? state.renewedBookCodes : [],
+        campusCredential: state.campusCredential,
         profile: Object.assign({}, cloneValue(data.buildBaseProfile(currentLocale)), state.profile || {}),
         interactionMessages: localizeInteractionMessages(state.interactionMessages, currentLocale),
         community: state.community,
@@ -207,6 +212,27 @@ function handleRequest(options) {
 
   if (path === '/api/upload/presignedUrl' && method === 'GET') {
     return authHandlers.handlePresignedUrl(query, utils)
+  }
+
+  // --- Campus credential ---
+  if (path === '/api/campus-credential/status' && method === 'GET') {
+    return campusCredentialHandlers.handleCampusCredentialStatus(token, utils)
+  }
+
+  if (path === '/api/campus-credential/consent' && method === 'POST') {
+    return campusCredentialHandlers.handleCampusCredentialConsent(token, payload, utils)
+  }
+
+  if (path === '/api/campus-credential/revoke' && method === 'POST') {
+    return campusCredentialHandlers.handleCampusCredentialRevoke(token, utils)
+  }
+
+  if (path === '/api/campus-credential' && method === 'DELETE') {
+    return campusCredentialHandlers.handleCampusCredentialDelete(token, utils)
+  }
+
+  if (path === '/api/campus-credential/quick-auth' && method === 'POST') {
+    return campusCredentialHandlers.handleCampusCredentialQuickAuth(token, payload, utils)
   }
 
   // --- Profile ---

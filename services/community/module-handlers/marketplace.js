@@ -1,6 +1,7 @@
 const endpoints = require('../../endpoints.js')
 const { request } = require('../../request.js')
 const { encodeForm } = require('../../../utils/form.js')
+const { maskAddress, maskContactId, maskPhone } = require('../../../utils/mask.js')
 const i18n = require('../../../utils/i18n.js')
 const { getSecondhandCategoryOptions } = require('../../../constants/community.js')
 
@@ -122,7 +123,7 @@ module.exports = {
         rawItem.type,
         i18n.t('community.list.secondhand')
       ),
-      metaText: rawItem.location || '',
+      metaText: maskAddress(rawItem.location || ''),
       timeText: rawItem.publishTime || '',
       raw: rawItem
     }
@@ -152,7 +153,7 @@ module.exports = {
           id: item.id,
           title: item.name,
           subtitle: item.publishTime,
-          summary: item.location,
+          summary: maskAddress(item.location),
           cover:
             item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
           priceText: Number(item.price || 0).toFixed(2),
@@ -168,7 +169,7 @@ module.exports = {
           id: item.id,
           title: item.name,
           subtitle: item.publishTime,
-          summary: item.location,
+          summary: maskAddress(item.location),
           cover:
             item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
           priceText: Number(item.price || 0).toFixed(2),
@@ -181,7 +182,7 @@ module.exports = {
           id: item.id,
           title: item.name,
           subtitle: item.publishTime,
-          summary: item.location,
+          summary: maskAddress(item.location),
           cover:
             item.pictureURL && item.pictureURL.length ? item.pictureURL[0] : '/image/ershou.png',
           priceText: Number(item.price || 0).toFixed(2),
@@ -329,15 +330,16 @@ module.exports = {
     return {
       images: item.pictureURL || [],
       title: item.name || i18n.t('community.detail.productDetail'),
-      subtitle: item.location || '',
+      subtitle: maskAddress(item.location || ''),
       description: item.description || '',
       priceText: Number(item.price || 0).toFixed(2),
       publishTime: item.publishTime || '',
       sellerName: profile.nickname || profile.username || i18n.t('community.list.anonStudent'),
       sellerAvatar: profile.avatarURL || '/image/default.png',
-      qq: item.qq || '',
-      wechat: '',
+      qqText: maskContactId(item.qq || ''),
+      wechatText: '',
       phone: item.phone || '',
+      phoneText: maskPhone(item.phone || ''),
       canLike: false
     }
   },

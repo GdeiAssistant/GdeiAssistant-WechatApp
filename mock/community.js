@@ -15,8 +15,8 @@ const COMMUNITY_DEFAULT_STATE = {
       location: '海珠校区南苑宿舍楼下',
       type: 2,
       state: 1,
-      qq: '214578901',
-      phone: '13612340001',
+      qq: 'mock_contact_id_1',
+      phone: '13000000000',
       publishTime: '2026-03-13 20:10',
       pictureURL: ['/image/ershou.png'],
       owner: 'gdeiassistant'
@@ -29,8 +29,8 @@ const COMMUNITY_DEFAULT_STATE = {
       location: '图书馆一楼自助借阅区',
       type: 8,
       state: 1,
-      qq: '103454321',
-      phone: '13900000001',
+      qq: 'mock_contact_id_2',
+      phone: '13000000001',
       publishTime: '2026-03-14 16:20',
       pictureURL: ['/image/book.png'],
       owner: 'campus_seller'
@@ -43,8 +43,8 @@ const COMMUNITY_DEFAULT_STATE = {
       location: '北苑 8 栋快递柜',
       type: 5,
       state: 0,
-      qq: '214578901',
-      phone: '13612340001',
+      qq: 'mock_contact_id_1',
+      phone: '13000000000',
       publishTime: '2026-03-10 12:00',
       pictureURL: ['/image/data.png'],
       owner: 'gdeiassistant'
@@ -57,8 +57,8 @@ const COMMUNITY_DEFAULT_STATE = {
       location: '教学楼 A 栋',
       type: 7,
       state: 2,
-      qq: '214578901',
-      phone: '13612340001',
+      qq: 'mock_contact_id_1',
+      phone: '13000000000',
       publishTime: '2026-03-09 18:00',
       pictureURL: ['/image/spare.png'],
       owner: 'gdeiassistant'
@@ -73,9 +73,9 @@ const COMMUNITY_DEFAULT_STATE = {
       lostType: 0,
       itemType: 1,
       state: 0,
-      qq: '214578901',
-      wechat: 'linzy_2023',
-      phone: '13612340001',
+      qq: 'mock_contact_id_1',
+      wechat: 'mock_wechat_id_1',
+      phone: '13000000000',
       publishTime: '2026-03-15 08:20',
       pictureURL: ['/image/lostandfound.png'],
       owner: 'gdeiassistant'
@@ -88,9 +88,9 @@ const COMMUNITY_DEFAULT_STATE = {
       lostType: 1,
       itemType: 2,
       state: 0,
-      qq: '556677889',
-      wechat: '拾金不昧同学',
-      phone: '13700002222',
+      qq: 'mock_contact_id_3',
+      wechat: 'mock_wechat_id_2',
+      phone: '13000000002',
       publishTime: '2026-03-14 19:40',
       pictureURL: ['/image/card.png'],
       owner: 'library_helper'
@@ -103,8 +103,8 @@ const COMMUNITY_DEFAULT_STATE = {
       lostType: 0,
       itemType: 6,
       state: 1,
-      qq: '214578901',
-      wechat: 'linzy_2023',
+      qq: 'mock_contact_id_1',
+      wechat: 'mock_wechat_id_1',
       phone: '',
       publishTime: '2026-03-11 09:10',
       pictureURL: ['/image/book.png'],
@@ -205,11 +205,11 @@ const COMMUNITY_DEFAULT_STATE = {
     {
       orderId: 601,
       name: getDeliveryDefaultOrderName(),
-      number: 'A112233',
-      phone: '13612340001',
+      number: 'mock_pickup_code_a',
+      phone: '13000000000',
       price: 4,
       company: '菜鸟驿站',
-      address: '南苑 5 栋 307',
+      address: '示例楼栋 A 区',
       remarks: '一个中号纸箱，麻烦轻拿轻放。',
       orderTime: '2026-03-15 12:08',
       state: 0,
@@ -220,11 +220,11 @@ const COMMUNITY_DEFAULT_STATE = {
     {
       orderId: 602,
       name: getDeliveryDefaultOrderName(),
-      number: 'B009977',
-      phone: '13888880002',
+      number: 'mock_pickup_code_b',
+      phone: '13000000003',
       price: 6,
       company: '京东站点',
-      address: '北苑 2 栋 411',
+      address: '示例楼栋 B 区',
       remarks: '已付款，直接放宿舍门口即可。',
       orderTime: '2026-03-14 17:30',
       state: 1,
@@ -241,8 +241,8 @@ const COMMUNITY_DEFAULT_STATE = {
       faculty: '软件工程',
       hometown: '汕头',
       content: '会拍照、会修电脑、食堂很少踩雷。',
-      qq: '214578901',
-      wechat: 'linzy_2023',
+      qq: 'mock_contact_id_1',
+      wechat: 'mock_wechat_id_1',
       area: 0,
       pictureURL: '/image/dating.png',
       state: 1,
@@ -256,8 +256,8 @@ const COMMUNITY_DEFAULT_STATE = {
       faculty: '数学与信息科学学院',
       hometown: '佛山',
       content: '喜欢长跑和拍落日，周末会去图书馆。',
-      qq: '334455667',
-      wechat: 'runner_senior',
+      qq: 'mock_contact_id_4',
+      wechat: 'mock_wechat_id_3',
       area: 1,
       pictureURL: '/image/photograph.png',
       state: 1,
@@ -353,7 +353,7 @@ function buildLocalizedCommunityState(locale) {
   state.lostAndFoundItems[1].name = localizedCommunityText(normalizedLocale, '身份证', '身份證', 'ID card', '身分証', '신분증')
   state.lostAndFoundItems[1].description = localizedCommunityText(normalizedLocale, '在图书馆四楼自习区捡到，请失主联系。', '在圖書館四樓自習區撿到，請失主聯繫。', 'Found in the library 4F study area. Please contact me if it is yours.', '図書館4階の自習エリアで拾いました。持ち主の方は連絡してください。', '도서관 4층 자습 구역에서 주웠습니다. 분실하신 분은 연락해 주세요.')
   state.lostAndFoundItems[1].location = localizedCommunityText(normalizedLocale, '图书馆四楼', '圖書館四樓', 'Library 4F', '図書館4階', '도서관 4층')
-  state.lostAndFoundItems[1].wechat = localizedCommunityText(normalizedLocale, '拾金不昧同学', '拾金不昧同學', 'Helpful student', '親切な学生', '친절한 학생')
+  state.lostAndFoundItems[1].wechat = localizedCommunityText(normalizedLocale, 'mock_wechat_id_2', 'mock_wechat_id_2', 'mock_wechat_id_2', 'mock_wechat_id_2', 'mock_wechat_id_2')
   state.lostAndFoundItems[2].name = localizedCommunityText(normalizedLocale, '黑色双肩包', '黑色雙肩包', 'Black backpack', '黒いバックパック', '검은 백팩')
   state.lostAndFoundItems[2].description = localizedCommunityText(normalizedLocale, '内有数据线和一本离散数学笔记。', '內有數據線和一本離散數學筆記。', 'Contains a cable and a notebook for discrete mathematics.', '中にケーブルと離散数学のノートが入っています。', '안에 케이블과 이산수학 필기 노트가 들어 있습니다.')
   state.lostAndFoundItems[2].location = localizedCommunityText(normalizedLocale, 'B 栋 302', 'B 棟 302', 'Building B Room 302', 'B棟302', 'B동 302호')
@@ -381,11 +381,11 @@ function buildLocalizedCommunityState(locale) {
 
   state.deliveryOrders[0].name = getDeliveryDefaultOrderName(normalizedLocale)
   state.deliveryOrders[0].company = localizedCommunityText(normalizedLocale, '菜鸟驿站', '菜鳥驛站', 'Cainiao Station', '菜鳥ステーション', '차이냐오 스테이션')
-  state.deliveryOrders[0].address = localizedCommunityText(normalizedLocale, '南苑 5 栋 307', '南苑 5 棟 307', 'South Court Bldg 5 Room 307', '南苑5棟307', '남원 5동 307호')
+  state.deliveryOrders[0].address = localizedCommunityText(normalizedLocale, '示例楼栋 A 区', '示例樓棟 A 區', 'Example Building A', 'サンプル棟 A', '예시 건물 A')
   state.deliveryOrders[0].remarks = localizedCommunityText(normalizedLocale, '一个中号纸箱，麻烦轻拿轻放。', '一個中號紙箱，麻煩輕拿輕放。', 'A medium-size box. Please handle with care.', '中サイズの段ボールです。丁寧に扱ってください。', '중간 크기 상자예요. 조심히 다뤄 주세요.')
   state.deliveryOrders[1].name = getDeliveryDefaultOrderName(normalizedLocale)
   state.deliveryOrders[1].company = localizedCommunityText(normalizedLocale, '京东站点', '京東站點', 'JD pickup point', 'JD受取所', 'JD 수령 지점')
-  state.deliveryOrders[1].address = localizedCommunityText(normalizedLocale, '北苑 2 栋 411', '北苑 2 棟 411', 'North Court Bldg 2 Room 411', '北苑2棟411', '북원 2동 411호')
+  state.deliveryOrders[1].address = localizedCommunityText(normalizedLocale, '示例楼栋 B 区', '示例樓棟 B 區', 'Example Building B', 'サンプル棟 B', '예시 건물 B')
   state.deliveryOrders[1].remarks = localizedCommunityText(normalizedLocale, '已付款，直接放宿舍门口即可。', '已付款，直接放宿舍門口即可。', 'Already paid. You can leave it at the dorm door.', '支払い済みです。寮のドア前に置いてもらえれば大丈夫です。', '결제 완료했습니다. 기숙사 문 앞에 두셔도 됩니다.')
 
   state.datingProfiles[0].nickname = localizedCommunityText(normalizedLocale, '阿远的室友', '阿遠的室友', 'A Yuan\'s roommate', 'アーユエンのルームメイト', '아위안의 룸메이트')

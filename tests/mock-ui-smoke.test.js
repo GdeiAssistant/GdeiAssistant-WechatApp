@@ -92,6 +92,8 @@ function stubCommonModules(options) {
       'login.usernamePlaceholder': '请输入学号',
       'login.passwordPlaceholder': '请输入密码',
       'login.button': '登录',
+      'login.campusCredentialConsentText': 'consent text',
+      'login.campusCredentialConsentRequired': '请先勾选校园凭证单独授权后再登录',
       'login.debugSettings': '调试设置',
       'login.useMockData': '使用模拟数据',
       'login.moreSettings': '更多设置',
@@ -240,6 +242,10 @@ test('mock UI smoke covers login page bootstrap and submit flow', async function
     loginWithCampus(payload) {
       assert.equal(payload.username, 'gdeiassistant')
       assert.equal(payload.password, 'gdeiassistant')
+      assert.equal(payload.campusCredentialConsent, true)
+      assert.equal(payload.consentScene, 'LOGIN')
+      assert.equal(payload.policyDate, '2026-04-25')
+      assert.equal(payload.effectiveDate, '2026-05-11')
       return Promise.resolve({ success: true, data: { token: 'mock-session-token' } })
     }
   })
@@ -269,6 +275,7 @@ test('mock UI smoke covers login page bootstrap and submit flow', async function
   assert.equal(page.data.mockCredentialsHint, '账号：gdeiassistant / 密码：gdeiassistant')
   assert.equal(runtime.calls.setNavigationBarTitle.at(-1).title, '登录')
 
+  page.handleConsentChange({ detail: { value: ['agree'] } })
   page.formSubmit({
     detail: {
       value: {
