@@ -141,7 +141,7 @@ function stubCommon(calls, apiStub, tokenValue) {
       const messages = {
         'settingsPage.navTitle': '设置',
         'settingsPage.dataSourceTitle': '数据源',
-        'settingsPage.useMockData': '使用模拟测试数据',
+        'settingsPage.useMockData': '使用演示数据',
         'settingsPage.currentMode': '当前模式',
         'settingsPage.campusCredentialTitle': '校园凭证管理',
         'settingsPage.campusCredentialLoginFirst': '请先登录后查看校园凭证状态。',
