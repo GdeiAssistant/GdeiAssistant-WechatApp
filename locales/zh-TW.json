@@ -58,8 +58,8 @@
     "passwordEmpty": "密碼不能為空",
     "loginFailed": "登入失敗",
     "defaultError": "帳號或密碼錯誤",
-    "debugSettings": "偵錯設定",
-    "useMockData": "使用模擬測試資料",
+    "debugSettings": "資料來源設定",
+    "useMockData": "使用示範資料",
     "moreSettings": "更多功能設定",
     "campusCredentialConsentText": "我已閱讀並單獨同意平台在必要範圍內處理我的校園帳號憑證，用於校園身分認證、快速認證、校園資料查詢及與學校系統的必要會話同步。我知悉可在設定中撤回授權、刪除已保存憑證或關閉快速認證；關閉或刪除後，部分校園查詢功能可能需要重新登入或重新授權。",
     "campusCredentialConsentRequired": "請先勾選校園憑證單獨授權後再登入"
@@ -248,7 +248,7 @@
   "settingsPage": {
     "navTitle": "設定",
     "dataSourceTitle": "資料源",
-    "useMockData": "使用模擬測試資料",
+    "useMockData": "使用示範資料",
     "currentMode": "目前模式",
     "campusCredentialTitle": "校園憑證管理",
     "campusCredentialLoginFirst": "請先登入後查看校園憑證狀態。",

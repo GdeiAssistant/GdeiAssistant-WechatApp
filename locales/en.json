@@ -58,8 +58,8 @@
     "passwordEmpty": "Password cannot be empty",
     "loginFailed": "Login failed",
     "defaultError": "Invalid username or password",
-    "debugSettings": "Debug Settings",
-    "useMockData": "Use mock test data",
+    "debugSettings": "Data Source Settings",
+    "useMockData": "Use demo data",
     "moreSettings": "More settings",
     "campusCredentialConsentText": "I have read and separately agree that the platform may process my campus credential within the necessary scope for campus identity verification, quick authentication, campus data queries, and required session synchronization with school systems. I understand that I can revoke consent, delete saved credentials, or disable quick authentication in Settings, and some campus queries may require re-login or re-authorization afterward.",
     "campusCredentialConsentRequired": "Please confirm campus credential consent before logging in"
@@ -223,7 +223,7 @@
   "settingsPage": {
     "navTitle": "Settings",
     "dataSourceTitle": "Data Source",
-    "useMockData": "Use mock test data",
+    "useMockData": "Use demo data",
     "currentMode": "Current Mode",
     "campusCredentialTitle": "Campus Credential Controls",
     "campusCredentialLoginFirst": "Please log in first to view campus credential status.",

@@ -58,8 +58,8 @@
     "passwordEmpty": "密码不能为空",
     "loginFailed": "登录失败",
     "defaultError": "账号或密码错误",
-    "debugSettings": "调试设置",
-    "useMockData": "使用模拟测试数据",
+    "debugSettings": "数据源设置",
+    "useMockData": "使用演示数据",
     "moreSettings": "更多功能设置",
     "campusCredentialConsentText": "我已阅读并单独同意平台在必要范围内处理我的校园账号凭证，用于校园身份认证、快速认证、校园数据查询及与学校系统的必要会话同步。我知悉可在设置中撤回授权、删除已保存凭证或关闭快速认证；关闭或删除后，部分校园查询功能可能需要重新登录或重新授权。",
     "campusCredentialConsentRequired": "请先勾选校园凭证单独授权后再登录"
@@ -223,7 +223,7 @@
   "settingsPage": {
     "navTitle": "设置",
     "dataSourceTitle": "数据源",
-    "useMockData": "使用模拟测试数据",
+    "useMockData": "使用演示数据",
     "currentMode": "当前模式",
     "campusCredentialTitle": "校园凭证管理",
     "campusCredentialLoginFirst": "请先登录后查看校园凭证状态。",
