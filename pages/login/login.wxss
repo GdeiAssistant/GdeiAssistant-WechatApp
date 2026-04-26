@@ -51,6 +51,23 @@ form {
   font-size: 28rpx;
 }
 
+.consent_section {
+  margin: 24rpx 0 12rpx;
+}
+
+.consent_label {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  color: var(--color-text-secondary);
+  font-size: 26rpx;
+  line-height: 1.6;
+}
+
+.consent_text {
+  flex: 1;
+}
+
 .version_info {
   margin-top: 35rpx;
   margin-bottom: 35rpx;

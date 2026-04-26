@@ -32,16 +32,14 @@
 
     <view class="detail_card" wx:if="{{moduleId === 'ershou' || moduleId === 'lostandfound'}}">
       <view class="section_title">{{t.contactInfo}}</view>
-      <view class="contact_row" wx:if="{{detail.qq}}">
-        <text>{{t.contactQQ}}{{detail.qq}}</text>
-        <button size="mini" bindtap="copyValue" data-value="{{detail.qq}}">{{t.copy}}</button>
+      <view class="contact_row" wx:if="{{detail.qqText}}">
+        <text>{{t.contactQQ}}{{detail.qqText}}</text>
       </view>
-      <view class="contact_row" wx:if="{{detail.wechat}}">
-        <text>{{t.contactWechat}}{{detail.wechat}}</text>
-        <button size="mini" bindtap="copyValue" data-value="{{detail.wechat}}">{{t.copy}}</button>
+      <view class="contact_row" wx:if="{{detail.wechatText}}">
+        <text>{{t.contactWechat}}{{detail.wechatText}}</text>
       </view>
-      <view class="contact_row" wx:if="{{detail.phone}}">
-        <text>{{t.contactPhone}}{{detail.phone}}</text>
+      <view class="contact_row" wx:if="{{detail.phoneText}}">
+        <text>{{t.contactPhone}}{{detail.phoneText}}</text>
         <button size="mini" type="primary" bindtap="callPhone">{{t.call}}</button>
       </view>
       <view class="seller_box">
@@ -89,8 +87,8 @@
     <view class="detail_card" wx:if="{{moduleId === 'delivery'}}">
       <view class="section_title">{{t.taskInfo}}</view>
       <view class="detail_row" wx:if="{{detail.userRoleTitle}}">{{t.myRole}}{{detail.userRoleTitle}}</view>
-      <view class="detail_row">{{t.pickupPoint}}{{detail.pickupAddress}}</view>
-      <view class="detail_row">{{t.deliveryAddr}}{{detail.deliveryAddress}}</view>
+      <view class="detail_row">{{t.pickupPoint}}{{detail.pickupAddressText || detail.pickupAddress}}</view>
+      <view class="detail_row">{{t.deliveryAddr}}{{detail.deliveryAddressText || detail.deliveryAddress}}</view>
       <view class="detail_row" wx:if="{{detail.pickupCodeText}}">{{t.pickupCode}}{{detail.pickupCodeText}}</view>
       <view class="contact_row" wx:if="{{detail.phoneText}}">
         <text>{{t.contactPhone}}{{detail.phoneText}}</text>

@@ -102,7 +102,7 @@ test('marketplace normalizeItem produces expected shape', function () {
   assert.equal(result.summary, 'A description')
   assert.equal(result.cover, '/img/test.png')
   assert.equal(result.priceText, '19.99')
-  assert.equal(result.metaText, 'Campus A')
+  assert.equal(result.metaText, 'Campus***')
   assert.equal(result.timeText, '2025-01-01')
   assert.ok(result.raw, 'should preserve raw item')
 })
@@ -124,7 +124,7 @@ test('lostandfound normalizeItem produces expected shape', function () {
   assert.equal(result.title, 'Lost Phone')
   assert.equal(result.summary, 'Black phone')
   assert.equal(result.cover, '/img/phone.png')
-  assert.equal(result.metaText, 'Library')
+  assert.equal(result.metaText, 'Libr***')
   assert.equal(result.timeText, '2025-02-01')
   assert.ok(result.raw, 'should preserve raw item')
 })
@@ -355,7 +355,7 @@ test('delivery normalizeItem produces expected shape', function () {
 
   assert.equal(result.id, 50)
   assert.equal(result.title, 'EMS')
-  assert.equal(result.summary, 'Building A')
+  assert.equal(result.summary, 'Building***')
   assert.equal(result.priceText, '5.50')
   assert.ok(result.badgeText, 'should have a badge text')
   assert.equal(result.metaText, 'Handle with care')
@@ -634,24 +634,70 @@ test('lostandfound validateForm rejects when no contact info', function () {
 test('marketplace buildDetailView produces expected shape', function () {
   var handler = getModuleHandler('marketplace')
   var result = handler.buildDetailView({
-    secondhandItem: { pictureURL: ['/img/a.png'], name: 'Widget', price: 50, location: 'Dorm' },
+    secondhandItem: {
+      pictureURL: ['/img/a.png'],
+      name: 'Widget',
+      price: 50,
+      location: 'Dorm 301',
+      qq: 'mock_contact_id',
+      phone: '13000000000'
+    },
     profile: { nickname: 'Alice' }
   })
   assert.equal(result.title, 'Widget')
   assert.equal(result.sellerName, 'Alice')
   assert.equal(result.priceText, '50.00')
+  assert.equal(result.subtitle, 'Dorm***')
+  assert.equal(result.qqText, 'mo***id')
+  assert.equal(result.phoneText, '130****0000')
   assert.equal(result.canLike, false)
 })
 
 test('lostandfound buildDetailView produces expected shape', function () {
   var handler = getModuleHandler('lostandfound')
   var result = handler.buildDetailView({
-    item: { name: 'Keys', lostType: 0, location: 'Canteen' },
+    item: {
+      name: 'Keys',
+      lostType: 0,
+      location: 'Canteen 1F',
+      qq: 'mock_contact_id',
+      wechat: 'mock_wechat_id',
+      phone: '13000000000'
+    },
     profile: { nickname: 'Bob' }
   })
   assert.equal(result.title, 'Keys')
   assert.equal(result.sellerName, 'Bob')
+  assert.ok(result.subtitle.indexOf('community.detail.lostLocation') !== -1)
+  assert.ok(result.subtitle.indexOf('***') !== -1)
+  assert.equal(result.subtitle.indexOf('Canteen 1F'), -1)
+  assert.equal(result.qqText, 'mo***id')
+  assert.equal(result.wechatText, 'mo***id')
+  assert.equal(result.phoneText, '130****0000')
   assert.equal(result.canLike, false)
+})
+
+test('delivery buildDetailView masks sensitive fields for public viewers', function () {
+  var handler = getModuleHandler('delivery')
+  var result = handler.buildDetailView({
+    order: {
+      company: 'Example Pickup Point',
+      address: 'Example Building 301',
+      number: 'ABC123456',
+      phone: '13000000000',
+      price: 6,
+      remarks: 'Handle with care',
+      state: 0
+    },
+    detailType: 1
+  })
+
+  assert.equal(result.pickupAddressText, 'Example***')
+  assert.equal(result.deliveryAddressText, 'Example***')
+  assert.equal(result.pickupCodeText, 'A***')
+  assert.equal(result.phoneText, '130****0000')
+  assert.equal(result.canViewSensitiveInfo, false)
+  assert.equal(result.canAccept, true)
 })
 
 test('secret getComments returns a promise', function () {

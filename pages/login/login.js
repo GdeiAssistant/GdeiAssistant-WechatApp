@@ -19,7 +19,8 @@ Page({
     versionCode: '',
     useMockData: false,
     dataSourceLabel: '',
-    mockCredentialsHint: ''
+    mockCredentialsHint: '',
+    campusCredentialConsent: false
   },
 
   refreshI18n: function () {
@@ -32,6 +33,8 @@ Page({
         usernamePlaceholder: i18n.t('login.usernamePlaceholder'),
         passwordPlaceholder: i18n.t('login.passwordPlaceholder'),
         button: i18n.t('login.button'),
+        campusCredentialConsentText: i18n.t('login.campusCredentialConsentText'),
+        campusCredentialConsentRequired: i18n.t('login.campusCredentialConsentRequired'),
         debugSettings: i18n.t('login.debugSettings'),
         useMockData: i18n.t('login.useMockData'),
         moreSettings: i18n.t('login.moreSettings')
@@ -59,11 +62,28 @@ Page({
       return
     }
 
+    if (!this.data.campusCredentialConsent) {
+      utils.showNoActionModal(
+        i18n.t('login.fillCredentials'),
+        i18n.t('login.campusCredentialConsentRequired')
+      )
+      loginGuard.release()
+      return
+    }
+
     wx.showNavigationBarLoading()
-    authApi.loginWithCampus({
+    const payload = {
       username,
       password
-    }).then((result) => {
+    }
+    if (this.data.campusCredentialConsent) {
+      payload.campusCredentialConsent = true
+      payload.consentScene = 'LOGIN'
+      payload.policyDate = '2026-04-25'
+      payload.effectiveDate = '2026-05-11'
+    }
+
+    authApi.loginWithCampus(payload).then((result) => {
       wx.hideNavigationBarLoading()
       if (result.success && result.data && result.data.token) {
         wx.setStorageSync(storageKeys.username, username)
@@ -85,6 +105,13 @@ Page({
   refreshRuntimeState: function() {
     this.setData({
       useMockData: dataSource.isMockMode()
+    })
+  },
+
+  handleConsentChange: function(event) {
+    const values = event && event.detail && Array.isArray(event.detail.value) ? event.detail.value : []
+    this.setData({
+      campusCredentialConsent: values.indexOf('agree') !== -1
     })
   },
 

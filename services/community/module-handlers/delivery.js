@@ -1,6 +1,7 @@
 const endpoints = require('../../endpoints.js')
 const { request } = require('../../request.js')
 const { encodeForm } = require('../../../utils/form.js')
+const { maskAddress, maskPhone, maskPickupCode } = require('../../../utils/mask.js')
 const i18n = require('../../../utils/i18n.js')
 const {
   getDeliveryStatusOptions,
@@ -100,7 +101,7 @@ module.exports = {
     return {
       id: rawItem.orderId,
       title: rawItem.company || i18n.t('community.list.campusErrand'),
-      summary: rawItem.address || '',
+      summary: maskAddress(rawItem.address || ''),
       priceText: formatPrice(rawItem.price),
       badgeText: findLabel(
         getDeliveryStatusOptions(),
@@ -145,7 +146,7 @@ module.exports = {
           id: item.orderId,
           title: item.company || i18n.t('community.modules.delivery.title'),
           subtitle: item.orderTime,
-          summary: item.address,
+          summary: maskAddress(item.address),
           priceText: Number(item.price || 0).toFixed(2),
           actions: []
         })
@@ -155,7 +156,7 @@ module.exports = {
           id: item.orderId,
           title: item.company || i18n.t('community.modules.delivery.title'),
           subtitle: item.orderTime,
-          summary: item.address,
+          summary: maskAddress(item.address),
           priceText: Number(item.price || 0).toFixed(2),
           actions: []
         })
@@ -255,10 +256,67 @@ module.exports = {
   },
 
   // --- Detail: build detail view ---
-  buildDetailView: function () {
+  buildDetailView: function (payload) {
+    var detailPayload = payload || {}
+    var order = detailPayload.order || {}
+    var detailType = Number(detailPayload.detailType)
+    var canViewSensitiveInfo = detailType === 0 || detailType === 3
+    var status = Number(order.state || 0)
+    var trade = detailPayload.trade || null
+
+    var roleTitle = ''
+    if (detailType === 0) {
+      roleTitle = i18n.t('community.detail.rolePublisher')
+    } else if (detailType === 3) {
+      roleTitle = i18n.t('community.detail.roleAcceptor')
+    } else {
+      roleTitle = i18n.t('community.detail.roleVisitor')
+    }
+
+    var statusDescription = ''
+    if (status === 2) {
+      statusDescription = i18n.t('community.detail.deliveryDesc2')
+    } else if (detailType === 3) {
+      statusDescription = i18n.t('community.detail.deliveryDesc13')
+    } else if (detailType === 0 && status === 1) {
+      statusDescription = i18n.t('community.detail.deliveryDesc10')
+    } else if (status === 0) {
+      statusDescription = i18n.t(
+        detailType === 0 ? 'community.detail.deliveryDesc00' : 'community.detail.deliveryDesc01'
+      )
+    } else if (status === 1) {
+      statusDescription = i18n.t('community.detail.deliveryDesc10')
+    } else {
+      statusDescription = i18n.t('community.detail.deliveryDesc2')
+    }
+
     return {
       title: i18n.t('community.detail.detail'),
-      description: ''
+      description: order.remarks || '',
+      publishTime: order.orderTime || '',
+      pickupAddress: order.company || '',
+      deliveryAddress: order.address || '',
+      pickupAddressText: canViewSensitiveInfo
+        ? String(order.company || '')
+        : maskAddress(order.company || ''),
+      deliveryAddressText: canViewSensitiveInfo
+        ? String(order.address || '')
+        : maskAddress(order.address || ''),
+      pickupCodeText: order.number
+        ? canViewSensitiveInfo
+          ? String(order.number)
+          : maskPickupCode(order.number)
+        : '',
+      phone: order.phone || '',
+      phoneText: maskPhone(order.phone || ''),
+      priceText: formatPrice(order.price),
+      userRoleTitle: roleTitle,
+      statusDescription: statusDescription,
+      sensitiveHint: canViewSensitiveInfo ? '' : i18n.t('community.detail.contactMaskedHint'),
+      canViewSensitiveInfo: canViewSensitiveInfo,
+      canAccept: detailType === 1 && status === 0,
+      canFinish: detailType === 0 && status === 1 && !!(trade && trade.tradeId),
+      tradeId: trade && trade.tradeId ? trade.tradeId : null
     }
   },
 

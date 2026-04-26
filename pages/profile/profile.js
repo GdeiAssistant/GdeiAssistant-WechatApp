@@ -1,6 +1,7 @@
 const userApi = require('../../services/apis/user.js')
 const uploadService = require('../../services/upload.js')
 const pageUtils = require('../../utils/page.js')
+const { maskAccount } = require('../../utils/mask.js')
 const LOCATION_REGIONS = require('../../constants/location-regions.js')
 var themeUtil = require('../../utils/theme')
 var i18n = require('../../utils/i18n')
@@ -182,6 +183,7 @@ function normalizeProfile(profile, avatar) {
   const hometown = safeProfile.hometown || {}
   return {
     username: safeProfile.username || '',
+    maskedUsername: maskAccount(safeProfile.username || ''),
     nickname: safeProfile.nickname || '',
     avatar: avatar || safeProfile.avatar || '/image/default.png',
     birthday: safeProfile.birthday || '',

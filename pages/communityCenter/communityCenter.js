@@ -3,6 +3,7 @@ const communityApi = require('../../services/apis/community.js')
 const { getModuleHandler } = require('../../services/community/registry.js')
 const userApi = require('../../services/apis/user.js')
 const pageUtils = require('../../utils/page.js')
+const { maskAccount } = require('../../utils/mask.js')
 const i18n = require('../../utils/i18n.js')
 var themeUtil = require('../../utils/theme')
 
@@ -97,7 +98,7 @@ Page({
       this.setData({
         summaryProfile: {
           avatar: profile.avatar || '/image/default.png',
-          nickname: profile.nickname || profile.username || i18n.t('community.center.me'),
+          nickname: profile.nickname || maskAccount(profile.username) || i18n.t('community.center.me'),
           introduction: profile.introduction || ''
         }
       })

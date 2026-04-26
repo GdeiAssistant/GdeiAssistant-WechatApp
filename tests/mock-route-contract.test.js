@@ -191,8 +191,8 @@ function buildRouteContracts(endpoints) {
         price: 12,
         location: '图书馆',
         type: 2,
-        qq: '123456',
-        phone: '13612340001',
+        qq: 'mock_contact_id',
+        phone: '13000000000',
         imageKeys: 'mock/ershou.jpg'
       })
     }),
@@ -203,8 +203,8 @@ function buildRouteContracts(endpoints) {
         price: 13,
         location: '图书馆',
         type: 2,
-        qq: '123456',
-        phone: '13612340001'
+        qq: 'mock_contact_id',
+        phone: '13000000000'
       })
     }),
     routeContract('secondhand.state', 'POST', endpoints.community.secondhand.state(101), {
@@ -225,7 +225,7 @@ function buildRouteContracts(endpoints) {
         location: '一饭',
         lostType: 0,
         itemType: 1,
-        qq: '123456',
+        qq: 'mock_contact_id',
         imageKeys: 'mock/lostfound.jpg'
       })
     }),
@@ -236,7 +236,7 @@ function buildRouteContracts(endpoints) {
         location: '一饭',
         lostType: 0,
         itemType: 1,
-        qq: '123456'
+        qq: 'mock_contact_id'
       })
     }),
     routeContract('lostAndFound.didFound', 'POST', endpoints.community.lostAndFound.didFound(201)),
@@ -298,10 +298,10 @@ function buildRouteContracts(endpoints) {
       data: form({
         name: '快递代拿',
         number: '00000000000',
-        phone: '13612340001',
+        phone: '13000000000',
         price: 4,
         company: '菜鸟驿站',
-        address: '南苑 5 栋',
+        address: '示例楼栋',
         remarks: '轻拿轻放'
       })
     }),
@@ -323,8 +323,8 @@ function buildRouteContracts(endpoints) {
         faculty: '软件工程',
         hometown: '广州',
         content: '用于 mock 路由契约测试',
-        qq: '123456',
-        wechat: 'mock_wechat',
+        qq: 'mock_contact_id',
+        wechat: 'mock_wechat_id',
         area: 0,
         imageKey: 'mock/dating.jpg'
       })

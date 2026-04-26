@@ -28,6 +28,15 @@
         <button type="primary" formType="submit">{{t.button}}</button>
       </view>
 
+      <view class="consent_section">
+        <checkbox-group bindchange="handleConsentChange">
+          <label class="consent_label">
+            <checkbox value="agree" checked="{{campusCredentialConsent}}" />
+            <text class="consent_text">{{t.campusCredentialConsentText}}</text>
+          </label>
+        </checkbox-group>
+      </view>
+
     </form>
 
     <view class="weui-cells__title">{{t.debugSettings}}</view>

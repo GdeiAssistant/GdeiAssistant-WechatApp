@@ -1,4 +1,5 @@
 var data = require('./mock-data.js')
+var campusCredentialHandlers = require('./campus-credential-handlers.js')
 
 function handleLogin(payload, utils) {
   var username = String(payload.username || '').trim()
@@ -33,6 +34,7 @@ function handleLogin(payload, utils) {
 
   var nextState = utils.readState()
   nextState.token = 'mock-session-token'
+  campusCredentialHandlers.applyLoginCampusCredentialState(nextState, username, payload)
   utils.writeState(nextState)
   return utils.resolveWithDelay(utils.buildSuccess({ token: nextState.token }))
 }

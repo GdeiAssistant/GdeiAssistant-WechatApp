@@ -278,14 +278,14 @@ var YELLOW_PAGE_RESULT = {
     { typeCode: 4, typeName: '图书与网络' }
   ],
   data: [
-    { typeCode: 1, section: '教务处值班室', majorPhone: '020-12345678', minorPhone: '', address: '行政楼 302', email: 'jwc@gdei.edu.cn', website: 'https://www.gdei.edu.cn/jwc' },
-    { typeCode: 1, section: '考务办公室', majorPhone: '020-12345680', minorPhone: '020-12345681', address: '行政楼 306', email: 'exam@gdei.edu.cn', website: '' },
-    { typeCode: 2, section: '宿舍报修', majorPhone: '020-87654321', minorPhone: '', address: '后勤楼 1 楼', email: 'repair@gdei.edu.cn', website: '' },
-    { typeCode: 2, section: '校园保卫处', majorPhone: '020-87654323', minorPhone: '020-87654324', address: '保卫处值班室', email: '', website: '' },
-    { typeCode: 3, section: '学生工作部', majorPhone: '020-66554411', minorPhone: '', address: '行政楼 201', email: 'xgb@gdei.edu.cn', website: '' },
-    { typeCode: 3, section: '就业指导中心', majorPhone: '020-66554413', minorPhone: '', address: '创新创业楼', email: 'job@gdei.edu.cn', website: 'https://job.gdei.edu.cn' },
-    { typeCode: 4, section: '图书馆总服务台', majorPhone: '020-99887711', minorPhone: '', address: '图书馆 1 楼', email: 'library@gdei.edu.cn', website: 'https://lib.gdei.edu.cn' },
-    { typeCode: 4, section: '网络信息中心', majorPhone: '020-99887712', minorPhone: '020-99887713', address: '信息楼 402', email: 'nic@gdei.edu.cn', website: 'https://nic.gdei.edu.cn' }
+    { typeCode: 1, section: '教务处值班室', majorPhone: '020-00000001', minorPhone: '', address: '示例楼栋 302', email: 'service@example.test', website: 'https://example.test/academic' },
+    { typeCode: 1, section: '考务办公室', majorPhone: '020-00000002', minorPhone: '020-00000003', address: '示例楼栋 306', email: 'exam@example.test', website: '' },
+    { typeCode: 2, section: '宿舍报修', majorPhone: '020-00000004', minorPhone: '', address: '示例后勤楼 1 层', email: 'repair@example.test', website: '' },
+    { typeCode: 2, section: '校园保卫处', majorPhone: '020-00000005', minorPhone: '020-00000006', address: '示例值班室', email: '', website: '' },
+    { typeCode: 3, section: '学生工作部', majorPhone: '020-00000007', minorPhone: '', address: '示例楼栋 201', email: 'student@example.test', website: '' },
+    { typeCode: 3, section: '就业指导中心', majorPhone: '020-00000008', minorPhone: '', address: '示例服务楼', email: 'career@example.test', website: 'https://example.test/career' },
+    { typeCode: 4, section: '图书馆总服务台', majorPhone: '020-00000009', minorPhone: '', address: '示例图书馆 1 层', email: 'library@example.test', website: 'https://example.test/library' },
+    { typeCode: 4, section: '网络信息中心', majorPhone: '020-00000010', minorPhone: '020-00000011', address: '示例信息楼 402', email: 'network@example.test', website: 'https://example.test/network' }
   ]
 }
 
@@ -550,21 +550,21 @@ function getYellowPageResult(locale) {
   result.type[2].typeName = localizedMockText('学生服务', '學生服務', 'Student Services', '学生サービス', '학생 서비스', normalizedLocale)
   result.type[3].typeName = localizedMockText('图书与网络', '圖書與網路', 'Library & Network', '図書とネットワーク', '도서관 및 네트워크', normalizedLocale)
   result.data[0].section = localizedMockText('教务处值班室', '教務處值班室', 'Academic Affairs Duty Office', '教務課当直室', '교무처 당직실', normalizedLocale)
-  result.data[0].address = localizedMockText('行政楼 302', '行政樓 302', 'Administration Building 302', '管理棟302', '행정동 302호', normalizedLocale)
+  result.data[0].address = localizedMockText('示例楼栋 302', '示例樓棟 302', 'Example Building 302', 'サンプル棟302', '예시 건물 302호', normalizedLocale)
   result.data[1].section = localizedMockText('考务办公室', '考務辦公室', 'Exam Office', '試験事務室', '시험 사무실', normalizedLocale)
-  result.data[1].address = localizedMockText('行政楼 306', '行政樓 306', 'Administration Building 306', '管理棟306', '행정동 306호', normalizedLocale)
+  result.data[1].address = localizedMockText('示例楼栋 306', '示例樓棟 306', 'Example Building 306', 'サンプル棟306', '예시 건물 306호', normalizedLocale)
   result.data[2].section = localizedMockText('宿舍报修', '宿舍報修', 'Dorm Repair', '寮修理受付', '기숙사 수리 접수', normalizedLocale)
-  result.data[2].address = localizedMockText('后勤楼 1 楼', '後勤樓 1 樓', 'Logistics Building 1F', '後勤棟1階', '후생동 1층', normalizedLocale)
+  result.data[2].address = localizedMockText('示例后勤楼 1 层', '示例後勤樓 1 層', 'Example Logistics Building 1F', 'サンプル後勤棟1階', '예시 후생동 1층', normalizedLocale)
   result.data[3].section = localizedMockText('校园保卫处', '校園保衛處', 'Campus Security Office', '学内保安室', '캠퍼스 보안실', normalizedLocale)
-  result.data[3].address = localizedMockText('保卫处值班室', '保衛處值班室', 'Security Duty Room', '保安当直室', '보안 당직실', normalizedLocale)
+  result.data[3].address = localizedMockText('示例值班室', '示例值班室', 'Example Duty Room', 'サンプル当直室', '예시 당직실', normalizedLocale)
   result.data[4].section = localizedMockText('学生工作部', '學生工作部', 'Student Affairs Office', '学生支援部', '학생처', normalizedLocale)
-  result.data[4].address = localizedMockText('行政楼 201', '行政樓 201', 'Administration Building 201', '管理棟201', '행정동 201호', normalizedLocale)
+  result.data[4].address = localizedMockText('示例楼栋 201', '示例樓棟 201', 'Example Building 201', 'サンプル棟201', '예시 건물 201호', normalizedLocale)
   result.data[5].section = localizedMockText('就业指导中心', '就業指導中心', 'Career Center', '就職支援センター', '취업지원센터', normalizedLocale)
-  result.data[5].address = localizedMockText('创新创业楼', '創新創業樓', 'Innovation Building', 'イノベーション棟', '창업지원관', normalizedLocale)
+  result.data[5].address = localizedMockText('示例服务楼', '示例服務樓', 'Example Service Building', 'サンプルサービス棟', '예시 서비스관', normalizedLocale)
   result.data[6].section = localizedMockText('图书馆总服务台', '圖書館總服務台', 'Library Service Desk', '図書館総合カウンター', '도서관 안내 데스크', normalizedLocale)
-  result.data[6].address = localizedMockText('图书馆 1 楼', '圖書館 1 樓', 'Library 1F', '図書館1階', '도서관 1층', normalizedLocale)
+  result.data[6].address = localizedMockText('示例图书馆 1 层', '示例圖書館 1 層', 'Example Library 1F', 'サンプル図書館1階', '예시 도서관 1층', normalizedLocale)
   result.data[7].section = localizedMockText('网络信息中心', '網路信息中心', 'Network Information Center', 'ネットワーク情報センター', '네트워크 정보센터', normalizedLocale)
-  result.data[7].address = localizedMockText('信息楼 402', '信息樓 402', 'Information Building 402', '情報棟402', '정보관 402호', normalizedLocale)
+  result.data[7].address = localizedMockText('示例信息楼 402', '示例信息樓 402', 'Example Information Building 402', 'サンプル情報棟402', '예시 정보관 402호', normalizedLocale)
   return result
 }
 

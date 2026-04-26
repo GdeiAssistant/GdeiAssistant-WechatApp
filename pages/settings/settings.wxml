@@ -1,4 +1,6 @@
 <view class="page__bd {{themeClass}}" style="{{fontStyle}}">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
   <view class="weui-cells__title">{{t.dataSourceTitle}}</view>
   <view class="weui-cells weui-cells_after-title">
     <view class="weui-cell weui-cell_switch">
@@ -14,6 +16,61 @@
   </view>
 
   <text wx:if="{{useMockData}}" class="mock_hint">{{mockCredentialsHint}}</text>
+
+  <view class="weui-cells__title">{{t.campusCredentialTitle}}</view>
+  <view class="weui-cells weui-cells_after-title">
+    <view class="weui-cell">
+      <view class="weui-cell__bd">{{t.campusCredentialAuthStatus}}</view>
+      <view class="weui-cell__ft">{{campusCredential.hasActiveConsent ? t.campusCredentialAuthorized : t.campusCredentialUnauthorized}}</view>
+    </view>
+    <view class="weui-cell">
+      <view class="weui-cell__bd">{{t.campusCredentialSaved}}</view>
+      <view class="weui-cell__ft">{{campusCredential.hasSavedCredential ? t.campusCredentialYes : t.campusCredentialNo}}</view>
+    </view>
+    <view class="weui-cell weui-cell_switch">
+      <view class="weui-cell__bd">{{t.campusCredentialQuickAuth}}</view>
+      <view class="weui-cell__ft">
+        <switch
+          checked="{{campusCredential.quickAuthEnabled}}"
+          disabled="{{!campusCredential.hasSession || campusCredentialLoading || campusCredentialActionLoading}}"
+          bindchange="handleQuickAuthSwitch"
+        />
+      </view>
+    </view>
+    <view class="weui-cell">
+      <view class="weui-cell__bd">{{t.campusCredentialConsentedAt}}</view>
+      <view class="weui-cell__ft">{{campusCredential.consentedAt || '-'}}</view>
+    </view>
+    <view class="weui-cell" wx:if="{{campusCredential.revokedAt}}">
+      <view class="weui-cell__bd">{{t.campusCredentialRevokedAt}}</view>
+      <view class="weui-cell__ft">{{campusCredential.revokedAt}}</view>
+    </view>
+    <view class="weui-cell" wx:if="{{campusCredential.maskedCampusAccount}}">
+      <view class="weui-cell__bd">{{t.campusCredentialAccount}}</view>
+      <view class="weui-cell__ft">{{campusCredential.maskedCampusAccount}}</view>
+    </view>
+  </view>
+
+  <view class="status_hint" wx:if="{{campusCredentialLoading}}">{{t.campusCredentialLoadingText}}</view>
+  <view class="status_hint" wx:if="{{!campusCredentialLoading && campusCredentialMessage}}">{{campusCredentialMessage}}</view>
+
+  <view class="action_group">
+    <button
+      size="mini"
+      type="warn"
+      disabled="{{!campusCredential.hasSession || campusCredentialActionLoading}}"
+      bindtap="handleCampusCredentialRevoke"
+    >
+      {{t.campusCredentialRevoke}}
+    </button>
+    <button
+      size="mini"
+      disabled="{{!campusCredential.hasSession || campusCredentialActionLoading}}"
+      bindtap="handleCampusCredentialDelete"
+    >
+      {{t.campusCredentialDelete}}
+    </button>
+  </view>
 
   <view class="weui-cells__title">{{t.featureDisplayTitle}}</view>
   <block wx:for="{{featureSections}}" wx:key="id" wx:for-item="section">
