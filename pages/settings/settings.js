@@ -278,6 +278,7 @@ Page({
         useMockData: i18n.t('settingsPage.useMockData'),
         currentMode: i18n.t('settingsPage.currentMode'),
         campusCredentialTitle: i18n.t('settingsPage.campusCredentialTitle'),
+        campusCredentialDangerTitle: i18n.t('settingsPage.campusCredentialDangerTitle'),
         campusCredentialLoginFirst: i18n.t('settingsPage.campusCredentialLoginFirst'),
         campusCredentialLoadingText: i18n.t('settingsPage.campusCredentialLoadingText'),
         campusCredentialLoadFailed: i18n.t('settingsPage.campusCredentialLoadFailed'),

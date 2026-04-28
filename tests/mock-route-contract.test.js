@@ -78,6 +78,16 @@ function buildRouteContracts(endpoints) {
       data: { fileName: 'contract.jpg', contentType: 'image/jpeg' }
     }),
 
+    routeContract('campusCredential.status', 'GET', endpoints.campusCredential.status),
+    routeContract('campusCredential.consent', 'POST', endpoints.campusCredential.consent, {
+      data: { policyDate: '2026-04-25', effectiveDate: '2026-05-11' }
+    }),
+    routeContract('campusCredential.quickAuth', 'POST', endpoints.campusCredential.quickAuth, {
+      data: { enabled: false }
+    }),
+    routeContract('campusCredential.revoke', 'POST', endpoints.campusCredential.revoke),
+    routeContract('campusCredential.delete', 'DELETE', endpoints.campusCredential.credential),
+
     routeContract('user.avatar.get', 'GET', endpoints.user.avatar),
     routeContract('user.avatar.post', 'POST', endpoints.user.avatar, {
       data: { avatarKey: 'mock/avatar.jpg', avatarHdKey: 'mock/avatar_hd.jpg' }

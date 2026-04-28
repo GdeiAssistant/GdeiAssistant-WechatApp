@@ -52,7 +52,7 @@ form {
 }
 
 .consent_section {
-  margin: 24rpx 0 12rpx;
+  margin: 24rpx 0 28rpx;
 }
 
 .consent_label {

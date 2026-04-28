@@ -18,21 +18,31 @@
   <text wx:if="{{useMockData}}" class="mock_hint">{{mockCredentialsHint}}</text>
 
   <view class="weui-cells__title">{{t.campusCredentialTitle}}</view>
+  <view class="credential_summary">
+    <view class="credential_summary_item {{campusCredential.hasActiveConsent ? 'is_active' : ''}}">
+      <text class="credential_summary_label">{{t.campusCredentialAuthStatus}}</text>
+      <text class="credential_summary_value">{{campusCredential.hasActiveConsent ? t.campusCredentialAuthorized : t.campusCredentialUnauthorized}}</text>
+    </view>
+    <view class="credential_summary_item {{campusCredential.hasSavedCredential ? 'is_active' : ''}}">
+      <text class="credential_summary_label">{{t.campusCredentialSaved}}</text>
+      <text class="credential_summary_value">{{campusCredential.hasSavedCredential ? t.campusCredentialYes : t.campusCredentialNo}}</text>
+    </view>
+    <view class="credential_summary_item {{campusCredential.quickAuthEnabled ? 'is_active' : ''}}">
+      <text class="credential_summary_label">{{t.campusCredentialQuickAuth}}</text>
+      <text class="credential_summary_value">{{campusCredential.quickAuthEnabled ? t.campusCredentialYes : t.campusCredentialNo}}</text>
+    </view>
+  </view>
+
   <view class="weui-cells weui-cells_after-title">
-    <view class="weui-cell">
-      <view class="weui-cell__bd">{{t.campusCredentialAuthStatus}}</view>
-      <view class="weui-cell__ft">{{campusCredential.hasActiveConsent ? t.campusCredentialAuthorized : t.campusCredentialUnauthorized}}</view>
-    </view>
-    <view class="weui-cell">
-      <view class="weui-cell__bd">{{t.campusCredentialSaved}}</view>
-      <view class="weui-cell__ft">{{campusCredential.hasSavedCredential ? t.campusCredentialYes : t.campusCredentialNo}}</view>
-    </view>
     <view class="weui-cell weui-cell_switch">
-      <view class="weui-cell__bd">{{t.campusCredentialQuickAuth}}</view>
+      <view class="weui-cell__bd">
+        <view>{{t.campusCredentialQuickAuth}}</view>
+        <view class="credential_cell_note">{{campusCredential.quickAuthEnabled ? t.campusCredentialQuickAuthEnabled : t.campusCredentialQuickAuthDisabled}}</view>
+      </view>
       <view class="weui-cell__ft">
         <switch
           checked="{{campusCredential.quickAuthEnabled}}"
-          disabled="{{!campusCredential.hasSession || campusCredentialLoading || campusCredentialActionLoading}}"
+          disabled="{{!campusCredential.hasSession || campusCredentialLoading || campusCredentialActionLoading || (!campusCredential.quickAuthEnabled && (!campusCredential.hasActiveConsent || !campusCredential.hasSavedCredential))}}"
           bindchange="handleQuickAuthSwitch"
         />
       </view>
@@ -54,10 +64,10 @@
   <view class="status_hint" wx:if="{{campusCredentialLoading}}">{{t.campusCredentialLoadingText}}</view>
   <view class="status_hint" wx:if="{{!campusCredentialLoading && campusCredentialMessage}}">{{campusCredentialMessage}}</view>
 
+  <view class="danger_title">{{t.campusCredentialDangerTitle}}</view>
   <view class="action_group">
     <button
       size="mini"
-      type="warn"
       disabled="{{!campusCredential.hasSession || campusCredentialActionLoading}}"
       bindtap="handleCampusCredentialRevoke"
     >
@@ -65,6 +75,7 @@
     </button>
     <button
       size="mini"
+      type="warn"
       disabled="{{!campusCredential.hasSession || campusCredentialActionLoading}}"
       bindtap="handleCampusCredentialDelete"
     >
