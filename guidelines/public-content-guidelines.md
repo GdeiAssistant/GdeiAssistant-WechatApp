@@ -1,51 +1,50 @@
-# Public Content Guidelines
+# 公开文案维护指南
 
-## Purpose
+## 适用范围
 
-Public pages and repository-facing copy should be written for real users and maintainers of a production-ready project. They should not read like AI prompts, drafting notes, or code review instructions.
+本指南用于维护微信小程序的 README、关于页、协议页、隐私说明、校园凭证说明以及其他面向用户展示的公开文案。公开文案应写给真实用户和维护者阅读，不应像 AI 提示词、草稿备注或代码评审说明。
 
-## What belongs in public pages
+## 应当说明的内容
 
-- User rights and obligations
-- Privacy and sensitive-data notices
-- Campus credential consent and management explanations
-- Non-official-service disclaimers
-- Marketplace, delivery, and lost-and-found risk notices
-- Account safety, complaint, and reporting guidance
+- 用户权利、用户义务和功能限制。
+- 隐私处理、敏感信息处理和账户安全提示。
+- 校园账号凭证的授权、使用范围、撤回授权、删除申请和快速认证控制。
+- 项目不是学校官方服务、也不代表学校授权服务的说明。
+- 二手、跑腿、失物招领等用户内容和交易场景的风险说明。
+- 投诉、举报、申诉和帮助反馈入口。
 
-## What must not appear in public pages
+## 不应出现在公开文案中的内容
 
-- AI, Codex, or ChatGPT drafting notes
-- TODO items
-- Internal implementation instructions
-- “Write this if...” style notes
-- Unverified legal entities, contacts, or filing information
-- Unrelated framework or starter-template documentation links
-- Excessive policy-navigation link lists
+- AI、Codex、ChatGPT 或其他工具的对话记录、生成说明和提示词。
+- TODO、占位文本、评审备注或“稍后补充”等草稿痕迹。
+- 内部实现说明、接口细节、调试口吻和仅面向开发者的技术说明。
+- 未核实的主体名称、地址、联系方式、备案号、授权关系或法律结论。
+- 面向普通用户展示的调试账号、测试密码、Token 或本地环境信息。
+- 与用户理解功能无关的框架模板链接和过多协议导航链接。
 
-## README style
+## README 写法
 
-- Keep the README concise.
-- Do not duplicate full policy text in the README.
-- Do not turn the README into a policy navigation page.
-- Link maintainers to internal guidance only where useful.
+- README 主要面向部署者和维护者，应保持简洁、清楚。
+- README 可以提示法律、隐私和安全边界，但不应复制完整协议正文。
+- 面向用户的正式协议和政策内容，应以小程序内关于页、协议页和政策页为准。
+- 如需说明公开文案维护规则，链接本指南即可。
 
-## Policy date handling
+## 协议日期处理
 
-- Do not change dates for typo fixes, wording cleanup, or editorial restructuring.
-- Only update dates for substantive changes to user rights, obligations, privacy processing, dispute handling, or service rules.
+- 只修错别字、排版、语气或 README 说明时，不更新协议生效日期。
+- 只有涉及用户权利义务、隐私处理、争议处理、校园凭证规则或服务规则的实质变更时，才更新协议日期。
+- 更新日期时，应同步检查 Web、Android、iOS 和小程序端展示是否一致。
 
-## Compliance wording
+## 合规措辞
 
-- Use accurate and cautious wording.
-- Do not describe the project as an official school service unless verified.
-- Do not invent legal entities, addresses, emails, filing numbers, or contact details.
+- 使用谨慎、可核验的表述。
+- 未经核实，不得称项目为学校官方、学校授权、学校背书或学校合作服务。
+- 不得虚构运营主体、联系人、地址、邮箱、备案号或许可信息。
 
-## Review checklist
+## 提交前检查
 
-- No internal notes remain in public copy.
-- No AI-dialogue wording appears in public copy.
-- No unverified legal or contact information is added.
-- Necessary user risk notices remain visible.
-- No unnecessary framework links remain.
-- No policy dates are changed without a substantive reason.
+- 没有内部备注、AI 对话、TODO 或占位说明。
+- 没有未核实的法律主体、联系方式、备案号或授权关系。
+- 必要的隐私、校园凭证、第三方服务和非官方服务提示仍然可见。
+- README 没有重复大段协议正文，也没有变成协议目录页。
+- 没有在无实质规则变化时更新协议日期。
