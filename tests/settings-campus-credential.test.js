@@ -144,6 +144,7 @@ function stubCommon(calls, apiStub, tokenValue) {
         'settingsPage.useMockData': '使用演示数据',
         'settingsPage.currentMode': '当前模式',
         'settingsPage.campusCredentialTitle': '校园凭证管理',
+        'settingsPage.campusCredentialDangerTitle': '危险操作',
         'settingsPage.campusCredentialLoginFirst': '请先登录后查看校园凭证状态。',
         'settingsPage.campusCredentialLoadingText': '正在加载校园凭证状态...',
         'settingsPage.campusCredentialLoadFailed': '校园凭证状态加载失败，请稍后重试。',

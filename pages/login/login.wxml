@@ -24,10 +24,6 @@
         </view>
       </view>
 
-      <view class="btn-area">
-        <button type="primary" formType="submit">{{t.button}}</button>
-      </view>
-
       <view class="consent_section">
         <checkbox-group bindchange="handleConsentChange">
           <label class="consent_label">
@@ -35,6 +31,10 @@
             <text class="consent_text">{{t.campusCredentialConsentText}}</text>
           </label>
         </checkbox-group>
+      </view>
+
+      <view class="btn-area">
+        <button type="primary" formType="submit">{{t.button}}</button>
       </view>
 
     </form>
