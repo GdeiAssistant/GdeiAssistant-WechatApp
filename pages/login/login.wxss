@@ -35,20 +35,43 @@ form {
   font-size: 26rpx;
 }
 
+.login_aux {
+  margin-top: 36rpx;
+  padding-top: 24rpx;
+  border-top: 1rpx solid var(--color-border);
+}
+
+.mock_toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8rpx;
+}
+
+.mock_label {
+  color: var(--color-text-tertiary);
+  font-size: 24rpx;
+}
+
+.mock_switch {
+  transform: scale(0.82);
+  transform-origin: right center;
+}
+
 .mock_hint {
   display: block;
-  margin: 20rpx 40rpx 0;
-  color: var(--color-text-secondary);
-  text-align: center;
-  font-size: 26rpx;
+  margin: 12rpx 8rpx 0;
+  color: var(--color-text-tertiary);
+  font-size: 24rpx;
+  line-height: 1.5;
 }
 
 .settings_link {
   display: block;
-  margin-top: 20rpx;
-  color: var(--color-link);
-  text-align: center;
-  font-size: 28rpx;
+  margin-top: 14rpx;
+  padding: 0 8rpx;
+  color: var(--color-text-tertiary);
+  font-size: 24rpx;
 }
 
 .consent_section {

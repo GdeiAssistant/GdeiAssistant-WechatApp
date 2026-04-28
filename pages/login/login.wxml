@@ -39,20 +39,16 @@
 
     </form>
 
-    <view class="weui-cells__title">{{t.debugSettings}}</view>
-    <view class="weui-cells weui-cells_after-title">
-      <view class="weui-cell weui-cell_switch">
-        <view class="weui-cell__bd">{{t.useMockData}}</view>
-        <view class="weui-cell__ft">
-          <switch checked="{{useMockData}}" bindchange="handleDataSourceChange" />
-        </view>
+    <view class="login_aux">
+      <view class="mock_toolbar">
+        <text class="mock_label">{{t.useMockData}}</text>
+        <switch class="mock_switch" checked="{{useMockData}}" bindchange="handleDataSourceChange" />
       </view>
+      <text wx:if="{{useMockData}}" class="mock_hint">{{mockCredentialsHint}}</text>
+      <navigator url="/pages/settings/settings" class="settings_link" hover-class="none">
+        {{t.moreSettings}}
+      </navigator>
     </view>
-
-    <text wx:if="{{useMockData}}" class="mock_hint">{{mockCredentialsHint}}</text>
-    <navigator url="/pages/settings/settings" class="settings_link" hover-class="none">
-      {{t.moreSettings}}
-    </navigator>
   </view>
 
   <view class="version_info">
