@@ -49,8 +49,3 @@ npm run smoke
 ## 开源协议
 
 本项目采用 [Apache License 2.0](LICENSE.md) 开源协议。
-
-## 维护说明
-
-- 面向用户的公开文案应保持简洁、准确，并避免出现内部备注或实现说明。
-- 维护者可参考 [公开文案维护指南](guidelines/public-content-guidelines.md) 统一处理 README 与小程序公开文案。
