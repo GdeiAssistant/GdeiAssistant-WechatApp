@@ -89,6 +89,15 @@ form {
 
 .consent_text {
   flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  min-width: 0;
+}
+
+.consent_detail_link {
+  margin-left: 12rpx;
+  color: var(--color-link);
 }
 
 .version_info {

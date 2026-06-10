@@ -38,6 +38,7 @@ test('develop in devtools uses localhost resource domain', function () {
 
   assert.equal(config.currentEnv, 'dev')
   assert.equal(config.resourceDomain, 'http://localhost:8080/')
+  assert.equal(config.allowRuntimeDebugOptions, true)
 })
 
 test('develop on real device falls back to staging domain', function () {
@@ -70,6 +71,7 @@ test('release runtime uses production domain', function () {
 
   assert.equal(config.currentEnv, 'prod')
   assert.equal(config.resourceDomain, 'https://gdeiassistant.cn/')
+  assert.equal(config.allowRuntimeDebugOptions, false)
 })
 
 test('node staging environment resolves to staging config', function () {

@@ -100,6 +100,9 @@ function stubCommon(calls, apiStub, tokenValue) {
   })
   stubModule(path.join(ROOT, 'services/data-source.js'), {
     DATA_SOURCE_MODES: { remote: 'remote', mock: 'mock' },
+    canUseDemoMode() {
+      return true
+    },
     isMockMode() {
       return false
     },

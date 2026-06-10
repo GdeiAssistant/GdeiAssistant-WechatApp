@@ -10,6 +10,7 @@ const LOGIN_PAGE_MODULE = path.join(ROOT, 'pages/login/login.js')
 const INDEX_PAGE_MODULE = path.join(ROOT, 'pages/index/index.js')
 const NEWS_PAGE_MODULE = path.join(ROOT, 'pages/news/news.js')
 const COMMUNITY_LIST_PAGE_MODULE = path.join(ROOT, 'pages/communityList/communityList.js')
+const APPEARANCE_PAGE_MODULE = path.join(ROOT, 'pages/appearance/appearance.js')
 const STORAGE_MODULE = path.join(ROOT, 'constants/storage.js')
 
 function waitForSettled() {
@@ -93,6 +94,9 @@ function stubCommonModules(options) {
       'login.passwordPlaceholder': '请输入密码',
       'login.button': '登录',
       'login.campusCredentialConsentText': 'consent text',
+      'login.campusCredentialConsentSummary': 'consent summary',
+      'login.campusCredentialConsentDetailAction': '查看详情',
+      'login.campusCredentialConsentDetailTitle': '授权说明',
       'login.campusCredentialConsentRequired': '请先勾选校园凭证单独授权后再登录',
       'login.debugSettings': '数据源设置',
       'login.useMockData': '使用演示数据',
@@ -139,6 +143,10 @@ function stubCommonModules(options) {
   )
 
   stubModule(path.join(ROOT, 'utils/i18n.js'), {
+    getCurrentLocale() {
+      return 'zh-CN'
+    },
+    setLocale() {},
     t(key) {
       return Object.prototype.hasOwnProperty.call(translations, key) ? translations[key] : key
     },
@@ -252,6 +260,9 @@ test('mock UI smoke covers login page bootstrap and submit flow', async function
 
   stubModule(path.join(ROOT, 'services/data-source.js'), {
     DATA_SOURCE_MODES: { remote: 'remote', mock: 'mock' },
+    canUseDemoMode() {
+      return true
+    },
     isMockMode() {
       return true
     },
@@ -292,6 +303,48 @@ test('mock UI smoke covers login page bootstrap and submit flow', async function
   assert.equal(runtime.calls.redirectTo[0].url, '../index/index')
   assert.equal(runtime.calls.showNavigationBarLoading, 1)
   assert.equal(runtime.calls.hideNavigationBarLoading, 1)
+})
+
+test('appearance page labels traditional Chinese variants as Hong Kong/Macau and Taiwan', function () {
+  const runtime = setupWxRuntime()
+  stubCommonModules({
+    translations: {
+      'appearance.title': '外观',
+      'appearance.theme.label': '主题',
+      'appearance.theme.system': '跟随系统',
+      'appearance.theme.light': '浅色',
+      'appearance.theme.dark': '深色',
+      'appearance.font.label': '字体大小',
+      'appearance.font.small': '小',
+      'appearance.font.standard': '标准',
+      'appearance.font.large': '大',
+      'appearance.font.xlarge': '特大',
+      'appearance.font.preview': '预览',
+      'appearance.language.label': '语言'
+    }
+  })
+  stubModule(path.join(ROOT, 'utils/theme.js'), {
+    FONT_SCALES: [0.85, 1, 1.15, 1.3],
+    applyTheme() {},
+    getThemeMode() {
+      return 'system'
+    },
+    getFontScaleStep() {
+      return 1
+    },
+    buildFontStyle() {
+      return ''
+    }
+  })
+
+  const pageConfig = loadPage(APPEARANCE_PAGE_MODULE)
+  const page = createPageInstance(pageConfig, runtime.calls)
+  page.onLoad()
+
+  const labelsByCode = Object.fromEntries(page.data.locales.map((locale) => [locale.code, locale.label]))
+  assert.equal(labelsByCode['zh-HK'], '繁體中文（港澳）')
+  assert.equal(labelsByCode['zh-TW'], '繁體中文（台灣）')
+  assert.ok(!page.data.locales.some((locale) => locale.label === '繁體中文（香港）'))
 })
 
 test('mock UI smoke covers index page profile, inbox badge and feature actions', async function () {
@@ -350,6 +403,9 @@ test('mock UI smoke covers index page profile, inbox badge and feature actions',
   })
 
   stubModule(path.join(ROOT, 'services/data-source.js'), {
+    canUseDemoMode() {
+      return true
+    },
     getDataSourceLabel() {
       return '模拟数据'
     }

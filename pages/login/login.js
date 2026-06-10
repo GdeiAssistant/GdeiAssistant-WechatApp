@@ -18,6 +18,7 @@ Page({
     ready: false,
     versionCode: '',
     useMockData: false,
+    canUseDemoMode: false,
     dataSourceLabel: '',
     mockCredentialsHint: '',
     campusCredentialConsent: false
@@ -34,6 +35,9 @@ Page({
         passwordPlaceholder: i18n.t('login.passwordPlaceholder'),
         button: i18n.t('login.button'),
         campusCredentialConsentText: i18n.t('login.campusCredentialConsentText'),
+        campusCredentialConsentSummary: i18n.t('login.campusCredentialConsentSummary'),
+        campusCredentialConsentDetailAction: i18n.t('login.campusCredentialConsentDetailAction'),
+        campusCredentialConsentDetailTitle: i18n.t('login.campusCredentialConsentDetailTitle'),
         campusCredentialConsentRequired: i18n.t('login.campusCredentialConsentRequired'),
         debugSettings: i18n.t('login.debugSettings'),
         useMockData: i18n.t('login.useMockData'),
@@ -42,6 +46,14 @@ Page({
       mockCredentialsHint: getMockCredentialsHint()
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
+  },
+
+  showCampusCredentialConsentDetail: function() {
+    wx.showModal({
+      title: this.data.t.campusCredentialConsentDetailTitle,
+      content: this.data.t.campusCredentialConsentText,
+      showCancel: false
+    })
   },
 
   formSubmit: function(e) {
@@ -104,6 +116,7 @@ Page({
 
   refreshRuntimeState: function() {
     this.setData({
+      canUseDemoMode: dataSource.canUseDemoMode(),
       useMockData: dataSource.isMockMode()
     })
   },
@@ -116,6 +129,13 @@ Page({
   },
 
   handleDataSourceChange: function(event) {
+    if (!dataSource.canUseDemoMode()) {
+      dataSource.setDataSourceMode(dataSource.DATA_SOURCE_MODES.remote)
+      this.refreshRuntimeState()
+      this.refreshI18n()
+      return
+    }
+
     const useMockData = !!event.detail.value
     dataSource.setDataSourceMode(useMockData ? dataSource.DATA_SOURCE_MODES.mock : dataSource.DATA_SOURCE_MODES.remote)
     auth.clearSession()

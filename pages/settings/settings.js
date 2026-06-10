@@ -49,6 +49,7 @@ Page({
     t: {},
     themeClass: '',
     useMockData: false,
+    canUseDemoMode: false,
     dataSourceLabel: '',
     mockCredentialsHint: '',
     featureSections: [],
@@ -61,6 +62,7 @@ Page({
 
   refreshPageState: function() {
     this.setData({
+      canUseDemoMode: dataSource.canUseDemoMode(),
       useMockData: dataSource.isMockMode(),
       dataSourceLabel: dataSource.getDataSourceLabel(),
       mockCredentialsHint: getMockCredentialsHint(),
@@ -159,6 +161,12 @@ Page({
   },
 
   handleDataSourceChange: function(event) {
+    if (!dataSource.canUseDemoMode()) {
+      dataSource.setDataSourceMode(dataSource.DATA_SOURCE_MODES.remote)
+      this.refreshPageState()
+      return
+    }
+
     const useMockData = !!event.detail.value
     dataSource.setDataSourceMode(useMockData ? dataSource.DATA_SOURCE_MODES.mock : dataSource.DATA_SOURCE_MODES.remote)
     auth.clearSession()

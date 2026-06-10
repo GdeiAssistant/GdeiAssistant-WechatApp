@@ -20,11 +20,21 @@ function normalizeDomain(domain) {
   return domain.endsWith('/') ? domain : `${domain}/`
 }
 
-function resolveCurrentEnv() {
+function resolveMiniProgramEnvVersion() {
   try {
     if (typeof wx !== 'undefined' && wx.getAccountInfoSync) {
       const accountInfo = wx.getAccountInfoSync()
-      const envVersion = accountInfo && accountInfo.miniProgram ? accountInfo.miniProgram.envVersion : ''
+      return accountInfo && accountInfo.miniProgram ? accountInfo.miniProgram.envVersion || '' : ''
+    }
+  } catch (error) {
+    // Ignore runtime detection failure and fallback below.
+  }
+  return ''
+}
+
+function resolveCurrentEnv(envVersion) {
+  try {
+    if (envVersion) {
       // WeChat runtime mapping:
       // develop -> local development
       // trial -> staging
@@ -54,6 +64,18 @@ function resolveCurrentEnv() {
   }
 
   return 'prod'
+}
+
+function resolveAllowRuntimeDebugOptions(currentEnv, envVersion) {
+  if (typeof wx !== 'undefined') {
+    return envVersion !== 'release'
+  }
+
+  if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV) {
+    return process.env.NODE_ENV !== 'production'
+  }
+
+  return currentEnv !== 'prod'
 }
 
 function isDevtoolsRuntime() {
@@ -91,11 +113,13 @@ function resolveResourceDomain(currentEnv) {
   return normalizeDomain(ENV_CONFIG.prod.resourceDomain)
 }
 
-const currentEnv = resolveCurrentEnv()
+const miniProgramEnvVersion = resolveMiniProgramEnvVersion()
+const currentEnv = resolveCurrentEnv(miniProgramEnvVersion)
 const envConfig = ENV_CONFIG[currentEnv] || ENV_CONFIG.prod
 
 module.exports = {
   currentEnv,
+  allowRuntimeDebugOptions: resolveAllowRuntimeDebugOptions(currentEnv, miniProgramEnvVersion),
   ...envConfig,
   resourceDomain: resolveResourceDomain(currentEnv)
 }

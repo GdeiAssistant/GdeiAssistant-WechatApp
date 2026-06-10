@@ -19,6 +19,7 @@ function setupWxRuntime() {
   const calls = {
     noActionModal: [],
     redirectTo: [],
+    showModal: [],
     showNavigationBarLoading: 0,
     hideNavigationBarLoading: 0
   }
@@ -41,6 +42,9 @@ function setupWxRuntime() {
     },
     redirectTo(options) {
       calls.redirectTo.push(options)
+    },
+    showModal(options) {
+      calls.showModal.push(options)
     },
     setNavigationBarTitle() {},
     getAccountInfoSync() {
@@ -106,6 +110,9 @@ function stubCommon(loginSpy, modalCalls) {
   })
   stubModule(path.join(ROOT, 'services/data-source.js'), {
     DATA_SOURCE_MODES: { remote: 'remote', mock: 'mock' },
+    canUseDemoMode() {
+      return true
+    },
     isMockMode() {
       return false
     },
@@ -127,6 +134,9 @@ function stubCommon(loginSpy, modalCalls) {
         'login.passwordPlaceholder': '请输入校园网密码',
         'login.button': '登录',
         'login.campusCredentialConsentText': 'consent text',
+        'login.campusCredentialConsentSummary': 'consent summary',
+        'login.campusCredentialConsentDetailAction': '查看详情',
+        'login.campusCredentialConsentDetailTitle': '授权说明',
         'login.campusCredentialConsentRequired': '请先勾选校园凭证单独授权后再登录',
         'login.debugSettings': '数据源设置',
         'login.useMockData': '使用演示数据',
@@ -172,6 +182,24 @@ test('login blocks submit when campus credential consent is not checked', async 
   assert.equal(loginCallCount, 0)
   assert.equal(runtime.calls.noActionModal.length, 1)
   assert.equal(runtime.calls.noActionModal[0].content, '请先勾选校园凭证单独授权后再登录')
+})
+
+test('login shows full campus credential consent detail on request', async function () {
+  const runtime = setupWxRuntime()
+  stubCommon(function () {
+    return Promise.resolve({ success: true, data: { token: 'token' } })
+  }, runtime.calls.noActionModal)
+
+  const page = createPageInstance(loadPage())
+  page.onLoad()
+  await waitForSettled()
+
+  page.showCampusCredentialConsentDetail()
+
+  assert.equal(runtime.calls.showModal.length, 1)
+  assert.equal(runtime.calls.showModal[0].title, '授权说明')
+  assert.equal(runtime.calls.showModal[0].content, 'consent text')
+  assert.equal(runtime.calls.showModal[0].showCancel, false)
 })
 
 test('login sends campus credential consent metadata when checked', async function () {

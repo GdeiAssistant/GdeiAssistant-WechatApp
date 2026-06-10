@@ -1,12 +1,21 @@
 const storageKeys = require('../constants/storage.js')
 const i18n = require('../utils/i18n.js')
+const config = require('../config/index.js')
 
 const DATA_SOURCE_MODES = {
   remote: 'remote',
   mock: 'mock'
 }
 
+function canUseDemoMode() {
+  return !!config.allowRuntimeDebugOptions
+}
+
 function getDataSourceMode() {
+  if (!canUseDemoMode()) {
+    return DATA_SOURCE_MODES.remote
+  }
+
   try {
     const mode = wx.getStorageSync(storageKeys.dataSourceMode)
     if (mode === DATA_SOURCE_MODES.mock || mode === DATA_SOURCE_MODES.remote) {
@@ -21,9 +30,15 @@ function getDataSourceMode() {
 
 function setDataSourceMode(mode) {
   const nextMode =
-    mode === DATA_SOURCE_MODES.mock ? DATA_SOURCE_MODES.mock : DATA_SOURCE_MODES.remote
+    canUseDemoMode() && mode === DATA_SOURCE_MODES.mock
+      ? DATA_SOURCE_MODES.mock
+      : DATA_SOURCE_MODES.remote
   try {
-    wx.setStorageSync(storageKeys.dataSourceMode, nextMode)
+    if (!canUseDemoMode() && wx.removeStorageSync) {
+      wx.removeStorageSync(storageKeys.dataSourceMode)
+    } else {
+      wx.setStorageSync(storageKeys.dataSourceMode, nextMode)
+    }
   } catch (error) {
     // Ignore data source storage write failures.
   }
@@ -44,6 +59,7 @@ function getDataSourceLabel() {
 
 module.exports = {
   DATA_SOURCE_MODES,
+  canUseDemoMode,
   getDataSourceMode,
   setDataSourceMode,
   toggleDataSourceMode,

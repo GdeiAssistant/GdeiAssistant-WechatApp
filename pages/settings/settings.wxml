@@ -1,21 +1,23 @@
 <view class="page__bd {{themeClass}}" style="{{fontStyle}}">
   <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
 
-  <view class="weui-cells__title">{{t.dataSourceTitle}}</view>
-  <view class="weui-cells weui-cells_after-title">
-    <view class="weui-cell weui-cell_switch">
-      <view class="weui-cell__bd">{{t.useMockData}}</view>
-      <view class="weui-cell__ft">
-        <switch checked="{{useMockData}}" bindchange="handleDataSourceChange" />
+  <block wx:if="{{canUseDemoMode}}">
+    <view class="weui-cells__title">{{t.dataSourceTitle}}</view>
+    <view class="weui-cells weui-cells_after-title">
+      <view class="weui-cell weui-cell_switch">
+        <view class="weui-cell__bd">{{t.useMockData}}</view>
+        <view class="weui-cell__ft">
+          <switch checked="{{useMockData}}" bindchange="handleDataSourceChange" />
+        </view>
+      </view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">{{t.currentMode}}</view>
+        <view class="weui-cell__ft">{{dataSourceLabel}}</view>
       </view>
     </view>
-    <view class="weui-cell">
-      <view class="weui-cell__bd">{{t.currentMode}}</view>
-      <view class="weui-cell__ft">{{dataSourceLabel}}</view>
-    </view>
-  </view>
 
-  <text wx:if="{{useMockData}}" class="mock_hint">{{mockCredentialsHint}}</text>
+    <text wx:if="{{useMockData}}" class="mock_hint">{{mockCredentialsHint}}</text>
+  </block>
 
   <view class="weui-cells__title">{{t.campusCredentialTitle}}</view>
   <view class="credential_summary">
