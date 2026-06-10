@@ -14,8 +14,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 20rpx;
-  border-radius: 28rpx;
-  box-shadow: 0 16rpx 38rpx rgba(0, 0, 0, 0.05);
+  border-radius: 18rpx;
+  border: 1rpx solid var(--color-border);
 }
 
 .hero_content {
@@ -46,8 +46,8 @@
   margin-bottom: 20rpx;
   padding: 26rpx;
   background: var(--color-surface);
-  border-radius: 24rpx;
-  box-shadow: 0 14rpx 34rpx rgba(0, 0, 0, 0.045);
+  border-radius: 16rpx;
+  border: 1rpx solid var(--color-border);
 }
 
 .section_title {

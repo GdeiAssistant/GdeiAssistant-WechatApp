@@ -13,9 +13,9 @@
   justify-content: space-between;
   margin: 20rpx 24rpx 0;
   padding: 28rpx 30rpx;
-  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg-secondary) 100%);
-  border-radius: 26rpx;
-  box-shadow: 0 14rpx 34rpx rgba(0, 0, 0, 0.05);
+  background: var(--color-surface);
+  border-radius: 18rpx;
+  border: 1rpx solid var(--color-border);
 }
 
 .userinfo {
@@ -46,12 +46,15 @@
   color: var(--color-text-primary);
   font-size: 34rpx;
   font-weight: 600;
+  word-break: break-word;
 }
 
 .userinfo-source {
   margin-top: 8rpx;
   color: var(--color-text-tertiary);
   font-size: 24rpx;
+  line-height: 1.4;
+  word-break: break-word;
 }
 
 .userinfo-entry {

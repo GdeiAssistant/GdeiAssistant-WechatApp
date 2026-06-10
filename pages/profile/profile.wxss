@@ -22,9 +22,9 @@
   align-items: flex-start;
   margin: 24rpx 24rpx 0;
   padding: 30rpx;
-  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-bg-secondary) 100%);
-  border-radius: 28rpx;
-  box-shadow: 0 16rpx 40rpx rgba(0, 0, 0, 0.05);
+  background: var(--color-surface);
+  border-radius: 18rpx;
+  border: 1rpx solid var(--color-border);
 }
 
 .profile_avatar_wrap {
@@ -38,7 +38,6 @@
   border-radius: 50%;
   background: var(--color-bg-secondary);
   border: 6rpx solid var(--color-surface);
-  box-shadow: 0 10rpx 26rpx rgba(0, 0, 0, 0.08);
 }
 
 .avatar_badge {
@@ -67,6 +66,7 @@
   font-size: 36rpx;
   font-weight: 700;
   color: var(--color-text-primary);
+  word-break: break-word;
 }
 
 .profile_subtitle {
@@ -90,9 +90,9 @@
 
 .profile_cells {
   margin: 0 24rpx;
-  border-radius: 24rpx;
+  border-radius: 16rpx;
   overflow: hidden;
-  box-shadow: 0 12rpx 32rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid var(--color-border);
 }
 
 .textarea_wrap {
