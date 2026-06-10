@@ -62,6 +62,9 @@
     "useMockData": "데모 데이터 사용",
     "moreSettings": "추가 설정",
     "campusCredentialConsentText": "저는 캠퍼스 인증, 빠른 인증, 캠퍼스 데이터 조회 및 학교 시스템과의 필요한 세션 동기화를 위해 필요한 범위 내에서 학교 계정 자격정보가 처리되는 것에 별도로 동의합니다. 설정에서 동의를 철회하거나 저장된 자격정보를 삭제하거나 빠른 인증을 끌 수 있음을 이해합니다.",
+    "campusCredentialConsentSummary": "캠퍼스 자격정보 별도 승인에 동의합니다",
+    "campusCredentialConsentDetailAction": "자세히 보기",
+    "campusCredentialConsentDetailTitle": "캠퍼스 자격정보 승인 안내",
     "campusCredentialConsentRequired": "로그인하기 전에 캠퍼스 자격정보 동의를 확인해 주세요"
   },
   "auth": {

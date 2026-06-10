@@ -62,6 +62,9 @@
     "useMockData": "Use demo data",
     "moreSettings": "More settings",
     "campusCredentialConsentText": "I have read and separately agree that the platform may process my campus credential within the necessary scope for campus identity verification, quick authentication, campus data queries, and required session synchronization with school systems. I understand that I can revoke consent, delete saved credentials, or disable quick authentication in Settings, and some campus queries may require re-login or re-authorization afterward.",
+    "campusCredentialConsentSummary": "I agree to the separate campus credential authorization",
+    "campusCredentialConsentDetailAction": "View details",
+    "campusCredentialConsentDetailTitle": "Campus credential authorization",
     "campusCredentialConsentRequired": "Please confirm campus credential consent before logging in"
   },
   "auth": {

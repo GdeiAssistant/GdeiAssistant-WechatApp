@@ -28,7 +28,10 @@
         <checkbox-group bindchange="handleConsentChange">
           <label class="consent_label">
             <checkbox value="agree" checked="{{campusCredentialConsent}}" />
-            <text class="consent_text">{{t.campusCredentialConsentText}}</text>
+            <view class="consent_text">
+              <text>{{t.campusCredentialConsentSummary}}</text>
+              <text class="consent_detail_link" catchtap="showCampusCredentialConsentDetail">{{t.campusCredentialConsentDetailAction}}</text>
+            </view>
           </label>
         </checkbox-group>
       </view>
@@ -40,11 +43,11 @@
     </form>
 
     <view class="login_aux">
-      <view class="mock_toolbar">
+      <view wx:if="{{canUseDemoMode}}" class="mock_toolbar">
         <text class="mock_label">{{t.useMockData}}</text>
         <switch class="mock_switch" checked="{{useMockData}}" bindchange="handleDataSourceChange" />
       </view>
-      <text wx:if="{{useMockData}}" class="mock_hint">{{mockCredentialsHint}}</text>
+      <text wx:if="{{canUseDemoMode && useMockData}}" class="mock_hint">{{mockCredentialsHint}}</text>
       <navigator url="/pages/settings/settings" class="settings_link" hover-class="none">
         {{t.moreSettings}}
       </navigator>

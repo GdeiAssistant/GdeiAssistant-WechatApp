@@ -62,6 +62,9 @@
     "useMockData": "使用示範資料",
     "moreSettings": "更多功能設定",
     "campusCredentialConsentText": "我已閱讀並單獨同意平台在必要範圍內處理我的校園帳號憑證，用於校園身分認證、快速認證、校園資料查詢及與學校系統的必要會話同步。我知悉可在設定中撤回授權、刪除已保存憑證或關閉快速認證；關閉或刪除後，部分校園查詢功能可能需要重新登入或重新授權。",
+    "campusCredentialConsentSummary": "我已閱讀並同意校園憑證單獨授權",
+    "campusCredentialConsentDetailAction": "查看詳情",
+    "campusCredentialConsentDetailTitle": "校園憑證授權說明",
     "campusCredentialConsentRequired": "請先勾選校園憑證單獨授權後再登入"
   },
   "auth": {

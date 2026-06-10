@@ -62,6 +62,9 @@
     "useMockData": "使用演示数据",
     "moreSettings": "更多功能设置",
     "campusCredentialConsentText": "我已阅读并单独同意平台在必要范围内处理我的校园账号凭证，用于校园身份认证、快速认证、校园数据查询及与学校系统的必要会话同步。我知悉可在设置中撤回授权、删除已保存凭证或关闭快速认证；关闭或删除后，部分校园查询功能可能需要重新登录或重新授权。",
+    "campusCredentialConsentSummary": "我已阅读并同意校园凭证单独授权",
+    "campusCredentialConsentDetailAction": "查看详情",
+    "campusCredentialConsentDetailTitle": "校园凭证授权说明",
     "campusCredentialConsentRequired": "请先勾选校园凭证单独授权后再登录"
   },
   "auth": {

@@ -62,6 +62,9 @@
     "useMockData": "デモデータを使用",
     "moreSettings": "その他の設定",
     "campusCredentialConsentText": "私は、学内認証、クイック認証、学内データ照会、および学校システムとの必要なセッション同期のために、必要な範囲で学内アカウント資格情報が処理されることに個別に同意します。設定から同意を撤回したり、保存済み資格情報を削除したり、クイック認証を無効化できることを理解しています。",
+    "campusCredentialConsentSummary": "学内資格情報の個別許可に同意します",
+    "campusCredentialConsentDetailAction": "詳細を見る",
+    "campusCredentialConsentDetailTitle": "学内資格情報の許可説明",
     "campusCredentialConsentRequired": "ログインする前に学内資格情報への同意を確認してください"
   },
   "auth": {
