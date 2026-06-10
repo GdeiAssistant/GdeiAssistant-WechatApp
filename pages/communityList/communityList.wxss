@@ -13,8 +13,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 20rpx;
-  border-radius: 28rpx;
-  box-shadow: 0 16rpx 38rpx rgba(0, 0, 0, 0.05);
+  border-radius: 18rpx;
+  border: 1rpx solid var(--color-border);
 }
 
 .hero_content {
@@ -48,8 +48,8 @@
   display: flex;
   justify-content: space-between;
   background: var(--color-surface);
-  border-radius: 20rpx;
-  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.04);
+  border-radius: 16rpx;
+  border: 1rpx solid var(--color-border);
 }
 
 .stat_item {
@@ -68,6 +68,9 @@
 .stat_label {
   font-size: 28rpx;
   color: var(--color-text-secondary);
+  text-align: center;
+  line-height: 1.35;
+  word-break: break-word;
 }
 
 .search_bar {
@@ -77,8 +80,8 @@
   align-items: center;
   padding: 14rpx;
   background: var(--color-surface);
-  border-radius: 24rpx;
-  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.04);
+  border-radius: 16rpx;
+  border: 1rpx solid var(--color-border);
 }
 
 .search_input {
@@ -101,23 +104,24 @@
 }
 
 .tab_scroll {
-  white-space: nowrap;
   margin-top: 20rpx;
 }
 
 .tab_row {
-  display: inline-flex;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
   padding: 0 24rpx;
 }
 
 .tab_item {
-  margin-right: 16rpx;
   padding: 16rpx 28rpx;
   border-radius: 999rpx;
   background: var(--color-surface);
   color: var(--color-text-secondary);
   font-size: 28rpx;
-  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.03);
+  border: 1rpx solid var(--color-border);
+  line-height: 1.35;
 }
 
 .tab_item_active {
@@ -135,9 +139,9 @@
 .photo_card {
   margin-bottom: 20rpx;
   background: var(--color-surface);
-  border-radius: 24rpx;
+  border-radius: 18rpx;
   overflow: hidden;
-  box-shadow: 0 14rpx 34rpx rgba(0, 0, 0, 0.045);
+  border: 1rpx solid var(--color-border);
 }
 
 .market_card {
@@ -168,9 +172,9 @@
   width: 48.2%;
   margin-bottom: 20rpx;
   background: var(--color-surface);
-  border-radius: 22rpx;
+  border-radius: 18rpx;
   overflow: hidden;
-  box-shadow: 0 14rpx 34rpx rgba(0, 0, 0, 0.045);
+  border: 1rpx solid var(--color-border);
 }
 
 .lost_cover,
@@ -206,6 +210,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12rpx;
+  min-width: 0;
 }
 
 .card_title {
@@ -213,6 +218,7 @@
   font-weight: 600;
   color: var(--color-text-primary);
   line-height: 1.5;
+  word-break: break-word;
 }
 
 .card_summary {
@@ -233,6 +239,9 @@
   background: var(--color-bg-tertiary);
   color: var(--color-primary);
   font-size: 22rpx;
+  line-height: 1.3;
+  text-align: center;
+  white-space: normal;
 }
 
 .card_sub_badge {
@@ -250,6 +259,8 @@
   color: var(--color-text-secondary);
   font-size: 28rpx;
   line-height: 1.5;
+  min-width: 0;
+  word-break: break-word;
 }
 
 .price_text {
@@ -262,6 +273,7 @@
 .metric_text {
   color: var(--color-text-tertiary);
   font-size: 22rpx;
+  line-height: 1.35;
 }
 
 .secret_card {
@@ -346,9 +358,9 @@
   margin: 24rpx;
   padding: 52rpx 32rpx;
   background: var(--color-surface);
-  border-radius: 24rpx;
+  border-radius: 16rpx;
   text-align: center;
-  box-shadow: 0 12rpx 30rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid var(--color-border);
 }
 
 .empty_title {

@@ -29,8 +29,8 @@
   margin: 20rpx 24rpx 0;
   padding: 26rpx;
   background: var(--color-surface);
-  border-radius: 24rpx;
-  box-shadow: 0 14rpx 34rpx rgba(0, 0, 0, 0.045);
+  border-radius: 18rpx;
+  border: 1rpx solid var(--color-border);
 }
 
 .detail_head_meta {
@@ -39,6 +39,7 @@
   justify-content: space-between;
   gap: 16rpx;
   margin-bottom: 14rpx;
+  min-width: 0;
 }
 
 .detail_module_tag {
@@ -50,6 +51,9 @@
   background: var(--color-bg-secondary);
   color: var(--color-text-secondary);
   font-size: 22rpx;
+  line-height: 1.3;
+  text-align: center;
+  white-space: normal;
 }
 
 .detail_head_time {
@@ -62,6 +66,7 @@
   font-weight: 600;
   color: var(--color-text-primary);
   line-height: 1.5;
+  word-break: break-word;
 }
 
 .detail_subtitle,
@@ -126,6 +131,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 16rpx;
+  min-width: 0;
 }
 
 .seller_box {
