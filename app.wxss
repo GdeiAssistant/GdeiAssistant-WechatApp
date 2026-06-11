@@ -10,7 +10,7 @@ page {
 checkbox, radio{
   margin-right: 10rpx;
 }
-button{
+.btn-area button{
   margin-top: 20rpx;
   margin-bottom: 20rpx;
 }
