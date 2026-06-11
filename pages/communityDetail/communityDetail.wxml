@@ -10,7 +10,7 @@
     <swiper wx:if="{{detail.images && detail.images.length}}" class="detail_swiper" indicator-dots autoplay="{{false}}">
       <block wx:for="{{detail.images}}" wx:key="*this" wx:for-item="imageItem">
         <swiper-item data-index="{{index}}" bindtap="previewImages">
-          <image class="detail_swiper_image" src="{{imageItem}}" mode="aspectFill"></image>
+          <image class="detail_swiper_image" src="{{imageItem}}" mode="aspectFit"></image>
         </swiper-item>
       </block>
     </swiper>

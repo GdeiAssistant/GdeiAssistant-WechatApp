@@ -13,9 +13,9 @@
   };
 </wxs>
 
-<view class="page__bd {{themeClass}}" style="{{fontStyle}}">
+<view class="page__bd schedule-page {{themeClass}}" style="{{fontStyle}}">
 
-  <view class="weui-navbar">
+  <view class="weui-navbar schedule-navbar">
     <block wx:for="{{tabs}}" wx:key="*this">
       <view id="{{index}}" class="weui-navbar__item {{activeIndex == index ? 'weui-bar__item_on' : ''}}" bindtap="tabClick">
         <view class="weui-navbar__title">{{item}}</view>
@@ -23,28 +23,29 @@
     </block>
   </view>
 
-  <view block wx:if="{{week}}">
-    <view class="weui-btn-area">
+  <view wx:if="{{week}}">
+    <view class="schedule-toolbar">
       <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
-        <button type="default">{{scheduleHelper.formatWeekButton(week, t.weekLabel)}}</button>
+        <button class="schedule-week-button" type="default" plain="true">
+          {{scheduleHelper.formatWeekButton(week, t.weekLabel)}}
+        </button>
       </picker>
     </view>
   </view>
 
-  <view class="weui-tab__panel" block wx:if="{{scheduleList}}">
+  <view class="schedule-panel" wx:if="{{scheduleList}}">
 
-    <view class="weui-tab__content" hidden="{{activeIndex != k}}" wx:for-index="k" wx:for="{{tabs}}" wx:key="k_key">
+    <view class="schedule-day" hidden="{{activeIndex != k}}" wx:for-index="k" wx:for="{{tabs}}" wx:key="k_key">
       <block wx:for="{{scheduleList[k]}}" wx:for-item="i" wx:key="index">
-        <view class="weui-media-box weui-media-box_text">
-          <view style='font-size:13px' class="weui-media-box__title weui-media-box__title_in-text">
-            {{i.scheduleLesson}}
+        <view class="schedule-card">
+          <view class="schedule-card__topline">
+            <text class="schedule-card__lesson">{{i.scheduleLesson}}</text>
+            <text class="schedule-card__week">{{scheduleHelper.formatWeekRange(i.minScheduleWeek, i.maxScheduleWeek, t.weekRange)}}</text>
           </view>
-          <view class="weui-media-box__info">
-            <block>
-              <text class="weui-media-box__bold" style='font-size:15px'>{{i.scheduleName}}\n</text>
-              <text style='float:left'>{{scheduleHelper.formatWeekRange(i.minScheduleWeek, i.maxScheduleWeek, t.weekRange)}}\n{{i.scheduleTeacher}}</text>
-              <text style='float:right'>{{i.scheduleLocation}}</text>
-            </block>
+          <view class="schedule-card__name">{{i.scheduleName}}</view>
+          <view class="schedule-card__details">
+            <view class="schedule-card__detail schedule-card__teacher">{{i.scheduleTeacher}}</view>
+            <view class="schedule-card__detail schedule-card__location">{{i.scheduleLocation}}</view>
           </view>
         </view>
       </block>

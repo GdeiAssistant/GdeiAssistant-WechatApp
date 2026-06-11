@@ -54,7 +54,7 @@
 
   <view class="list_section" wx:if="{{moduleId === 'ershou'}}">
     <view wx:for="{{items}}" wx:key="id" wx:for-item="item" data-index="{{index}}" bindtap="openDetail" class="market_card">
-      <image class="market_cover" src="{{item.cover}}" mode="aspectFill"></image>
+      <image class="market_cover" src="{{item.cover}}" mode="aspectFit"></image>
       <view class="market_content">
         <view class="card_title">{{item.title}}</view>
         <view class="card_summary">{{item.summary}}</view>
@@ -72,7 +72,7 @@
 
   <view class="list_section lost_grid" wx:if="{{moduleId === 'lostandfound'}}">
     <view wx:for="{{items}}" wx:key="id" wx:for-item="item" data-index="{{index}}" bindtap="openDetail" class="lost_card">
-      <image class="lost_cover" src="{{item.cover}}" mode="aspectFill"></image>
+      <image class="lost_cover" src="{{item.cover}}" mode="aspectFit"></image>
       <view class="lost_badges">
         <text class="card_badge">{{item.badgeText}}</text>
         <text class="card_sub_badge">{{item.subBadgeText}}</text>
@@ -98,7 +98,7 @@
 
   <view class="list_section" wx:if="{{moduleId === 'express' || moduleId === 'topic'}}">
     <view wx:for="{{items}}" wx:key="id" wx:for-item="item" data-index="{{index}}" bindtap="openDetail" class="post_card">
-      <image wx:if="{{item.cover}}" class="topic_cover" src="{{item.cover}}" mode="aspectFill"></image>
+      <image wx:if="{{item.cover}}" class="topic_cover" src="{{item.cover}}" mode="aspectFit"></image>
       <view class="card_title">{{item.title}}</view>
       <view class="card_summary">{{item.summary}}</view>
       <view class="post_footer">
@@ -126,7 +126,7 @@
 
   <view class="list_section dating_grid" wx:if="{{moduleId === 'dating'}}">
     <view wx:for="{{items}}" wx:key="id" wx:for-item="item" data-index="{{index}}" bindtap="openDetail" class="dating_card">
-      <image class="dating_cover" src="{{item.cover}}" mode="aspectFill"></image>
+      <image class="dating_cover" src="{{item.cover}}" mode="aspectFit"></image>
       <view class="card_title">{{item.title}}</view>
       <view class="card_meta">{{item.badgeText}} · {{item.metaText}}</view>
       <view class="card_summary">{{item.summary}}</view>
@@ -136,7 +136,7 @@
 
   <view class="list_section" wx:if="{{moduleId === 'photograph'}}">
     <view wx:for="{{items}}" wx:key="id" wx:for-item="item" data-index="{{index}}" bindtap="openDetail" class="photo_card">
-      <image class="photo_cover" src="{{item.cover}}" mode="aspectFill"></image>
+      <image class="photo_cover" src="{{item.cover}}" mode="aspectFit"></image>
       <view class="card_title">{{item.title}}</view>
       <view class="card_summary">{{item.summary}}</view>
       <view class="post_footer">

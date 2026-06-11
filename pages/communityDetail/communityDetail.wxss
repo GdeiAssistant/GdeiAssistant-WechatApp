@@ -3,7 +3,7 @@
 .detail_page {
   min-height: 100vh;
   background: var(--color-bg-primary);
-  padding-bottom: 40rpx;
+  padding-bottom: calc(40rpx + env(safe-area-inset-bottom));
 }
 
 .loading_box {
@@ -16,7 +16,10 @@
 }
 
 .detail_swiper {
-  height: 440rpx;
+  height: 72vw;
+  min-height: 360rpx;
+  max-height: 640rpx;
+  background: var(--color-bg-secondary);
 }
 
 .detail_swiper_image {
