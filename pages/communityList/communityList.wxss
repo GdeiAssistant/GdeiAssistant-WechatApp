@@ -1,7 +1,7 @@
 @import "../../common/lib/weui.wxss";
 
 .community-page {
-  padding-bottom: 130rpx;
+  padding-bottom: calc(170rpx + env(safe-area-inset-bottom));
   background: var(--color-bg-primary);
   min-height: 100vh;
 }
@@ -149,8 +149,11 @@
 }
 
 .market_cover {
-  width: 220rpx;
-  height: 220rpx;
+  width: 32%;
+  min-width: 160rpx;
+  max-width: 220rpx;
+  height: auto;
+  aspect-ratio: 1;
   flex-shrink: 0;
   background: var(--color-bg-secondary);
 }
@@ -180,7 +183,8 @@
 .lost_cover,
 .dating_cover {
   width: 100%;
-  height: 220rpx;
+  height: auto;
+  aspect-ratio: 4 / 3;
   background: var(--color-bg-secondary);
 }
 
@@ -194,7 +198,8 @@
 .photo_cover,
 .topic_cover {
   width: 100%;
-  height: 320rpx;
+  height: auto;
+  aspect-ratio: 16 / 9;
   background: var(--color-bg-secondary);
 }
 
@@ -337,7 +342,7 @@
   position: fixed;
   left: 24rpx;
   right: 24rpx;
-  bottom: 20rpx;
+  bottom: calc(20rpx + env(safe-area-inset-bottom));
   display: flex;
   gap: 16rpx;
   z-index: 20;
