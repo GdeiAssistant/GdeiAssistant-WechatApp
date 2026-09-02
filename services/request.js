@@ -151,7 +151,7 @@ function request(options) {
     })
 
   if (!authRequired) {
-    return execute()
+    return execute(auth.getSessionToken())
   }
 
   return auth.ensureSessionToken().then((token) => execute(token))
