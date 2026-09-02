@@ -151,7 +151,7 @@ test('request injects Authorization header when authRequired', async function ()
   assert.equal(capturedHeader.Authorization, 'Bearer my-jwt-token')
 })
 
-test('request omits Authorization header when not authRequired', async function () {
+test('request propagates an existing Authorization header when auth is optional', async function () {
   let capturedHeader = null
 
   const { request } = setup(function (opts) {
@@ -159,9 +159,10 @@ test('request omits Authorization header when not authRequired', async function 
     opts.success({ statusCode: 200, data: { code: 200, data: null } })
   })
 
+  global.wx.setStorageSync('sessionToken', 'optional-jwt-token')
   await request({ url: '/api/public', authRequired: false })
 
-  assert.equal(capturedHeader.Authorization, undefined)
+  assert.equal(capturedHeader.Authorization, 'Bearer optional-jwt-token')
 })
 
 // ---- 401 handling ----
