@@ -214,16 +214,19 @@ function setupAuth401(options) {
     }
   })
   stubModule(MOCK_MODULE, {
-    handleRequest: function () {
+    handleRequest: function (requestOptions) {
       if (typeof config.onMockRequest === 'function') {
-        return config.onMockRequest({
-          getCurrentToken: function () {
-            return currentToken
+        return config.onMockRequest(
+          {
+            getCurrentToken: function () {
+              return currentToken
+            },
+            setCurrentToken: function (token) {
+              currentToken = token
+            }
           },
-          setCurrentToken: function (token) {
-            currentToken = token
-          }
-        })
+          requestOptions
+        )
       }
       return Promise.reject(Object.assign(new Error('unauthorized'), { statusCode: 401 }))
     }
@@ -294,14 +297,36 @@ test('request 401 after logout does not clear again', async function () {
   assert.equal(env.relaunchCount, 0)
 })
 
-test('request unauthenticated 401 rejects without clearing session', async function () {
-  const env = setupAuth401({ currentToken: 'token-still-here' })
+test('request unauthenticated 401 does not clear a session created after the request', async function () {
+  const env = setupAuth401({
+    currentToken: '',
+    onRemoteRequest: function (opts, helpers) {
+      assert.equal(opts.header.Authorization, undefined)
+      helpers.setCurrentToken('token-new-login')
+      opts.success({ statusCode: 401, data: {} })
+    }
+  })
 
   await assert.rejects(env.request({ url: '/api/public', authRequired: false }), {
     message: '登录凭证已过期，请重新登录'
   })
   assert.equal(env.sessionCleared, 0)
   assert.equal(env.relaunchCount, 0)
+})
+
+test('request optional-auth 401 clears the matching session sent with the request', async function () {
+  const env = setupAuth401({
+    currentToken: 'token-optional',
+    onRemoteRequest: function (opts) {
+      assert.equal(opts.header.Authorization, 'Bearer token-optional')
+      opts.success({ statusCode: 401, data: {} })
+    }
+  })
+  await assert.rejects(env.request({ url: '/api/public', authRequired: false }), {
+    message: '登录凭证已过期，请重新登录'
+  })
+  assert.equal(env.sessionCleared, 1)
+  assert.equal(env.relaunchCount, 1)
 })
 
 test('mock request 401 clears only when request token still matches current session', async function () {
@@ -347,8 +372,13 @@ test('mock request 401 clears only when request token still matches current sess
   assert.ok(loggedOut.loadingHidden >= 1)
 
   const unauthenticated = setupAuth401({
-    currentToken: 'token-still-here',
-    mockMode: true
+    currentToken: '',
+    mockMode: true,
+    onMockRequest: function (helpers, opts) {
+      assert.equal(opts.header.Authorization, undefined)
+      helpers.setCurrentToken('token-new-login')
+      return Promise.reject(Object.assign(new Error('unauthorized'), { statusCode: 401 }))
+    }
   })
   await assert.rejects(
     unauthenticated.request({ url: '/api/public', authRequired: false, showLoading: true }),
@@ -357,6 +387,22 @@ test('mock request 401 clears only when request token still matches current sess
   assert.equal(unauthenticated.sessionCleared, 0)
   assert.equal(unauthenticated.relaunchCount, 0)
   assert.ok(unauthenticated.loadingHidden >= 1)
+})
+
+test('mock optional-auth 401 clears the matching session sent with the request', async function () {
+  const env = setupAuth401({
+    currentToken: 'token-optional-mock',
+    mockMode: true,
+    onMockRequest: function (_, opts) {
+      assert.equal(opts.header.Authorization, 'Bearer token-optional-mock')
+      return Promise.reject(Object.assign(new Error('unauthorized'), { statusCode: 401 }))
+    }
+  })
+  await assert.rejects(env.request({ url: '/api/public', authRequired: false }), {
+    message: '登录凭证已过期，请重新登录'
+  })
+  assert.equal(env.sessionCleared, 1)
+  assert.equal(env.relaunchCount, 1)
 })
 
 // ---- Payload normalization ----

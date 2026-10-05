@@ -72,3 +72,9 @@ Node 全套 171 项通过；lint、format:check 和 smoke 通过（34 pages）�
 - 回归：`tests/chat-image.test.js`（重复 clientId 预览被点图片 / 未知 localKey / 失败重试）、`tests/request.test.js`（remote/mock 当前 token、换 token、退出后、无 token 401）。
 - 验证：Cursor Auto 会话的 Shell 被拒绝后，由主助手直接完成。把新增回归放到未修复的准确源码快照副本，28 项中 5 项失败，命中图片误定位和 remote/mock 迟到 401；当前修复后专项 28/28、全套 185/185 通过，`lint`、`format:check` 和 34 页 `smoke` 均退出 0。实际 Node 26.3.0，仍与项目声明 24.14.1 不同；未运行微信开发者工具或设备。未改依赖、未 commit/push、未访问真实校园或 R2。
 - Dot 云端复验：2026-10-06，在 Debian 13 Linux 独立副本中使用实际 Node 24.14.1 / npm 11.11.0，`npm ci`、`npm test`、`lint`、`format:check`、`smoke` 五项均退出 0；185/185 测试及 34 页静态检查通过。准确五文件增量的原/新 SHA-256 全部匹配，303 个源码文件符合预期，原快照与旧测试副本未修改。两项缺陷另以全内存 wx stub 调用实际生产方法复验通过。主助手已下载第 2 版完整日志，核对 ZIP CRC、241 个文件 SHA-256、命令退出码和测试输出；未执行微信开发者工具、真机 UI 或真实服务。
+
+### 合入最新 master 后的验证（2026-10-06）
+
+用户授权测试分支提交、推送与草稿 PR 后，接入 master 最新可选请求鉴权及锁文件修复。`authRequired: false` 允许匿名访问，但已登录时仍携带当前 token；因此旧的两个“已有 token 但请求无鉴权”测试前提不成立。测试调整为实际无 token 发出请求、随后新登录再收到 401，并补充 remote/mock 可选鉴权请求携带当前 token 时的 401 行为；生产请求保护逻辑保留。
+
+实际本地 Node 26.3.0 / npm 11.17.0：`npm ci`、请求专项、全套 187/187 测试、lint、format 与 34 页 smoke 均通过；smoke 显示的 Node 24.14.1 是项目声明版本。测试分支 PR #69 的 GitHub CI 使用项目声明版本，云端结果需另行核对，不将本机结果或排队状态算作设备/构建测试通过。未合并或发布。
