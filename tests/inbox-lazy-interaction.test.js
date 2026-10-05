@@ -5,91 +5,132 @@ const assert = require('node:assert/strict')
 const { stubModule, clearModule } = require('./helpers/module.js')
 
 const ROOT = path.resolve(__dirname, '..')
+const INBOX_MODULE = path.join(ROOT, 'pages/inbox/inbox.js')
 
-// --- Stubs ---
-
-// Stub wx global
-const wxCalls = []
-global.wx = {
-  setStorageSync: function () {},
-  navigateTo: function () {},
-  setNavigationBarTitle: function () {},
-  stopPullDownRefresh: function () {},
-  showModal: function () {},
-  showToast: function () {}
-}
-
-// Stub i18n
-stubModule(path.join(ROOT, 'utils/i18n.js'), {
-  t: function (key) {
-    return key
-  },
-  tReplace: function (key) {
-    return key
-  }
-})
-
-// Stub theme
-stubModule(path.join(ROOT, 'utils/theme.js'), {
-  applyTheme: function () {}
-})
-
-// Stub page utils
-stubModule(path.join(ROOT, 'utils/page.js'), {
-  runWithNavigationLoading: function (ctx, fn, opts) {
-    if (opts && opts.loadingKey) {
-      ctx.data[opts.loadingKey] = true
-    }
-    return fn().then(function (result) {
-      if (opts && opts.loadingKey) {
-        ctx.data[opts.loadingKey] = false
-      }
-      return result
-    })
-  },
-  showTopTips: function () {}
-})
-
-// Stub storage keys
-stubModule(path.join(ROOT, 'constants/storage.js'), {})
-
-// Track API calls
 var apiCallLog = []
-
-stubModule(path.join(ROOT, 'services/apis/messages.js'), {
-  getAnnouncementList: function (start, size) {
-    apiCallLog.push({ method: 'getAnnouncementList', args: [start, size] })
-    return Promise.resolve({ success: true, data: [] })
-  },
-  getInteractionList: function (start, size) {
-    apiCallLog.push({ method: 'getInteractionList', args: [start, size] })
-    return Promise.resolve({ success: true, data: [] })
-  },
-  getUnreadCount: function () {
-    apiCallLog.push({ method: 'getUnreadCount' })
-    return Promise.resolve({ success: true, data: 3 })
-  },
-  markMessageRead: function () {
-    return Promise.resolve({ success: true })
-  },
-  markAllMessagesRead: function () {
-    return Promise.resolve({ success: true })
-  }
-})
-
-// Clear and require inbox page module
-clearModule(path.join(ROOT, 'pages/inbox/inbox.js'))
-
-// We need to intercept the Page() call to capture the page config
 var capturedPageConfig = null
-global.Page = function (config) {
-  capturedPageConfig = config
-}
 
-require(path.join(ROOT, 'pages/inbox/inbox.js'))
+function installInboxTestStubs() {
+  global.wx = {
+    getStorageSync: function () {
+      return ''
+    },
+    setStorageSync: function () {},
+    removeStorageSync: function () {},
+    navigateTo: function () {},
+    setNavigationBarTitle: function () {},
+    stopPullDownRefresh: function () {},
+    showModal: function () {},
+    showToast: function () {}
+  }
+
+  stubModule(path.join(ROOT, 'utils/i18n.js'), {
+    t: function (key) {
+      return key
+    },
+    tReplace: function (key) {
+      return key
+    }
+  })
+
+  stubModule(path.join(ROOT, 'utils/theme.js'), {
+    applyTheme: function () {}
+  })
+
+  stubModule(path.join(ROOT, 'utils/page.js'), {
+    runWithNavigationLoading: function (ctx, fn, opts) {
+      if (opts && opts.loadingKey) {
+        ctx.data[opts.loadingKey] = true
+      }
+      return fn().then(function (result) {
+        if (opts && opts.loadingKey) {
+          ctx.data[opts.loadingKey] = false
+        }
+        return result
+      })
+    },
+    showTopTips: function () {}
+  })
+
+  stubModule(path.join(ROOT, 'constants/storage.js'), {})
+
+  stubModule(path.join(ROOT, 'services/apis/messages.js'), {
+    getAnnouncementList: function (start, size) {
+      apiCallLog.push({ method: 'getAnnouncementList', args: [start, size] })
+      return Promise.resolve({ success: true, data: [] })
+    },
+    getInteractionList: function (start, size) {
+      apiCallLog.push({ method: 'getInteractionList', args: [start, size] })
+      return Promise.resolve({ success: true, data: [] })
+    },
+    getUnreadCount: function () {
+      apiCallLog.push({ method: 'getUnreadCount' })
+      return Promise.resolve({ success: true, data: 3 })
+    },
+    markMessageRead: function () {
+      return Promise.resolve({ success: true })
+    },
+    markAllMessagesRead: function () {
+      return Promise.resolve({ success: true })
+    }
+  })
+
+  stubModule(path.join(ROOT, 'services/apis/social.js'), {
+    getUnread: function () {
+      apiCallLog.push({ method: 'getUnread' })
+      return Promise.resolve({ success: true, data: { total: 0 } })
+    },
+    getConversations: function () {
+      apiCallLog.push({ method: 'getConversations' })
+      return Promise.resolve({
+        success: true,
+        data: { items: [], nextCursor: null, hasMore: false }
+      })
+    }
+  })
+
+  stubModule(path.join(ROOT, 'services/social-realtime.js'), {
+    ensureConnected: function () {},
+    on: function () {
+      return function () {}
+    },
+    off: function () {},
+    disconnect: function () {}
+  })
+
+  stubModule(path.join(ROOT, 'utils/social.js'), {
+    normalizePage: function (payload) {
+      const data = payload || {}
+      return {
+        items: Array.isArray(data.items) ? data.items : [],
+        nextCursor: data.nextCursor || null,
+        hasMore: !!data.hasMore
+      }
+    },
+    openChat: function () {}
+  })
+
+  stubModule(path.join(ROOT, 'services/auth.js'), {
+    getSessionToken: function () {
+      return 'test-token'
+    },
+    ensureSessionToken: function () {
+      return Promise.resolve('test-token')
+    },
+    clearSession: function () {},
+    reLaunchToLogin: function () {}
+  })
+
+  clearModule(INBOX_MODULE)
+  capturedPageConfig = null
+  global.Page = function (config) {
+    capturedPageConfig = config
+  }
+  require(INBOX_MODULE)
+}
 
 function createPageInstance() {
-  // Create a fresh page-like object with data copy and setData
+  installInboxTestStubs()
   var instance = Object.create(capturedPageConfig)
   instance.data = JSON.parse(JSON.stringify(capturedPageConfig.data))
   instance.setData = function (patch) {
@@ -103,7 +144,6 @@ test('initial load does NOT call interaction list — zero getInteractionList re
   var page = createPageInstance()
   page.onLoad()
 
-  // Let promises settle
   await new Promise(function (r) {
     setTimeout(r, 50)
   })
@@ -131,10 +171,8 @@ test('switching to interaction tab triggers list fetch on first activation', asy
     setTimeout(r, 50)
   })
 
-  // Clear log after initial load
   apiCallLog = []
 
-  // Simulate switching to interaction tab
   page.switchTab({ currentTarget: { dataset: { key: 'interaction' } } })
   await new Promise(function (r) {
     setTimeout(r, 50)
@@ -155,22 +193,18 @@ test('switching to interaction tab a second time does NOT re-fetch list', async 
     setTimeout(r, 50)
   })
 
-  // First switch to interaction
   page.switchTab({ currentTarget: { dataset: { key: 'interaction' } } })
   await new Promise(function (r) {
     setTimeout(r, 50)
   })
 
-  // Switch back to announcement
   page.switchTab({ currentTarget: { dataset: { key: 'announcement' } } })
   await new Promise(function (r) {
     setTimeout(r, 50)
   })
 
-  // Clear log
   apiCallLog = []
 
-  // Switch to interaction again
   page.switchTab({ currentTarget: { dataset: { key: 'interaction' } } })
   await new Promise(function (r) {
     setTimeout(r, 50)
@@ -194,7 +228,6 @@ test('pull-down refresh on interaction tab fetches list and sets interactionLoad
     setTimeout(r, 50)
   })
 
-  // Switch to interaction tab to set activeTab
   page.setData({ activeTab: 'interaction' })
 
   apiCallLog = []

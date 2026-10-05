@@ -234,6 +234,14 @@ Page({
     })
   },
 
+  openDmPrivacy: function() {
+    wx.navigateTo({ url: '/pages/dmPrivacy/dmPrivacy' })
+  },
+
+  openBlockList: function() {
+    wx.navigateTo({ url: '/pages/blockList/blockList' })
+  },
+
   handleQuickAuthSwitch: function(event) {
     if (!this.data.campusCredential.hasSession || this.data.campusCredentialActionLoading) {
       this.setData({
@@ -314,6 +322,9 @@ Page({
         campusCredentialEnableNeedCredential: i18n.t('settingsPage.campusCredentialEnableNeedCredential'),
         campusCredentialActionFailed: i18n.t('settingsPage.campusCredentialActionFailed'),
         featureDisplayTitle: i18n.t('settingsPage.featureDisplayTitle'),
+        privacySection: i18n.t('social.entry.privacy'),
+        dmPrivacy: i18n.t('social.privacy.navTitle'),
+        blockList: i18n.t('social.blocks.navTitle'),
         switchSuccess: i18n.t('settingsPage.switchSuccess'),
         switchSuccessContent: i18n.t('settingsPage.switchSuccessContent')
       }

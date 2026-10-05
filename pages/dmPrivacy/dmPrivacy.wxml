@@ -1,0 +1,19 @@
+<view class="page {{themeClass}}" style="{{fontStyle}}">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+  <view class="hint">{{t.hint}}</view>
+  <view class="weui-cells">
+    <view
+      class="weui-cell weui-cell_access"
+      wx:for="{{options}}"
+      wx:key="value"
+      data-value="{{item.value}}"
+      bindtap="selectPolicy"
+    >
+      <view class="weui-cell__bd option">
+        <view class="option_title">{{item.label}}</view>
+        <view class="option_desc">{{item.desc}}</view>
+      </view>
+      <view class="weui-cell__ft checked" wx:if="{{item.value === dmPolicy}}">{{t.selected}}</view>
+    </view>
+  </view>
+</view>

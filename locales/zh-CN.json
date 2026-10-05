@@ -287,6 +287,7 @@
   "inboxPage": {
     "navTitle": "收件箱",
     "tabAnnouncement": "系统公告",
+    "tabDirect": "私信",
     "tabInteraction": "互动消息",
     "loadingAnnouncement": "正在加载系统公告",
     "noMoreAnnouncement": "没有更多系统公告了",
@@ -296,6 +297,9 @@
     "loadingInteraction": "正在加载互动消息",
     "noMoreInteraction": "没有更多互动消息了",
     "noInteraction": "暂无互动消息",
+    "loadingDirect": "正在加载私信",
+    "noDirect": "暂无私信",
+    "openAllDirect": "全部私信",
     "navigationUnsupported": "该互动消息暂不支持跳转",
     "shareTitle": "收件通知",
     "read": "已读",
@@ -1009,6 +1013,101 @@
         "moduleNotSupported": "暂不支持当前模块",
         "editNotSupported": "当前模块暂不支持编辑"
       }
+    }
+  },
+  "social": {
+    "common": {
+      "noIntro": "暂无简介",
+      "emptyList": "暂无内容"
+    },
+    "search": {
+      "navTitle": "搜索用户",
+      "placeholder": "搜索昵称或公开 ID",
+      "empty": "没有找到用户"
+    },
+    "profile": {
+      "navTitle": "用户主页"
+    },
+    "stats": {
+      "following": "关注",
+      "followers": "粉丝",
+      "friends": "好友"
+    },
+    "relationship": {
+      "self": "我自己",
+      "none": "未关注",
+      "following": "已关注",
+      "followedBy": "对方关注了你",
+      "mutual": "互相关注"
+    },
+    "actions": {
+      "follow": "关注",
+      "unfollow": "取消关注",
+      "message": "私信",
+      "block": "拉黑",
+      "unblock": "解除拉黑",
+      "blockConfirm": "拉黑后双方将取消关注，且无法再互相关注或私信。",
+      "unblockConfirm": "解除拉黑后不会自动恢复之前的关注关系。"
+    },
+    "conversations": {
+      "navTitle": "私信",
+      "empty": "暂无私信会话",
+      "noMessage": "暂无消息",
+      "imageMessage": "[图片]"
+    },
+    "chat": {
+      "navTitle": "聊天",
+      "loadEarlier": "加载更早消息",
+      "inputPlaceholder": "输入文字消息",
+      "send": "发送",
+      "image": "图片",
+      "imageLoading": "图片加载中",
+      "imageTooLarge": "图片不能超过 5MB",
+      "imageTypeInvalid": "仅支持 JPEG/PNG 图片",
+      "imageDisabled": "图片私信暂未启用",
+      "pending": "发送中",
+      "sent": "已发送",
+      "failedRetry": "发送失败，点击重试"
+    },
+    "privacy": {
+      "navTitle": "谁可以私信我",
+      "hint": "每次发送都会按对方当前设置判断权限。",
+      "selected": "已选择",
+      "saved": "已保存",
+      "all": "所有人",
+      "following": "我关注的人",
+      "mutual": "互相关注的人",
+      "none": "不允许任何人",
+      "desc": {
+        "all": "所有已登录用户都可以给你发私信",
+        "following": "只有你关注的人可以给你发私信",
+        "mutual": "只有互相关注的人可以给你发私信",
+        "none": "不接收任何私信，你仍可主动发出"
+      }
+    },
+    "blocks": {
+      "navTitle": "黑名单",
+      "empty": "黑名单为空"
+    },
+    "entry": {
+      "searchUsers": "搜索用户",
+      "directMessages": "私信",
+      "following": "我的关注",
+      "followers": "我的粉丝",
+      "friends": "我的好友",
+      "privacy": "私信设置",
+      "blocks": "黑名单",
+      "authorProfile": "查看主页"
+    },
+    "errors": {
+      "userNotFound": "用户不存在",
+      "conversationNotFound": "会话不存在",
+      "contactUnavailable": "暂时无法联系该用户",
+      "privacyRestricted": "对方的私信设置不允许发送",
+      "invalidRequest": "请求无效",
+      "clientMessageConflict": "消息冲突，请重新编辑后再发送",
+      "invalidImage": "图片格式无效",
+      "imageMessagingDisabled": "图片私信暂未启用"
     }
   }
 }

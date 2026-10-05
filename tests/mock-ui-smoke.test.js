@@ -371,12 +371,29 @@ test('mock UI smoke covers index page profile, inbox badge and feature actions',
     },
     clearSession() {
       clearCalls += 1
+    },
+    getSessionToken() {
+      return 'mock-token'
     }
   })
 
   stubModule(path.join(ROOT, 'services/apis/messages.js'), {
     getUnreadCount() {
       return Promise.resolve({ success: true, data: 7 })
+    }
+  })
+
+  stubModule(path.join(ROOT, 'services/apis/social.js'), {
+    getUnread() {
+      return Promise.resolve({ success: true, data: { total: 0 } })
+    }
+  })
+
+  stubModule(path.join(ROOT, 'services/social-realtime.js'), {
+    ensureConnected() {},
+    disconnect() {},
+    on() {
+      return function () {}
     }
   })
 

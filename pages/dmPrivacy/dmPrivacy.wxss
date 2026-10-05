@@ -1,0 +1,33 @@
+@import "../../common/lib/weui.wxss";
+
+.page {
+  min-height: 100vh;
+  background: var(--color-bg-primary);
+}
+
+.hint {
+  margin: 24rpx;
+  color: var(--color-text-tertiary);
+  font-size: 24rpx;
+  line-height: 1.6;
+}
+
+.option {
+  padding: 8rpx 0;
+}
+
+.option_title {
+  color: var(--color-text-primary);
+  font-size: 30rpx;
+}
+
+.option_desc {
+  margin-top: 6rpx;
+  color: var(--color-text-tertiary);
+  font-size: 22rpx;
+}
+
+.checked {
+  color: #07c160;
+  font-size: 24rpx;
+}

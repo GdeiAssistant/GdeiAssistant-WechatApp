@@ -1,0 +1,40 @@
+<view class="page {{themeClass}}" style="{{fontStyle}}">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+  <view class="search_box">
+    <input
+      class="search_input"
+      value="{{query}}"
+      placeholder="{{t.searchPlaceholder}}"
+      confirm-type="search"
+      bindinput="onQueryInput"
+      bindconfirm="onSearch"
+    />
+  </view>
+
+  <view class="weui-cells" wx:if="{{users.length}}">
+    <view
+      class="weui-cell weui-cell_access"
+      wx:for="{{users}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="openProfile"
+    >
+      <view class="weui-cell__bd user_row">
+        <image class="avatar" src="{{item.displayAvatar || '/image/default.png'}}" mode="aspectFill"></image>
+        <view class="user_meta">
+          <view class="nickname">{{item.nickname}}</view>
+          <view class="intro">{{item.introduction || t.noIntro}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{!loading && searched && !users.length}}">{{t.empty}}</view>
+  <view class="weui-loadmore" wx:if="{{loading}}">
+    <i class="weui-loading"></i>
+    <view class="weui-loadmore__tips">{{t.loading}}</view>
+  </view>
+  <view class="weui-loadmore" wx:if="{{!loading && hasMore}}">
+    <view class="weui-loadmore__tips" bindtap="loadMore">{{t.loadMore}}</view>
+  </view>
+</view>

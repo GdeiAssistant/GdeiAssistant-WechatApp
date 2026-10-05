@@ -1,0 +1,15 @@
+<view class="page {{themeClass}}" style="{{fontStyle}}">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+  <view class="weui-cells" wx:if="{{users.length}}">
+    <view class="weui-cell" wx:for="{{users}}" wx:key="id">
+      <view class="weui-cell__bd user_row" data-id="{{item.id}}" bindtap="openProfile">
+        <image class="avatar" src="{{item.displayAvatar || '/image/default.png'}}" mode="aspectFill"></image>
+        <view>{{item.nickname}}</view>
+      </view>
+      <view class="weui-cell__ft">
+        <button size="mini" data-id="{{item.id}}" bindtap="unblock">{{t.unblock}}</button>
+      </view>
+    </view>
+  </view>
+  <view class="empty" wx:if="{{!loading && !users.length}}">{{t.empty}}</view>
+</view>

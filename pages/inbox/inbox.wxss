@@ -139,3 +139,8 @@
   color: var(--color-text-tertiary);
   font-size: 22rpx;
 }
+
+.direct_all {
+  padding: 16rpx 28rpx 24rpx;
+  text-align: right;
+}

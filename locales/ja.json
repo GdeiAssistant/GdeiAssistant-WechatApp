@@ -312,6 +312,7 @@
   "inboxPage": {
     "navTitle": "受信箱",
     "tabAnnouncement": "お知らせ",
+    "tabDirect": "DM",
     "tabInteraction": "メッセージ",
     "loadingAnnouncement": "お知らせを読み込み中",
     "noMoreAnnouncement": "これ以上お知らせはありません",
@@ -321,6 +322,9 @@
     "loadingInteraction": "メッセージを読み込み中",
     "noMoreInteraction": "これ以上メッセージはありません",
     "noInteraction": "メッセージはありません",
+    "loadingDirect": "DM を読み込み中",
+    "noDirect": "DM はありません",
+    "openAllDirect": "すべての DM",
     "navigationUnsupported": "このメッセージはジャンプに対応していません",
     "shareTitle": "受信通知",
     "read": "既読",
@@ -1140,6 +1144,101 @@
         "moduleNotSupported": "このモジュールは未対応です",
         "editNotSupported": "このモジュールは編集に未対応です"
       }
+    }
+  },
+  "social": {
+    "common": {
+      "noIntro": "紹介文なし",
+      "emptyList": "内容がありません"
+    },
+    "search": {
+      "navTitle": "ユーザー検索",
+      "placeholder": "ニックネームまたは公開 ID",
+      "empty": "ユーザーが見つかりません"
+    },
+    "profile": {
+      "navTitle": "プロフィール"
+    },
+    "stats": {
+      "following": "フォロー",
+      "followers": "フォロワー",
+      "friends": "相互"
+    },
+    "relationship": {
+      "self": "自分",
+      "none": "未フォロー",
+      "following": "フォロー中",
+      "followedBy": "相手がフォロー中",
+      "mutual": "相互フォロー"
+    },
+    "actions": {
+      "follow": "フォロー",
+      "unfollow": "フォロー解除",
+      "message": "メッセージ",
+      "block": "ブロック",
+      "unblock": "ブロック解除",
+      "blockConfirm": "ブロックすると双方のフォローが解除され、再フォローやメッセージができなくなります。",
+      "unblockConfirm": "ブロック解除しても以前のフォローは戻りません。"
+    },
+    "conversations": {
+      "navTitle": "メッセージ",
+      "empty": "会話はまだありません",
+      "noMessage": "メッセージなし",
+      "imageMessage": "[画像]"
+    },
+    "chat": {
+      "navTitle": "チャット",
+      "loadEarlier": "以前のメッセージを読み込む",
+      "inputPlaceholder": "メッセージを入力",
+      "send": "送信",
+      "image": "画像",
+      "imageLoading": "画像を読み込み中",
+      "imageTooLarge": "画像は 5MB 以下にしてください",
+      "imageTypeInvalid": "JPEG/PNG のみ対応しています",
+      "imageDisabled": "画像メッセージは未対応です",
+      "pending": "送信中",
+      "sent": "送信済み",
+      "failedRetry": "失敗。タップで再試行"
+    },
+    "privacy": {
+      "navTitle": "メッセージを受け取れる相手",
+      "hint": "送信のたびに相手の最新設定で判定します。",
+      "selected": "選択中",
+      "saved": "保存しました",
+      "all": "すべての人",
+      "following": "自分がフォローしている人",
+      "mutual": "相互フォロー",
+      "none": "誰も不可",
+      "desc": {
+        "all": "ログイン済みの全員がメッセージできます",
+        "following": "自分がフォローしている人のみ",
+        "mutual": "相互フォローのみ",
+        "none": "受信しませんが、自分からは送れます"
+      }
+    },
+    "blocks": {
+      "navTitle": "ブロックリスト",
+      "empty": "ブロック中のユーザーはいません"
+    },
+    "entry": {
+      "searchUsers": "ユーザー検索",
+      "directMessages": "メッセージ",
+      "following": "フォロー",
+      "followers": "フォロワー",
+      "friends": "相互",
+      "privacy": "メッセージ設定",
+      "blocks": "ブロック",
+      "authorProfile": "プロフィールを見る"
+    },
+    "errors": {
+      "userNotFound": "ユーザーが見つかりません",
+      "conversationNotFound": "会話が見つかりません",
+      "contactUnavailable": "このユーザーには連絡できません",
+      "privacyRestricted": "相手の設定により送信できません",
+      "invalidRequest": "無効なリクエストです",
+      "clientMessageConflict": "メッセージが衝突しました。編集して再送信してください",
+      "invalidImage": "画像形式が無効です",
+      "imageMessagingDisabled": "画像メッセージは未対応です"
     }
   }
 }

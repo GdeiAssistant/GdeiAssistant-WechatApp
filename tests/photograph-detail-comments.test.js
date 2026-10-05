@@ -40,6 +40,12 @@ stubModule(path.join(ROOT, 'utils/theme.js'), {
   applyTheme: function () {}
 })
 
+stubModule(path.join(ROOT, 'services/social-avatar.js'), {
+  resolve: function (url) {
+    return Promise.resolve(url)
+  }
+})
+
 stubModule(path.join(ROOT, 'utils/page.js'), {
   runWithNavigationLoading: function (ctx, fn) {
     return fn()

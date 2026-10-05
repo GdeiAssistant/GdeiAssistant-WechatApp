@@ -1,6 +1,8 @@
 const path = require('node:path')
 const test = require('node:test')
 const assert = require('node:assert/strict')
+const fs = require('node:fs')
+const crypto = require('node:crypto')
 
 const { clearModule, stubModule } = require('./helpers/module.js')
 const { encodeForm } = require('../utils/form.js')
@@ -63,6 +65,7 @@ function routeContract(label, method, routePath, options) {
 function buildRouteContracts(endpoints) {
   const form = encodeForm
   const mockConstants = require(MOCK_CONSTANTS_MODULE)
+  const demoPng = fs.readFileSync(path.join(ROOT, 'image/logo.png'))
 
   return [
     routeContract('auth.login', 'POST', endpoints.auth.login, {
@@ -184,6 +187,86 @@ function buildRouteContracts(endpoints) {
     routeContract('messages.unreadCount', 'GET', endpoints.messages.unreadCount),
     routeContract('messages.markRead', 'POST', endpoints.messages.markRead('interaction_1')),
     routeContract('messages.markAllRead', 'POST', endpoints.messages.markAllRead),
+
+    routeContract('social.me', 'GET', endpoints.social.me),
+    routeContract('social.users', 'GET', endpoints.social.users, {
+      data: { query: '阿晴', limit: 20 }
+    }),
+    routeContract(
+      'social.user',
+      'GET',
+      endpoints.social.user('22222222-2222-4222-8222-222222222222')
+    ),
+    routeContract(
+      'social.relationships',
+      'GET',
+      endpoints.social.relationships('11111111-1111-4111-8111-111111111111'),
+      { data: { kind: 'following', limit: 20 } }
+    ),
+    routeContract(
+      'social.follow',
+      'PUT',
+      endpoints.social.follow('33333333-3333-4333-8333-333333333333')
+    ),
+    routeContract(
+      'social.unfollow',
+      'DELETE',
+      endpoints.social.follow('33333333-3333-4333-8333-333333333333')
+    ),
+    routeContract(
+      'social.block',
+      'PUT',
+      endpoints.social.block('55555555-5555-4555-8555-555555555555')
+    ),
+    routeContract(
+      'social.unblock',
+      'DELETE',
+      endpoints.social.block('55555555-5555-4555-8555-555555555555')
+    ),
+    routeContract('social.blocks', 'GET', endpoints.social.blocks, { data: { limit: 20 } }),
+    routeContract('social.privacy.get', 'GET', endpoints.social.privacy),
+    routeContract('social.privacy.put', 'PUT', endpoints.social.privacy, {
+      data: { dmPolicy: 'MUTUAL' }
+    }),
+    routeContract('social.unread', 'GET', endpoints.social.unread),
+    routeContract('social.conversations.create', 'POST', endpoints.social.conversations, {
+      data: { peerId: '22222222-2222-4222-8222-222222222222' }
+    }),
+    routeContract('social.conversations.list', 'GET', endpoints.social.conversations, {
+      data: { limit: 20 }
+    }),
+    routeContract('social.conversation', 'GET', endpoints.social.conversation('9001')),
+    routeContract('social.messages.list', 'GET', endpoints.social.messages('9001'), {
+      data: { limit: 20 }
+    }),
+    routeContract('social.messages.send', 'POST', endpoints.social.messages('9001'), {
+      data: {
+        clientMessageId: 'dddddddd-dddd-4ddd-8ddd-dddddddddddd',
+        content: 'route contract message'
+      }
+    }),
+    routeContract('social.messages.image', 'POST', endpoints.social.messageImage('9001'), {
+      data: {
+        clientMessageId: 'eeeeeeee-img0-4eee-8eee-eeeeeeeeeeee',
+        image: {
+          path: '/image/logo.png',
+          fingerprint: 'sha1:' + crypto.createHash('sha1').update(demoPng).digest('hex'),
+          size: demoPng.length,
+          width: demoPng.readUInt32BE(16),
+          height: demoPng.readUInt32BE(20),
+          contentType: 'image/png'
+        }
+      }
+    }),
+    // Seed nextMessageId=10003; prior social.messages.send consumes 10003, image upload is 10004.
+    routeContract(
+      'social.messages.imageContent',
+      'GET',
+      endpoints.social.messageImageContent('9001', '10004')
+    ),
+    routeContract('social.read', 'PUT', endpoints.social.read('9001'), {
+      data: { lastReadSeq: '2' }
+    }),
 
     routeContract('secondhand.list', 'GET', endpoints.community.secondhand.list(0)),
     routeContract(

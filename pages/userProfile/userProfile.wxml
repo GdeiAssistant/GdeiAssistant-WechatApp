@@ -1,0 +1,53 @@
+<view class="page {{themeClass}}" style="{{fontStyle}}">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <view class="loading_box" wx:if="{{loading}}">
+    <i class="weui-loading"></i>
+    <text>{{t.loading}}</text>
+  </view>
+
+  <block wx:if="{{!loading && user}}">
+    <view class="card">
+      <view class="header">
+        <image class="avatar" src="{{user.displayAvatar || '/image/default.png'}}" mode="aspectFill"></image>
+        <view>
+          <view class="name">{{user.nickname}}</view>
+          <view class="intro">{{user.introduction || t.noIntro}}</view>
+          <view class="relation">{{relationshipText}}</view>
+        </view>
+      </view>
+
+      <view class="stats">
+        <view class="stat" data-kind="following" bindtap="openRelationships">
+          <view class="stat_value">{{user.followingCount}}</view>
+          <view class="stat_label">{{t.following}}</view>
+        </view>
+        <view class="stat" data-kind="followers" bindtap="openRelationships">
+          <view class="stat_value">{{user.followerCount}}</view>
+          <view class="stat_label">{{t.followers}}</view>
+        </view>
+        <view class="stat" data-kind="friends" bindtap="openRelationships">
+          <view class="stat_value">{{user.friendCount}}</view>
+          <view class="stat_label">{{t.friends}}</view>
+        </view>
+      </view>
+
+      <view class="actions" wx:if="{{user.relationship !== 'SELF'}}">
+        <button size="mini" type="primary" bindtap="toggleFollow" disabled="{{acting}}">
+          {{isFollowing ? t.unfollow : t.follow}}
+        </button>
+        <button size="mini" bindtap="openMessage" disabled="{{acting || !user.canMessage}}">
+          {{t.message}}
+        </button>
+        <button size="mini" type="warn" bindtap="toggleBlock" disabled="{{acting}}">
+          {{user.blockedByMe ? t.unblock : t.block}}
+        </button>
+      </view>
+      <view class="relation" wx:if="{{!user.canMessage && user.relationship !== 'SELF'}}">
+        {{permissionHint}}
+      </view>
+    </view>
+  </block>
+
+  <view class="empty" wx:if="{{!loading && !user}}">{{t.notFound}}</view>
+</view>

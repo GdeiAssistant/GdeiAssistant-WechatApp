@@ -42,9 +42,16 @@
         <text>{{t.contactPhone}}{{detail.phoneText}}</text>
         <button size="mini" type="primary" bindtap="callPhone">{{t.call}}</button>
       </view>
-      <view class="seller_box">
+      <view class="seller_box" bindtap="openAuthorProfile" data-author-id="{{detail.authorId}}">
         <image class="seller_avatar" src="{{detail.sellerAvatar}}" mode="aspectFill"></image>
         <view class="seller_text">{{t.publisher}}{{detail.sellerName}}</view>
+        <view class="seller_link" wx:if="{{detail.authorId}}">{{t.authorProfile}}</view>
+      </view>
+    </view>
+
+    <view class="detail_card" wx:if="{{(moduleId === 'topic' || moduleId === 'photograph') && detail.authorId}}">
+      <view class="seller_box" bindtap="openAuthorProfile" data-author-id="{{detail.authorId}}">
+        <view class="seller_text">{{t.authorProfile}}</view>
       </view>
     </view>
 

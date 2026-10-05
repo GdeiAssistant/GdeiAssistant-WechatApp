@@ -287,7 +287,8 @@
   "inboxPage": {
     "navTitle": "Inbox",
     "tabAnnouncement": "Announcements",
-    "tabInteraction": "Messages",
+    "tabDirect": "DMs",
+    "tabInteraction": "Activity",
     "loadingAnnouncement": "Loading announcements",
     "noMoreAnnouncement": "No more announcements",
     "noAnnouncement": "No announcements",
@@ -296,6 +297,9 @@
     "loadingInteraction": "Loading messages",
     "noMoreInteraction": "No more messages",
     "noInteraction": "No messages",
+    "loadingDirect": "Loading direct messages",
+    "noDirect": "No direct messages",
+    "openAllDirect": "All DMs",
     "navigationUnsupported": "This message does not support navigation",
     "shareTitle": "Inbox",
     "read": "Read",
@@ -1009,6 +1013,101 @@
         "moduleNotSupported": "This module is not supported",
         "editNotSupported": "This module does not support editing"
       }
+    }
+  },
+  "social": {
+    "common": {
+      "noIntro": "No introduction",
+      "emptyList": "Nothing here yet"
+    },
+    "search": {
+      "navTitle": "Search users",
+      "placeholder": "Search nickname or public ID",
+      "empty": "No users found"
+    },
+    "profile": {
+      "navTitle": "Profile"
+    },
+    "stats": {
+      "following": "Following",
+      "followers": "Followers",
+      "friends": "Friends"
+    },
+    "relationship": {
+      "self": "You",
+      "none": "Not following",
+      "following": "Following",
+      "followedBy": "Follows you",
+      "mutual": "Friends"
+    },
+    "actions": {
+      "follow": "Follow",
+      "unfollow": "Unfollow",
+      "message": "Message",
+      "block": "Block",
+      "unblock": "Unblock",
+      "blockConfirm": "Blocking removes follows both ways and prevents new follows or messages.",
+      "unblockConfirm": "Unblocking does not restore previous follows."
+    },
+    "conversations": {
+      "navTitle": "Messages",
+      "empty": "No conversations yet",
+      "noMessage": "No messages",
+      "imageMessage": "[Image]"
+    },
+    "chat": {
+      "navTitle": "Chat",
+      "loadEarlier": "Load earlier messages",
+      "inputPlaceholder": "Type a message",
+      "send": "Send",
+      "image": "Image",
+      "imageLoading": "Loading image",
+      "imageTooLarge": "Images must be 5MB or smaller",
+      "imageTypeInvalid": "Only JPEG/PNG images are supported",
+      "imageDisabled": "Image messaging is not enabled",
+      "pending": "Sending",
+      "sent": "Sent",
+      "failedRetry": "Failed. Tap to retry"
+    },
+    "privacy": {
+      "navTitle": "Who can message me",
+      "hint": "Permission is checked against the recipient's current setting every time.",
+      "selected": "Selected",
+      "saved": "Saved",
+      "all": "Everyone",
+      "following": "People I follow",
+      "mutual": "Mutual follows",
+      "none": "No one",
+      "desc": {
+        "all": "Any signed-in user can message you",
+        "following": "Only people you follow can message you",
+        "mutual": "Only mutual follows can message you",
+        "none": "You receive no messages, but can still send"
+      }
+    },
+    "blocks": {
+      "navTitle": "Blocked",
+      "empty": "Block list is empty"
+    },
+    "entry": {
+      "searchUsers": "Search users",
+      "directMessages": "Direct messages",
+      "following": "Following",
+      "followers": "Followers",
+      "friends": "Friends",
+      "privacy": "Message settings",
+      "blocks": "Blocked",
+      "authorProfile": "View profile"
+    },
+    "errors": {
+      "userNotFound": "User not found",
+      "conversationNotFound": "Conversation not found",
+      "contactUnavailable": "This user is unavailable",
+      "privacyRestricted": "Their message settings do not allow this",
+      "invalidRequest": "Invalid request",
+      "clientMessageConflict": "Message conflict. Edit and send again",
+      "invalidImage": "Invalid image format",
+      "imageMessagingDisabled": "Image messaging is not enabled"
     }
   }
 }

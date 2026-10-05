@@ -4,6 +4,7 @@ const {
 } = require('../../constants/community.js')
 const { fetchProfileOptions } = require('../../constants/profile.js')
 const communityApi = require('../../services/apis/community.js')
+const socialAvatar = require('../../services/social-avatar.js')
 const { getModuleHandler } = require('../../services/community/registry.js')
 const pageUtils = require('../../utils/page.js')
 const { createSubmitGuard } = require('../../utils/debounce.js')
@@ -91,7 +92,8 @@ Page({
       commentPlaceholder: i18n.t('community.detail.commentPlaceholder'),
       submitComment: i18n.t('community.detail.submitComment'),
       contactQQ: i18n.t('community.center.contactQQ'),
-      contactWechat: i18n.t('community.center.contactWechat')
+      contactWechat: i18n.t('community.center.contactWechat'),
+      authorProfile: i18n.t('social.entry.authorProfile')
     }
 
     this.setData({
@@ -131,15 +133,19 @@ Page({
   loadDetail: function() {
     return pageUtils.runWithNavigationLoading(this, () => {
       return communityApi.getDetail(this.data.moduleId, this.data.detailId)
-    }).then((result) => {
+    }).then(async (result) => {
       if (!result.success) {
         pageUtils.showTopTips(this, result.message || i18n.t('common.loadFailed'))
         return
       }
 
       var payload = result.data || {}
+      var detail = buildDetail(this.data.moduleId, payload)
+      if (detail.authorId && detail.sellerAvatar) {
+        detail.sellerAvatar = await socialAvatar.resolve(detail.sellerAvatar)
+      }
       this.setData({
-        detail: buildDetail(this.data.moduleId, payload),
+        detail: detail,
         loading: false,
         errorMessage: null
       })
@@ -196,6 +202,20 @@ Page({
     wx.previewImage({
       current: images[index] || images[0],
       urls: images
+    })
+  },
+
+  openAuthorProfile: function(event) {
+    // Anonymous treehole/express must not expose identity entry points.
+    if (this.data.moduleId === 'secret' || this.data.moduleId === 'express') {
+      return
+    }
+    const authorId = event.currentTarget.dataset.authorId
+    if (!authorId) {
+      return
+    }
+    wx.navigateTo({
+      url: '/pages/userProfile/userProfile?id=' + encodeURIComponent(authorId)
     })
   },
 

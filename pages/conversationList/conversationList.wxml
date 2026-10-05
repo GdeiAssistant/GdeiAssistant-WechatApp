@@ -1,0 +1,32 @@
+<view class="page {{themeClass}}" style="{{fontStyle}}">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+  <view class="weui-cells" wx:if="{{conversations.length}}">
+    <view
+      class="weui-cell weui-cell_access"
+      wx:for="{{conversations}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      data-peer="{{item.peer.id}}"
+      bindtap="openChat"
+    >
+      <view class="weui-cell__bd item">
+        <image class="avatar" src="{{item.peer.displayAvatar || '/image/default.png'}}" mode="aspectFill"></image>
+        <view class="body">
+          <view class="name_row">
+            <view class="name">{{item.peer.nickname}}</view>
+            <view class="time">{{item.updatedAtText}}</view>
+          </view>
+          <view class="name_row">
+            <view class="preview">{{item.previewText}}</view>
+            <view class="badge" wx:if="{{item.unreadCount}}">{{item.unreadCount}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="empty" wx:if="{{!loading && !conversations.length}}">{{t.empty}}</view>
+  <view class="weui-loadmore" wx:if="{{loading}}">
+    <i class="weui-loading"></i>
+    <view class="weui-loadmore__tips">{{t.loading}}</view>
+  </view>
+</view>

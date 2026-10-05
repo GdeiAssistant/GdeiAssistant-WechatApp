@@ -30,6 +30,24 @@ function clearSession() {
       // Ignore storage cleanup failures.
     }
   })
+  try {
+    const socialRealtime = require('./social-realtime.js')
+    socialRealtime.disconnect()
+  } catch (error) {
+    // Ignore realtime cleanup failures.
+  }
+  try {
+    const socialAvatar = require('./social-avatar.js')
+    socialAvatar.clearCache()
+  } catch (error) {
+    // Ignore avatar cache cleanup failures.
+  }
+  try {
+    const socialChatImage = require('./social-chat-image.js')
+    socialChatImage.clearCache()
+  } catch (error) {
+    // Ignore chat image cache cleanup failures.
+  }
 }
 
 function reLaunchToLogin(title, content) {
@@ -72,6 +90,13 @@ function ensureSessionToken(options) {
 
 function logout() {
   const token = getSessionToken()
+  try {
+    const socialRealtime = require('./social-realtime.js')
+    socialRealtime.disconnect()
+  } catch (error) {
+    // Ignore realtime cleanup failures.
+  }
+
   if (!token) {
     return Promise.resolve()
   }
