@@ -2,6 +2,8 @@
 module.exports = {
   "zh-CN": {
     "common": {
+      "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
+      "rightsReserved": "版权所有",
       "loading": "加载中...",
       "retry": "重试",
       "confirm": "确认",
@@ -177,6 +179,7 @@ module.exports = {
       "nicknameEmpty": "昵称不能为空",
       "nicknameTooLong": "昵称长度不能超过{{max}}个字符",
       "introTooLong": "个人简介长度不能超过{{max}}个字符",
+      "saveIntroduction": "保存简介",
       "saved": "已保存",
       "loadProfileFailed": "加载个人资料失败",
       "optionsFallback": "资料字典加载失败，已使用本地兜底选项",
@@ -1153,6 +1156,7 @@ module.exports = {
         "emptyList": "暂无内容"
       },
       "search": {
+        "hint": "输入昵称或公开 ID 找人",
         "navTitle": "搜索用户",
         "placeholder": "搜索昵称或公开 ID",
         "empty": "没有找到用户"
@@ -1182,6 +1186,7 @@ module.exports = {
         "unblockConfirm": "解除拉黑后不会自动恢复之前的关注关系。"
       },
       "conversations": {
+        "searchUsers": "搜索用户",
         "navTitle": "私信",
         "empty": "暂无私信会话",
         "noMessage": "暂无消息",
@@ -1224,9 +1229,6 @@ module.exports = {
       "entry": {
         "searchUsers": "搜索用户",
         "directMessages": "私信",
-        "following": "我的关注",
-        "followers": "我的粉丝",
-        "friends": "我的好友",
         "privacy": "私信设置",
         "blocks": "黑名单",
         "authorProfile": "查看主页"
@@ -1245,6 +1247,8 @@ module.exports = {
   },
   "zh-HK": {
     "common": {
+      "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
+      "rightsReserved": "版權所有",
       "loading": "載入中...",
       "retry": "重試",
       "confirm": "確認",
@@ -1420,6 +1424,7 @@ module.exports = {
       "nicknameEmpty": "暱稱不能為空",
       "nicknameTooLong": "暱稱長度不能超過{{max}}個字元",
       "introTooLong": "個人簡介長度不能超過{{max}}個字元",
+      "saveIntroduction": "儲存簡介",
       "saved": "已儲存",
       "loadProfileFailed": "載入個人資料失敗",
       "optionsFallback": "資料字典載入失敗，已使用本地預設選項",
@@ -2396,6 +2401,7 @@ module.exports = {
         "emptyList": "暫無內容"
       },
       "search": {
+        "hint": "輸入暱稱或公開 ID 搵人",
         "navTitle": "搜索用戶",
         "placeholder": "搜索暱稱或公開 ID",
         "empty": "沒有找到用戶"
@@ -2425,6 +2431,7 @@ module.exports = {
         "unblockConfirm": "解除拉黑後不會自動恢復之前的關注關係。"
       },
       "conversations": {
+        "searchUsers": "搜尋用戶",
         "navTitle": "私信",
         "empty": "暫無私信會話",
         "noMessage": "暫無消息",
@@ -2467,9 +2474,6 @@ module.exports = {
       "entry": {
         "searchUsers": "搜索用戶",
         "directMessages": "私訊",
-        "following": "我的關注",
-        "followers": "我的粉絲",
-        "friends": "我的好友",
         "privacy": "私訊設定",
         "blocks": "黑名單",
         "authorProfile": "查看主頁"
@@ -2488,6 +2492,8 @@ module.exports = {
   },
   "zh-TW": {
     "common": {
+      "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
+      "rightsReserved": "版權所有",
       "loading": "載入中...",
       "retry": "重試",
       "confirm": "確認",
@@ -2663,6 +2669,7 @@ module.exports = {
       "nicknameEmpty": "暱稱不能為空",
       "nicknameTooLong": "暱稱長度不能超過{{max}}個字元",
       "introTooLong": "個人簡介長度不能超過{{max}}個字元",
+      "saveIntroduction": "儲存簡介",
       "saved": "已儲存",
       "loadProfileFailed": "載入個人資料失敗",
       "optionsFallback": "資料字典載入失敗，已使用本機預設選項",
@@ -3639,6 +3646,7 @@ module.exports = {
         "emptyList": "暫無內容"
       },
       "search": {
+        "hint": "輸入暱稱或公開 ID 找人",
         "navTitle": "搜尋用戶",
         "placeholder": "搜尋暱稱或公開 ID",
         "empty": "沒有找到用戶"
@@ -3668,6 +3676,7 @@ module.exports = {
         "unblockConfirm": "解除封鎖後不會自動恢復之前的追蹤關係。"
       },
       "conversations": {
+        "searchUsers": "搜尋使用者",
         "navTitle": "私訊",
         "empty": "暫無私訊會話",
         "noMessage": "暫無訊息",
@@ -3710,9 +3719,6 @@ module.exports = {
       "entry": {
         "searchUsers": "搜尋用戶",
         "directMessages": "私訊",
-        "following": "我的追蹤",
-        "followers": "我的粉絲",
-        "friends": "我的好友",
         "privacy": "私訊設定",
         "blocks": "黑名單",
         "authorProfile": "查看主頁"
@@ -3731,6 +3737,8 @@ module.exports = {
   },
   "en": {
     "common": {
+      "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
+      "rightsReserved": "All rights reserved",
       "loading": "Loading...",
       "retry": "Retry",
       "confirm": "Confirm",
@@ -3906,6 +3914,7 @@ module.exports = {
       "nicknameEmpty": "Nickname cannot be empty",
       "nicknameTooLong": "Nickname cannot exceed {{max}} characters",
       "introTooLong": "Bio cannot exceed {{max}} characters",
+      "saveIntroduction": "Save intro",
       "saved": "Saved",
       "loadProfileFailed": "Failed to load profile",
       "optionsFallback": "Failed to load options, using local defaults",
@@ -4882,6 +4891,7 @@ module.exports = {
         "emptyList": "Nothing here yet"
       },
       "search": {
+        "hint": "Search people by nickname or public ID",
         "navTitle": "Search users",
         "placeholder": "Search nickname or public ID",
         "empty": "No users found"
@@ -4911,6 +4921,7 @@ module.exports = {
         "unblockConfirm": "Unblocking does not restore previous follows."
       },
       "conversations": {
+        "searchUsers": "Search users",
         "navTitle": "Messages",
         "empty": "No conversations yet",
         "noMessage": "No messages",
@@ -4953,9 +4964,6 @@ module.exports = {
       "entry": {
         "searchUsers": "Search users",
         "directMessages": "Direct messages",
-        "following": "Following",
-        "followers": "Followers",
-        "friends": "Friends",
         "privacy": "Message settings",
         "blocks": "Blocked",
         "authorProfile": "View profile"
@@ -4974,6 +4982,8 @@ module.exports = {
   },
   "ja": {
     "common": {
+      "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
+      "rightsReserved": "All rights reserved",
       "loading": "読み込み中...",
       "retry": "再試行",
       "confirm": "確認",
@@ -5149,6 +5159,7 @@ module.exports = {
       "nicknameEmpty": "ニックネームを入力してください",
       "nicknameTooLong": "ニックネームは{{max}}文字以内で入力してください",
       "introTooLong": "自己紹介は{{max}}文字以内で入力してください",
+      "saveIntroduction": "紹介を保存",
       "saved": "保存しました",
       "loadProfileFailed": "プロフィールの読み込みに失敗しました",
       "optionsFallback": "オプションの読み込みに失敗しました。ローカルデフォルトを使用します",
@@ -6125,6 +6136,7 @@ module.exports = {
         "emptyList": "内容がありません"
       },
       "search": {
+        "hint": "ニックネームまたは公開IDでユーザーを検索",
         "navTitle": "ユーザー検索",
         "placeholder": "ニックネームまたは公開 ID",
         "empty": "ユーザーが見つかりません"
@@ -6154,6 +6166,7 @@ module.exports = {
         "unblockConfirm": "ブロック解除しても以前のフォローは戻りません。"
       },
       "conversations": {
+        "searchUsers": "ユーザーを検索",
         "navTitle": "メッセージ",
         "empty": "会話はまだありません",
         "noMessage": "メッセージなし",
@@ -6196,9 +6209,6 @@ module.exports = {
       "entry": {
         "searchUsers": "ユーザー検索",
         "directMessages": "メッセージ",
-        "following": "フォロー",
-        "followers": "フォロワー",
-        "friends": "相互",
         "privacy": "メッセージ設定",
         "blocks": "ブロック",
         "authorProfile": "プロフィールを見る"
@@ -6217,6 +6227,8 @@ module.exports = {
   },
   "ko": {
     "common": {
+      "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
+      "rightsReserved": "All rights reserved",
       "loading": "로딩 중...",
       "retry": "재시도",
       "confirm": "확인",
@@ -6392,6 +6404,7 @@ module.exports = {
       "nicknameEmpty": "닉네임을 입력하세요",
       "nicknameTooLong": "닉네임은 {{max}}자 이내로 입력하세요",
       "introTooLong": "자기소개는 {{max}}자 이내로 입력하세요",
+      "saveIntroduction": "소개 저장",
       "saved": "저장됨",
       "loadProfileFailed": "프로필 로딩 실패",
       "optionsFallback": "옵션 로딩 실패, 로컬 기본값을 사용합니다",
@@ -7368,6 +7381,7 @@ module.exports = {
         "emptyList": "내용이 없습니다"
       },
       "search": {
+        "hint": "닉네임 또는 공개 ID로 사용자 검색",
         "navTitle": "사용자 검색",
         "placeholder": "닉네임 또는 공개 ID",
         "empty": "사용자를 찾을 수 없습니다"
@@ -7397,6 +7411,7 @@ module.exports = {
         "unblockConfirm": "차단을 해제해도 이전 팔로우가 복구되지 않습니다."
       },
       "conversations": {
+        "searchUsers": "사용자 검색",
         "navTitle": "쪽지",
         "empty": "쪽지 대화가 없습니다",
         "noMessage": "메시지 없음",
@@ -7439,9 +7454,6 @@ module.exports = {
       "entry": {
         "searchUsers": "사용자 검색",
         "directMessages": "쪽지",
-        "following": "내 팔로잉",
-        "followers": "내 팔로워",
-        "friends": "내 친구",
         "privacy": "쪽지 설정",
         "blocks": "차단 목록",
         "authorProfile": "프로필 보기"
