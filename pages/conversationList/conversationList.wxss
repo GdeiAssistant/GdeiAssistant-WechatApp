@@ -2,21 +2,28 @@
 
 .page {
   min-height: 100vh;
+  padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
   background: var(--color-bg-primary);
+}
+
+.page > .weui-cells {
+  margin-top: 24rpx;
 }
 
 .item {
   display: flex;
   align-items: center;
-  padding: 8rpx 0;
+  min-width: 0;
 }
 
 .avatar {
-  width: 84rpx;
-  height: 84rpx;
+  width: 88rpx;
+  height: 88rpx;
+  margin-right: 24rpx;
   border-radius: 50%;
-  margin-right: 20rpx;
-  background: var(--color-bg-secondary);
+  background: var(--color-surface-sunken);
+  flex-shrink: 0;
 }
 
 .body {
@@ -31,37 +38,55 @@
 }
 
 .name {
+  min-width: 0;
   color: var(--color-text-primary);
-  font-size: 30rpx;
+  font-size: var(--font-body);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .time {
+  flex-shrink: 0;
+  margin-left: 16rpx;
   color: var(--color-text-tertiary);
-  font-size: 22rpx;
+  font-size: var(--font-caption);
+  font-variant-numeric: tabular-nums;
 }
 
 .preview {
-  margin-top: 8rpx;
+  flex: 1;
+  min-width: 0;
+  margin-top: 6rpx;
   color: var(--color-text-secondary);
-  font-size: 24rpx;
+  font-size: var(--font-meta);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .badge {
+  flex-shrink: 0;
   margin-left: 12rpx;
   min-width: 36rpx;
   padding: 2rpx 10rpx;
+  box-sizing: border-box;
   border-radius: var(--radius-full);
   background: var(--color-danger);
-  color: #FFFFFF;
-  font-size: 20rpx;
+  color: #ffffff;
+  font-size: var(--font-caption);
+  font-weight: 700;
   text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
 .empty {
-  padding: 80rpx 24rpx;
-  text-align: center;
-  color: var(--color-text-tertiary);
+  margin: 32rpx var(--gutter) 0;
+  padding: 40rpx 32rpx;
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: var(--font-meta);
+  line-height: 1.6;
 }

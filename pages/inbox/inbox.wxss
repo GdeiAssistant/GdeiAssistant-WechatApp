@@ -1,7 +1,7 @@
 @import "../../common/lib/weui.wxss";
 
 .inbox_page {
-  padding-bottom: 28rpx;
+  min-height: 100vh;
   background: var(--color-bg-primary);
 }
 
@@ -9,66 +9,72 @@
   position: sticky;
   top: 0;
   z-index: 20;
-  background-color: var(--color-surface);
-  border-bottom: 1rpx solid var(--color-border);
 }
 
+/* Each tab is one column: an optional meta row on the canvas, then one grouped surface. */
 .section_card {
-  margin: 24rpx 24rpx 0;
-  background: var(--color-surface);
-  border-radius: var(--radius-card);
-  overflow: hidden;
-  border: 1rpx solid var(--color-border);
-  box-shadow: var(--shadow-card);
+  margin: 24rpx var(--gutter) 0;
+}
+
+.section_card .weui-cells {
+  margin: 0;
 }
 
 .item_title {
-  padding-right: 20rpx;
+  padding-right: 16rpx;
   color: var(--color-text-primary);
+  font-weight: 600;
+  line-height: 1.45;
   word-break: break-word;
 }
 
 .item_summary {
   margin-top: 8rpx;
-  color: var(--color-text-tertiary);
-  font-size: 24rpx;
+  padding-right: 16rpx;
+  color: var(--color-text-secondary);
+  font-size: var(--font-meta);
   line-height: 1.6;
 }
 
 .item_date {
-  font-size: 24rpx;
+  flex-shrink: 0;
+  align-self: flex-start;
+  font-size: var(--font-caption);
+  font-variant-numeric: tabular-nums;
 }
 
 .interaction_meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20rpx 28rpx 4rpx;
+  padding: 0 8rpx 16rpx;
 }
 
 .meta_badge {
   color: var(--color-text-secondary);
-  font-size: 24rpx;
+  font-size: var(--font-meta);
+  font-weight: 600;
 }
 
 .meta_action {
-  color: var(--color-text-secondary);
-  font-size: 24rpx;
+  color: var(--color-primary-ink);
+  font-size: var(--font-meta);
+  font-weight: 600;
 }
 
 .interaction_list {
-  padding: 12rpx 24rpx 20rpx;
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  overflow: hidden;
 }
 
 .interaction_card {
-  margin-top: 16rpx;
-  padding: 24rpx;
-  border-radius: var(--radius-card);
-  background: var(--color-bg-primary);
+  padding: 28rpx 32rpx;
+  background: var(--color-surface);
 }
 
-.interaction_card:first-child {
-  margin-top: 0;
+.interaction_card + .interaction_card {
+  border-top: 1rpx solid var(--color-divider);
 }
 
 .interaction_card_active {
@@ -79,14 +85,14 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 16rpx;
 }
 
 .interaction_title {
   flex: 1;
   min-width: 0;
+  margin-right: 16rpx;
   color: var(--color-text-primary);
-  font-size: 30rpx;
+  font-size: var(--font-body);
   font-weight: 600;
   line-height: 1.45;
   word-break: break-word;
@@ -94,61 +100,64 @@
 
 .interaction_read {
   flex-shrink: 0;
-  padding: 4rpx 12rpx;
+  padding: 4rpx 14rpx;
   border-radius: var(--radius-full);
-  font-size: 22rpx;
+  font-size: var(--font-caption);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .interaction_read_done {
-  background: var(--color-divider);
+  background: var(--color-surface-sunken);
   color: var(--color-text-tertiary);
 }
 
 .interaction_read_pending {
-  background: var(--color-border);
-  color: var(--color-text-secondary);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-ink);
 }
 
 .interaction_tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 12rpx;
-  margin-top: 16rpx;
+  margin-top: 12rpx;
 }
 
 .interaction_tag {
-  padding: 4rpx 12rpx;
+  margin-right: 12rpx;
+  padding: 2rpx 14rpx;
   border-radius: var(--radius-full);
-  background: var(--color-bg-tertiary);
+  background: var(--color-surface-sunken);
   color: var(--color-text-secondary);
-  font-size: 22rpx;
+  font-size: var(--font-caption);
 }
 
 .interaction_tag_secondary {
-  background: var(--color-bg-secondary);
+  background: transparent;
+  box-shadow: inset 0 0 0 1rpx var(--color-border);
 }
 
 .interaction_content {
-  margin-top: 18rpx;
+  margin-top: 12rpx;
   color: var(--color-text-secondary);
-  font-size: 26rpx;
-  line-height: 1.7;
+  font-size: var(--font-meta);
+  line-height: 1.65;
+  word-break: break-word;
 }
 
 .interaction_time {
-  margin-top: 18rpx;
+  margin-top: 12rpx;
   color: var(--color-text-tertiary);
-  font-size: 22rpx;
+  font-size: var(--font-caption);
+  font-variant-numeric: tabular-nums;
 }
 
 .direct_all {
-  padding: 16rpx 28rpx 24rpx;
-  text-align: right;
+  padding: 24rpx 8rpx 0;
+  text-align: left;
 }
 
-.section_card .weui-cells {
-  margin: 0;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
+.section_card .weui-loadmore {
+  margin-left: 0;
+  margin-right: 0;
 }

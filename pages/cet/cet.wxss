@@ -1,15 +1,19 @@
 @import "../../common/lib/weui.wxss";
 
 .checkcode_image {
-  width: 160rpx;
-  height: 64rpx;
+  width: 176rpx;
+  height: 68rpx;
+  border-radius: 12rpx;
+  background-color: var(--color-surface-sunken);
 }
 
 .checkcode_mock {
   min-width: 160rpx;
-  padding: 10rpx 20rpx;
-  border-radius: 8rpx;
-  background-color: var(--color-bg-secondary);
+  padding: 12rpx 24rpx;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary-ink);
+  font-size: var(--font-meta);
+  font-weight: 600;
   text-align: center;
-  color: var(--color-link);
 }

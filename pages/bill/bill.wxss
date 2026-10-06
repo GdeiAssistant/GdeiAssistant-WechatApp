@@ -1,6 +1,12 @@
 @import "../../common/lib/weui.wxss";
 
 .weui-navbar {
-  position: static;
-  background-color: var(--color-surface);
+  position: relative;
+}
+
+/* Statement rows: merchant on the left, amount set in tabular figures on the right. */
+.weui-cell__ft {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }

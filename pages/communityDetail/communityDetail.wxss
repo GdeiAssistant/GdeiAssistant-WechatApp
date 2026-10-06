@@ -2,74 +2,79 @@
 
 .detail_page {
   min-height: 100vh;
+  padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
   background: var(--color-bg-primary);
-  padding-bottom: calc(40rpx + env(safe-area-inset-bottom));
 }
 
 .loading_box {
-  padding: 100rpx 0;
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
-  align-items: center;
+  align-items: flex-start;
+  margin: 48rpx var(--gutter) 0;
+  padding: 48rpx 32rpx;
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
   color: var(--color-text-secondary);
+  font-size: var(--font-meta);
+}
+
+.loading_box text {
+  margin-top: 16rpx;
 }
 
 .detail_swiper {
   height: 72vw;
   min-height: 360rpx;
   max-height: 640rpx;
-  background: var(--color-bg-secondary);
+  background: var(--color-surface-sunken);
 }
 
 .detail_swiper_image {
   width: 100%;
   height: 100%;
-  background: var(--color-bg-secondary);
+  background: var(--color-surface-sunken);
 }
 
+/* Supporting sections: flat grouped surfaces inside the gutter. */
 .detail_card {
-  margin: 20rpx 24rpx 0;
-  padding: 26rpx;
-  background: var(--color-surface);
+  margin: 24rpx var(--gutter) 0;
+  padding: 28rpx 32rpx;
   border-radius: var(--radius-card);
-  border: 1rpx solid var(--color-border);
-  box-shadow: var(--shadow-card);
+  background: var(--color-surface);
+}
+
+/* The post itself reads as an article on the canvas, not another card. */
+.detail_card_main {
+  margin: 0;
+  padding: 40rpx var(--gutter) 32rpx;
+  border-radius: 0;
+  background: transparent;
+  border-bottom: 1rpx solid var(--color-divider);
 }
 
 .detail_head_meta {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16rpx;
-  margin-bottom: 14rpx;
+  margin-bottom: 16rpx;
   min-width: 0;
 }
 
 .detail_module_tag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8rpx 18rpx;
+  padding: 6rpx 18rpx;
   border-radius: var(--radius-full);
-  background: var(--color-bg-secondary);
-  color: var(--color-text-secondary);
-  font-size: 22rpx;
-  line-height: 1.3;
-  text-align: center;
-  white-space: normal;
-}
-
-.detail_head_time {
-  color: var(--color-text-tertiary);
-  font-size: 22rpx;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-ink);
+  font-size: var(--font-caption);
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .detail_title {
-  font-size: 34rpx;
-  font-weight: 600;
   color: var(--color-text-primary);
-  line-height: 1.5;
+  font-size: var(--font-display);
+  font-weight: 700;
+  line-height: 1.3;
   word-break: break-word;
 }
 
@@ -81,105 +86,163 @@
 .detail_hint {
   margin-top: 12rpx;
   color: var(--color-text-tertiary);
-  font-size: 24rpx;
-  line-height: 1.7;
+  font-size: var(--font-meta);
+  line-height: 1.6;
 }
 
 .detail_price {
-  margin-top: 18rpx;
-  color: var(--color-danger);
-  font-size: 40rpx;
+  margin-top: 16rpx;
+  color: var(--color-danger-ink);
+  font-size: 48rpx;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .detail_badges {
-  margin-top: 18rpx;
   display: flex;
-  gap: 12rpx;
+  flex-wrap: wrap;
+  margin-top: 16rpx;
 }
 
 .detail_badge {
-  padding: 8rpx 18rpx;
+  margin-right: 12rpx;
+  padding: 6rpx 18rpx;
   border-radius: var(--radius-full);
-  background: var(--color-bg-tertiary);
-  color: var(--color-primary);
-  font-size: 22rpx;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-ink);
+  font-size: var(--font-caption);
+  font-weight: 600;
 }
 
 .detail_badge_secondary {
-  background: var(--color-bg-secondary);
+  background: var(--color-surface-sunken);
   color: var(--color-text-secondary);
 }
 
-.detail_desc,
-.detail_row,
-.comment_text {
-  margin-top: 18rpx;
-  color: var(--color-text-secondary);
-  font-size: 28rpx;
+.detail_desc {
+  margin-top: 24rpx;
+  color: var(--color-text-primary);
+  font-size: var(--font-body);
   line-height: 1.8;
   word-break: break-word;
 }
 
+.detail_row,
+.comment_text {
+  margin-top: 12rpx;
+  color: var(--color-text-secondary);
+  font-size: var(--font-body);
+  line-height: 1.7;
+  word-break: break-word;
+}
+
 .section_title {
-  font-size: 28rpx;
+  color: var(--color-text-secondary);
+  font-size: var(--font-meta);
   font-weight: 600;
-  color: var(--color-text-primary);
+  line-height: 1.4;
 }
 
 .contact_row,
 .seller_box,
 .action_row {
-  margin-top: 18rpx;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16rpx;
   min-width: 0;
+  margin-top: 16rpx;
+  color: var(--color-text-primary);
+}
+
+.contact_row button,
+.action_row button {
+  margin: 0;
+}
+
+.action_row button {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-ink);
+}
+
+.action_row button::after {
+  border-color: transparent;
 }
 
 .seller_box {
   justify-content: flex-start;
-  padding-top: 4rpx;
+  margin-top: 24rpx;
+  padding-top: 24rpx;
+  border-top: 1rpx solid var(--color-divider);
+}
+
+.detail_card > .seller_box:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
 }
 
 .seller_avatar {
   width: 72rpx;
   height: 72rpx;
+  margin-right: 20rpx;
   border-radius: 50%;
-  background: var(--color-bg-secondary);
+  background: var(--color-surface-sunken);
+  flex-shrink: 0;
 }
 
-.seller_text,
-.seller_link {
-  color: var(--color-text-secondary);
-  font-size: 24rpx;
+.seller_text {
+  min-width: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-body);
 }
 
 .seller_link {
   margin-left: auto;
-  color: var(--color-text-primary);
+  padding-left: 16rpx;
+  color: var(--color-primary-ink);
+  font-size: var(--font-meta);
+  font-weight: 600;
 }
+
+.comment_item {
+  padding: 24rpx 0;
+}
+
+.comment_item + .comment_item {
+  border-top: 1rpx solid var(--color-divider);
+}
+
+.comment_item:last-child {
+  padding-bottom: 0;
+}
+
 .comment_name {
-  font-size: 26rpx;
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+  font-size: var(--font-meta);
+  font-weight: 600;
 }
 
 .detail_actions {
   margin-top: 24rpx;
 }
 
-.comment_item {
-  padding: 18rpx 0;
-  border-bottom: 1rpx solid var(--color-bg-secondary);
+.detail_actions button,
+.detail_card > button {
+  margin-top: 24rpx;
 }
 
-.comment_item:last-child {
-  border-bottom: none;
-}
-
+/* Inputs nested in a section use a sunken field instead of a second surface. */
 .detail_card .weui-cells {
   margin: 16rpx 0 0;
   border-radius: var(--radius-control);
-  box-shadow: none;
+  background: var(--color-surface-sunken);
+}
+
+.detail_card .weui-cell {
+  padding-left: 24rpx;
+  padding-right: 24rpx;
+}
+
+.detail_card .guess_hint {
+  padding: 0 24rpx 20rpx;
 }

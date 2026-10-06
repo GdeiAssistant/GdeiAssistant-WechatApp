@@ -2,37 +2,64 @@
 
 .page {
   min-height: 100vh;
+  padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
   background: var(--color-bg-primary);
-  padding-bottom: 40rpx;
 }
 
+/* Search field: a pill on the canvas with a drawn magnifier, no card shadow. */
 .search_box {
-  margin: 24rpx;
-  padding: 16rpx 24rpx;
+  position: relative;
+  margin: 24rpx var(--gutter);
+  padding: 0 32rpx 0 80rpx;
+  border-radius: var(--radius-full);
   background: var(--color-surface);
-  border-radius: var(--radius-card);
-  border: 1rpx solid var(--color-border);
-  box-shadow: var(--shadow-card);
+}
+
+.search_box:before {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  left: 32rpx;
+  width: 22rpx;
+  height: 22rpx;
+  margin-top: -16rpx;
+  border: 3rpx solid var(--color-text-tertiary);
+  border-radius: 50%;
+}
+
+.search_box:after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  left: 56rpx;
+  width: 10rpx;
+  height: 3rpx;
+  margin-top: 8rpx;
+  background: var(--color-text-tertiary);
+  transform: rotate(45deg);
 }
 
 .search_input {
   width: 100%;
-  font-size: 28rpx;
+  height: 88rpx;
   color: var(--color-text-primary);
+  font-size: var(--font-body);
 }
 
 .user_row {
   display: flex;
   align-items: center;
-  padding: 24rpx 28rpx;
+  min-width: 0;
 }
 
 .avatar {
   width: 80rpx;
   height: 80rpx;
+  margin-right: 24rpx;
   border-radius: 50%;
-  margin-right: 20rpx;
-  background: var(--color-bg-secondary);
+  background: var(--color-surface-sunken);
+  flex-shrink: 0;
 }
 
 .user_meta {
@@ -42,21 +69,25 @@
 
 .nickname {
   color: var(--color-text-primary);
-  font-size: 30rpx;
+  font-size: var(--font-body);
+  font-weight: 600;
 }
 
 .intro {
-  margin-top: 6rpx;
+  margin-top: 4rpx;
   color: var(--color-text-tertiary);
-  font-size: 24rpx;
+  font-size: var(--font-meta);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .empty {
-  padding: 80rpx 24rpx;
-  text-align: center;
-  color: var(--color-text-tertiary);
-  font-size: 26rpx;
+  margin: 8rpx var(--gutter) 0;
+  padding: 40rpx 32rpx;
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: var(--font-meta);
+  line-height: 1.6;
 }

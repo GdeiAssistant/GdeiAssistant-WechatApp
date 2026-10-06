@@ -10,8 +10,7 @@
 .chat_header {
   display: flex;
   align-items: center;
-  gap: 20rpx;
-  padding: 20rpx 24rpx;
+  padding: 20rpx var(--gutter);
   background: var(--color-surface);
   border-bottom: 1rpx solid var(--color-divider);
 }
@@ -19,8 +18,10 @@
 .chat_header_avatar {
   width: 72rpx;
   height: 72rpx;
+  margin-right: 20rpx;
   border-radius: 50%;
   background: var(--color-primary-soft);
+  flex-shrink: 0;
 }
 
 .chat_header_meta {
@@ -29,15 +30,15 @@
 }
 
 .chat_header_name {
-  font-size: 32rpx;
-  font-weight: 600;
+  font-size: var(--font-title);
+  font-weight: 700;
   color: var(--color-text-primary);
 }
 
 .chat_header_sub {
   margin-top: 4rpx;
-  font-size: 22rpx;
-  color: var(--color-text-secondary);
+  font-size: var(--font-caption);
+  color: var(--color-text-tertiary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -46,7 +47,7 @@
 .messages {
   flex: 1;
   overflow-y: auto;
-  padding: 24rpx;
+  padding: 24rpx var(--gutter);
   box-sizing: border-box;
 }
 
@@ -65,28 +66,25 @@
 
 .time {
   margin-bottom: 8rpx;
-  font-size: 20rpx;
+  font-size: var(--font-caption);
   color: var(--color-text-tertiary);
-  text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
 .bubble {
-  padding: 18rpx 22rpx;
+  padding: 20rpx 26rpx;
   border-radius: var(--radius-card);
   border-bottom-left-radius: 8rpx;
   background: var(--color-surface);
   color: var(--color-text-primary);
-  font-size: 28rpx;
+  font-size: var(--font-body);
   line-height: 1.5;
   word-break: break-word;
-  border: 1rpx solid var(--color-border);
-  box-shadow: var(--shadow-card);
 }
 
 .bubble_row.mine .bubble {
-  background: var(--color-primary);
+  background: var(--color-fill-primary);
   color: var(--color-on-primary);
-  border-color: var(--color-primary);
   border-bottom-left-radius: var(--radius-card);
   border-bottom-right-radius: 8rpx;
 }
@@ -97,7 +95,7 @@
 }
 
 .bubble_failed {
-  opacity: 0.85;
+  box-shadow: inset 0 0 0 2rpx var(--color-danger);
 }
 
 .chat_image {
@@ -122,24 +120,23 @@
 
 .status {
   margin-top: 8rpx;
-  font-size: 20rpx;
+  font-size: var(--font-caption);
   color: var(--color-text-tertiary);
   text-align: right;
 }
 
 .hint {
-  padding: 12rpx 24rpx;
-  color: var(--color-text-secondary);
-  font-size: 22rpx;
-  background: var(--color-surface);
-  border-top: 1rpx solid var(--color-divider);
+  padding: 16rpx var(--gutter);
+  color: var(--color-warning-ink);
+  font-size: var(--font-meta);
+  line-height: 1.5;
+  background: var(--color-warning-soft);
 }
 
 .composer {
   display: flex;
   align-items: flex-end;
-  gap: 12rpx;
-  padding: 16rpx 20rpx;
+  padding: 16rpx var(--gutter);
   background: var(--color-surface);
   border-top: 1rpx solid var(--color-divider);
 }
@@ -150,36 +147,48 @@
 
 .composer_input {
   flex: 1;
-  min-height: 72rpx;
+  min-height: 56rpx;
   max-height: 180rpx;
-  padding: 16rpx 20rpx;
-  border-radius: var(--radius-control);
-  background: var(--color-bg-primary);
+  margin: 0 16rpx;
+  padding: 16rpx 24rpx;
+  border-radius: 44rpx;
+  background: var(--color-surface-sunken);
   color: var(--color-text-primary);
-  font-size: 28rpx;
+  font-size: var(--font-body);
+  line-height: 1.4;
 }
 
 .composer_icon_btn,
 .composer_send_btn {
   height: 44px;
+  width: auto;
   min-width: 44px;
   line-height: 44px;
-  padding: 0 20rpx;
+  padding: 0 24rpx;
   margin: 0;
-  font-size: 26rpx;
-  border-radius: var(--radius-control);
+  font-size: var(--font-meta);
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
 }
 
 .composer_icon_btn {
   background: var(--color-primary-soft);
-  color: var(--color-primary);
+  color: var(--color-primary-ink);
+}
+
+.composer_icon_btn::after {
+  border-color: transparent;
 }
 
 .load_earlier {
+  display: table;
+  margin: 0 auto 24rpx;
+  padding: 8rpx 24rpx;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-primary-ink);
+  font-size: var(--font-meta);
   text-align: center;
-  padding: 12rpx;
-  color: var(--color-text-secondary);
-  font-size: 24rpx;
 }
 
 .image_draft_mask {
@@ -193,15 +202,16 @@
   align-items: center;
   justify-content: center;
   z-index: 20;
-  padding: 40rpx;
+  padding: var(--gutter);
   box-sizing: border-box;
 }
 
 .image_draft_card {
   width: 100%;
   max-width: 640rpx;
-  background: var(--color-surface);
+  background: var(--color-surface-raised);
   border-radius: var(--radius-card);
+  box-shadow: var(--shadow-raised);
   padding: 24rpx;
 }
 
@@ -216,5 +226,8 @@
   margin-top: 24rpx;
   display: flex;
   justify-content: flex-end;
-  gap: 16rpx;
+}
+
+.image_draft_actions .composer_send_btn + .composer_send_btn {
+  margin-left: 16rpx;
 }

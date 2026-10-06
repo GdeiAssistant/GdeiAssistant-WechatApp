@@ -1,79 +1,86 @@
 @import "../../common/lib/weui.wxss";
 
-page,
-.page,
-.page__bd {
-  min-height: 100%;
-  background-color: var(--color-bg-primary);
-}
-
 .schedule-page {
   min-height: 100vh;
   padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
+  background-color: var(--color-bg-primary);
 }
 
+/* Seven weekdays share one segmented track; labels stay on one line at phone width. */
 .schedule-navbar {
-  position: static;
-  background-color: var(--color-surface);
-  border-bottom: 1rpx solid var(--color-border);
+  position: relative;
+}
+
+.schedule-navbar .weui-navbar__item {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .schedule-navbar .weui-navbar__title {
-  white-space: normal;
+  font-size: var(--font-caption);
+  white-space: nowrap;
   line-height: 1.3;
 }
 
 .schedule-toolbar {
-  padding: 24rpx 24rpx 8rpx;
+  padding: 24rpx var(--gutter) 0;
 }
 
 .schedule-week-button {
   width: 100%;
-  min-height: 76rpx;
+  min-height: 80rpx;
   margin: 0;
-  color: var(--color-link);
-  background: var(--color-surface);
-  border-color: var(--color-border);
-  font-size: 30rpx;
-  line-height: 1.35;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-ink);
+  font-size: var(--font-meta);
+  font-weight: 600;
+  line-height: 80rpx;
+}
+
+.schedule-week-button::after {
+  border-color: transparent;
 }
 
 .schedule-panel {
-  padding: 8rpx 24rpx 24rpx;
+  padding: 8rpx var(--gutter) 24rpx;
 }
 
+/* Each lesson: period chip and week range on top, course name as the headline. */
 .schedule-card {
   margin-top: 20rpx;
-  padding: 24rpx;
-  color: var(--color-text-primary);
-  background-color: var(--color-surface);
-  border: 1rpx solid var(--color-border);
+  padding: 28rpx 32rpx;
   border-radius: var(--radius-card);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
   box-sizing: border-box;
-  box-shadow: var(--shadow-card);
 }
 
 .schedule-card__topline {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 12rpx;
+  margin-bottom: 16rpx;
 }
 
 .schedule-card__lesson {
   min-width: 0;
   margin-right: 20rpx;
-  color: var(--color-link);
-  font-size: 26rpx;
-  line-height: 1.4;
+  padding: 4rpx 16rpx;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-ink);
+  font-size: var(--font-caption);
+  font-weight: 600;
+  line-height: 1.5;
 }
 
 .schedule-card__week {
   flex-shrink: 0;
-  max-width: 45%;
-  color: var(--color-text-secondary);
-  font-size: 24rpx;
+  max-width: 50%;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-caption);
   line-height: 1.4;
   text-align: right;
   white-space: normal;
@@ -81,30 +88,26 @@ page,
 
 .schedule-card__name {
   color: var(--color-text-primary);
-  font-size: 32rpx;
-  font-weight: 600;
-  line-height: 1.45;
+  font-size: var(--font-title);
+  font-weight: 700;
+  line-height: 1.35;
 }
 
 .schedule-card__details {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 16rpx;
+  margin-top: 12rpx;
 }
 
 .schedule-card__detail {
   max-width: 100%;
-  margin-top: 8rpx;
+  margin-top: 4rpx;
   color: var(--color-text-secondary);
-  font-size: 28rpx;
+  font-size: var(--font-meta);
   line-height: 1.45;
   word-break: break-all;
 }
 
 .schedule-card__teacher {
   margin-right: 24rpx;
-}
-
-.schedule-card__location {
-  color: var(--color-text-primary);
 }

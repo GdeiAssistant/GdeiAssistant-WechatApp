@@ -1,48 +1,83 @@
-/* GdeiAssistant brand tokens, shared with Web / Android / iOS. Light (default) and Dark. */
+/*
+ * GdeiAssistant brand tokens (v2), shared with Web / Android / iOS.
+ * Light is the default on `page`; `.theme-dark` is applied by utils/theme.js on each page root.
+ * Text-on-white uses --color-primary-ink so small text keeps WCAG AA contrast.
+ */
 
 page {
   --color-primary: #0E8F6E;
   --color-primary-hover: #0A7559;
+  --color-primary-pressed: #085E48;
+  --color-primary-ink: #0A7559;
   --color-primary-soft: #E3F3EE;
   --color-on-primary: #FFFFFF;
+  --color-fill-primary: #0A7559;
+
+  --color-band: #0A7559;
+  --color-on-band: #FFFFFF;
+  --color-on-band-muted: #CFE9E0;
+  --color-band-chip: rgba(255, 255, 255, 0.14);
 
   --color-bg-primary: #F4F7F6;
   --color-bg-secondary: #EAF0EE;
   --color-bg-tertiary: #E1E9E6;
   --color-surface: #FFFFFF;
   --color-surface-raised: #FFFFFF;
+  --color-surface-sunken: #EEF3F1;
 
   --color-text-primary: #11201C;
   --color-text-secondary: #4E5F5A;
-  --color-text-tertiary: #6F7F7A;
+  --color-text-tertiary: #63736E;
   --color-border: #DDE6E3;
   --color-divider: #E9EFED;
 
   --color-danger: #D14343;
+  --color-danger-ink: #B83636;
   --color-danger-soft: #FBEAEA;
   --color-warning: #B7791F;
+  --color-warning-ink: #8F5E14;
   --color-warning-soft: #F8EEDC;
-  --color-link: #0E8F6E;
+  --color-link: #0A7559;
   --color-overlay: rgba(17, 32, 28, 0.5);
+
+  --color-segment-track: #E1E9E6;
+  --color-segment-active: #FFFFFF;
+  --shadow-segment: 0 2rpx 6rpx rgba(17, 54, 44, 0.08);
 
   --radius-card: 28rpx;
   --radius-control: 20rpx;
   --radius-full: 999rpx;
-  --shadow-card: 0 4rpx 20rpx rgba(17, 32, 28, 0.05);
-  --shadow-raised: 0 12rpx 40rpx rgba(17, 32, 28, 0.12);
+  --gutter: 32rpx;
+  --shadow-card: 0 2rpx 6rpx rgba(17, 54, 44, 0.04), 0 8rpx 24rpx rgba(17, 54, 44, 0.05);
+  --shadow-raised: 0 12rpx 40rpx rgba(17, 54, 44, 0.14);
+
+  --font-display: 44rpx;
+  --font-title: 34rpx;
+  --font-body: 30rpx;
+  --font-meta: 26rpx;
+  --font-caption: 22rpx;
 }
 
 .theme-dark {
   --color-primary: #34C79A;
   --color-primary-hover: #5AD6AE;
+  --color-primary-pressed: #2BA984;
+  --color-primary-ink: #34C79A;
   --color-primary-soft: #12332A;
   --color-on-primary: #0E1513;
+  --color-fill-primary: #34C79A;
+
+  --color-band: #12332A;
+  --color-on-band: #E6EEEB;
+  --color-on-band-muted: #A3C9BC;
+  --color-band-chip: rgba(52, 199, 154, 0.16);
 
   --color-bg-primary: #0E1513;
   --color-bg-secondary: #1C2724;
   --color-bg-tertiary: #222D2A;
   --color-surface: #151E1B;
   --color-surface-raised: #1C2724;
+  --color-surface-sunken: #111916;
 
   --color-text-primary: #E6EEEB;
   --color-text-secondary: #A3B3AE;
@@ -51,15 +86,23 @@ page {
   --color-divider: #222D2A;
 
   --color-danger: #F07171;
+  --color-danger-ink: #F07171;
   --color-danger-soft: #3A1E1E;
   --color-warning: #E0A54A;
+  --color-warning-ink: #E0A54A;
   --color-warning-soft: #352915;
   --color-link: #34C79A;
   --color-overlay: rgba(0, 0, 0, 0.6);
 
-  --shadow-card: 0 4rpx 20rpx rgba(0, 0, 0, 0.24);
-  --shadow-raised: 0 12rpx 40rpx rgba(0, 0, 0, 0.4);
+  --color-segment-track: #151E1B;
+  --color-segment-active: #2A3733;
+  --shadow-segment: none;
 
+  --shadow-card: 0 2rpx 6rpx rgba(0, 0, 0, 0.2), 0 8rpx 24rpx rgba(0, 0, 0, 0.18);
+  --shadow-raised: 0 12rpx 40rpx rgba(0, 0, 0, 0.45);
+
+  /* Contain child margins so the light `page` background never shows above the root. */
+  display: flow-root;
   min-height: 100vh;
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);

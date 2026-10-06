@@ -1,56 +1,77 @@
 .page {
   min-height: 100vh;
-  padding-bottom: 48rpx;
+  padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
   background: var(--color-bg-primary);
+  color: var(--color-text-primary);
 }
+
 .section-title {
-  margin: 40rpx 0 12rpx;
-  padding: 0 48rpx;
-  font-size: 26rpx;
-  font-weight: 600;
+  margin: 48rpx 0 0;
+  padding: 0 calc(var(--gutter) + 8rpx) 16rpx;
   color: var(--color-text-secondary);
+  font-size: var(--font-meta);
+  font-weight: 600;
+  line-height: 1.4;
 }
+
 .option-list,
 .font-card {
-  margin: 0 24rpx;
-  background: var(--color-surface);
-  border: 1rpx solid var(--color-border);
+  margin: 0 var(--gutter);
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-card);
+  background: var(--color-surface);
   overflow: hidden;
 }
+
 .option-item {
-  min-height: 96rpx;
-  box-sizing: border-box;
-  padding: 24rpx 32rpx;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1rpx solid var(--color-divider);
+  min-height: 104rpx;
+  box-sizing: border-box;
+  padding: 26rpx 32rpx;
   color: var(--color-text-primary);
+  font-size: var(--font-body);
 }
-.option-item:last-child {
-  border-bottom: 0;
+
+.option-item + .option-item {
+  border-top: 1rpx solid var(--color-divider);
 }
+
+/* Selected state: a filled emerald disc behind the check glyph. */
 .check {
-  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: var(--color-fill-primary);
+  color: var(--color-on-primary);
+  font-size: 24rpx;
   font-weight: 700;
+  line-height: 1;
 }
+
 .font-card {
   padding: 24rpx 32rpx 32rpx;
 }
+
 .font-labels {
   display: flex;
   justify-content: space-between;
-  font-size: 22rpx;
-  color: var(--color-text-secondary);
-  margin-top: 8rpx;
+  margin-top: 4rpx;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-caption);
 }
+
 .font-preview {
   display: block;
-  margin-top: 24rpx;
-  padding: 24rpx;
+  margin-top: 28rpx;
+  padding: 28rpx;
   border-radius: var(--radius-control);
-  background: var(--color-bg-secondary);
+  background: var(--color-surface-sunken);
   color: var(--color-text-primary);
+  line-height: 1.5;
 }

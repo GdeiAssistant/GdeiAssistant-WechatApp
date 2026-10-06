@@ -2,19 +2,25 @@
 
 <official-account></official-account>
 
-  <view class="userinfo_card" wx:if="{{avatar}}">
-    <view class="userinfo">
-      <image class="userinfo-avatar" src="{{avatar}}" background-size="cover"></image>
-      <view class="userinfo_meta">
-        <text class="userinfo-nickname">{{nickname}}</text>
-        <text class="userinfo-source">{{t.dataSourceLabel}}</text>
-        <text class="userinfo-entry" bindtap="openProfile">{{t.viewProfile}}</text>
+  <view class="home_band" wx:if="{{avatar}}">
+    <view class="userinfo_card">
+      <view class="home_band_top">
+        <image class="home_logo" src="/image/logo.png" mode="aspectFit"></image>
+        <view class="userinfo_notice" bindtap="openInbox">
+          <image class="userinfo_notice_icon" src="/image/mono/inbox.png" mode="aspectFit"></image>
+          <text class="userinfo_notice_badge" wx:if="{{inboxBadgeText}}">{{inboxBadgeText}}</text>
+        </view>
       </view>
-    </view>
 
-    <view class="userinfo_notice" bindtap="openInbox">
-      <image class="userinfo_notice_icon" src="/image/mono/inbox.png" mode="aspectFit"></image>
-      <text class="userinfo_notice_badge" wx:if="{{inboxBadgeText}}">{{inboxBadgeText}}</text>
+      <view class="userinfo">
+        <image class="userinfo-avatar" src="{{avatar}}" mode="aspectFill"></image>
+        <view class="userinfo_meta">
+          <text class="userinfo-nickname">{{nickname}}</text>
+          <text class="userinfo-source">{{t.dataSourceLabel}}</text>
+        </view>
+      </view>
+
+      <text class="userinfo-entry" bindtap="openProfile">{{t.viewProfile}}</text>
     </view>
   </view>
 

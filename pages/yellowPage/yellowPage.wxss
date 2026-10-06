@@ -1,6 +1,13 @@
 @import "../../common/lib/weui.wxss";
 
+.weui-cell__bd {
+  min-width: 0;
+}
+
 .item_meta {
-  color: var(--color-text-secondary);
-  font-size: 24rpx;
+  margin-top: 4rpx;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-meta);
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
 }
