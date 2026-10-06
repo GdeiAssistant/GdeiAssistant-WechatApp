@@ -1,46 +1,47 @@
 @import "../../common/lib/weui.wxss";
 
+/* Sub-group label inside "feature display": quieter than a section title, indented to the cell text. */
 .section_title {
-  margin: 40rpx 0 12rpx;
-  padding: 0 48rpx;
-  color: var(--color-text-secondary);
-  font-size: 26rpx;
-  font-weight: 600;
-}
-
-.mock_hint {
-  display: block;
-  margin: 20rpx 48rpx 0;
+  margin: 32rpx 0 0;
+  padding: 0 calc(var(--gutter) + 32rpx) 12rpx;
   color: var(--color-text-tertiary);
-  text-align: center;
-  font-size: 26rpx;
+  font-size: var(--font-caption);
+  font-weight: 600;
+  line-height: 1.4;
 }
 
+.mock_hint,
 .status_hint {
-  margin: 18rpx 48rpx 0;
+  display: block;
+  margin: 16rpx calc(var(--gutter) + 8rpx) 0;
   color: var(--color-text-secondary);
-  font-size: 26rpx;
-  line-height: 1.6;
+  font-size: var(--font-meta);
+  line-height: 1.55;
+  text-align: left;
 }
 
+/* Credential state: three equal facts in one segmented strip, active ones tinted. */
 .credential_summary {
   display: flex;
-  gap: 16rpx;
-  margin: 0 24rpx 16rpx;
+  margin: 0 var(--gutter) 16rpx;
+  padding: 6rpx;
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
 }
 
 .credential_summary_item {
   flex: 1;
   min-width: 0;
-  padding: 18rpx 16rpx;
-  border-radius: var(--radius-control);
-  background: var(--color-surface);
-  border: 1rpx solid var(--color-divider);
+  padding: 18rpx 20rpx;
+  border-radius: 22rpx;
+}
+
+.credential_summary_item + .credential_summary_item {
+  margin-left: 6rpx;
 }
 
 .credential_summary_item.is_active {
   background: var(--color-primary-soft);
-  border-color: var(--color-primary-soft);
 }
 
 .credential_summary_label,
@@ -50,43 +51,48 @@
 
 .credential_summary_label {
   color: var(--color-text-tertiary);
-  font-size: 22rpx;
+  font-size: var(--font-caption);
   line-height: 1.3;
 }
 
 .credential_summary_value {
   margin-top: 8rpx;
   color: var(--color-text-secondary);
-  font-size: 25rpx;
+  font-size: var(--font-meta);
   font-weight: 600;
   line-height: 1.35;
   word-break: break-all;
 }
 
 .credential_summary_item.is_active .credential_summary_value {
-  color: var(--color-primary);
+  color: var(--color-primary-ink);
 }
 
 .credential_cell_note {
   margin-top: 6rpx;
   color: var(--color-text-tertiary);
-  font-size: 24rpx;
+  font-size: var(--font-meta);
   line-height: 1.45;
 }
 
 .danger_title {
-  margin: 40rpx 48rpx 0;
-  color: var(--color-danger);
-  font-size: 24rpx;
+  margin: 48rpx 0 0;
+  padding: 0 calc(var(--gutter) + 8rpx) 16rpx;
+  color: var(--color-danger-ink);
+  font-size: var(--font-meta);
   font-weight: 600;
 }
 
 .action_group {
   display: flex;
-  gap: 20rpx;
-  padding: 16rpx 24rpx 0;
+  padding: 0 var(--gutter);
 }
 
 .action_group button {
   flex: 1;
+  margin: 0;
+}
+
+.action_group button + button {
+  margin-left: 20rpx;
 }

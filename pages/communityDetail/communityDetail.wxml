@@ -15,7 +15,7 @@
       </block>
     </swiper>
 
-    <view class="detail_card">
+    <view class="detail_card detail_card_main">
       <view class="detail_head_meta" wx:if="{{moduleConfig}}">
         <text class="detail_module_tag">{{moduleConfig.title}}</text>
       </view>

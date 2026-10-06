@@ -1,28 +1,38 @@
 @import './styles/theme.wxss';
 
+/*
+ * Global layer: base typography, native component skin and a few shared layout helpers.
+ * Grouped surfaces are flat (no outline, no drop shadow); hierarchy comes from spacing and type.
+ */
+
 page {
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
   height: 100%;
-  font-size: 32rpx;
-  line-height: 1.6;
+  font-size: 30rpx;
+  line-height: 1.55;
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   font-variant-numeric: tabular-nums;
   padding-bottom: env(safe-area-inset-bottom);
+  -webkit-font-smoothing: antialiased;
 }
 
 checkbox,
 radio {
-  margin-right: 10rpx;
+  margin-right: 12rpx;
 }
 
 form {
   width: 100%;
 }
 
+/* Buttons: one filled primary, one quiet secondary, one destructive. Radius 20rpx (10px). */
 button {
+  min-height: 96rpx;
   border-radius: var(--radius-control);
+  font-size: 30rpx;
   font-weight: 600;
+  line-height: 96rpx;
   background-color: var(--color-surface);
   color: var(--color-text-primary);
 }
@@ -33,27 +43,28 @@ button::after {
 }
 
 button[type="primary"] {
-  background-color: var(--color-primary);
+  background-color: var(--color-fill-primary);
   color: var(--color-on-primary);
 }
 
-button[type="primary"]::after {
+button[type="primary"]::after,
+button[type="warn"]::after {
   border-color: transparent;
-}
-
-.button-hover[type="primary"] {
-  background-color: var(--color-primary-hover);
-  color: var(--color-on-primary);
-}
-
-button[type="primary"][disabled] {
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
-  opacity: 0.5;
 }
 
 .button-hover {
   background-color: var(--color-bg-secondary);
+}
+
+.button-hover[type="primary"] {
+  background-color: var(--color-primary-pressed);
+  color: var(--color-on-primary);
+}
+
+button[type="primary"][disabled] {
+  background-color: var(--color-fill-primary);
+  color: var(--color-on-primary);
+  opacity: 0.45;
 }
 
 button[type="default"][disabled] {
@@ -62,23 +73,30 @@ button[type="default"][disabled] {
 }
 
 button[type="warn"] {
-  background-color: var(--color-danger);
-  color: #ffffff;
+  background-color: var(--color-danger-soft);
+  color: var(--color-danger-ink);
 }
 
-button[type="warn"]::after {
-  border-color: transparent;
+button[type="warn"][disabled] {
+  background-color: var(--color-danger-soft);
+  color: var(--color-danger-ink);
+  opacity: 0.5;
 }
 
 button[size="mini"] {
+  min-height: 64rpx;
   border-radius: var(--radius-full);
   font-size: 26rpx;
-  line-height: 2.3;
+  line-height: 64rpx;
   padding: 0 28rpx;
 }
 
 button[size="mini"]::after {
   border-radius: var(--radius-full);
+}
+
+button[plain] {
+  background-color: transparent;
 }
 
 input,
@@ -105,7 +123,7 @@ textarea {
   flex-direction: column;
   min-height: 100%;
   justify-content: space-between;
-  font-size: 32rpx;
+  font-size: 30rpx;
 }
 
 .page-body {
@@ -133,13 +151,17 @@ textarea {
 }
 
 .btn-area {
-  margin-top: 40rpx;
+  margin-top: 48rpx;
   box-sizing: border-box;
   width: 100%;
-  padding: 0 24rpx;
+  padding: 0 var(--gutter);
 }
 
 .btn-area button {
-  margin-top: 16rpx;
-  margin-bottom: 16rpx;
+  margin-top: 20rpx;
+  margin-bottom: 0;
+}
+
+.btn-area button:first-child {
+  margin-top: 0;
 }

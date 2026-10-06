@@ -1199,18 +1199,29 @@ icon {
     white-space: nowrap;
 }
 
-/* GdeiAssistant brand overlay: replace WeChat green language with emerald tokens. */
+/*
+ * GdeiAssistant v2 skin over WeUI.
+ * Flat grouped surfaces on a tinted canvas, 16px (32rpx) gutter, radius 14px/10px/full,
+ * left-aligned sentence-case section labels, one emerald accent. Colors come from styles/theme.wxss.
+ */
 
 .weui-cells,
 .weui-form-preview,
 .weui-panel {
-    margin: 24rpx 24rpx 0;
+    margin: 0 var(--gutter);
     background-color: var(--color-surface);
-    border: 1rpx solid var(--color-border);
+    border: 0;
     border-radius: var(--radius-card);
-    box-shadow: var(--shadow-card);
+    box-shadow: none;
     overflow: hidden;
     color: var(--color-text-primary);
+    font-size: var(--font-body);
+    line-height: 1.5;
+}
+
+.weui-cells + .weui-cells,
+.weui-form-preview + .weui-form-preview {
+    margin-top: 24rpx;
 }
 
 .weui-cells:before,
@@ -1223,13 +1234,12 @@ icon {
 }
 
 .weui-cells__title {
-    margin-top: 40rpx;
-    margin-bottom: 12rpx;
-    padding-left: 48rpx;
-    padding-right: 48rpx;
+    margin: 48rpx 0 0;
+    padding: 0 calc(var(--gutter) + 8rpx) 16rpx;
     color: var(--color-text-secondary);
-    font-size: 26rpx;
+    font-size: var(--font-meta);
     font-weight: 600;
+    line-height: 1.4;
 }
 
 .weui-cells__title + .weui-cells,
@@ -1238,22 +1248,35 @@ icon {
 }
 
 .weui-cells__tips {
-    padding-left: 48rpx;
-    padding-right: 48rpx;
+    margin-top: 16rpx;
+    padding: 0 calc(var(--gutter) + 8rpx);
     color: var(--color-text-tertiary);
+    font-size: var(--font-meta);
+    line-height: 1.55;
 }
 
 .weui-cell {
-    min-height: 96rpx;
+    min-height: 104rpx;
     box-sizing: border-box;
-    padding: 24rpx 32rpx;
+    padding: 26rpx 32rpx;
     color: var(--color-text-primary);
+    font-size: var(--font-body);
 }
 
 .weui-cell:before {
     left: 32rpx;
+    right: 0;
     border-top-color: var(--color-divider);
     color: var(--color-divider);
+}
+
+/* Cells wrapped in <picker> or <navigator> are each a first child; restore the divider between them. */
+picker + picker .weui-cell:before,
+.weui-cell + picker .weui-cell:before,
+picker + .weui-cell:before,
+navigator + navigator .weui-cell:before,
+navigator + navigator.weui-cell:before {
+    display: block;
 }
 
 .weui-cell_active,
@@ -1262,12 +1285,84 @@ icon {
     background-color: var(--color-bg-secondary);
 }
 
-.weui-cell__ft {
-    color: var(--color-text-secondary);
+.weui-cell__hd {
+    flex-shrink: 0;
 }
 
+.weui-cell__bd {
+    min-width: 0;
+    word-break: break-word;
+}
+
+.weui-cell__ft {
+    max-width: 60%;
+    margin-left: 24rpx;
+    color: var(--color-text-tertiary);
+    font-size: var(--font-body);
+    font-variant-numeric: tabular-nums;
+    word-break: break-word;
+}
+
+.weui-cell_access .weui-cell__ft,
+.weui-cell__ft_in-access {
+    position: relative;
+    padding-right: 32rpx;
+}
+
+.weui-cell_access .weui-cell__ft:after,
 .weui-cell__ft_in-access:after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    right: 4rpx;
+    width: 14rpx;
+    height: 14rpx;
+    margin-top: -8rpx;
+    border-style: solid;
+    border-width: 3rpx 3rpx 0 0;
     border-color: var(--color-text-tertiary);
+    transform: rotate(45deg);
+    box-sizing: border-box;
+}
+
+.weui-cell_switch {
+    padding-top: 18rpx;
+    padding-bottom: 18rpx;
+}
+
+.weui-cell_input {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.weui-cell_vcode {
+    padding-right: 16rpx;
+}
+
+.weui-label {
+    width: 168rpx;
+    margin-right: 16rpx;
+    color: var(--color-text-secondary);
+    font-size: var(--font-body);
+    word-break: break-word;
+}
+
+.weui-input {
+    height: 104rpx;
+    min-height: 104rpx;
+    line-height: 104rpx;
+    font-size: var(--font-body);
+}
+
+.weui-textarea {
+    font-size: var(--font-body);
+    line-height: 1.6;
+}
+
+.weui-textarea-counter {
+    margin-top: 8rpx;
+    color: var(--color-text-tertiary);
+    font-size: var(--font-caption);
 }
 
 .weui-cell_link,
@@ -1284,18 +1379,127 @@ icon {
     color: var(--color-text-primary);
 }
 
+.weui-label {
+    color: var(--color-text-secondary);
+}
+
+/* Error banner: inset, tinted, readable. Still fixed to the top as before. */
 .weui-toptips {
-    color: #ffffff;
+    top: 16rpx;
+    left: var(--gutter);
+    right: var(--gutter);
+    padding: 20rpx 28rpx;
+    border-radius: var(--radius-control);
+    font-size: var(--font-meta);
+    line-height: 1.5;
+    text-align: left;
+    word-break: break-word;
+    color: var(--color-text-primary);
+    background-color: var(--color-surface-raised);
+    box-shadow: var(--shadow-raised);
 }
 
 .weui-toptips_warn,
 .weui-badge {
+    background-color: var(--color-danger-soft);
+    color: var(--color-danger-ink);
+}
+
+.weui-badge {
+    color: #ffffff;
     background-color: var(--color-danger);
 }
 
 .weui-cell_warn,
 .weui-textarea-counter_warn {
-    color: var(--color-danger);
+    color: var(--color-danger-ink);
+}
+
+/* Form preview reads like a receipt: a headline figure, then label/value rows. */
+.weui-form-preview__hd {
+    padding: 32rpx 32rpx 28rpx;
+    text-align: left;
+    line-height: 1.4;
+}
+
+.weui-form-preview__hd:after {
+    left: 32rpx;
+    right: 32rpx;
+    border-bottom-color: var(--color-divider);
+}
+
+.weui-form-preview__hd .weui-form-preview__label {
+    color: var(--color-text-secondary);
+    font-size: var(--font-meta);
+}
+
+.weui-form-preview__bd {
+    padding: 24rpx 32rpx 28rpx;
+    font-size: var(--font-meta);
+    text-align: left;
+    color: var(--color-text-tertiary);
+}
+
+.weui-form-preview__item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 8rpx 0;
+    overflow: visible;
+}
+
+.weui-form-preview__label {
+    float: none;
+    flex-shrink: 0;
+    min-width: 0;
+    margin-right: 24rpx;
+    text-align: left;
+    text-align-last: auto;
+    color: var(--color-text-tertiary);
+    font-size: var(--font-meta);
+}
+
+.weui-form-preview__value {
+    display: block;
+    flex: 1;
+    min-width: 0;
+    overflow: visible;
+    text-align: right;
+    color: var(--color-text-primary);
+    font-size: var(--font-meta);
+    word-break: break-word;
+    font-variant-numeric: tabular-nums;
+}
+
+.weui-form-preview__value_in-hd {
+    font-size: 48rpx;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-text-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+.weui-form-preview__ft:after {
+    border-top-color: var(--color-divider);
+}
+
+.weui-form-preview__btn,
+.weui-form-preview__btn_primary,
+.weui-vcode-btn {
+    color: var(--color-primary-ink);
+    font-weight: 600;
+}
+
+.weui-form-preview__btn:after {
+    border-left-color: var(--color-divider);
+}
+
+.weui-vcode-btn:active {
+    color: var(--color-primary-hover);
+}
+
+.weui-form-preview__btn_active {
+    background-color: var(--color-bg-secondary);
 }
 
 .weui-form-preview__label,
@@ -1308,35 +1512,18 @@ icon {
     color: var(--color-text-tertiary);
 }
 
-.weui-form-preview__value {
-    color: var(--color-text-primary);
-}
-
-.weui-form-preview__value_in-hd {
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-}
-
-.weui-form-preview__btn,
-.weui-form-preview__btn_primary,
-.weui-vcode-btn {
-    color: var(--color-primary);
-}
-
-.weui-vcode-btn:active {
-    color: var(--color-primary-hover);
-}
-
-.weui-form-preview__btn_active,
-.weui-grid_active {
-    background-color: var(--color-bg-secondary);
-}
-
+/* Grids (home and launchers): plain cells on one surface, no per-tile cards. */
 .weui-grids {
-    margin: 0 16rpx 8rpx;
-    overflow: visible;
+    margin: 0 var(--gutter);
+    padding: 8rpx 0;
+    overflow: hidden;
     border: 0;
-    background: transparent;
+    border-radius: var(--radius-card);
+    background-color: var(--color-surface);
+}
+
+.weui-grids:before {
+    display: none;
 }
 
 .weui-grids:after {
@@ -1349,52 +1536,93 @@ icon {
 }
 
 .weui-grid {
-    width: 31.4%;
-    margin: 0 0.96% 16rpx;
-    padding: 28rpx 8rpx 22rpx;
+    width: 25%;
+    margin: 0;
+    padding: 24rpx 4rpx 20rpx;
     box-sizing: border-box;
-    background-color: var(--color-surface);
-    border: 1rpx solid var(--color-border);
-    border-radius: var(--radius-card);
-    box-shadow: var(--shadow-card);
+    background-color: transparent;
+    border: 0;
+    border-radius: var(--radius-control);
+    box-shadow: none;
+}
+
+.weui-grid:before,
+.weui-grid:after {
+    display: none;
+}
+
+.weui-grid_active {
+    background-color: var(--color-bg-secondary);
 }
 
 .weui-grid__icon {
     width: 48rpx;
     height: 48rpx;
-    padding: 18rpx;
+    padding: 20rpx;
     border-radius: var(--radius-control);
     background-color: var(--color-primary-soft);
 }
 
 .weui-grid__label {
-    margin-top: 14rpx;
+    margin-top: 12rpx;
     color: var(--color-text-primary);
-    font-size: 26rpx;
+    font-size: var(--font-caption);
+    line-height: 1.35;
+    white-space: normal;
 }
 
+/* Tabs become a segmented control inside the gutter. */
 .weui-navbar {
-    background-color: var(--color-surface);
-    border-bottom: 1rpx solid var(--color-divider);
+    position: relative;
+    top: auto;
+    z-index: 2;
+    box-sizing: border-box;
+    width: auto;
+    margin: 24rpx var(--gutter) 0;
+    padding: 6rpx;
+    border: 0;
+    border-radius: var(--radius-control);
+    background-color: var(--color-segment-track);
 }
 
 .weui-navbar__item {
+    padding: 14rpx 4rpx;
+    border-radius: 16rpx;
     color: var(--color-text-secondary);
+    font-size: 0;
+    line-height: 1.3;
 }
 
 .weui-navbar__item.weui-bar__item_on {
-    color: var(--color-primary);
+    background-color: var(--color-segment-active);
+    color: var(--color-text-primary);
+    box-shadow: var(--shadow-segment);
+}
+
+.weui-navbar__title {
+    max-width: 100%;
+    font-size: var(--font-meta);
     font-weight: 600;
 }
 
 .weui-navbar__slider {
-    height: 6rpx;
-    border-radius: var(--radius-full);
-    background-color: var(--color-primary);
+    display: none;
 }
 
 .weui-btn-area {
-    margin: 48rpx 24rpx 24rpx;
+    margin: 48rpx var(--gutter) 32rpx;
+}
+
+.weui-btn {
+    border-radius: var(--radius-control);
+}
+
+/* Loading and empty states. */
+.weui-loadmore {
+    width: auto;
+    margin: 48rpx var(--gutter);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-meta);
 }
 
 .weui-loadmore__tips,
@@ -1402,28 +1630,67 @@ icon {
     color: var(--color-text-tertiary);
 }
 
+.weui-loadmore_line {
+    border-top-color: var(--color-divider);
+}
+
 .weui-loadmore__tips_in-line {
     background-color: var(--color-bg-primary);
 }
 
 .weui-search-bar {
+    padding: 16rpx var(--gutter);
     background-color: var(--color-bg-primary);
-    border-color: var(--color-divider);
+    border: 0;
+}
+
+.weui-search-bar:before,
+.weui-search-bar:after {
+    display: none;
 }
 
 .weui-search-bar__form,
 .weui-search-bar__label {
     background: var(--color-surface);
     border-radius: var(--radius-control);
-    border-color: var(--color-border);
+    border-color: transparent;
+}
+
+.weui-search-bar__form:after {
+    display: none;
 }
 
 .weui-search-bar__cancel-btn {
-    color: var(--color-primary);
+    color: var(--color-primary-ink);
+}
+
+/* Result / message blocks: left-aligned headline instead of a centered template. */
+.weui-msg {
+    margin: 32rpx var(--gutter) 0;
+    padding: 40rpx 32rpx 32rpx;
+    border-radius: var(--radius-card);
+    background-color: var(--color-surface);
+    text-align: left;
+}
+
+.weui-msg__text-area {
+    margin-bottom: 0;
+    padding: 0;
 }
 
 .weui-msg__title {
+    margin-bottom: 16rpx;
     color: var(--color-text-primary);
+    font-size: var(--font-display);
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.weui-msg__desc {
+    margin-top: 6rpx;
+    font-size: var(--font-meta);
+    line-height: 1.55;
+    color: var(--color-text-secondary);
 }
 
 .page__bd,
@@ -1432,4 +1699,17 @@ icon {
     min-height: 100%;
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
+}
+
+.page__bd {
+    padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
+    box-sizing: border-box;
+}
+
+/* Dark roots must fill the viewport; the generic 100% above would stop at content height. */
+.page__bd.theme-dark,
+.page.theme-dark,
+.page-root.theme-dark,
+.container.theme-dark {
+    min-height: 100vh;
 }

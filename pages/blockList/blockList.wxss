@@ -2,24 +2,53 @@
 
 .page {
   min-height: 100vh;
+  padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
   background: var(--color-bg-primary);
+}
+
+.page > .weui-cells {
+  margin-top: 24rpx;
 }
 
 .user_row {
   display: flex;
   align-items: center;
+  min-width: 0;
 }
 
 .avatar {
-  width: 72rpx;
-  height: 72rpx;
+  width: 80rpx;
+  height: 80rpx;
+  margin-right: 24rpx;
   border-radius: 50%;
-  margin-right: 20rpx;
-  background: var(--color-bg-secondary);
+  background: var(--color-surface-sunken);
+  flex-shrink: 0;
 }
 
+.user_row view {
+  color: var(--color-text-primary);
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.weui-cell__ft button {
+  margin: 0;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-ink);
+}
+
+.weui-cell__ft button::after {
+  border-color: transparent;
+}
+
+/* Empty state: a quiet left-aligned note inside the gutter, not a centered splash. */
 .empty {
-  padding: 80rpx 24rpx;
-  text-align: center;
-  color: var(--color-text-tertiary);
+  margin: 32rpx var(--gutter) 0;
+  padding: 40rpx 32rpx;
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: var(--font-meta);
+  line-height: 1.6;
 }

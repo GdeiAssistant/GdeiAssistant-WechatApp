@@ -1,22 +1,29 @@
 @import "../../common/lib/weui.wxss";
 
 .community-page {
-  padding-bottom: calc(170rpx + env(safe-area-inset-bottom));
-  background: var(--color-bg-primary);
   min-height: 100vh;
+  box-sizing: border-box;
+  padding-bottom: calc(176rpx + env(safe-area-inset-bottom));
+  background: var(--color-bg-primary);
 }
 
+/* Module header: icon tile then title and summary, flat on the canvas. */
 .hero_card {
-  background: var(--color-primary-soft);
-  margin: 20rpx 24rpx 0;
-  padding: 30rpx;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 20rpx;
-  border-radius: var(--radius-card);
-  border: 1rpx solid var(--color-border);
-  box-shadow: var(--shadow-card);
+  padding: 40rpx var(--gutter) 8rpx;
+}
+
+.hero_icon {
+  order: -1;
+  width: 96rpx;
+  height: 96rpx;
+  margin-right: 28rpx;
+  padding: 18rpx;
+  box-sizing: border-box;
+  border-radius: 28rpx;
+  background: var(--color-primary-soft);
+  flex-shrink: 0;
 }
 
 .hero_content {
@@ -26,150 +33,151 @@
 
 .hero_title {
   color: var(--color-text-primary);
-  font-size: 38rpx;
+  font-size: var(--font-display);
   font-weight: 700;
+  line-height: 1.25;
 }
 
 .hero_summary {
-  margin-top: 12rpx;
+  margin-top: 8rpx;
   color: var(--color-text-secondary);
-  font-size: 28rpx;
-  line-height: 1.7;
+  font-size: var(--font-meta);
+  line-height: 1.6;
 }
 
-.hero_icon {
-  width: 112rpx;
-  height: 112rpx;
-  opacity: 0.88;
-  flex-shrink: 0;
-}
-
+/* Photo stats: one strip, figures divided by hairlines. */
 .stats_panel {
-  margin: 20rpx 24rpx 0;
-  padding: 24rpx;
   display: flex;
-  justify-content: space-between;
+  margin: 32rpx var(--gutter) 0;
+  padding: 24rpx 0;
   background: var(--color-surface);
   border-radius: var(--radius-card);
-  border: 1rpx solid var(--color-border);
-  box-shadow: var(--shadow-card);
 }
 
 .stat_item {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8rpx;
+  min-width: 0;
+  border-left: 1rpx solid var(--color-divider);
+}
+
+.stat_item:first-child {
+  border-left: 0;
 }
 
 .stat_value {
-  font-size: 36rpx;
-  font-weight: 600;
   color: var(--color-text-primary);
+  font-size: var(--font-title);
+  font-weight: 700;
+  line-height: 1.3;
   font-variant-numeric: tabular-nums;
 }
 
 .stat_label {
-  font-size: 28rpx;
+  margin-top: 4rpx;
   color: var(--color-text-secondary);
-  text-align: center;
+  font-size: var(--font-caption);
   line-height: 1.35;
+  text-align: center;
   word-break: break-word;
 }
 
+/* Search: pill field with inline actions. */
 .search_bar {
-  margin: 20rpx 24rpx 0;
   display: flex;
-  gap: 12rpx;
   align-items: center;
-  padding: 14rpx;
-  background: var(--color-surface);
-  border-radius: var(--radius-card);
-  border: 1rpx solid var(--color-border);
-  box-shadow: var(--shadow-card);
+  margin: 32rpx var(--gutter) 0;
 }
 
 .search_input {
   flex: 1;
-  height: 76rpx;
-  padding: 0 24rpx;
-  background: var(--color-bg-secondary);
+  min-width: 0;
+  height: 80rpx;
+  padding: 0 32rpx;
+  background: var(--color-surface);
   border-radius: var(--radius-full);
-  font-size: 28rpx;
+  font-size: var(--font-meta);
 }
 
 .search_button {
-  margin: 0;
-  border-radius: var(--radius-full);
+  margin: 0 0 0 16rpx;
+  flex-shrink: 0;
 }
 
 .search_button_secondary {
-  background: var(--color-bg-secondary);
+  background: var(--color-surface);
   color: var(--color-text-secondary);
 }
 
+/* Filter chips */
 .tab_scroll {
-  margin-top: 20rpx;
+  margin-top: 28rpx;
+  white-space: nowrap;
 }
 
 .tab_row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12rpx;
-  padding: 0 24rpx;
+  padding: 0 var(--gutter);
 }
 
 .tab_item {
-  padding: 16rpx 28rpx;
+  flex-shrink: 0;
+  margin-right: 16rpx;
+  padding: 0 28rpx;
+  min-height: 64rpx;
+  line-height: 64rpx;
   border-radius: var(--radius-full);
   background: var(--color-surface);
   color: var(--color-text-secondary);
-  font-size: 28rpx;
-  border: 1rpx solid var(--color-border);
-  line-height: 1.35;
+  font-size: var(--font-meta);
+  font-weight: 600;
 }
 
 .tab_item_active {
-  background: var(--color-primary);
+  background: var(--color-fill-primary);
   color: var(--color-on-primary);
-  border-color: var(--color-primary);
 }
 
+/* Feed */
 .list_section {
-  padding: 20rpx 24rpx 0;
+  padding: 28rpx var(--gutter) 0;
 }
 
 .market_card,
 .post_card,
 .delivery_card,
-.photo_card {
+.photo_card,
+.lost_card,
+.dating_card {
   margin-bottom: 20rpx;
   background: var(--color-surface);
   border-radius: var(--radius-card);
   overflow: hidden;
-  border: 1rpx solid var(--color-border);
-  box-shadow: var(--shadow-card);
 }
 
+/* Second-hand: thumbnail row */
 .market_card {
   display: flex;
 }
 
 .market_cover {
-  width: 32%;
-  min-width: 160rpx;
-  max-width: 220rpx;
-  height: auto;
-  aspect-ratio: 1;
+  width: 200rpx;
+  height: 200rpx;
+  margin: 24rpx 0 24rpx 24rpx;
+  border-radius: var(--radius-control);
+  background: var(--color-surface-sunken);
   flex-shrink: 0;
-  background: var(--color-bg-secondary);
 }
 
 .market_content {
   flex: 1;
-  padding: 24rpx;
+  min-width: 0;
+  padding: 24rpx 28rpx;
 }
 
+/* Two-column grids: lost and found, dating */
 .lost_grid,
 .dating_grid {
   display: flex;
@@ -179,40 +187,39 @@
 
 .lost_card,
 .dating_card {
-  width: 48.2%;
-  margin-bottom: 20rpx;
-  background: var(--color-surface);
-  border-radius: var(--radius-card);
-  overflow: hidden;
-  border: 1rpx solid var(--color-border);
-  box-shadow: var(--shadow-card);
+  width: 48.5%;
 }
 
 .lost_cover,
 .dating_cover {
+  display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
-  background: var(--color-bg-secondary);
+  height: 240rpx;
+  background: var(--color-surface-sunken);
 }
 
 .lost_badges {
-  padding: 20rpx 20rpx 0;
   display: flex;
-  gap: 8rpx;
+  flex-wrap: wrap;
   align-items: center;
+  padding: 20rpx 20rpx 0;
+}
+
+.lost_badges .card_badge {
+  margin-right: 8rpx;
 }
 
 .photo_cover,
 .topic_cover {
+  display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
-  background: var(--color-bg-secondary);
+  height: 360rpx;
+  background: var(--color-surface-sunken);
 }
 
-.delivery_card {
-  padding: 26rpx;
+.delivery_card,
+.secret_card {
+  padding: 28rpx;
 }
 
 .delivery_header,
@@ -222,98 +229,117 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12rpx;
   min-width: 0;
 }
 
+.card_meta_row {
+  margin-top: 12rpx;
+  justify-content: flex-start;
+}
+
+.card_footer {
+  margin-top: 12rpx;
+}
+
+.delivery_header .card_title {
+  flex: 1;
+  min-width: 0;
+  margin-right: 16rpx;
+}
+
+.post_footer .time_text {
+  flex: 1;
+}
+
+.post_footer .metric_text {
+  margin-left: 20rpx;
+}
+
 .card_title {
-  font-size: 30rpx;
-  font-weight: 600;
   color: var(--color-text-primary);
-  line-height: 1.5;
+  font-size: var(--font-body);
+  font-weight: 600;
+  line-height: 1.45;
   word-break: break-word;
 }
 
 .card_summary {
-  margin-top: 14rpx;
+  margin-top: 8rpx;
   color: var(--color-text-secondary);
-  font-size: 28rpx;
-  line-height: 1.7;
+  font-size: var(--font-meta);
+  line-height: 1.6;
   word-break: break-word;
 }
 
 .card_badge,
 .card_sub_badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6rpx 14rpx;
+  display: inline-block;
+  padding: 4rpx 14rpx;
   border-radius: var(--radius-full);
-  background: var(--color-bg-tertiary);
-  color: var(--color-primary);
-  font-size: 22rpx;
-  line-height: 1.3;
-  text-align: center;
-  white-space: normal;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-ink);
+  font-size: var(--font-caption);
+  font-weight: 600;
+  line-height: 1.4;
+  flex-shrink: 0;
 }
 
 .card_sub_badge {
-  background: var(--color-bg-secondary);
+  background: var(--color-surface-sunken);
   color: var(--color-text-secondary);
 }
 
 .delivery_badge {
   background: var(--color-warning-soft);
-  color: var(--color-warning);
+  color: var(--color-warning-ink);
 }
 
 .card_meta {
   flex: 1;
-  color: var(--color-text-secondary);
-  font-size: 28rpx;
-  line-height: 1.5;
   min-width: 0;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-caption);
+  line-height: 1.5;
   word-break: break-word;
 }
 
+.card_meta_row .card_meta {
+  margin-left: 12rpx;
+}
+
 .price_text {
-  color: var(--color-danger);
-  font-size: 32rpx;
-  font-weight: 600;
+  color: var(--color-danger-ink);
+  font-size: var(--font-title);
+  font-weight: 700;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 .time_text,
 .metric_text {
   color: var(--color-text-tertiary);
-  font-size: 22rpx;
-  line-height: 1.35;
+  font-size: var(--font-caption);
+  line-height: 1.4;
 }
 
+/* Anonymous posts: quiet accent rule on the leading edge. */
 .secret_card {
-  padding: 26rpx;
-  border-left: 8rpx solid var(--color-text-primary);
+  border-left: 8rpx solid var(--color-primary);
+}
+
+.delivery_card .card_summary {
+  margin-top: 12rpx;
+}
+
+.delivery_card .time_text {
+  display: block;
+  margin-top: 12rpx;
 }
 
 .dating_card .card_title,
 .dating_card .card_meta,
 .dating_card .card_summary,
-.dating_card .time_text {
-  padding: 0 20rpx;
-}
-
-.dating_card .card_title {
-  margin-top: 18rpx;
-}
-
-.dating_card .card_summary {
-  min-height: 80rpx;
-}
-
-.dating_card .time_text {
-  display: block;
-  padding-bottom: 20rpx;
-}
-
+.dating_card .time_text,
 .photo_card .card_title,
 .photo_card .card_summary,
 .photo_card .post_footer,
@@ -324,36 +350,88 @@
 .lost_card .card_summary,
 .lost_card .card_meta,
 .lost_card .time_text {
-  padding-left: 20rpx;
-  padding-right: 20rpx;
+  padding-left: 24rpx;
+  padding-right: 24rpx;
 }
 
+.secret_card .card_title,
+.secret_card .card_summary,
+.secret_card .post_footer {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.dating_card .card_title,
 .photo_card .card_title,
 .post_card .card_title,
 .lost_card .card_title {
   margin-top: 20rpx;
 }
 
-.photo_card .post_footer,
-.post_card .post_footer {
-  padding-top: 18rpx;
-  padding-bottom: 20rpx;
+.secret_card .card_title {
+  margin-top: 0;
 }
 
+.dating_card .card_meta,
+.lost_card .card_meta {
+  display: block;
+  margin-top: 6rpx;
+}
+
+.dating_card .card_summary {
+  min-height: 84rpx;
+}
+
+.dating_card .time_text,
 .lost_card .time_text {
   display: block;
   padding-top: 12rpx;
-  padding-bottom: 20rpx;
+  padding-bottom: 24rpx;
 }
 
+.photo_card .post_footer,
+.post_card .post_footer {
+  padding-top: 16rpx;
+  padding-bottom: 24rpx;
+}
+
+.secret_card .post_footer {
+  padding-bottom: 0;
+}
+
+/* Empty state */
+.empty_panel {
+  margin: 32rpx var(--gutter) 0;
+  padding: 40rpx 32rpx;
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
+}
+
+.empty_title {
+  color: var(--color-text-primary);
+  font-size: var(--font-body);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.empty_summary {
+  margin-top: 8rpx;
+  color: var(--color-text-secondary);
+  font-size: var(--font-meta);
+  line-height: 1.6;
+}
+
+/* Fixed actions above the home indicator */
 .bottom_bar {
   position: fixed;
-  left: 24rpx;
-  right: 24rpx;
-  bottom: calc(20rpx + env(safe-area-inset-bottom));
-  display: flex;
-  gap: 16rpx;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 20;
+  display: flex;
+  padding: 16rpx var(--gutter) calc(16rpx + env(safe-area-inset-bottom));
+  background: var(--color-bg-primary);
+  border-top: 1rpx solid var(--color-divider);
 }
 
 .bottom_button {
@@ -362,30 +440,11 @@
   border-radius: var(--radius-full);
 }
 
+.bottom_button + .bottom_button {
+  margin-left: 16rpx;
+}
+
 .bottom_button_secondary {
   background: var(--color-surface);
   color: var(--color-text-primary);
-}
-
-.empty_panel {
-  margin: 24rpx;
-  padding: 52rpx 32rpx;
-  background: var(--color-surface);
-  border-radius: var(--radius-card);
-  text-align: center;
-  border: 1rpx solid var(--color-border);
-  box-shadow: var(--shadow-card);
-}
-
-.empty_title {
-  color: var(--color-text-primary);
-  font-size: 30rpx;
-  font-weight: 600;
-}
-
-.empty_summary {
-  margin-top: 14rpx;
-  color: var(--color-text-tertiary);
-  font-size: 24rpx;
-  line-height: 1.7;
 }

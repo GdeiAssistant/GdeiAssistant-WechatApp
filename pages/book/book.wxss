@@ -1,63 +1,67 @@
 @import "../../common/lib/weui.wxss";
 
 .weui-navbar {
-  position: static;
-  background-color: var(--color-surface);
+  position: relative;
 }
 
 .borrow-empty {
-  margin-top: 20rpx;
-  padding: 32rpx 24rpx;
+  margin: 32rpx var(--gutter) 0;
+  padding: 32rpx;
   border-radius: var(--radius-card);
-  background: var(--color-bg-secondary);
+  background: var(--color-surface);
   color: var(--color-text-secondary);
+  font-size: var(--font-meta);
   line-height: 1.6;
 }
 
 .renew-mask {
   position: fixed;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   z-index: 999;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 32rpx;
+  padding: var(--gutter);
   background: var(--color-overlay);
 }
 
 .renew-dialog {
   width: 100%;
   max-width: 640rpx;
-  padding: 36rpx 32rpx;
+  padding: 40rpx 32rpx 32rpx;
   border-radius: var(--radius-card);
-  background: var(--color-surface);
+  background: var(--color-surface-raised);
+  box-shadow: var(--shadow-raised);
   box-sizing: border-box;
 }
 
 .renew-dialog__title {
-  font-size: 34rpx;
+  font-size: var(--font-title);
   font-weight: 700;
   color: var(--color-text-primary);
 }
 
 .renew-dialog__message {
   margin-top: 16rpx;
-  font-size: 26rpx;
+  font-size: var(--font-meta);
   line-height: 1.6;
   color: var(--color-text-secondary);
 }
 
 .renew-dialog__input {
   margin-top: 24rpx;
-  padding: 24rpx;
+  padding: 24rpx 28rpx;
   border-radius: var(--radius-control);
-  background: var(--color-bg-secondary);
+  background: var(--color-surface-sunken);
 }
 
 .renew-dialog__error {
   margin-top: 16rpx;
-  font-size: 24rpx;
-  color: var(--color-danger);
+  font-size: var(--font-meta);
+  color: var(--color-danger-ink);
 }
 
 .renew-dialog__actions {
@@ -71,6 +75,6 @@
 }
 
 .renew-dialog__button_secondary {
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
   background: var(--color-bg-secondary);
 }

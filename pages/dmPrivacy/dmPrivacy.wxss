@@ -2,32 +2,51 @@
 
 .page {
   min-height: 100vh;
+  padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
   background: var(--color-bg-primary);
 }
 
+.page > .weui-cells {
+  margin-top: 24rpx;
+}
+
 .hint {
-  margin: 24rpx;
-  color: var(--color-text-tertiary);
-  font-size: 24rpx;
+  margin: 32rpx calc(var(--gutter) + 8rpx) 16rpx;
+  color: var(--color-text-secondary);
+  font-size: var(--font-meta);
   line-height: 1.6;
 }
 
+.page > .hint + .weui-cells {
+  margin-top: 0;
+}
+
 .option {
-  padding: 8rpx 0;
+  min-width: 0;
+  padding: 4rpx 0;
 }
 
 .option_title {
   color: var(--color-text-primary);
-  font-size: 30rpx;
+  font-size: var(--font-body);
+  font-weight: 600;
 }
 
 .option_desc {
   margin-top: 6rpx;
   color: var(--color-text-tertiary);
-  font-size: 22rpx;
+  font-size: var(--font-meta);
+  line-height: 1.5;
 }
 
+/* Selected policy: a soft emerald pill next to the chevron. */
 .checked {
-  color: var(--color-primary);
-  font-size: 24rpx;
+  flex-shrink: 0;
+  padding: 4rpx 16rpx;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-ink);
+  font-size: var(--font-caption);
+  font-weight: 600;
 }

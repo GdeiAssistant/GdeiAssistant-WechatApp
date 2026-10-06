@@ -2,17 +2,16 @@
 
 .page {
   min-height: 100vh;
+  padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
   background: var(--color-bg-primary);
-  padding-bottom: 48rpx;
 }
 
+/* Public profile uses the same brand band as "my profile"; actions sit below it on the canvas. */
 .card {
-  margin: 24rpx;
-  padding: 30rpx;
-  background: var(--color-surface);
-  border-radius: var(--radius-card);
-  border: 1rpx solid var(--color-border);
-  box-shadow: var(--shadow-card);
+  padding: 40rpx var(--gutter) 32rpx;
+  background: var(--color-band);
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
 }
 
 .header {
@@ -20,38 +19,49 @@
   align-items: flex-start;
 }
 
+.header > view {
+  flex: 1;
+  min-width: 0;
+}
+
 .avatar {
-  width: 132rpx;
-  height: 132rpx;
+  width: 136rpx;
+  height: 136rpx;
+  margin-right: 28rpx;
   border-radius: 50%;
-  margin-right: 24rpx;
-  background: var(--color-bg-secondary);
+  border: 4rpx solid var(--color-band-chip);
+  background: var(--color-band-chip);
+  flex-shrink: 0;
 }
 
 .name {
-  font-size: 34rpx;
-  color: var(--color-text-primary);
-  font-weight: 600;
+  color: var(--color-on-band);
+  font-size: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  word-break: break-word;
 }
 
 .intro {
-  margin-top: 10rpx;
-  color: var(--color-text-secondary);
-  font-size: 26rpx;
-  line-height: 1.5;
+  margin-top: 12rpx;
+  color: var(--color-on-band);
+  font-size: var(--font-meta);
+  line-height: 1.6;
+  word-break: break-word;
 }
 
 .relation {
-  margin-top: 10rpx;
-  color: var(--color-text-tertiary);
-  font-size: 24rpx;
+  margin-top: 12rpx;
+  color: var(--color-on-band-muted);
+  font-size: var(--font-meta);
+  line-height: 1.5;
 }
 
 .stats {
   display: flex;
-  flex-wrap: wrap;
-  margin-top: 28rpx;
-  gap: 16rpx;
+  margin-top: 32rpx;
+  border-radius: var(--radius-control);
+  background: var(--color-band-chip);
 }
 
 .stat {
@@ -63,39 +73,77 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 14rpx 8rpx;
   text-align: center;
-  padding: 12rpx 8rpx;
+}
+
+.stat + .stat {
+  border-left: 1rpx solid var(--color-band-chip);
 }
 
 .stat_value {
-  font-size: 32rpx;
+  color: var(--color-on-band);
+  font-size: var(--font-title);
+  font-weight: 700;
   line-height: 1.2;
-  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
 }
 
 .stat_label {
-  margin-top: 6rpx;
-  font-size: 22rpx;
+  margin-top: 4rpx;
+  color: var(--color-on-band-muted);
+  font-size: var(--font-caption);
   line-height: 1.35;
-  color: var(--color-text-tertiary);
   white-space: normal;
   word-break: break-word;
 }
 
+/* Follow is the one filled action; message and block are quieter siblings. */
 .actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16rpx;
-  margin-top: 28rpx;
+  margin-top: 24rpx;
 }
 
 .actions button {
+  flex: 1;
   margin: 0;
+  min-height: 80rpx;
+  line-height: 80rpx;
+  padding: 0 12rpx;
+  background: var(--color-band-chip);
+  color: var(--color-on-band);
+}
+
+.actions button + button {
+  margin-left: 16rpx;
+}
+
+.actions button[type="primary"] {
+  background: var(--color-surface);
+  color: var(--color-primary-ink);
+}
+
+.actions button[type="warn"] {
+  background: var(--color-band-chip);
+  color: var(--color-on-band);
+}
+
+.actions button::after {
+  border-color: transparent;
 }
 
 .loading_box,
 .empty {
-  padding: 80rpx 24rpx;
-  text-align: center;
-  color: var(--color-text-tertiary);
+  margin: 32rpx var(--gutter) 0;
+  padding: 48rpx 32rpx;
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: var(--font-meta);
+  line-height: 1.6;
+}
+
+.loading_box text {
+  display: block;
+  margin-top: 12rpx;
 }

@@ -1,42 +1,60 @@
 @import "../../common/lib/weui.wxss";
 
 .weui-navbar {
-  position: static;
-  background-color: var(--color-surface);
+  position: relative;
 }
 
+/* Module shortcuts read as one grouped list of linked rows, not tinted tiles. */
 .module_shortcuts {
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
-  margin-bottom: 24rpx;
+  margin: 24rpx var(--gutter) 0;
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  overflow: hidden;
 }
 
 .shortcut_card {
+  position: relative;
   display: block;
-  padding: 24rpx;
-  border-radius: var(--radius-card);
-  background: var(--color-primary-soft);
-  border: 1rpx solid var(--color-primary-soft);
+  padding: 28rpx 80rpx 28rpx 32rpx;
+  background: var(--color-surface);
 }
 
-.shortcut_card_warn {
-  background: var(--color-warning-soft);
-  border-color: var(--color-warning-soft);
+.shortcut_card + .shortcut_card {
+  border-top: 1rpx solid var(--color-divider);
+}
+
+.shortcut_card:after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  right: 36rpx;
+  width: 14rpx;
+  height: 14rpx;
+  margin-top: -9rpx;
+  border-style: solid;
+  border-width: 3rpx 3rpx 0 0;
+  border-color: var(--color-text-tertiary);
+  transform: rotate(45deg);
 }
 
 .shortcut_card_active {
-  opacity: 0.88;
+  background: var(--color-bg-secondary);
 }
 
 .shortcut_title {
-  font-size: 30rpx;
+  font-size: var(--font-body);
   font-weight: 600;
-  color: var(--color-text-primary);
+  line-height: 1.4;
+  color: var(--color-primary-ink);
+}
+
+.shortcut_card_warn .shortcut_title {
+  color: var(--color-warning-ink);
 }
 
 .shortcut_desc {
-  margin-top: 8rpx;
-  font-size: 24rpx;
+  margin-top: 6rpx;
+  font-size: var(--font-meta);
+  line-height: 1.5;
   color: var(--color-text-secondary);
 }

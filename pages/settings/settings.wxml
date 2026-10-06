@@ -45,6 +45,7 @@
         <switch
           checked="{{campusCredential.quickAuthEnabled}}"
           disabled="{{!campusCredential.hasSession || campusCredentialLoading || campusCredentialActionLoading || (!campusCredential.quickAuthEnabled && (!campusCredential.hasActiveConsent || !campusCredential.hasSavedCredential))}}"
+          color="{{themeClass === 'theme-dark' ? '#34C79A' : '#0E8F6E'}}"
           bindchange="handleQuickAuthSwitch"
         />
       </view>

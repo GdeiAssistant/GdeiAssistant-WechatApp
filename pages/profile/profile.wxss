@@ -2,14 +2,17 @@
 
 .profile_page {
   min-height: 100vh;
-  padding-bottom: 40rpx;
   background: var(--color-bg-primary);
 }
 
 .loading_box {
-  padding: 80rpx 0;
-  text-align: center;
+  margin: 48rpx var(--gutter) 0;
+  padding: 64rpx 32rpx;
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
   color: var(--color-text-tertiary);
+  font-size: var(--font-meta);
+  text-align: center;
 }
 
 .loading_box text {
@@ -17,15 +20,13 @@
   margin-top: 16rpx;
 }
 
+/* Identity sits in the brand band, the same signature as the home screen. */
 .profile_card {
   display: flex;
   flex-direction: column;
-  margin: 24rpx 24rpx 0;
-  padding: 30rpx;
-  background: var(--color-surface);
-  border-radius: var(--radius-card);
-  border: 1rpx solid var(--color-border);
-  box-shadow: var(--shadow-card);
+  padding: 40rpx var(--gutter) 32rpx;
+  background: var(--color-band);
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
 }
 
 .profile_card_main {
@@ -37,28 +38,30 @@
 .profile_avatar_wrap {
   position: relative;
   flex-shrink: 0;
+  padding-bottom: 20rpx;
 }
 
 .profile_avatar {
-  width: 132rpx;
-  height: 132rpx;
+  width: 136rpx;
+  height: 136rpx;
   border-radius: 50%;
-  background: var(--color-bg-secondary);
-  border: 6rpx solid var(--color-surface);
+  background: var(--color-band-chip);
+  border: 4rpx solid var(--color-band-chip);
 }
 
 .avatar_badge {
   position: absolute;
   left: 50%;
-  bottom: -10rpx;
+  bottom: 0;
   transform: translateX(-50%);
-  min-width: 92rpx;
+  min-width: 96rpx;
   max-width: 168rpx;
-  padding: 8rpx 14rpx;
+  padding: 8rpx 16rpx;
   border-radius: var(--radius-full);
-  background: var(--color-primary);
-  color: var(--color-on-primary);
-  font-size: 20rpx;
+  background: var(--color-surface);
+  color: var(--color-primary-ink);
+  font-size: var(--font-caption);
+  font-weight: 600;
   line-height: 1.25;
   text-align: center;
   white-space: normal;
@@ -68,77 +71,51 @@
 .profile_meta {
   flex: 1;
   min-width: 0;
-  margin-left: 24rpx;
-  padding-top: 8rpx;
+  margin-left: 28rpx;
+  padding-top: 4rpx;
 }
 
 .profile_name {
-  font-size: 36rpx;
+  color: var(--color-on-band);
+  font-size: var(--font-display);
   font-weight: 700;
-  color: var(--color-text-primary);
+  line-height: 1.2;
   word-break: break-word;
 }
 
 .profile_subtitle {
-  margin-top: 10rpx;
-  color: var(--color-text-tertiary);
-  font-size: 24rpx;
-}
-
-.profile_status {
-  margin-top: 12rpx;
-  color: var(--color-primary);
-  font-size: 24rpx;
-}
-
-.profile_intro {
-  margin-top: 18rpx;
-  color: var(--color-text-secondary);
-  font-size: 26rpx;
-  line-height: 1.7;
-}
-
-.profile_cells {
-  margin: 0 24rpx;
-  border-radius: var(--radius-card);
-  overflow: hidden;
-  border: 1rpx solid var(--color-border);
-  box-shadow: var(--shadow-card);
-}
-
-.textarea_wrap {
-  width: 100%;
-  max-width: 100%;
-}
-
-.profile_textarea {
-  width: 100%;
-  box-sizing: border-box;
-  color: var(--color-text-primary);
-}
-
-.profile_textarea {
-  min-height: 140rpx;
-  text-align: left;
-  line-height: 1.7;
-}
-
-.multi_line_value {
-  max-width: 100%;
-  white-space: normal;
+  margin-top: 8rpx;
+  color: var(--color-on-band-muted);
+  font-size: var(--font-meta);
+  line-height: 1.4;
   word-break: break-word;
 }
 
-.introduction_cell {
-  align-items: flex-start;
+.profile_status {
+  display: inline-block;
+  margin-top: 12rpx;
+  padding: 4rpx 16rpx;
+  border-radius: var(--radius-full);
+  background: var(--color-band-chip);
+  color: var(--color-on-band);
+  font-size: var(--font-caption);
 }
 
+.profile_intro {
+  margin-top: 16rpx;
+  color: var(--color-on-band);
+  font-size: var(--font-meta);
+  line-height: 1.65;
+  word-break: break-word;
+}
+
+/* Follow counts: one tinted strip split by hairlines, each segment tappable. */
 .profile_stats {
   display: flex;
-  flex-wrap: wrap;
   width: 100%;
-  margin-top: 24rpx;
-  gap: 16rpx;
+  margin-top: 32rpx;
+  border-radius: var(--radius-control);
+  background: var(--color-band-chip);
 }
 
 .social_stat {
@@ -150,22 +127,67 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 14rpx 8rpx;
   text-align: center;
-  padding: 12rpx 8rpx;
+}
+
+.social_stat + .social_stat {
+  border-left: 1rpx solid var(--color-band-chip);
 }
 
 .social_stat_value {
-  font-size: 32rpx;
+  color: var(--color-on-band);
+  font-size: var(--font-title);
+  font-weight: 700;
   line-height: 1.2;
-  color: var(--color-text-primary);
   font-variant-numeric: tabular-nums;
 }
 
 .social_stat_label {
-  margin-top: 6rpx;
-  font-size: 22rpx;
+  margin-top: 4rpx;
+  color: var(--color-on-band-muted);
+  font-size: var(--font-caption);
   line-height: 1.35;
-  color: var(--color-text-tertiary);
   white-space: normal;
   word-break: break-word;
+}
+
+.profile_cells {
+  overflow: hidden;
+}
+
+.multi_line_value {
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Introduction: label above a full-width field instead of a squeezed right column. */
+.introduction_cell {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.introduction_cell .weui-cell__bd {
+  color: var(--color-text-primary);
+}
+
+.textarea_wrap {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 16rpx;
+  padding: 20rpx 24rpx;
+  box-sizing: border-box;
+  border-radius: var(--radius-control);
+  background: var(--color-surface-sunken);
+  text-align: left;
+}
+
+.profile_textarea {
+  width: 100%;
+  min-height: 140rpx;
+  box-sizing: border-box;
+  color: var(--color-text-primary);
+  font-size: var(--font-body);
+  line-height: 1.6;
+  text-align: left;
 }

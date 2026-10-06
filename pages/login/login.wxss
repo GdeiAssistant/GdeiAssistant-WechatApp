@@ -2,101 +2,71 @@
 
 .container {
   background: var(--color-bg-primary);
+  justify-content: flex-start;
 }
 
-.page-section {
-  margin-bottom: 20rpx;
+/* Brand band: logo, product name and data source, left aligned. */
+.login_band {
+  background: var(--color-band);
+  padding: 72rpx var(--gutter) 64rpx;
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
+}
+
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.userinfo-avatar {
+  width: 112rpx;
+  height: 112rpx;
+  margin-bottom: 32rpx;
+  border-radius: 28rpx;
+  background: #ffffff;
+}
+
+.userinfo-nickname {
+  color: var(--color-on-band);
+  font-size: 52rpx;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.userinfo-source {
+  margin-top: 12rpx;
+  color: var(--color-on-band-muted);
+  font-size: var(--font-meta);
+  line-height: 1.4;
 }
 
 .page-body {
-  margin-top: 40rpx;
+  margin-top: 48rpx;
+  flex-grow: 1;
 }
 
 form {
   width: 100%;
 }
 
-.userinfo {
-  margin-top: 72rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.page-section {
+  margin-bottom: 0;
 }
 
-.userinfo-avatar {
-  width: 144rpx;
-  height: 144rpx;
-  margin: 12rpx 20rpx 24rpx;
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-card);
-}
-
-.userinfo-nickname {
-  color: var(--color-text-primary);
-  font-size: 40rpx;
-  font-weight: 700;
-}
-
-.userinfo-source {
-  margin-top: 8rpx;
-  color: var(--color-text-tertiary);
-  font-size: 24rpx;
-}
-
-.weui-cells {
-  margin-left: 24rpx;
-  margin-right: 24rpx;
-}
-
-.login_aux {
-  margin: 40rpx 48rpx 0;
-  padding-top: 24rpx;
-  border-top: 1rpx solid var(--color-divider);
-}
-
-.mock_toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 8rpx;
-}
-
-.mock_label {
-  color: var(--color-text-tertiary);
-  font-size: 24rpx;
-}
-
-.mock_switch {
-  transform: scale(0.82);
-  transform-origin: right center;
-}
-
-.mock_hint {
-  display: block;
-  margin: 12rpx 8rpx 0;
-  color: var(--color-text-tertiary);
-  font-size: 24rpx;
-  line-height: 1.5;
-}
-
-.settings_link {
-  display: block;
-  margin-top: 14rpx;
-  padding: 0 8rpx;
-  color: var(--color-text-tertiary);
-  font-size: 24rpx;
+.login_fields .weui-cell {
+  min-height: 112rpx;
 }
 
 .consent_section {
-  margin: 32rpx 48rpx 8rpx;
+  margin: 32rpx var(--gutter) 0;
+  padding: 0 8rpx;
 }
 
 .consent_label {
   display: flex;
   align-items: flex-start;
-  gap: 16rpx;
   color: var(--color-text-secondary);
-  font-size: 26rpx;
+  font-size: var(--font-meta);
   line-height: 1.6;
 }
 
@@ -114,10 +84,58 @@ form {
   font-weight: 600;
 }
 
+.btn-area {
+  margin-top: 40rpx;
+}
+
+/* Secondary tools sit in one quiet group under the primary action. */
+.login_aux {
+  margin: 48rpx var(--gutter) 0;
+  padding: 8rpx 32rpx;
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+}
+
+.mock_toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 96rpx;
+  border-bottom: 1rpx solid var(--color-divider);
+}
+
+.mock_label {
+  color: var(--color-text-primary);
+  font-size: var(--font-body);
+}
+
+.mock_switch {
+  transform: scale(0.86);
+  transform-origin: right center;
+}
+
+.mock_hint {
+  display: block;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid var(--color-divider);
+  color: var(--color-text-secondary);
+  font-size: var(--font-meta);
+  line-height: 1.55;
+}
+
+.settings_link {
+  display: flex;
+  align-items: center;
+  min-height: 96rpx;
+  color: var(--color-primary-ink);
+  font-size: var(--font-body);
+  font-weight: 600;
+}
+
 .version_info {
   margin: 48rpx 0 40rpx;
   text-align: center;
   color: var(--color-text-tertiary);
-  font-size: 24rpx;
+  font-size: var(--font-caption);
   font-variant-numeric: tabular-nums;
 }
