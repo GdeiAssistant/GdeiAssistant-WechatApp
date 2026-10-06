@@ -129,7 +129,6 @@ function stubCommon(loginSpy, modalCalls) {
       const messages = {
         'login.navTitle': '登录',
         'login.appName': '广东二师助手',
-        'login.dataSourceLabel': '数据源：',
         'login.usernamePlaceholder': '请输入校园网账号',
         'login.passwordPlaceholder': '请输入校园网密码',
         'login.button': '登录',
