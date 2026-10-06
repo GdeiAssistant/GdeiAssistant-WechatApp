@@ -1,41 +1,16 @@
 var LOCATION_REGIONS = require('../constants/location-regions.js')
-var i18n = require('../utils/i18n.js')
 var {
   getDefaultProfileOptionsPayload,
   getFacultyDictionaryOptions,
   getMajorLabelByCode,
   getMajorOptions,
-  formatLocationDisplay
+  formatLocationDisplay,
+  getLocationNodeName,
+  findLocationNodes,
+  getLocationDisplay,
+  localizeIpArea
 } = require('../constants/profile.js')
 var mockData = require('./mock-data.js')
-
-function getLocationNodeName(node, locale) {
-  if (!node || typeof node !== 'object') {
-    return ''
-  }
-  var normalizedLocale = typeof utilsNormalizeLocale === 'function'
-    ? utilsNormalizeLocale(locale)
-    : (i18n && typeof i18n.normalizeLocale === 'function' ? i18n.normalizeLocale(locale) : 'zh-CN')
-
-  if (normalizedLocale === 'en' || normalizedLocale === 'ja' || normalizedLocale === 'ko') {
-    var localizedNames = node.localizedNames || {}
-    if (localizedNames[normalizedLocale]) {
-      return String(localizedNames[normalizedLocale]).trim()
-    }
-    if (node.latinName) {
-      return String(node.latinName).trim()
-    }
-  }
-
-  return String(node.aliasesName || node.name || '').trim()
-}
-
-function utilsNormalizeLocale(locale) {
-  if (i18n && typeof i18n.normalizeLocale === 'function') {
-    return i18n.normalizeLocale(locale)
-  }
-  return 'zh-CN'
-}
 
 function buildLocationDisplay(region, state, city, locale) {
   return formatLocationDisplay(
@@ -47,30 +22,7 @@ function buildLocationDisplay(region, state, city, locale) {
 }
 
 function findLocationNodeByCodes(regionCode, stateCode, cityCode) {
-  var region = LOCATION_REGIONS.filter(function(item) {
-    return item.code === regionCode
-  })[0]
-  if (!region) {
-    return null
-  }
-
-  var states = Array.isArray(region.states) ? region.states : []
-  var state = states.filter(function(item) {
-    return item.code === stateCode
-  })[0] || states[0] || null
-  if (!state && states.length) {
-    return null
-  }
-
-  var cities = state && Array.isArray(state.cities) ? state.cities : []
-  var city = cities.filter(function(item) {
-    return item.code === cityCode
-  })[0] || cities[0] || null
-  if (!city && cities.length) {
-    return null
-  }
-
-  return { region: region, state: state, city: city }
+  return findLocationNodes({ region: regionCode, state: stateCode, city: cityCode }, LOCATION_REGIONS)
 }
 
 function applyProfileUpdate(token, updater, utils) {
@@ -104,6 +56,13 @@ function handleProfile(token, utils) {
         return { code: state.profile.major.code, label: majorLabel || localizedProfile.major.label }
       })()
     : localizedProfile.major
+  ;['location', 'hometown'].forEach(function(field) {
+    var location = mergedProfile[field] || {}
+    mergedProfile[field] = Object.assign({}, location, {
+      displayName: getLocationDisplay(location, location.displayName, locale, LOCATION_REGIONS)
+    })
+  })
+  mergedProfile.ipArea = localizeIpArea(mergedProfile.ipArea, locale)
   return utils.resolveWithDelay(utils.buildSuccess(mergedProfile))
 }
 

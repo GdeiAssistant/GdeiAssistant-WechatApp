@@ -1,6 +1,6 @@
-const userApi = require('../services/apis/user.js')
 const i18n = require('../utils/i18n.js')
 const profileCatalog = require('./profile-catalog.js')
+const LOCATION_REGIONS = require('./location-regions.js')
 
 const NOT_SELECTED = '__not_selected__'
 let cachedProfileOptionsPayload = profileCatalog.buildDefaultProfileOptionsPayload()
@@ -21,9 +21,11 @@ function getEnrollmentYearOptions() {
 
 function fetchProfileOptions(forceRefresh) {
   if (hasLoadedRemoteProfileOptions && !forceRefresh) {
-    return Promise.resolve(cachedProfileOptions)
+    return Promise.resolve(getCachedProfileOptions())
   }
 
+  // Resolve the API lazily: request -> mock -> profile handlers also use this catalog.
+  const userApi = require('../services/apis/user.js')
   return userApi.getProfileOptions().then(function(result) {
     if (!result.success) {
       throw new Error(result.message || i18n.t('profilePage.loadProfileFailed'))
@@ -43,7 +45,7 @@ function getCachedProfileOptions() {
     cachedProfileOptionsPayload = profileCatalog.buildDefaultProfileOptionsPayload(locale)
   }
   if (!cachedProfileOptions || cachedProfileOptionsLocale !== locale) {
-    cachedProfileOptions = normalizeProfileOptions(cachedProfileOptionsPayload)
+    cachedProfileOptions = normalizeProfileOptions(cachedProfileOptionsPayload, hasLoadedRemoteProfileOptions)
     cachedProfileOptionsLocale = locale
   }
   return cachedProfileOptions
@@ -140,25 +142,113 @@ function formatLocationDisplay(regionName, stateName, cityName, locale) {
   return parts.join(' ')
 }
 
-function normalizeProfileOptions(payload) {
+function getLocationNodeName(node, locale) {
+  if (!node || typeof node !== 'object') {
+    return ''
+  }
+  const normalizedLocale = i18n.normalizeLocale(locale || getCurrentLocale())
+  const localizedName = (node.localizedNames || {})[normalizedLocale]
+  if (localizedName) {
+    return String(localizedName).trim()
+  }
+  if (normalizedLocale === 'en' || normalizedLocale === 'ja' || normalizedLocale === 'ko') {
+    return String(node.latinName || node.aliasesName || node.name || '').trim()
+  }
+  return String(node.aliasesName || node.name || '').trim()
+}
+
+function findLocationNodes(codes, locationTree) {
+  const safeCodes = codes || {}
+  const regionCode = String(safeCodes.region || '')
+  const stateCode = String(safeCodes.state || '')
+  const cityCode = String(safeCodes.city || '')
+  const region = (locationTree || LOCATION_REGIONS).find(function(node) { return node.code === regionCode })
+  if (!region || (!stateCode && cityCode)) {
+    return null
+  }
+  const state = stateCode ? (region.states || []).find(function(node) { return node.code === stateCode }) : null
+  if (stateCode && !state) {
+    return null
+  }
+  const city = cityCode ? (state.cities || []).find(function(node) { return node.code === cityCode }) : null
+  return cityCode && !city ? null : { region: region, state: state, city: city }
+}
+
+function getLocationDisplay(codes, fallback, locale, locationTree) {
+  const nodes = findLocationNodes(codes, locationTree)
+  return nodes ? formatLocationDisplay(
+    getLocationNodeName(nodes.region, locale),
+    getLocationNodeName(nodes.state, locale),
+    getLocationNodeName(nodes.city, locale),
+    locale
+  ) : (fallback || '')
+}
+
+let locationNameIndex
+
+function localizeIpArea(value, locale) {
+  // Only complete catalog names/paths are system geography. Unknown text is kept verbatim.
+  if (!locationNameIndex) {
+    locationNameIndex = Object.create(null)
+    const addPath = function(nodes) {
+      const aliases = [
+        nodes.map(function(node) { return node.name }).join(' '),
+        nodes.map(function(node) { return node.name }).join(''),
+        nodes.map(function(node) { return node.aliasesName || node.name }).join(' '),
+        nodes.map(function(node) { return node.latinName || node.name }).join(' ')
+      ]
+      i18n.SUPPORTED_LOCALES.forEach(function(language) {
+        const foreign = language === 'en' || language === 'ja' || language === 'ko'
+        const names = nodes.map(function(node) {
+          return (node.localizedNames || {})[language] || (foreign && node.latinName) || node.aliasesName || node.name
+        })
+        aliases.push(names.join(' '), foreign ? names.slice().reverse().join(', ') : names.join(' '))
+        if (language.indexOf('zh-') === 0) aliases.push(names.join(''))
+      })
+      aliases.forEach(function(name) {
+        if (!name) return
+        const candidates = locationNameIndex[name] || (locationNameIndex[name] = [])
+        if (candidates.indexOf(nodes) === -1) candidates.push(nodes)
+      })
+    }
+    const addNodes = function(nodes, parents, level) {
+      nodes.forEach(function(node) {
+        const fullPath = parents.concat(node)
+        for (let start = 0; start < fullPath.length; start += 1) addPath(fullPath.slice(start))
+        if (level < 2) addNodes(node[level === 0 ? 'states' : 'cities'] || [], fullPath, level + 1)
+      })
+    }
+    addNodes(LOCATION_REGIONS, [], 0)
+  }
+  const candidates = locationNameIndex[value]
+  if (!candidates || !candidates.length) {
+    return value || ''
+  }
+  const names = candidates.map(function(nodes) {
+    const labels = nodes.map(function(node) { return getLocationNodeName(node, locale) })
+    return formatLocationDisplay(labels[0], labels[1], labels[2], locale)
+  })
+  return names.every(function(name) { return name === names[0] }) ? names[0] : value
+}
+
+function normalizeProfileOptions(payload, relocalize) {
   const fallbackPayload = profileCatalog.buildDefaultProfileOptionsPayload()
   const safePayload = payload || {}
   const normalizedFallbackFaculties = normalizeFacultyOptions(fallbackPayload.faculties, [])
-  const faculties = normalizeFacultyOptions(safePayload.faculties, normalizedFallbackFaculties)
+  const faculties = normalizeFacultyOptions(safePayload.faculties, normalizedFallbackFaculties, relocalize)
 
   return {
     faculties: faculties,
-    marketplaceItemTypes: normalizeDictionaryOptions(safePayload.marketplaceItemTypes, fallbackPayload.marketplaceItemTypes),
-    lostFoundItemTypes: normalizeDictionaryOptions(safePayload.lostFoundItemTypes, fallbackPayload.lostFoundItemTypes),
-    lostFoundModes: normalizeDictionaryOptions(safePayload.lostFoundModes, fallbackPayload.lostFoundModes)
+    marketplaceItemTypes: normalizeDictionaryOptions(safePayload.marketplaceItemTypes, fallbackPayload.marketplaceItemTypes, relocalize),
+    lostFoundItemTypes: normalizeDictionaryOptions(safePayload.lostFoundItemTypes, fallbackPayload.lostFoundItemTypes, relocalize),
+    lostFoundModes: normalizeDictionaryOptions(safePayload.lostFoundModes, fallbackPayload.lostFoundModes, relocalize)
   }
 }
 
-function normalizeFacultyOptions(options, fallbackOptions) {
-  const legacyFallbackLocale = typeof i18n.getCurrentLocale === 'function'
-    ? i18n.getCurrentLocale()
-    : 'zh-CN'
-  const legacyFallbackFaculties = profileCatalog.buildDefaultProfileOptionsPayload(legacyFallbackLocale).faculties
+function normalizeFacultyOptions(options, fallbackOptions, relocalize) {
+  const legacyFallbackFaculties = (i18n.SUPPORTED_LOCALES || [getCurrentLocale()]).reduce(function(result, language) {
+    return result.concat(profileCatalog.buildDefaultProfileOptionsPayload(language).faculties)
+  }, [])
   const fallbackFacultyByCode = fallbackOptions.reduce(function(result, faculty) {
     if (faculty && typeof faculty.code === 'number') {
       result[faculty.code] = faculty
@@ -177,7 +267,7 @@ function normalizeFacultyOptions(options, fallbackOptions) {
   const normalizedOptions = (Array.isArray(options) ? options : []).map(function(option) {
     const code = typeof option.code === 'number' ? option.code : null
     const fallbackFaculty = code === null ? null : fallbackFacultyByCode[code]
-    var label = String(option.label || (fallbackFaculty && fallbackFaculty.label) || '').trim()
+    var label = String((relocalize && fallbackFaculty && fallbackFaculty.label) || option.label || (fallbackFaculty && fallbackFaculty.label) || '').trim()
     if (code === null || !label) {
       return null
     }
@@ -204,12 +294,13 @@ function normalizeFacultyOptions(options, fallbackOptions) {
             }
           }
 
-          const fallbackMajor = ((fallbackFaculty && fallbackFaculty.majors) || []).filter(function(item) {
-            return item && item.code === majorValueFromString
-          })[0]
+          const majorCode = fallbackMajorCode || majorValueFromString
+          const fallbackMajor = ((fallbackFaculty && fallbackFaculty.majors) || []).find(function(item) {
+            return item && item.code === majorCode
+          })
 
           return {
-            code: fallbackMajorCode || majorValueFromString,
+            code: majorCode,
             label: String((fallbackMajor && fallbackMajor.label) || '').trim() || majorValueFromString
           }
         }
@@ -218,10 +309,10 @@ function normalizeFacultyOptions(options, fallbackOptions) {
         }
         var majorCode = String(major.code || '').trim()
         var majorLabel = String(major.label || '').trim()
-        if (!majorLabel) {
+        if (!majorLabel || relocalize) {
           majorLabel = String((((fallbackFaculty && fallbackFaculty.majors) || []).filter(function(item) {
             return item && item.code === majorCode
-          })[0] || {}).label || '').trim()
+          })[0] || {}).label || majorLabel).trim()
         }
         if (!majorCode || !majorLabel) {
           return null
@@ -250,7 +341,7 @@ function normalizeFacultyOptions(options, fallbackOptions) {
   return normalizedOptions.length ? normalizedOptions : fallbackOptions.slice()
 }
 
-function normalizeDictionaryOptions(options, fallbackOptions) {
+function normalizeDictionaryOptions(options, fallbackOptions, relocalize) {
   const normalizedOptions = (Array.isArray(options) ? options : []).map(function(option) {
     const code = typeof option === 'number'
       ? option
@@ -259,6 +350,7 @@ function normalizeDictionaryOptions(options, fallbackOptions) {
       ? fallbackOptions.filter(function(item) { return item && item.code === code })[0]
       : null
     const label = String(
+      (relocalize && fallbackOption && fallbackOption.label) ||
       (option && typeof option === 'object' ? option.label : '') ||
       (fallbackOption && fallbackOption.label) ||
       ''
@@ -306,5 +398,9 @@ module.exports = {
   getMarketplaceItemOptions,
   getLostFoundItemOptions,
   getLostFoundModeOptions,
-  formatLocationDisplay
+  formatLocationDisplay,
+  getLocationNodeName,
+  findLocationNodes,
+  getLocationDisplay,
+  localizeIpArea
 }

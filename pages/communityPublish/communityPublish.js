@@ -85,6 +85,7 @@ function findEditableItem(moduleId, payload, itemId) {
 Page({
   onShow: function () {
     themeUtil.applyTheme(this)
+    this.refreshDictionaryOptions()
     this.refreshI18n()
   },
   data: {
