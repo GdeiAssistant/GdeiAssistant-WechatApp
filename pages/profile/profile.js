@@ -489,6 +489,11 @@ Page({
   },
 
   applyProfilePatch: function(patch) {
+    const introductionDraft = this.data.form && this.data.form.introduction
+    const hasIntroductionPatch = Object.prototype.hasOwnProperty.call(patch || {}, 'introduction')
+    const preserveIntroductionDraft = typeof introductionDraft === 'string'
+      && introductionDraft !== String((this.data.profile || {}).introduction || '')
+      && (!hasIntroductionPatch || introductionDraft.trim() !== String(patch.introduction || '').trim())
     const nextProfile = syncProfileLocationDisplay(
       normalizeProfile(Object.assign({}, this.data.profile || {}, patch || {})),
       this.getLocationTree()
@@ -497,6 +502,9 @@ Page({
       profile: nextProfile
     })
     this.setEditableState(nextProfile)
+    if (preserveIntroductionDraft) {
+      this.setData({ 'form.introduction': introductionDraft })
+    }
   },
 
   queueProfileSave: function(fieldKey, promiseFactory, patch) {
@@ -514,8 +522,12 @@ Page({
         this.applyProfilePatch(patch)
         this.setSaveStatus(i18n.t('profilePage.saved'))
       }).catch((error) => {
+        const introductionDraft = this.data.form && this.data.form.introduction
         if (this.data.profile) {
           this.setEditableState(this.data.profile)
+          if (typeof introductionDraft === 'string') {
+            this.setData({ 'form.introduction': introductionDraft })
+          }
         }
         pageUtils.showTopTips(this, error.message)
       }).finally(() => {
