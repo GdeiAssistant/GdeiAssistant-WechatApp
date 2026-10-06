@@ -430,8 +430,6 @@ Page({
         friends: i18n.t('social.stats.friends'),
         searchUsers: i18n.t('social.entry.searchUsers'),
         directMessages: i18n.t('social.entry.directMessages'),
-        privacy: i18n.t('social.entry.privacy'),
-        blocks: i18n.t('social.entry.blocks'),
         socialSection: i18n.t('social.entry.directMessages')
       }
     })
@@ -617,12 +615,7 @@ Page({
       wx.navigateTo({ url: '/pages/conversationList/conversationList' })
       return
     }
-    if (target === 'privacy') {
-      wx.navigateTo({ url: '/pages/dmPrivacy/dmPrivacy' })
-      return
-    }
-    if (target === 'blocks') {
-      wx.navigateTo({ url: '/pages/blockList/blockList' })
+    if (target !== 'following' && target !== 'followers' && target !== 'friends') {
       return
     }
     if (!this.data.socialMe || !this.data.socialMe.id) {

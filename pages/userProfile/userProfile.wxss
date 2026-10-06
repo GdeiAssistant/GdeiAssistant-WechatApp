@@ -48,23 +48,37 @@
 
 .stats {
   display: flex;
+  flex-wrap: wrap;
   margin-top: 28rpx;
+  gap: 16rpx;
 }
 
 .stat {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 96rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  padding: 12rpx 8rpx;
 }
 
 .stat_value {
   font-size: 32rpx;
+  line-height: 1.2;
   color: var(--color-text-primary);
 }
 
 .stat_label {
   margin-top: 6rpx;
   font-size: 22rpx;
+  line-height: 1.35;
   color: var(--color-text-tertiary);
+  white-space: normal;
+  word-break: break-word;
 }
 
 .actions {

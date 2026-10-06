@@ -26,7 +26,17 @@ function handleAnnouncementDetail(token, path, utils) {
   })[0]
 
   if (!detail) {
-    return utils.rejectWithMessage(data.localizedMockText('系统通知不存在', '系統通知不存在', 'System notification not found', 'システム通知が見つかりません', '시스템 알림을 찾을 수 없습니다', utils.currentLocale && utils.currentLocale()))
+    return utils.rejectWithMessage(
+      data.localizedMockText(
+        '系统通知不存在',
+        '系統訊息不存在',
+        'System notification not found',
+        'システム通知が見つかりません',
+        '시스템 알림을 찾을 수 없습니다',
+        utils.currentLocale && utils.currentLocale(),
+        '系統通知不存在'
+      )
+    )
   }
 
   return utils.resolveWithDelay(utils.buildSuccess(detail))

@@ -8,54 +8,47 @@
 
   <block wx:if="{{!loading && profile}}">
     <view class="profile_card">
-      <view class="profile_avatar_wrap" bindtap="handleAvatarTap">
-        <image class="profile_avatar" src="{{profile.avatar}}" mode="aspectFill"></image>
-        <view class="avatar_badge">{{avatarUploading ? t.uploading : t.changeAvatar}}</view>
+      <view class="profile_card_main">
+        <view class="profile_avatar_wrap" bindtap="handleAvatarTap">
+          <image class="profile_avatar" src="{{profile.avatar}}" mode="aspectFill"></image>
+          <view class="avatar_badge">{{avatarUploading ? t.uploading : t.changeAvatar}}</view>
+        </view>
+
+        <view class="profile_meta">
+          <view class="profile_name">{{profile.nickname || t.notFilled}}</view>
+          <view class="profile_subtitle">{{t.usernameLabel}}{{profile.maskedUsername || t.notFilled}}</view>
+          <view class="profile_subtitle">{{t.ipAreaLabel}}{{profile.ipArea || t.empty}}</view>
+          <view class="profile_status" wx:if="{{avatarUploading || savingField || saveStatusText}}">
+            {{avatarUploading ? t.updatingAvatar : (savingField ? t.savingProfile : saveStatusText)}}
+          </view>
+          <view class="profile_intro">{{((form && form.introduction) || profile.introduction) || t.notFilled}}</view>
+        </view>
       </view>
 
-      <view class="profile_meta">
-        <view class="profile_name">{{profile.nickname || t.notFilled}}</view>
-        <view class="profile_subtitle">{{t.usernameLabel}}{{profile.maskedUsername || t.notFilled}}</view>
-        <view class="profile_subtitle">{{t.ipAreaLabel}}{{profile.ipArea || t.empty}}</view>
-        <view class="profile_status" wx:if="{{avatarUploading || savingField || saveStatusText}}">
-          {{avatarUploading ? t.updatingAvatar : (savingField ? t.savingProfile : saveStatusText)}}
+      <view class="profile_stats" wx:if="{{socialMe}}">
+        <view class="social_stat" data-target="following" bindtap="openSocialEntry">
+          <view class="social_stat_value">{{socialMe.followingCount}}</view>
+          <view class="social_stat_label">{{t.following}}</view>
         </view>
-        <view class="profile_intro">{{((form && form.introduction) || profile.introduction) || t.notFilled}}</view>
+        <view class="social_stat" data-target="followers" bindtap="openSocialEntry">
+          <view class="social_stat_value">{{socialMe.followerCount}}</view>
+          <view class="social_stat_label">{{t.followers}}</view>
+        </view>
+        <view class="social_stat" data-target="friends" bindtap="openSocialEntry">
+          <view class="social_stat_value">{{socialMe.friendCount}}</view>
+          <view class="social_stat_label">{{t.friends}}</view>
+        </view>
       </view>
     </view>
 
     <view class="weui-cells__title" wx:if="{{socialMe}}">{{t.socialSection}}</view>
     <view class="weui-cells weui-cells_after-title profile_cells" wx:if="{{socialMe}}">
-      <view class="weui-cell">
-        <view class="weui-cell__bd social_stats">
-          <view class="social_stat" data-target="following" bindtap="openSocialEntry">
-            <view class="social_stat_value">{{socialMe.followingCount}}</view>
-            <view class="social_stat_label">{{t.following}}</view>
-          </view>
-          <view class="social_stat" data-target="followers" bindtap="openSocialEntry">
-            <view class="social_stat_value">{{socialMe.followerCount}}</view>
-            <view class="social_stat_label">{{t.followers}}</view>
-          </view>
-          <view class="social_stat" data-target="friends" bindtap="openSocialEntry">
-            <view class="social_stat_value">{{socialMe.friendCount}}</view>
-            <view class="social_stat_label">{{t.friends}}</view>
-          </view>
-        </view>
-      </view>
       <view class="weui-cell weui-cell_access" data-target="search" bindtap="openSocialEntry">
         <view class="weui-cell__bd">{{t.searchUsers}}</view>
         <view class="weui-cell__ft"></view>
       </view>
       <view class="weui-cell weui-cell_access" data-target="messages" bindtap="openSocialEntry">
         <view class="weui-cell__bd">{{t.directMessages}}</view>
-        <view class="weui-cell__ft"></view>
-      </view>
-      <view class="weui-cell weui-cell_access" data-target="privacy" bindtap="openSocialEntry">
-        <view class="weui-cell__bd">{{t.privacy}}</view>
-        <view class="weui-cell__ft"></view>
-      </view>
-      <view class="weui-cell weui-cell_access" data-target="blocks" bindtap="openSocialEntry">
-        <view class="weui-cell__bd">{{t.blocks}}</view>
         <view class="weui-cell__ft"></view>
       </view>
       <view class="weui-cell weui-cell_access" bindtap="openOwnSocialProfile">

@@ -227,14 +227,17 @@ function handleLocationUpdate(token, payload, type, utils) {
   var locationNode = findLocationNodeByCodes(regionCode, stateCode, cityCode)
 
   if (!locationNode) {
-    return utils.rejectWithMessage(mockData.localizedMockText(
-      '未找到对应的地区选项',
-      '未找到對應的地區選項',
-      'The selected location option was not found',
-      '選択した地域オプションが見つかりませんでした',
-      '선택한 지역 옵션을 찾을 수 없습니다',
-      utils.currentLocale && utils.currentLocale()
-    ))
+    return utils.rejectWithMessage(
+      mockData.localizedMockText(
+        '未找到对应的地区选项',
+        '找不到對應的地區選項',
+        'The selected location option was not found',
+        '選択した地域オプションが見つかりませんでした',
+        '선택한 지역 옵션을 찾을 수 없습니다',
+        utils.currentLocale && utils.currentLocale(),
+        '未找到對應的地區選項'
+      )
+    )
   }
 
   return applyProfileUpdate(token, function(profile) {

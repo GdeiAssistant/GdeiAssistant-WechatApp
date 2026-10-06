@@ -90,11 +90,31 @@ function handleCardLost(token, query, utils) {
 
   var cardPassword = String(query.cardPassword || '').trim()
   if (!/^\d{6}$/.test(cardPassword)) {
-    return utils.rejectWithMessage(data.localizedMockText('请输入正确的校园卡查询密码', '請輸入正確的校園卡查詢密碼', 'Please enter the correct campus card query password', '正しいキャンパスカード照会パスワードを入力してください', '올바른 캠퍼스카드 조회 비밀번호를 입력해 주세요', utils.currentLocale && utils.currentLocale()))
+    return utils.rejectWithMessage(
+      data.localizedMockText(
+        '请输入正确的校园卡查询密码',
+        '請輸入正確的校園卡查詢密碼',
+        'Please enter the correct campus card query password',
+        '正しいキャンパスカード照会パスワードを入力してください',
+        '올바른 캠퍼스카드 조회 비밀번호를 입력해 주세요',
+        utils.currentLocale && utils.currentLocale(),
+        '請輸入正確的校園卡查詢密碼'
+      )
+    )
   }
 
   if (cardPassword !== '246810') {
-    return utils.rejectWithMessage(data.localizedMockText('模拟挂失失败：校园卡查询密码不正确', '模擬掛失失敗：校園卡查詢密碼不正確', 'Mock loss report failed: incorrect campus card query password', '模擬紛失届の送信に失敗しました: キャンパスカード照会パスワードが正しくありません', '모의 분실신고 실패: 캠퍼스카드 조회 비밀번호가 올바르지 않습니다', utils.currentLocale && utils.currentLocale()))
+    return utils.rejectWithMessage(
+      data.localizedMockText(
+        '模拟挂失失败：校园卡查询密码不正确',
+        '模擬掛失失敗：校園卡查詢密碼不正確',
+        'Mock loss report failed: incorrect campus card query password',
+        '模擬紛失届の送信に失敗しました: キャンパスカード照会パスワードが正しくありません',
+        '모의 분실신고 실패: 캠퍼스카드 조회 비밀번호가 올바르지 않습니다',
+        utils.currentLocale && utils.currentLocale(),
+        '模擬報失失敗：校園卡查詢密碼不正確'
+      )
+    )
   }
 
   var state = utils.readState()
@@ -111,11 +131,31 @@ function handleBookBorrow(token, query, utils) {
 
   var password = String(query.password || '').trim()
   if (!password) {
-    return utils.rejectWithMessage(data.localizedMockText('请输入图书馆密码后再查询借阅', '請輸入圖書館密碼後再查詢借閱', 'Please enter the library password before checking borrowing records', '貸出状況を確認する前に図書館パスワードを入力してください', '대출 현황을 조회하기 전에 도서관 비밀번호를 입력해 주세요', utils.currentLocale && utils.currentLocale()))
+    return utils.rejectWithMessage(
+      data.localizedMockText(
+        '请输入图书馆密码后再查询借阅',
+        '請輸入圖書館密碼後再查詢借閱',
+        'Please enter the library password before checking borrowing records',
+        '貸出状況を確認する前に図書館パスワードを入力してください',
+        '대출 현황을 조회하기 전에 도서관 비밀번호를 입력해 주세요',
+        utils.currentLocale && utils.currentLocale(),
+        '請輸入圖書館密碼後再查詢借閱'
+      )
+    )
   }
 
   if (password !== 'library123' && password !== '123456') {
-    return utils.rejectWithMessage(data.localizedMockText('图书馆密码不正确', '圖書館密碼不正確', 'Incorrect library password', '図書館パスワードが正しくありません', '도서관 비밀번호가 올바르지 않습니다', utils.currentLocale && utils.currentLocale()))
+    return utils.rejectWithMessage(
+      data.localizedMockText(
+        '图书馆密码不正确',
+        '圖書館密碼不正確',
+        'Incorrect library password',
+        '図書館パスワードが正しくありません',
+        '도서관 비밀번호가 올바르지 않습니다',
+        utils.currentLocale && utils.currentLocale(),
+        '圖書館密碼不正確'
+      )
+    )
   }
 
   return utils.resolveWithDelay(utils.buildSuccess(buildBorrowedBooks(utils.readState())))
@@ -129,11 +169,31 @@ function handleBookRenew(token, payload, utils) {
 
   var password = String(payload.password || '').trim()
   if (!password) {
-    return utils.rejectWithMessage(data.localizedMockText('请输入图书馆密码', '請輸入圖書館密碼', 'Please enter the library password', '図書館パスワードを入力してください', '도서관 비밀번호를 입력해 주세요', utils.currentLocale && utils.currentLocale()))
+    return utils.rejectWithMessage(
+      data.localizedMockText(
+        '请输入图书馆密码',
+        '請輸入圖書館密碼',
+        'Please enter the library password',
+        '図書館パスワードを入力してください',
+        '도서관 비밀번호를 입력해 주세요',
+        utils.currentLocale && utils.currentLocale(),
+        '請輸入圖書館密碼'
+      )
+    )
   }
 
   if (password !== 'library123' && password !== '123456') {
-    return utils.rejectWithMessage(data.localizedMockText('模拟续借失败：图书馆密码不正确', '模擬續借失敗：圖書館密碼不正確', 'Mock renewal failed: incorrect library password', '模擬延長貸出に失敗しました: 図書館パスワードが正しくありません', '모의 연장 실패: 도서관 비밀번호가 올바르지 않습니다', utils.currentLocale && utils.currentLocale()))
+    return utils.rejectWithMessage(
+      data.localizedMockText(
+        '模拟续借失败：图书馆密码不正确',
+        '模擬續借失敗：圖書館密碼不正確',
+        'Mock renewal failed: incorrect library password',
+        '模擬延長貸出に失敗しました: 図書館パスワードが正しくありません',
+        '모의 연장 실패: 도서관 비밀번호가 올바르지 않습니다',
+        utils.currentLocale && utils.currentLocale(),
+        '模擬續借失敗：圖書館密碼不正確'
+      )
+    )
   }
 
   var state = utils.readState()
@@ -204,7 +264,17 @@ function handleCetNumberSave(token, payload, utils) {
   var name = String(payload.name || '').trim()
 
   if (!/^\d{15}$/.test(number)) {
-    return utils.rejectWithMessage(data.localizedMockText('准考证号必须为15位数字', '準考證號必須為15位數字', 'Admission ticket number must be 15 digits', '受験票番号は15桁で入力してください', '수험표 번호는 15자리 숫자여야 합니다', utils.currentLocale && utils.currentLocale()))
+    return utils.rejectWithMessage(
+      data.localizedMockText(
+        '准考证号必须为15位数字',
+        '準考證號必須為15位數字',
+        'Admission ticket number must be 15 digits',
+        '受験票番号は15桁で入力してください',
+        '수험표 번호는 15자리 숫자여야 합니다',
+        utils.currentLocale && utils.currentLocale(),
+        '准考證號必須為15位數字'
+      )
+    )
   }
 
   var state = utils.readState()
@@ -222,7 +292,17 @@ function handleCetQuery(token, query, utils) {
 
   var checkcode = String(query.checkcode || '').trim().toLowerCase()
   if (checkcode !== 'gd26' && checkcode !== '1234') {
-    return utils.rejectWithMessage(data.localizedMockText('模拟查询失败：验证码错误', '模擬查詢失敗：驗證碼錯誤', 'Mock query failed: incorrect captcha', '模擬照会に失敗しました: 認証コードが正しくありません', '모의 조회 실패: 인증 코드가 올바르지 않습니다', utils.currentLocale && utils.currentLocale()))
+    return utils.rejectWithMessage(
+      data.localizedMockText(
+        '模拟查询失败：验证码错误',
+        '模擬查詢失敗：驗證碼錯誤',
+        'Mock query failed: incorrect captcha',
+        '模擬照会に失敗しました: 認証コードが正しくありません',
+        '모의 조회 실패: 인증 코드가 올바르지 않습니다',
+        utils.currentLocale && utils.currentLocale(),
+        '模擬查詢失敗：驗證碼錯誤'
+      )
+    )
   }
 
   var locale = utils.currentLocale && utils.currentLocale()

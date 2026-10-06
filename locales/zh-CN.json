@@ -770,6 +770,7 @@
       "search": "搜索",
       "clear": "清空",
       "loading": "正在加载",
+"loadMore": "加载更多",
       "noMore": "没有更多数据了",
       "emptyTitle": "暂无内容",
       "emptySummary": "换个筛选条件试试，或者发布一条新的内容。",

@@ -331,10 +331,14 @@ function localizedCommunityText(
   traditionalChinese,
   english,
   japanese,
-  korean
+  korean,
+  hongKongChinese
 ) {
   var normalizedLocale = i18n.normalizeLocale(locale || i18n.getCurrentLocale())
-  if (normalizedLocale === 'zh-HK' || normalizedLocale === 'zh-TW') return traditionalChinese
+  if (normalizedLocale === 'zh-HK') {
+    return hongKongChinese != null ? hongKongChinese : traditionalChinese
+  }
+  if (normalizedLocale === 'zh-TW') return traditionalChinese
   if (normalizedLocale === 'en') return english
   if (normalizedLocale === 'ja') return japanese
   if (normalizedLocale === 'ko') return korean
@@ -873,11 +877,9 @@ function getCurrentUsername(utils) {
 function ensureCommunityState(utils) {
   const state = utils.readState()
   const currentLocale = getCommunityLocale(utils)
-  if (
-    !state.community ||
-    typeof state.community !== 'object' ||
-    state.communityLocale !== currentLocale
-  ) {
+  // Seed demo content once. Locale changes must not erase posts, edits or interactions.
+  // System labels and errors are resolved separately against the current request locale.
+  if (!state.community || typeof state.community !== 'object') {
     state.community = cloneCommunityState(utils)
     state.communityLocale = currentLocale
     utils.writeState(state)
@@ -894,15 +896,17 @@ function communityMessage(utils, key) {
       '商品不存在',
       'Item not found',
       '商品が見つかりません',
-      '상품을 찾을 수 없습니다'
+      '상품을 찾을 수 없습니다',
+      '搵唔到呢件商品'
     ),
     marketIncomplete: localizedCommunityText(
       locale,
       '请完整填写商品信息',
-      '請完整填寫商品信息',
+      '請完整填寫商品資訊',
       'Please complete all item information',
       '商品情報をすべて入力してください',
-      '상품 정보를 모두 입력해 주세요'
+      '상품 정보를 모두 입력해 주세요',
+      '請填晒商品資料'
     ),
     marketInvalidPrice: localizedCommunityText(
       locale,
@@ -910,7 +914,8 @@ function communityMessage(utils, key) {
       '請輸入正確的商品價格',
       'Please enter a valid item price',
       '正しい商品価格を入力してください',
-      '올바른 상품 가격을 입력해 주세요'
+      '올바른 상품 가격을 입력해 주세요',
+      '請輸入正確嘅商品價錢'
     ),
     marketEditDenied: localizedCommunityText(
       locale,
@@ -918,7 +923,8 @@ function communityMessage(utils, key) {
       '沒有權限編輯該商品',
       'You do not have permission to edit this item',
       'この商品を編集する権限がありません',
-      '이 상품을 수정할 권한이 없습니다'
+      '이 상품을 수정할 권한이 없습니다',
+      '冇權限改呢件商品'
     ),
     marketOperateDenied: localizedCommunityText(
       locale,
@@ -926,31 +932,35 @@ function communityMessage(utils, key) {
       '沒有權限操作該商品',
       'You do not have permission to operate on this item',
       'この商品を操作する権限がありません',
-      '이 상품을 조작할 권한이 없습니다'
+      '이 상품을 조작할 권한이 없습니다',
+      '冇權限操作呢件商品'
     ),
     infoNotFound: localizedCommunityText(
       locale,
       '信息不存在',
-      '信息不存在',
+      '資訊不存在',
       'Information not found',
       '情報が見つかりません',
-      '정보를 찾을 수 없습니다'
+      '정보를 찾을 수 없습니다',
+      '搵唔到呢啲資料'
     ),
     lostFoundIncomplete: localizedCommunityText(
       locale,
       '请完整填写失物信息',
-      '請完整填寫失物信息',
+      '請完整填寫失物資訊',
       'Please complete all lost-and-found information',
       '遺失物情報をすべて入力してください',
-      '분실물 정보를 모두 입력해 주세요'
+      '분실물 정보를 모두 입력해 주세요',
+      '請填晒失物資料'
     ),
     lostFoundContactRequired: localizedCommunityText(
       locale,
       '请至少填写一种联系方式',
-      '請至少填寫一種聯繫方式',
+      '請至少填寫一種聯絡方式',
       'Please provide at least one contact method',
       '連絡先を少なくとも1つ入力してください',
-      '연락처를 하나 이상 입력해 주세요'
+      '연락처를 하나 이상 입력해 주세요',
+      '請至少填一種聯絡方式'
     ),
     secretNotFound: localizedCommunityText(
       locale,
@@ -958,15 +968,17 @@ function communityMessage(utils, key) {
       '樹洞不存在',
       'Secret post not found',
       'ツリーホールが見つかりません',
-      '트리홀을 찾을 수 없습니다'
+      '트리홀을 찾을 수 없습니다',
+      '搵唔到呢個樹洞'
     ),
     commentEmpty: localizedCommunityText(
       locale,
       '评论不能为空',
-      '評論不能為空',
+      '留言不能為空',
       'Comment cannot be empty',
       'コメントを空にすることはできません',
-      '댓글은 비워둘 수 없습니다'
+      '댓글은 비워둘 수 없습니다',
+      '留言唔可以留空'
     ),
     secretContentEmpty: localizedCommunityText(
       locale,
@@ -974,7 +986,8 @@ function communityMessage(utils, key) {
       '樹洞內容不能為空',
       'Secret content cannot be empty',
       'ツリーホールの内容は空にできません',
-      '트리홀 내용은 비워둘 수 없습니다'
+      '트리홀 내용은 비워둘 수 없습니다',
+      '樹洞內容唔可以留空'
     ),
     secretVoiceEmpty: localizedCommunityText(
       locale,
@@ -982,31 +995,35 @@ function communityMessage(utils, key) {
       '語音內容不能為空',
       'Voice content cannot be empty',
       '音声内容は空にできません',
-      '음성 내용은 비워둘 수 없습니다'
+      '음성 내용은 비워둘 수 없습니다',
+      '語音內容唔可以留空'
     ),
     expressNotFound: localizedCommunityText(
       locale,
       '表白信息不存在',
-      '表白信息不存在',
+      '表白資訊不存在',
       'Confession post not found',
       '告白情報が見つかりません',
-      '고백 게시글을 찾을 수 없습니다'
+      '고백 게시글을 찾을 수 없습니다',
+      '搵唔到呢條表白'
     ),
     expressGuessUnsupported: localizedCommunityText(
       locale,
       '该表白不支持猜名字',
-      '該表白不支持猜名字',
+      '該表白不支援猜名字',
       'This confession does not support name guessing',
       'この告白は名前当てに対応していません',
-      '이 고백 글은 이름 맞히기를 지원하지 않습니다'
+      '이 고백 글은 이름 맞히기를 지원하지 않습니다',
+      '呢條表白唔支援估名'
     ),
     expressIncomplete: localizedCommunityText(
       locale,
       '请完整填写表白信息',
-      '請完整填寫表白信息',
+      '請完整填寫表白資訊',
       'Please complete all confession information',
       '告白情報をすべて入力してください',
-      '고백 정보를 모두 입력해 주세요'
+      '고백 정보를 모두 입력해 주세요',
+      '請填晒表白資料'
     ),
     topicNotFound: localizedCommunityText(
       locale,
@@ -1014,15 +1031,17 @@ function communityMessage(utils, key) {
       '話題不存在',
       'Topic not found',
       'トピックが見つかりません',
-      '토픽을 찾을 수 없습니다'
+      '토픽을 찾을 수 없습니다',
+      '搵唔到呢個話題'
     ),
     topicIncomplete: localizedCommunityText(
       locale,
       '请完整填写话题信息',
-      '請完整填寫話題信息',
+      '請完整填寫話題資訊',
       'Please complete all topic information',
       'トピック情報をすべて入力してください',
-      '토픽 정보를 모두 입력해 주세요'
+      '토픽 정보를 모두 입력해 주세요',
+      '請填晒話題資料'
     ),
     deliveryNotFound: localizedCommunityText(
       locale,
@@ -1030,7 +1049,8 @@ function communityMessage(utils, key) {
       '訂單不存在',
       'Order not found',
       '注文が見つかりません',
-      '주문을 찾을 수 없습니다'
+      '주문을 찾을 수 없습니다',
+      '搵唔到呢張訂單'
     ),
     deliveryOwnOrder: localizedCommunityText(
       locale,
@@ -1038,7 +1058,8 @@ function communityMessage(utils, key) {
       '不能接自己發布的訂單',
       'You cannot accept your own order',
       '自分が出した注文は受けられません',
-      '자신이 올린 주문은 받을 수 없습니다'
+      '자신이 올린 주문은 받을 수 없습니다',
+      '唔可以接自己發佈嘅訂單'
     ),
     deliveryAccepted: localizedCommunityText(
       locale,
@@ -1046,7 +1067,8 @@ function communityMessage(utils, key) {
       '訂單已被接取',
       'Order has already been accepted',
       '注文はすでに受注されています',
-      '주문이 이미 접수되었습니다'
+      '주문이 이미 접수되었습니다',
+      '訂單已經畀人接咗'
     ),
     tradeNotFound: localizedCommunityText(
       locale,
@@ -1054,7 +1076,8 @@ function communityMessage(utils, key) {
       '交易不存在',
       'Trade not found',
       '取引が見つかりません',
-      '거래를 찾을 수 없습니다'
+      '거래를 찾을 수 없습니다',
+      '搵唔到呢筆交易'
     ),
     deliveryFinishDenied: localizedCommunityText(
       locale,
@@ -1062,47 +1085,53 @@ function communityMessage(utils, key) {
       '只有發布者可確認完成',
       'Only the publisher can confirm completion',
       '完了確認は投稿者のみ可能です',
-      '게시자만 완료를 확인할 수 있습니다'
+      '게시자만 완료를 확인할 수 있습니다',
+      '得發佈者先可以確認完成'
     ),
     deliveryIncomplete: localizedCommunityText(
       locale,
       '请完整填写跑腿订单信息',
-      '請完整填寫跑腿訂單信息',
+      '請完整填寫跑腿訂單資訊',
       'Please complete all errand order information',
       '配送注文情報をすべて入力してください',
-      '심부름 주문 정보를 모두 입력해 주세요'
+      '심부름 주문 정보를 모두 입력해 주세요',
+      '請填晒跑腿訂單資料'
     ),
     datingIncomplete: localizedCommunityText(
       locale,
       '请完整填写交友信息',
-      '請完整填寫交友信息',
+      '請完整填寫交友資訊',
       'Please complete all dating information',
       '交友情報をすべて入力してください',
-      '교류 정보를 모두 입력해 주세요'
+      '교류 정보를 모두 입력해 주세요',
+      '請填晒交友資料'
     ),
     datingTargetNotFound: localizedCommunityText(
       locale,
       '目标信息不存在',
-      '目標信息不存在',
+      '目標資訊不存在',
       'Target profile not found',
       '対象プロフィールが見つかりません',
-      '대상 정보를 찾을 수 없습니다'
+      '대상 정보를 찾을 수 없습니다',
+      '搵唔到目標資料'
     ),
     datingSelfPick: localizedCommunityText(
       locale,
       '不能给自己发送撩一下',
-      '不能給自己發送撩一下',
+      '不能給自己傳送撩一下',
       'You cannot send a pick to yourself',
       '自分自身に送ることはできません',
-      '자기 자신에게 찔러보기를 보낼 수 없습니다'
+      '자기 자신에게 찔러보기를 보낼 수 없습니다',
+      '唔可以俾自己傳送撩一下'
     ),
     datingPickExists: localizedCommunityText(
       locale,
       '你已经发送过撩一下了',
-      '你已經發送過撩一下了',
+      '你已經傳送過撩一下了',
       'You have already sent a pick',
       'すでに送信済みです',
-      '이미 찔러보기를 보냈습니다'
+      '이미 찔러보기를 보냈습니다',
+      '你已經傳送過撩一下啦'
     ),
     requestNotFound: localizedCommunityText(
       locale,
@@ -1110,7 +1139,8 @@ function communityMessage(utils, key) {
       '請求不存在',
       'Request not found',
       'リクエストが見つかりません',
-      '요청을 찾을 수 없습니다'
+      '요청을 찾을 수 없습니다',
+      '搵唔到呢個請求'
     ),
     requestOperateDenied: localizedCommunityText(
       locale,
@@ -1118,15 +1148,17 @@ function communityMessage(utils, key) {
       '沒有權限操作該請求',
       'You do not have permission to operate on this request',
       'このリクエストを操作する権限がありません',
-      '이 요청을 조작할 권한이 없습니다'
+      '이 요청을 조작할 권한이 없습니다',
+      '冇權限操作呢個請求'
     ),
     infoOperateDenied: localizedCommunityText(
       locale,
       '没有权限操作该信息',
-      '沒有權限操作該信息',
+      '沒有權限操作該資訊',
       'You do not have permission to operate on this post',
       'この情報を操作する権限がありません',
-      '이 정보를 조작할 권한이 없습니다'
+      '이 정보를 조작할 권한이 없습니다',
+      '冇權限操作呢啲資料'
     ),
     photoNotFound: localizedCommunityText(
       locale,
@@ -1134,7 +1166,8 @@ function communityMessage(utils, key) {
       '作品不存在',
       'Work not found',
       '作品が見つかりません',
-      '작품을 찾을 수 없습니다'
+      '작품을 찾을 수 없습니다',
+      '搵唔到呢個作品'
     ),
     photoUploadRequired: localizedCommunityText(
       locale,
@@ -1142,7 +1175,8 @@ function communityMessage(utils, key) {
       '請至少上傳一張圖片',
       'Please upload at least one image',
       '画像を少なくとも1枚アップロードしてください',
-      '이미지를 한 장 이상 업로드해 주세요'
+      '이미지를 한 장 이상 업로드해 주세요',
+      '請至少上傳一張相'
     )
   }
   return messages[key] || key

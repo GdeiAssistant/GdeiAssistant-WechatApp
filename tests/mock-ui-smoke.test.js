@@ -344,9 +344,10 @@ test('appearance page labels traditional Chinese variants as Hong Kong/Macau and
   const labelsByCode = Object.fromEntries(
     page.data.locales.map((locale) => [locale.code, locale.label])
   )
-  assert.equal(labelsByCode['zh-HK'], '繁體中文（港澳）')
-  assert.equal(labelsByCode['zh-TW'], '繁體中文（台灣）')
-  assert.ok(!page.data.locales.some((locale) => locale.label === '繁體中文（香港）'))
+  assert.equal(labelsByCode['zh-HK'], '粵語（香港）')
+  assert.equal(labelsByCode['zh-TW'], '國語（台灣）')
+  assert.ok(!page.data.locales.some((locale) => locale.label === '繁體中文（港澳）'))
+  assert.ok(!page.data.locales.some((locale) => locale.label === '繁體中文（台灣）'))
 })
 
 test('mock UI smoke covers index page profile, inbox badge and feature actions', async function () {
