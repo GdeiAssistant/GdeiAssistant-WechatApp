@@ -4,7 +4,6 @@
     <view class="userinfo">
       <image class="userinfo-avatar" src="../../image/logo.png" mode="aspectFit"></image>
       <text class="userinfo-nickname">{{t.appName}}</text>
-      <text class="userinfo-source">{{t.dataSourceLabel}}</text>
     </view>
   </view>
 

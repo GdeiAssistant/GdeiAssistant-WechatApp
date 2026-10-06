@@ -19,18 +19,15 @@ Page({
     versionCode: '',
     useMockData: false,
     canUseDemoMode: false,
-    dataSourceLabel: '',
     mockCredentialsHint: '',
     campusCredentialConsent: false
   },
 
   refreshI18n: function () {
-    var dataSourceRaw = dataSource.getDataSourceLabel()
     this.setData({
       t: {
         navTitle: i18n.t('login.navTitle'),
         appName: i18n.t('login.appName'),
-        dataSourceLabel: i18n.t('login.dataSourceLabel') + dataSourceRaw,
         usernamePlaceholder: i18n.t('login.usernamePlaceholder'),
         passwordPlaceholder: i18n.t('login.passwordPlaceholder'),
         button: i18n.t('login.button'),

@@ -97,14 +97,6 @@
   word-break: break-word;
 }
 
-.userinfo-source {
-  margin-top: 10rpx;
-  color: var(--color-on-band-muted);
-  font-size: var(--font-meta);
-  line-height: 1.4;
-  word-break: break-word;
-}
-
 .userinfo-entry {
   align-self: flex-start;
   margin-top: 32rpx;

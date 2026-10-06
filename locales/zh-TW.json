@@ -50,7 +50,6 @@
     "button": "登入",
     "loading": "登入中...",
     "appName": "廣東二師助手",
-    "dataSourceLabel": "目前資料源：",
     "usernamePlaceholder": "請輸入校園網帳號",
     "passwordPlaceholder": "請輸入校園網密碼",
     "fillCredentials": "請填寫校園網帳號資訊",
@@ -92,7 +91,6 @@
   "index": {
     "navTitle": "功能列表",
     "appName": "廣東二師助手",
-    "dataSourceLabel": "目前資料源：",
     "viewProfile": "查看個人資料",
     "defaultNickname": "廣東二師助手使用者",
     "settingsSection": "功能設定",
@@ -271,7 +269,7 @@
     "campusCredentialRevoke": "撤回授權",
     "campusCredentialDelete": "刪除已保存憑證",
     "campusCredentialRevokeTitle": "撤回校園帳號憑證授權",
-    "campusCredentialRevokeContent": "撤回授權將停止後續基於已保存校園憑證的快速認證或會話同步；如服務端設定為安全優先處理，已保存憑證也可能被同步刪除。",
+    "campusCredentialRevokeContent": "撤回授權後，將不再使用已保存的校園憑證進行快速認證或會話同步，已保存的憑證也可能被一併刪除。",
     "campusCredentialDeleteTitle": "刪除已保存的校園憑證",
     "campusCredentialDeleteContent": "刪除後，課表、成績、校園卡、圖書館等查詢可能需要重新登入或重新授權。",
     "campusCredentialRevokeSuccess": "已撤回校園憑證授權",
@@ -472,7 +470,7 @@
       },
       "settings": {
         "title": "功能設定",
-        "desc": "切換 mock 與管理首頁模組"
+        "desc": "管理首頁模組"
       },
       "logout": {
         "title": "登出帳號",

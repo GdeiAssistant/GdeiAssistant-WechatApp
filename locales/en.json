@@ -50,7 +50,6 @@
     "button": "Login",
     "loading": "Logging in...",
     "appName": "GdeiAssistant",
-    "dataSourceLabel": "Data source: ",
     "usernamePlaceholder": "Enter campus account",
     "passwordPlaceholder": "Enter campus password",
     "fillCredentials": "Please fill in campus account",
@@ -84,7 +83,6 @@
   "index": {
     "navTitle": "Features",
     "appName": "GdeiAssistant",
-    "dataSourceLabel": "Data source: ",
     "viewProfile": "View profile",
     "defaultNickname": "GdeiAssistant User",
     "settingsSection": "Settings",
@@ -246,7 +244,7 @@
     "campusCredentialRevoke": "Revoke Consent",
     "campusCredentialDelete": "Delete Saved Credential",
     "campusCredentialRevokeTitle": "Revoke Campus Credential Consent",
-    "campusCredentialRevokeContent": "Revoking consent will stop future quick authentication or session synchronization based on saved campus credentials. Depending on backend safety-first behavior, saved credentials may also be deleted.",
+    "campusCredentialRevokeContent": "After revoking consent, your saved campus credential will no longer be used for quick authentication or session sync, and it may also be deleted.",
     "campusCredentialDeleteTitle": "Delete Saved Campus Credential",
     "campusCredentialDeleteContent": "After deletion, schedule, grades, campus card, and library queries may require login or re-authorization again.",
     "campusCredentialRevokeSuccess": "Campus credential consent revoked",
@@ -379,7 +377,7 @@
     },
     "actions": {
       "appearance": { "title": "Interface & Appearance", "desc": "Theme, font size, language" },
-      "settings": { "title": "Settings", "desc": "Toggle mock data and manage home modules" },
+      "settings": { "title": "Settings", "desc": "Manage home modules" },
       "logout": { "title": "Logout", "desc": "Log out of current account" }
     }
   },

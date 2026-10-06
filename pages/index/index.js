@@ -5,7 +5,6 @@ const socialApi = require('../../services/apis/social.js')
 const socialRealtime = require('../../services/social-realtime.js')
 const userApi = require('../../services/apis/user.js')
 const featureConfig = require('../../services/feature-config.js')
-const dataSource = require('../../services/data-source.js')
 var themeUtil = require('../../utils/theme')
 var i18n = require('../../utils/i18n')
 
@@ -26,19 +25,16 @@ Page({
     nickname: null,
     homeSections: [],
     systemActions: [],
-    dataSourceLabel: '',
     hiddenFeatureIds: [],
     inboxUnreadCount: 0,
     inboxBadgeText: ''
   },
 
   refreshI18n: function () {
-    var dataSourceRaw = dataSource.getDataSourceLabel()
     this.setData({
       t: {
         appName: i18n.t('index.appName'),
         navTitle: i18n.t('index.navTitle'),
-        dataSourceLabel: i18n.t('index.dataSourceLabel') + dataSourceRaw,
         viewProfile: i18n.t('index.viewProfile'),
         settingsSection: i18n.t('index.settingsSection')
       },
@@ -100,8 +96,7 @@ Page({
     })
 
     this.setData({
-      homeSections: homeSections,
-      dataSourceLabel: dataSource.getDataSourceLabel()
+      homeSections: homeSections
     })
   },
 

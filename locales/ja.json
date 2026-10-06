@@ -50,7 +50,6 @@
     "button": "ログイン",
     "loading": "ログイン中...",
     "appName": "GdeiAssistant",
-    "dataSourceLabel": "データソース：",
     "usernamePlaceholder": "キャンパスアカウントを入力",
     "passwordPlaceholder": "キャンパスパスワードを入力",
     "fillCredentials": "キャンパスアカウントを入力してください",
@@ -92,7 +91,6 @@
   "index": {
     "navTitle": "機能一覧",
     "appName": "GdeiAssistant",
-    "dataSourceLabel": "データソース：",
     "viewProfile": "プロフィールを見る",
     "defaultNickname": "GdeiAssistantユーザー",
     "settingsSection": "設定",
@@ -271,7 +269,7 @@
     "campusCredentialRevoke": "同意を撤回",
     "campusCredentialDelete": "保存済み資格情報を削除",
     "campusCredentialRevokeTitle": "学内資格情報への同意を撤回",
-    "campusCredentialRevokeContent": "同意を撤回すると、保存済み学内資格情報に基づくクイック認証やセッション同期は停止します。バックエンド設定によっては保存済み資格情報も削除される場合があります。",
+    "campusCredentialRevokeContent": "同意を撤回すると、保存済みの学内資格情報はクイック認証やセッション同期に使われなくなり、削除される場合もあります。",
     "campusCredentialDeleteTitle": "保存済み学内資格情報を削除",
     "campusCredentialDeleteContent": "削除後は、時間割、成績、学生証、図書館などの照会で再ログインまたは再同意が必要になる場合があります。",
     "campusCredentialRevokeSuccess": "学内資格情報への同意を撤回しました",
@@ -472,7 +470,7 @@
       },
       "settings": {
         "title": "機能設定",
-        "desc": "モックデータの切替とホームモジュール管理"
+        "desc": "ホームモジュールを管理"
       },
       "logout": {
         "title": "ログアウト",
