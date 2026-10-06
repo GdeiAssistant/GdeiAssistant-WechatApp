@@ -78,3 +78,23 @@ Node 全套 171 项通过；lint、format:check 和 smoke 通过（34 pages）�
 用户授权测试分支提交、推送与草稿 PR 后，接入 master 最新可选请求鉴权及锁文件修复。`authRequired: false` 允许匿名访问，但已登录时仍携带当前 token；因此旧的两个“已有 token 但请求无鉴权”测试前提不成立。测试调整为实际无 token 发出请求、随后新登录再收到 401，并补充 remote/mock 可选鉴权请求携带当前 token 时的 401 行为；生产请求保护逻辑保留。
 
 实际本地 Node 26.3.0 / npm 11.17.0：`npm ci`、请求专项、全套 187/187 测试、lint、format 与 34 页 smoke 均通过；smoke 显示的 Node 24.14.1 是项目声明版本。测试分支 PR #69 的 GitHub CI 使用项目声明版本，云端结果需另行核对，不将本机结果或排队状态算作设备/构建测试通过。未合并或发布。
+
+### 图片流程与页面退出补测（2026-10-06）
+
+本轮增加 5 项客户端组合回归，调用实际聊天页、图片/API 服务和 REST 请求实现；微信选图、文件系统、上传、下载、预览与请求由内存测试桩提供，实时管理器也隔离。这些是 Node 客户端集成验证，不是微信基础库编译、开发者工具渲染或真机 UI 验证。
+
+- 选图后保留原 bytes，确认发送使用 multipart `name=image`、原 UUID 与 Bearer；解析微信 `uploadFile` 的 JSON 字符串响应，再以本域数字路径鉴权下载预览。响应里给出的第三方图片 URL 不被用于下载或附加 token。
+- 非 JSON 上传响应保留失败气泡、原文件和 clientMessageId；隐私随后收紧时仍允许原 ID 确认重试。
+- 后台发送的迟到回调不更新隐藏页；回前台用实际 REST 请求确认此前已提交的图片，不重新上传，即使当前 canSend 已变为 false。
+- picker 取消、空结果以及图片功能关闭不产生新发送，也不误删现有草稿。
+- 退出页面清理自有草稿后，迟到历史响应不能再次创建私图文件或写回页面。该测试先复现一次额外 downloadFile；最小修复为 `applyMessages` 下载前检查 unload、`loadEarlier` 请求捕获 epoch/token 并检查响应、写回和错误提示的归属。原文字历史锚点测试仍保留。
+
+测试辅助函数同时清除 remote request/avatar 模块缓存，保证 remote REST 场景调用真实 request.js，而非残留的 mock dataSource；生产接口实现没有因此更改。
+
+官方工具核查：固定部署依赖 `miniprogram-ci@2.1.31` 的公开 README/type/source 提供 `getCompiledResult(options, saveZipPath)` 本地代码包编译接口，其 Project 构造需要 privateKey 或 privateKeyPath；项目属性接口通过私钥获取微信信息。本轮仅以 `npm pack --ignore-scripts` 下载包供只读核对，没有安装或调用该 SDK，没有编译、preview、upload、审核或发布。repository 与 wechat-production 的 Secrets 名称列表均为空；未读取密钥值。
+
+官方 `miniprogram-automator` 需要已安装的微信开发者工具 CLI，并开启工具的 CLI/HTTP 功能；Mac 默认路径为 `/Applications/wechatwebdevtools.app/Contents/MacOS/cli`。当前仅发现微信客户端，开发者工具未安装，也未安装 automator。因此仍缺官方编译和页面/键盘/选图/预览的平台验证条件；不以非官方模拟工具替代。
+
+参考：[微信官方 CI 文档](https://developers.weixin.qq.com/miniprogram/dev/devtools/ci)、[微信官方自动化入口](https://developers.weixin.qq.com/miniprogram/dev/devtools/auto/automator)、[微信官方 API 类型定义](https://github.com/wechat-miniprogram/api-typings/blob/master/types/wx/lib.wx.api.d.ts)。
+
+最终本机 Node 26.3.0：图片/聊天相关专项 22/22、当前全套 192/192、lint、format:check、34 页 smoke 均退出 0。全套包含新增的原草稿删除、晚响应下载次数为 0、临时文件不再创建断言。原始测试失败、修复后专项、全套与检查日志保存于 `/tmp/gdei-wechat-extra-validation-20261006/`；本机结果仍需由项目 CI 用声明的 Node 24.14.1 复验。未改发布 workflow/部署配置，未 commit/push/merge。

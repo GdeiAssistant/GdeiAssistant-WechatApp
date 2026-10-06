@@ -106,6 +106,9 @@ Page({
   },
 
   applyMessages: function (list, options) {
+    if (this._unloaded) {
+      return Promise.resolve()
+    }
     const config = options || {}
     const previousFirstKey =
       this.data.messages && this.data.messages[0] ? this.data.messages[0].localKey : ''
@@ -243,17 +246,23 @@ Page({
     if (!this.data.hasMoreEarlier || !this.data.conversationId) {
       return
     }
+    const epoch = this._pageEpoch
+    const token = auth.getSessionToken()
+    const isCurrent = () =>
+      !this._unloaded && epoch === this._pageEpoch && token === auth.getSessionToken()
     socialApi
       .getMessages(this.data.conversationId, {
         beforeSeq: this.data.earlierCursor || (this.data.messages[0] && this.data.messages[0].seq),
         limit: 20
       })
       .then((result) => {
+        if (!isCurrent()) return
         if (!result.success) {
           throw new Error(result.message)
         }
         const page = socialUtils.normalizePage(result.data)
         return this.appendOrReplaceMessages(page.items, { preserveFirstVisible: true }).then(() => {
+          if (!isCurrent()) return
           this.setData({
             hasMoreEarlier: page.hasMore,
             earlierCursor: page.nextCursor
@@ -261,6 +270,7 @@ Page({
         })
       })
       .catch((error) => {
+        if (!isCurrent()) return
         pageUtils.showTopTips(this, error.message)
       })
   },

@@ -13,6 +13,7 @@ const SOCIAL_DATA = path.join(ROOT, 'mock/social-data.js')
 const CHAT_PAGE = path.join(ROOT, 'pages/chat/chat.js')
 const SOCIAL_API = path.join(ROOT, 'services/apis/social.js')
 const CHAT_IMAGE = path.join(ROOT, 'services/social-chat-image.js')
+const SOCIAL_AVATAR = path.join(ROOT, 'services/social-avatar.js')
 const AUTH_MODULE = path.join(ROOT, 'services/auth.js')
 const REQUEST_MODULE = path.join(ROOT, 'services/request.js')
 const DATA_SOURCE = path.join(ROOT, 'services/data-source.js')
@@ -429,11 +430,297 @@ function remoteRuntime() {
     }
   })
   clearModule(CHAT_IMAGE)
+  clearModule(SOCIAL_AVATAR)
+  clearModule(REQUEST_MODULE)
   clearModule(SOCIAL_API)
   env.image = require(CHAT_IMAGE)
   env.socialApi = require(SOCIAL_API)
   return env
 }
+
+function createRemoteChatPage(env, context) {
+  const listeners = {}
+  stubModule(REALTIME, {
+    ensureConnected() {},
+    on(event, handler) {
+      listeners[event] = handler
+      return function () {
+        delete listeners[event]
+      }
+    }
+  })
+  wx.setNavigationBarColor = function () {}
+  const page = createPageInstance(loadChatPage())
+  page._imageSessionToken = env.storage[STORAGE_KEYS.sessionToken]
+  page.setData({
+    conversationId: '9001',
+    selfId: 'self',
+    canSend: true,
+    imageMessagingEnabled: true
+  })
+  page.refreshI18n()
+  context.after(function () {
+    page.onUnload()
+    if (page.__topTipsTimer) clearTimeout(page.__topTipsTimer)
+  })
+  return page
+}
+
+function remoteImageDto(clientMessageId) {
+  return {
+    id: '10003',
+    conversationId: '9001',
+    senderId: 'self',
+    clientMessageId: clientMessageId,
+    seq: '1',
+    type: 'IMAGE',
+    content: '',
+    image: {
+      url: 'https://untrusted.example/private.png',
+      width: 120,
+      height: 120,
+      size: 25870,
+      contentType: 'image/png'
+    }
+  }
+}
+
+test('remote page selection sends multipart, parses JSON string and previews authenticated download', async function (context) {
+  const env = remoteRuntime()
+  const uploads = []
+  const downloads = []
+  const previews = []
+  wx.uploadFile = function (opts) {
+    uploads.push(opts)
+  }
+  wx.downloadFile = function (opts) {
+    downloads.push(opts)
+    env.files.set('wxfile://authenticated-photo', Buffer.from(env.files.get(DEMO_IMAGE)))
+    opts.success({ statusCode: 200, tempFilePath: 'wxfile://authenticated-photo' })
+  }
+  wx.previewImage = function (opts) {
+    previews.push(opts)
+  }
+  const page = createRemoteChatPage(env, context)
+  await page.chooseImage()
+  const originalCopy = page.data.imageDraftPath
+  const originalBytes = Buffer.from(env.files.get(originalCopy))
+  page.confirmImageDraft()
+  await wait(0)
+  assert.equal(uploads.length, 1)
+  const upload = uploads[0]
+  assert.equal(upload.url, RESOURCE_DOMAIN + 'api/social/conversations/9001/messages/image')
+  assert.equal(upload.name, 'image')
+  assert.equal(upload.filePath, originalCopy)
+  assert.equal(upload.header.Authorization, 'Bearer image-session-a')
+  assert.equal(upload.header['Content-Type'], undefined, 'wx generates the multipart boundary')
+  assert.match(upload.formData.clientMessageId, /^[0-9a-f-]{36}$/i)
+  assert.deepEqual(env.files.get(upload.filePath), originalBytes)
+  upload.success({
+    statusCode: 200,
+    data: JSON.stringify({ success: true, data: remoteImageDto(upload.formData.clientMessageId) })
+  })
+  await wait(0)
+  assert.equal(page.data.sending, false)
+  assert.equal(page.data.messages.length, 1)
+  const sent = page.data.messages[0]
+  assert.equal(sent.id, '10003')
+  assert.equal(sent.status, 'sent')
+  assert.equal(sent.displayPath, 'wxfile://authenticated-photo')
+  assert.equal(downloads.length, 1)
+  assert.equal(
+    downloads[0].url,
+    RESOURCE_DOMAIN + 'api/social/conversations/9001/messages/10003/image'
+  )
+  assert.equal(downloads[0].header.Authorization, 'Bearer image-session-a')
+  await page.onImageTap({
+    currentTarget: { dataset: { localKey: sent.localKey, clientId: sent.clientMessageId } }
+  })
+  assert.deepEqual(previews, [{ current: sent.displayPath, urls: [sent.displayPath] }])
+  page.onUnload()
+  assert.ok(env.unlinked.includes(originalCopy))
+  assert.ok(env.unlinked.includes(sent.displayPath))
+  assert.ok(env.files.has(DEMO_IMAGE))
+})
+
+test('remote upload malformed JSON preserves original bytes and client id for a privacy-tightened retry', async function (context) {
+  const env = remoteRuntime()
+  const uploads = []
+  wx.uploadFile = function (opts) {
+    uploads.push(opts)
+  }
+  wx.downloadFile = function (opts) {
+    opts.success({ statusCode: 200, tempFilePath: 'wxfile://retried-image' })
+  }
+  const page = createRemoteChatPage(env, context)
+  await page.chooseImage()
+  const copy = page.data.imageDraftPath
+  page.confirmImageDraft()
+  await wait(0)
+  const clientId = uploads[0].formData.clientMessageId
+  uploads[0].success({ statusCode: 200, data: '<html>bad proxy response</html>' })
+  await wait(0)
+  assert.equal(page.data.sending, false)
+  assert.equal(page.data.messages[0].status, 'failed')
+  assert.equal(page.data.messages[0].localPath, copy)
+  assert.ok(page.data.errorMessage)
+  page.setData({ canSend: false })
+  page.retryMessage({ currentTarget: { dataset: { clientId: clientId } } })
+  await wait(0)
+  assert.equal(uploads.length, 2)
+  assert.equal(uploads[1].formData.clientMessageId, clientId)
+  assert.equal(uploads[1].filePath, copy)
+  assert.deepEqual(env.files.get(copy), env.files.get(DEMO_IMAGE))
+  uploads[1].success({
+    statusCode: 200,
+    data: JSON.stringify({ success: true, data: remoteImageDto(clientId) })
+  })
+  await wait(0)
+  assert.equal(page.data.messages.length, 1)
+  assert.equal(page.data.messages[0].status, 'sent')
+  assert.equal(page.data.messages[0].id, '10003')
+})
+
+test('background image upload is confirmed by foreground REST without reupload after privacy changes', async function (context) {
+  const env = remoteRuntime()
+  const uploads = []
+  const requests = []
+  let committed
+  wx.uploadFile = function (opts) {
+    uploads.push(opts)
+  }
+  wx.downloadFile = function (opts) {
+    if (opts.url.endsWith('/messages/10003/image')) {
+      opts.success({ statusCode: 200, tempFilePath: 'wxfile://confirmed-image' })
+    } else opts.success({ statusCode: 404 })
+  }
+  wx.request = function (opts) {
+    requests.push(opts)
+    const isMessages = opts.url.includes('/messages')
+    opts.success({
+      statusCode: 200,
+      data: {
+        success: true,
+        data: isMessages
+          ? { items: [committed], hasMore: false, nextCursor: null }
+          : {
+              id: '9001',
+              canSend: false,
+              sendPermissionReason: 'PRIVACY_RESTRICTED',
+              imageMessagingEnabled: true,
+              peer: { id: 'peer', nickname: '测试用户' }
+            }
+      }
+    })
+  }
+  const page = createRemoteChatPage(env, context)
+  await page.chooseImage()
+  const copy = page.data.imageDraftPath
+  page.confirmImageDraft()
+  await wait(0)
+  assert.equal(page.data.messages[0].status, 'pending')
+  const clientId = uploads[0].formData.clientMessageId
+  page.onHide()
+  assert.equal(page.data.messages[0].status, 'failed')
+  assert.equal(page.data.messages[0].clientMessageId, clientId)
+  assert.ok(env.files.has(copy))
+  committed = remoteImageDto(clientId)
+  uploads[0].success({ statusCode: 200, data: JSON.stringify({ success: true, data: committed }) })
+  await wait(0)
+  assert.equal(page.data.messages[0].id, undefined, 'hidden page ignores the upload callback')
+  const originalPull = page.pullNewer
+  let foregroundSync
+  page.pullNewer = function () {
+    foregroundSync = originalPull.call(this)
+    return foregroundSync
+  }
+  page.onShow()
+  await foregroundSync
+  assert.equal(page.data.canSend, false)
+  assert.equal(page.data.sending, false)
+  assert.equal(page.data.messages.length, 1)
+  assert.equal(page.data.messages[0].id, '10003')
+  assert.equal(page.data.messages[0].status, 'sent')
+  assert.equal(page.data.messages[0].clientMessageId, clientId)
+  assert.equal(page.data.messages[0].displayPath, 'wxfile://confirmed-image')
+  assert.equal(uploads.length, 1, 'foreground confirmation uses REST rather than a new send')
+  assert.equal(requests.length, 2)
+  assert.ok(
+    requests.every(function (request) {
+      return request.header.Authorization === 'Bearer image-session-a'
+    })
+  )
+})
+
+test('picker cancellation or an empty result preserves the current draft and cannot send a new image', async function (context) {
+  const env = remoteRuntime()
+  const page = createRemoteChatPage(env, context)
+  await page.chooseImage()
+  const copy = page.data.imageDraftPath
+  let pickerCalls = 0
+  let uploadCalls = 0
+  wx.uploadFile = function () {
+    uploadCalls += 1
+  }
+  wx.chooseMedia = function (opts) {
+    pickerCalls += 1
+    opts.fail({ errMsg: 'chooseMedia:fail cancel' })
+  }
+  await page.chooseImage()
+  assert.equal(page.data.imageDraftPath, copy)
+  wx.chooseMedia = function (opts) {
+    pickerCalls += 1
+    opts.success({ tempFiles: [] })
+  }
+  await page.chooseImage()
+  assert.equal(page.data.imageDraftPath, copy)
+  assert.equal(env.unlinked.length, 0)
+  page.setData({ imageMessagingEnabled: false })
+  await page.chooseImage()
+  assert.equal(pickerCalls, 2)
+  page.setData({ canSend: false })
+  page.confirmImageDraft()
+  assert.equal(uploadCalls, 0)
+  assert.ok(env.files.has(copy))
+})
+
+test('unloaded chat cannot start a private download from a late history response', async function (context) {
+  const env = remoteRuntime()
+  const page = createRemoteChatPage(env, context)
+  let request
+  let downloadCalls = 0
+  wx.request = function (opts) {
+    request = opts
+  }
+  wx.downloadFile = function (opts) {
+    downloadCalls += 1
+    env.files.set('wxfile://late-history-image', Buffer.from(env.files.get(DEMO_IMAGE)))
+    opts.success({ statusCode: 200, tempFilePath: 'wxfile://late-history-image' })
+  }
+  await page.chooseImage()
+  const ownedDraft = page.data.imageDraftPath
+  page.setData({ hasMoreEarlier: true, earlierCursor: '2' })
+  page.loadEarlier()
+  await wait(0)
+  assert.ok(request)
+  page.onUnload()
+  assert.ok(env.unlinked.includes(ownedDraft))
+  assert.equal(env.files.has(ownedDraft), false)
+  const unloadedState = JSON.stringify(page.data)
+  request.success({
+    statusCode: 200,
+    data: {
+      success: true,
+      data: { items: [remoteImageDto('older-client')], hasMore: false, nextCursor: null }
+    }
+  })
+  await wait(0)
+  assert.equal(downloadCalls, 0, 'a removed page must not recreate private files after cleanup')
+  assert.equal(env.files.has('wxfile://late-history-image'), false)
+  assert.equal(env.files.size, 1, 'only the original demo image remains')
+  assert.equal(page.data.messages.length, 0)
+  assert.equal(JSON.stringify(page.data), unloadedState)
+})
 
 test('late image downloads remove private files after token change or cache clear', async function () {
   const env = remoteRuntime()
