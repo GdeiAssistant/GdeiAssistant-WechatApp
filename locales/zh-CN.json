@@ -150,6 +150,7 @@
     "nicknameEmpty": "昵称不能为空",
     "nicknameTooLong": "昵称长度不能超过{{max}}个字符",
     "introTooLong": "个人简介长度不能超过{{max}}个字符",
+    "saveIntroduction": "保存简介",
     "saved": "已保存",
     "loadProfileFailed": "加载个人资料失败",
     "optionsFallback": "资料字典加载失败，已使用本地兜底选项",
@@ -1049,6 +1050,7 @@
       "unblockConfirm": "解除拉黑后不会自动恢复之前的关注关系。"
     },
     "conversations": {
+      "searchUsers": "搜索用户",
       "navTitle": "私信",
       "empty": "暂无私信会话",
       "noMessage": "暂无消息",

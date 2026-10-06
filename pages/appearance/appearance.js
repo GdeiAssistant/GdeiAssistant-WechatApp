@@ -12,8 +12,8 @@ Page({
     currentLocale: '',
     locales: [
       { code: 'zh-CN', label: '简体中文' },
-      { code: 'zh-HK', label: '粵語（香港）' },
-      { code: 'zh-TW', label: '國語（台灣）' },
+      { code: 'zh-HK', label: '繁體中文（香港）' },
+      { code: 'zh-TW', label: '繁體中文（台灣）' },
       { code: 'en', label: 'English' },
       { code: 'ja', label: '日本語' },
       { code: 'ko', label: '한국어' }

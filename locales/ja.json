@@ -175,6 +175,7 @@
     "nicknameEmpty": "ニックネームを入力してください",
     "nicknameTooLong": "ニックネームは{{max}}文字以内で入力してください",
     "introTooLong": "自己紹介は{{max}}文字以内で入力してください",
+    "saveIntroduction": "紹介を保存",
     "saved": "保存しました",
     "loadProfileFailed": "プロフィールの読み込みに失敗しました",
     "optionsFallback": "オプションの読み込みに失敗しました。ローカルデフォルトを使用します",
@@ -1180,6 +1181,7 @@
       "unblockConfirm": "ブロック解除しても以前のフォローは戻りません。"
     },
     "conversations": {
+      "searchUsers": "ユーザーを検索",
       "navTitle": "メッセージ",
       "empty": "会話はまだありません",
       "noMessage": "メッセージなし",

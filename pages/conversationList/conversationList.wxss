@@ -11,6 +11,14 @@
   margin-top: 24rpx;
 }
 
+.search_cells {
+  margin-top: 24rpx;
+}
+
+.search_hint {
+  color: var(--color-text-tertiary);
+}
+
 .item {
   display: flex;
   align-items: center;

@@ -175,6 +175,7 @@
     "nicknameEmpty": "닉네임을 입력하세요",
     "nicknameTooLong": "닉네임은 {{max}}자 이내로 입력하세요",
     "introTooLong": "자기소개는 {{max}}자 이내로 입력하세요",
+    "saveIntroduction": "소개 저장",
     "saved": "저장됨",
     "loadProfileFailed": "프로필 로딩 실패",
     "optionsFallback": "옵션 로딩 실패, 로컬 기본값을 사용합니다",
@@ -1180,6 +1181,7 @@
       "unblockConfirm": "차단을 해제해도 이전 팔로우가 복구되지 않습니다."
     },
     "conversations": {
+      "searchUsers": "사용자 검색",
       "navTitle": "쪽지",
       "empty": "쪽지 대화가 없습니다",
       "noMessage": "메시지 없음",

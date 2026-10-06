@@ -150,6 +150,7 @@
     "nicknameEmpty": "Nickname cannot be empty",
     "nicknameTooLong": "Nickname cannot exceed {{max}} characters",
     "introTooLong": "Bio cannot exceed {{max}} characters",
+    "saveIntroduction": "Save intro",
     "saved": "Saved",
     "loadProfileFailed": "Failed to load profile",
     "optionsFallback": "Failed to load options, using local defaults",
@@ -1049,6 +1050,7 @@
       "unblockConfirm": "Unblocking does not restore previous follows."
     },
     "conversations": {
+      "searchUsers": "Search users",
       "navTitle": "Messages",
       "empty": "No conversations yet",
       "noMessage": "No messages",

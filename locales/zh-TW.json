@@ -175,6 +175,7 @@
     "nicknameEmpty": "暱稱不能為空",
     "nicknameTooLong": "暱稱長度不能超過{{max}}個字元",
     "introTooLong": "個人簡介長度不能超過{{max}}個字元",
+    "saveIntroduction": "儲存簡介",
     "saved": "已儲存",
     "loadProfileFailed": "載入個人資料失敗",
     "optionsFallback": "資料字典載入失敗，已使用本機預設選項",
@@ -1180,6 +1181,7 @@
       "unblockConfirm": "解除封鎖後不會自動恢復之前的追蹤關係。"
     },
     "conversations": {
+      "searchUsers": "搜尋使用者",
       "navTitle": "私訊",
       "empty": "暫無私訊會話",
       "noMessage": "暫無訊息",
