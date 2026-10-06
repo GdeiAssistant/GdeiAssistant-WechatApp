@@ -292,6 +292,111 @@ test('catalog preserves existing hierarchy and has complete HK/TW labels for all
   assert.equal(foshan.latinName, 'Foshan')
 })
 
+test('Japan keeps all 47 prefecture codes with sourced foreign labels and the Tochigi correction', function () {
+  const { helpers } = setup()
+  const japan = TREE.find((node) => node.code === 'JPN')
+  const prefectures = japan.states.find((node) => node.code === 'JPN').cities
+  assert.equal(prefectures.length, 47)
+  assert.equal(new Set(prefectures.map((node) => node.code)).size, 47)
+  prefectures.forEach(function (node) {
+    ;['en', 'ja', 'ko'].forEach(function (locale) {
+      assert.ok(node.localizedNames[locale], node.code + ':' + locale)
+    })
+    assert.match(node.localizedNames.ja, /[都道府県]$/)
+  })
+  const tochigi = { region: 'JPN', state: 'JPN', city: '9' }
+  assert.equal(helpers.getLocationDisplay(tochigi, '', 'zh-CN'), '日本 栃木')
+  assert.equal(helpers.getLocationDisplay(tochigi, '', 'zh-HK'), '日本 栃木')
+  assert.equal(helpers.getLocationDisplay(tochigi, '', 'zh-TW'), '日本 栃木')
+  assert.equal(helpers.getLocationDisplay(tochigi, '', 'en'), 'Tochigi, Japan')
+  assert.equal(helpers.getLocationDisplay(tochigi, '', 'ja'), '栃木県, 日本')
+  assert.equal(helpers.getLocationDisplay(tochigi, '', 'ko'), '도치기 현, 일본')
+  assert.equal(helpers.findLocationNodes(tochigi).city.name, '枥木')
+  assert.equal(
+    helpers.getLocationDisplay({ region: 'JPN', state: 'JPN', city: '13' }, '', 'ja'),
+    '東京都, 日本'
+  )
+})
+
+test('sourced global city labels keep full hierarchies and unknown text remains unchanged', function () {
+  const { helpers } = setup()
+  const cases = [
+    [
+      'GBR',
+      'ENG',
+      'LND',
+      'London, England, United Kingdom',
+      'ロンドン, イングランド, イギリス',
+      '런던, 잉글랜드, 영국'
+    ],
+    ['FRA', 'FRA', 'PAR', 'Paris, France', 'パリ, フランス', '파리, 프랑스'],
+    [
+      'USA',
+      'CA',
+      'LAX',
+      'Los Angeles, California, United States',
+      'ロサンゼルス, カリフォルニア, アメリカ合衆国',
+      '로스앤젤레스, 캘리포니아주, 미국'
+    ]
+  ]
+  cases.forEach(function ([region, state, city, en, ja, ko]) {
+    const codes = { region: region, state: state, city: city }
+    assert.deepEqual(
+      ['en', 'ja', 'ko'].map((locale) => helpers.getLocationDisplay(codes, '', locale)),
+      [en, ja, ko]
+    )
+    assert.equal(helpers.findLocationNodes(codes).city.code, city)
+  })
+  const state = { region: 'USA', state: 'NY', city: '' }
+  const city = { region: 'USA', state: 'NY', city: 'QEE' }
+  assert.equal(helpers.findLocationNodes(state).city, null)
+  assert.equal(helpers.findLocationNodes(city).city.code, 'QEE')
+  assert.equal(helpers.getLocationDisplay(state, '', 'en'), 'New York, United States')
+  assert.equal(helpers.getLocationDisplay(city, '', 'en'), 'New York City, New York, United States')
+  assert.equal(helpers.getLocationDisplay(state, '', 'ja'), 'ニューヨーク州, アメリカ合衆国')
+  assert.equal(
+    helpers.getLocationDisplay(city, '', 'ja'),
+    'ニューヨーク, ニューヨーク州, アメリカ合衆国'
+  )
+  assert.equal(helpers.getLocationDisplay(state, '', 'ko'), '뉴욕주, 미국')
+  assert.equal(helpers.getLocationDisplay(city, '', 'ko'), '뉴욕, 뉴욕주, 미국')
+  assert.equal(helpers.localizeIpArea('뉴욕 / New York', 'en'), '뉴욕 / New York')
+  assert.equal(
+    helpers.localizeIpArea('我的 London / New York 旅行', 'ja'),
+    '我的 London / New York 旅行'
+  )
+  assert.equal(
+    helpers.getLocationDisplay({ region: 'CUSTOM', state: 'NY', city: 'QEE' }, '自填地区', 'en'),
+    '自填地区'
+  )
+})
+
+test('French Guiana and Guyana remain independent country choices and ambiguous old names stay raw', function () {
+  const { helpers } = setup()
+  const frenchGuiana = TREE.find((node) => node.code === 'GUF')
+  const guyana = TREE.find((node) => node.code === 'GUY')
+  assert.equal(frenchGuiana.iso, 'GF')
+  assert.equal(guyana.iso, 'GY')
+  assert.equal(frenchGuiana.name, '圭亚那')
+  const expected = {
+    'zh-CN': '法属圭亚那',
+    'zh-HK': '法屬圭亞那',
+    'zh-TW': '法屬圭亞那',
+    en: 'French Guiana',
+    ja: '仏領ギアナ',
+    ko: '프랑스령 기아나'
+  }
+  Object.entries(expected).forEach(function ([locale, name]) {
+    assert.equal(helpers.getLocationNodeName(frenchGuiana, locale), name)
+    assert.notEqual(helpers.getLocationNodeName(guyana, locale), name)
+    assert.equal(helpers.localizeIpArea('圭亚那', locale), '圭亚那')
+    assert.equal(helpers.localizeIpArea('French Guiana', locale), name)
+  })
+  assert.equal(helpers.localizeIpArea('法属圭亚那', 'ja'), '仏領ギアナ')
+  assert.equal(helpers.getLocationDisplay({ region: 'GUF' }, '', 'en'), 'French Guiana')
+  assert.equal(helpers.getLocationDisplay({ region: 'GUY' }, '', 'en'), 'Guyana')
+})
+
 test('labeled remote dictionaries and faculty/major page codes survive six locale switches', async function () {
   const catalog = require('../constants/profile-catalog.js')
   const options = catalog.buildDefaultProfileOptionsPayload('zh-CN')
