@@ -16,7 +16,6 @@
         <image class="userinfo-avatar" src="{{avatar}}" mode="aspectFill"></image>
         <view class="userinfo_meta">
           <text class="userinfo-nickname">{{nickname}}</text>
-          <text class="userinfo-source">{{t.dataSourceLabel}}</text>
         </view>
       </view>
 

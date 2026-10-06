@@ -52,7 +52,6 @@ module.exports = {
       "button": "登录",
       "loading": "登录中...",
       "appName": "广东二师助手",
-      "dataSourceLabel": "当前数据源：",
       "usernamePlaceholder": "请输入校园网账号",
       "passwordPlaceholder": "请输入校园网密码",
       "fillCredentials": "请填写校园网账号信息",
@@ -94,7 +93,6 @@ module.exports = {
     "index": {
       "navTitle": "功能列表",
       "appName": "广东二师助手",
-      "dataSourceLabel": "当前数据源：",
       "viewProfile": "查看个人资料",
       "defaultNickname": "广东二师助手用户",
       "settingsSection": "功能设置",
@@ -273,7 +271,7 @@ module.exports = {
       "campusCredentialRevoke": "撤回授权",
       "campusCredentialDelete": "删除已保存凭证",
       "campusCredentialRevokeTitle": "撤回校园账号凭证授权",
-      "campusCredentialRevokeContent": "撤回授权将停止后续基于已保存校园凭证的快速认证或会话同步；如服务端配置为安全优先处理，已保存凭证也可能被同步删除。",
+      "campusCredentialRevokeContent": "撤回授权后，将不再使用已保存的校园凭证进行快速认证或会话同步，已保存的凭证也可能被一并删除。",
       "campusCredentialDeleteTitle": "删除已保存的校园凭证",
       "campusCredentialDeleteContent": "删除后，课表、成绩、校园卡、图书馆等查询可能需要重新登录或重新授权。",
       "campusCredentialRevokeSuccess": "已撤回校园凭证授权",
@@ -474,7 +472,7 @@ module.exports = {
         },
         "settings": {
           "title": "功能设置",
-          "desc": "切换 mock 与管理首页模块"
+          "desc": "管理首页模块"
         },
         "logout": {
           "title": "退出账号",
@@ -1297,7 +1295,6 @@ module.exports = {
       "button": "登入",
       "loading": "登入中...",
       "appName": "廣東二師助手",
-      "dataSourceLabel": "當前數據源：",
       "usernamePlaceholder": "請輸入校園網賬號",
       "passwordPlaceholder": "請輸入校園網密碼",
       "fillCredentials": "請填寫校園網賬號信息",
@@ -1339,7 +1336,6 @@ module.exports = {
     "index": {
       "navTitle": "功能列表",
       "appName": "廣東二師助手",
-      "dataSourceLabel": "當前數據源：",
       "viewProfile": "查看個人資料",
       "defaultNickname": "廣東二師助手用戶",
       "settingsSection": "功能設定",
@@ -1518,7 +1514,7 @@ module.exports = {
       "campusCredentialRevoke": "撤回授權",
       "campusCredentialDelete": "刪除已保存憑證",
       "campusCredentialRevokeTitle": "撤回校園賬號憑證授權",
-      "campusCredentialRevokeContent": "撤回授權將停止後續基於已保存校園憑證的快速認證或會話同步；如服務端配置為安全優先處理，已保存憑證也可能被同步刪除。",
+      "campusCredentialRevokeContent": "撤回授權後，將不再使用已保存的校園憑證進行快速認證或會話同步，已保存的憑證也可能被一併刪除。",
       "campusCredentialDeleteTitle": "刪除已保存的校園憑證",
       "campusCredentialDeleteContent": "刪除之後，課表、成績、校園卡、圖書館等查詢可能要重新登入或者重新授權。",
       "campusCredentialRevokeSuccess": "已撤回校園憑證授權",
@@ -1719,7 +1715,7 @@ module.exports = {
         },
         "settings": {
           "title": "功能設定",
-          "desc": "切換 mock 與管理首頁模塊"
+          "desc": "管理首頁模塊"
         },
         "logout": {
           "title": "登出賬號",
@@ -2542,7 +2538,6 @@ module.exports = {
       "button": "登入",
       "loading": "登入中...",
       "appName": "廣東二師助手",
-      "dataSourceLabel": "目前資料源：",
       "usernamePlaceholder": "請輸入校園網帳號",
       "passwordPlaceholder": "請輸入校園網密碼",
       "fillCredentials": "請填寫校園網帳號資訊",
@@ -2584,7 +2579,6 @@ module.exports = {
     "index": {
       "navTitle": "功能列表",
       "appName": "廣東二師助手",
-      "dataSourceLabel": "目前資料源：",
       "viewProfile": "查看個人資料",
       "defaultNickname": "廣東二師助手使用者",
       "settingsSection": "功能設定",
@@ -2763,7 +2757,7 @@ module.exports = {
       "campusCredentialRevoke": "撤回授權",
       "campusCredentialDelete": "刪除已保存憑證",
       "campusCredentialRevokeTitle": "撤回校園帳號憑證授權",
-      "campusCredentialRevokeContent": "撤回授權將停止後續基於已保存校園憑證的快速認證或會話同步；如服務端設定為安全優先處理，已保存憑證也可能被同步刪除。",
+      "campusCredentialRevokeContent": "撤回授權後，將不再使用已保存的校園憑證進行快速認證或會話同步，已保存的憑證也可能被一併刪除。",
       "campusCredentialDeleteTitle": "刪除已保存的校園憑證",
       "campusCredentialDeleteContent": "刪除後，課表、成績、校園卡、圖書館等查詢可能需要重新登入或重新授權。",
       "campusCredentialRevokeSuccess": "已撤回校園憑證授權",
@@ -2964,7 +2958,7 @@ module.exports = {
         },
         "settings": {
           "title": "功能設定",
-          "desc": "切換 mock 與管理首頁模組"
+          "desc": "管理首頁模組"
         },
         "logout": {
           "title": "登出帳號",
@@ -3787,7 +3781,6 @@ module.exports = {
       "button": "Login",
       "loading": "Logging in...",
       "appName": "GdeiAssistant",
-      "dataSourceLabel": "Data source: ",
       "usernamePlaceholder": "Enter campus account",
       "passwordPlaceholder": "Enter campus password",
       "fillCredentials": "Please fill in campus account",
@@ -3829,7 +3822,6 @@ module.exports = {
     "index": {
       "navTitle": "Features",
       "appName": "GdeiAssistant",
-      "dataSourceLabel": "Data source: ",
       "viewProfile": "View profile",
       "defaultNickname": "GdeiAssistant User",
       "settingsSection": "Settings",
@@ -4008,7 +4000,7 @@ module.exports = {
       "campusCredentialRevoke": "Revoke Consent",
       "campusCredentialDelete": "Delete Saved Credential",
       "campusCredentialRevokeTitle": "Revoke Campus Credential Consent",
-      "campusCredentialRevokeContent": "Revoking consent will stop future quick authentication or session synchronization based on saved campus credentials. Depending on backend safety-first behavior, saved credentials may also be deleted.",
+      "campusCredentialRevokeContent": "After revoking consent, your saved campus credential will no longer be used for quick authentication or session sync, and it may also be deleted.",
       "campusCredentialDeleteTitle": "Delete Saved Campus Credential",
       "campusCredentialDeleteContent": "After deletion, schedule, grades, campus card, and library queries may require login or re-authorization again.",
       "campusCredentialRevokeSuccess": "Campus credential consent revoked",
@@ -4209,7 +4201,7 @@ module.exports = {
         },
         "settings": {
           "title": "Settings",
-          "desc": "Toggle mock data and manage home modules"
+          "desc": "Manage home modules"
         },
         "logout": {
           "title": "Logout",
@@ -5032,7 +5024,6 @@ module.exports = {
       "button": "ログイン",
       "loading": "ログイン中...",
       "appName": "GdeiAssistant",
-      "dataSourceLabel": "データソース：",
       "usernamePlaceholder": "キャンパスアカウントを入力",
       "passwordPlaceholder": "キャンパスパスワードを入力",
       "fillCredentials": "キャンパスアカウントを入力してください",
@@ -5074,7 +5065,6 @@ module.exports = {
     "index": {
       "navTitle": "機能一覧",
       "appName": "GdeiAssistant",
-      "dataSourceLabel": "データソース：",
       "viewProfile": "プロフィールを見る",
       "defaultNickname": "GdeiAssistantユーザー",
       "settingsSection": "設定",
@@ -5253,7 +5243,7 @@ module.exports = {
       "campusCredentialRevoke": "同意を撤回",
       "campusCredentialDelete": "保存済み資格情報を削除",
       "campusCredentialRevokeTitle": "学内資格情報への同意を撤回",
-      "campusCredentialRevokeContent": "同意を撤回すると、保存済み学内資格情報に基づくクイック認証やセッション同期は停止します。バックエンド設定によっては保存済み資格情報も削除される場合があります。",
+      "campusCredentialRevokeContent": "同意を撤回すると、保存済みの学内資格情報はクイック認証やセッション同期に使われなくなり、削除される場合もあります。",
       "campusCredentialDeleteTitle": "保存済み学内資格情報を削除",
       "campusCredentialDeleteContent": "削除後は、時間割、成績、学生証、図書館などの照会で再ログインまたは再同意が必要になる場合があります。",
       "campusCredentialRevokeSuccess": "学内資格情報への同意を撤回しました",
@@ -5454,7 +5444,7 @@ module.exports = {
         },
         "settings": {
           "title": "機能設定",
-          "desc": "モックデータの切替とホームモジュール管理"
+          "desc": "ホームモジュールを管理"
         },
         "logout": {
           "title": "ログアウト",
@@ -6277,7 +6267,6 @@ module.exports = {
       "button": "로그인",
       "loading": "로그인 중...",
       "appName": "GdeiAssistant",
-      "dataSourceLabel": "데이터 소스: ",
       "usernamePlaceholder": "캠퍼스 계정을 입력하세요",
       "passwordPlaceholder": "캠퍼스 비밀번호를 입력하세요",
       "fillCredentials": "캠퍼스 계정 정보를 입력하세요",
@@ -6319,7 +6308,6 @@ module.exports = {
     "index": {
       "navTitle": "기능 목록",
       "appName": "GdeiAssistant",
-      "dataSourceLabel": "데이터 소스: ",
       "viewProfile": "프로필 보기",
       "defaultNickname": "GdeiAssistant 사용자",
       "settingsSection": "설정",
@@ -6498,7 +6486,7 @@ module.exports = {
       "campusCredentialRevoke": "동의 철회",
       "campusCredentialDelete": "저장된 자격정보 삭제",
       "campusCredentialRevokeTitle": "캠퍼스 자격정보 동의 철회",
-      "campusCredentialRevokeContent": "동의를 철회하면 저장된 캠퍼스 자격정보를 기반으로 한 빠른 인증과 세션 동기화가 중단됩니다. 백엔드 안전 우선 설정에 따라 저장된 자격정보가 함께 삭제될 수도 있습니다.",
+      "campusCredentialRevokeContent": "동의를 철회하면 저장된 캠퍼스 자격정보는 빠른 인증이나 세션 동기화에 더 이상 사용되지 않으며, 함께 삭제될 수도 있습니다.",
       "campusCredentialDeleteTitle": "저장된 캠퍼스 자격정보 삭제",
       "campusCredentialDeleteContent": "삭제 후 시간표, 성적, 캠퍼스 카드, 도서관 조회는 다시 로그인하거나 다시 동의해야 할 수 있습니다.",
       "campusCredentialRevokeSuccess": "캠퍼스 자격정보 동의를 철회했습니다",
@@ -6699,7 +6687,7 @@ module.exports = {
         },
         "settings": {
           "title": "기능 설정",
-          "desc": "모의 데이터 전환 및 홈 모듈 관리"
+          "desc": "홈 모듈 관리"
         },
         "logout": {
           "title": "로그아웃",

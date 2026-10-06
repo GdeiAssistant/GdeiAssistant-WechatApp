@@ -33,13 +33,6 @@
   line-height: 1.2;
 }
 
-.userinfo-source {
-  margin-top: 12rpx;
-  color: var(--color-on-band-muted);
-  font-size: var(--font-meta);
-  line-height: 1.4;
-}
-
 .page-body {
   margin-top: 48rpx;
   flex-grow: 1;

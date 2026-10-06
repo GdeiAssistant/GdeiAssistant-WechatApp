@@ -50,7 +50,6 @@
     "button": "登录",
     "loading": "登录中...",
     "appName": "广东二师助手",
-    "dataSourceLabel": "当前数据源：",
     "usernamePlaceholder": "请输入校园网账号",
     "passwordPlaceholder": "请输入校园网密码",
     "fillCredentials": "请填写校园网账号信息",
@@ -84,7 +83,6 @@
   "index": {
     "navTitle": "功能列表",
     "appName": "广东二师助手",
-    "dataSourceLabel": "当前数据源：",
     "viewProfile": "查看个人资料",
     "defaultNickname": "广东二师助手用户",
     "settingsSection": "功能设置",
@@ -246,7 +244,7 @@
     "campusCredentialRevoke": "撤回授权",
     "campusCredentialDelete": "删除已保存凭证",
     "campusCredentialRevokeTitle": "撤回校园账号凭证授权",
-    "campusCredentialRevokeContent": "撤回授权将停止后续基于已保存校园凭证的快速认证或会话同步；如服务端配置为安全优先处理，已保存凭证也可能被同步删除。",
+    "campusCredentialRevokeContent": "撤回授权后，将不再使用已保存的校园凭证进行快速认证或会话同步，已保存的凭证也可能被一并删除。",
     "campusCredentialDeleteTitle": "删除已保存的校园凭证",
     "campusCredentialDeleteContent": "删除后，课表、成绩、校园卡、图书馆等查询可能需要重新登录或重新授权。",
     "campusCredentialRevokeSuccess": "已撤回校园凭证授权",
@@ -379,7 +377,7 @@
     },
     "actions": {
       "appearance": { "title": "界面和外观", "desc": "主题、字体大小、语言" },
-      "settings": { "title": "功能设置", "desc": "切换 mock 与管理首页模块" },
+      "settings": { "title": "功能设置", "desc": "管理首页模块" },
       "logout": { "title": "退出账号", "desc": "退出当前账号" }
     }
   },
