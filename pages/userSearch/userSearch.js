@@ -24,6 +24,7 @@ Page({
         navTitle: i18n.t('social.search.navTitle'),
         searchPlaceholder: i18n.t('social.search.placeholder'),
         noIntro: i18n.t('social.common.noIntro'),
+        searchHint: i18n.t('social.search.hint'),
         empty: i18n.t('social.search.empty'),
         loading: i18n.t('common.loading'),
         loadMore: i18n.t('common.more')

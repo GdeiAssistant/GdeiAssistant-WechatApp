@@ -29,12 +29,13 @@
     </view>
   </view>
 
+  <view class="empty" wx:if="{{!loading && !searched}}">{{t.searchHint}}</view>
   <view class="empty" wx:if="{{!loading && searched && !users.length}}">{{t.empty}}</view>
   <view class="weui-loadmore" wx:if="{{loading}}">
     <i class="weui-loading"></i>
     <view class="weui-loadmore__tips">{{t.loading}}</view>
   </view>
-  <view class="weui-loadmore" wx:if="{{!loading && hasMore}}">
-    <view class="weui-loadmore__tips" bindtap="loadMore">{{t.loadMore}}</view>
+  <view class="weui-loadmore loadmore_tappable" wx:if="{{!loading && hasMore}}" bindtap="loadMore">
+    <view class="weui-loadmore__tips">{{t.loadMore}}</view>
   </view>
 </view>

@@ -91,3 +91,7 @@
   font-size: var(--font-meta);
   line-height: 1.6;
 }
+
+.loadmore_tappable {
+  padding: 32rpx 0;
+}

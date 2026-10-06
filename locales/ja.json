@@ -1,5 +1,7 @@
 {
   "common": {
+    "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
+    "rightsReserved": "All rights reserved",
     "loading": "読み込み中...",
     "retry": "再試行",
     "confirm": "確認",
@@ -1152,6 +1154,7 @@
       "emptyList": "内容がありません"
     },
     "search": {
+      "hint": "ニックネームまたは公開IDでユーザーを検索",
       "navTitle": "ユーザー検索",
       "placeholder": "ニックネームまたは公開 ID",
       "empty": "ユーザーが見つかりません"
@@ -1224,9 +1227,6 @@
     "entry": {
       "searchUsers": "ユーザー検索",
       "directMessages": "メッセージ",
-      "following": "フォロー",
-      "followers": "フォロワー",
-      "friends": "相互",
       "privacy": "メッセージ設定",
       "blocks": "ブロック",
       "authorProfile": "プロフィールを見る"

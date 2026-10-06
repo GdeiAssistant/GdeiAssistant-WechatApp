@@ -1,5 +1,7 @@
 {
   "common": {
+    "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
+    "rightsReserved": "All rights reserved",
     "loading": "로딩 중...",
     "retry": "재시도",
     "confirm": "확인",
@@ -1152,6 +1154,7 @@
       "emptyList": "내용이 없습니다"
     },
     "search": {
+      "hint": "닉네임 또는 공개 ID로 사용자 검색",
       "navTitle": "사용자 검색",
       "placeholder": "닉네임 또는 공개 ID",
       "empty": "사용자를 찾을 수 없습니다"
@@ -1224,9 +1227,6 @@
     "entry": {
       "searchUsers": "사용자 검색",
       "directMessages": "쪽지",
-      "following": "내 팔로잉",
-      "followers": "내 팔로워",
-      "friends": "내 친구",
       "privacy": "쪽지 설정",
       "blocks": "차단 목록",
       "authorProfile": "프로필 보기"

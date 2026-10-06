@@ -1,5 +1,7 @@
 {
   "common": {
+    "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
+    "rightsReserved": "版權所有",
     "loading": "載入中...",
     "retry": "重試",
     "confirm": "確認",
@@ -1152,6 +1154,7 @@
       "emptyList": "暫無內容"
     },
     "search": {
+      "hint": "輸入暱稱或公開 ID 找人",
       "navTitle": "搜尋用戶",
       "placeholder": "搜尋暱稱或公開 ID",
       "empty": "沒有找到用戶"
@@ -1224,9 +1227,6 @@
     "entry": {
       "searchUsers": "搜尋用戶",
       "directMessages": "私訊",
-      "following": "我的追蹤",
-      "followers": "我的粉絲",
-      "friends": "我的好友",
       "privacy": "私訊設定",
       "blocks": "黑名單",
       "authorProfile": "查看主頁"

@@ -52,8 +52,8 @@
   </view>
 
   <view class="copyright_info">
-    <text>Copyright © 2016 - 2026 GdeiAssistant\n</text>
-    <text>All rights reserved</text>
+    <text>{{t.copyright}}</text>
+    <text>{{t.rightsReserved}}</text>
   </view>
 
 </view>
