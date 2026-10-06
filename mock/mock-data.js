@@ -6,9 +6,20 @@ var MOCK_ACCOUNT_DATA = {
   password: require('../constants/mock.js').MOCK_ACCOUNT_PASSWORD
 }
 
-function localizedProfileText(simplifiedChinese, traditionalChinese, english, japanese, korean, locale) {
+function localizedProfileText(
+  simplifiedChinese,
+  traditionalChinese,
+  english,
+  japanese,
+  korean,
+  locale,
+  hongKongChinese
+) {
   var normalizedLocale = i18n.normalizeLocale(locale)
-  if (normalizedLocale === 'zh-HK' || normalizedLocale === 'zh-TW') return traditionalChinese
+  if (normalizedLocale === 'zh-HK') {
+    return hongKongChinese != null ? hongKongChinese : traditionalChinese
+  }
+  if (normalizedLocale === 'zh-TW') return traditionalChinese
   if (normalizedLocale === 'en') return english
   if (normalizedLocale === 'ja') return japanese
   if (normalizedLocale === 'ko') return korean
@@ -49,11 +60,12 @@ function buildBaseProfile(locale) {
     },
     introduction: localizedProfileText(
       '喜欢做实用的小工具，也在准备移动端开发实习。',
-      '喜歡做實用的小工具，也在準備流動端開發實習。',
+      '喜歡做實用的小工具，也在準備行動端開發實習。',
       'Enjoys building practical tools and is preparing for a mobile development internship.',
       '実用的な小さなツールを作るのが好きで、モバイル開発インターンの準備もしています。',
       '실용적인 작은 도구를 만드는 것을 좋아하고, 모바일 개발 인턴을 준비하고 있습니다.',
-      normalizedLocale
+      normalizedLocale,
+      '喜歡做實用的小工具，也在準備流動端開發實習。'
     ),
     ipArea: localizedProfileText('广东', '廣東', 'Guangdong', '広東', '광둥', normalizedLocale)
   }
@@ -299,8 +311,24 @@ function cloneMockValue(value) {
   return JSON.parse(JSON.stringify(value))
 }
 
-function localizedMockText(simplifiedChinese, traditionalChinese, english, japanese, korean, locale) {
-  return localizedProfileText(simplifiedChinese, traditionalChinese, english, japanese, korean, locale || i18n.getCurrentLocale())
+function localizedMockText(
+  simplifiedChinese,
+  traditionalChinese,
+  english,
+  japanese,
+  korean,
+  locale,
+  hongKongChinese
+) {
+  return localizedProfileText(
+    simplifiedChinese,
+    traditionalChinese,
+    english,
+    japanese,
+    korean,
+    locale || i18n.getCurrentLocale(),
+    hongKongChinese
+  )
 }
 
 function getGradeReports(locale) {

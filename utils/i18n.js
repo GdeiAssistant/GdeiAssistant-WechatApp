@@ -53,23 +53,67 @@ function detectSystemLocale() {
 }
 
 function normalizeLocale(locale) {
-  var lang = String(locale || '')
-    .trim()
-    .replace(/_/g, '-')
-    .toLowerCase()
+  // Align with root Accept-Language normalization: first tag, drop ;q, underscore→hyphen, casefold.
+  var lang = String(locale || '').trim()
+  if (lang.indexOf(',') !== -1) {
+    lang = lang.split(',')[0]
+  }
+  var semi = lang.indexOf(';')
+  if (semi !== -1) {
+    lang = lang.slice(0, semi)
+  }
+  lang = lang.trim().replace(/_/g, '-').toLowerCase()
   if (!lang) {
     return 'zh-CN'
   }
-  if (lang === 'zh-cn' || lang === 'zh-hans' || lang === 'zh-hans-cn' || lang === 'zh')
+
+  // HK / MO (and extensions) before generic zh-hant*
+  if (
+    lang === 'zh-hk' ||
+    lang === 'zh-hant-hk' ||
+    lang === 'zh-mo' ||
+    lang === 'zh-hant-mo' ||
+    lang.indexOf('zh-hk-') === 0 ||
+    lang.indexOf('zh-hant-hk-') === 0 ||
+    lang.indexOf('zh-mo-') === 0 ||
+    lang.indexOf('zh-hant-mo-') === 0
+  ) {
+    return 'zh-HK'
+  }
+  if (lang.indexOf('zh-hk') === 0 || lang.indexOf('zh-hant-hk') === 0) {
+    return 'zh-HK'
+  }
+  if (lang.indexOf('zh-mo') === 0 || lang.indexOf('zh-hant-mo') === 0) {
+    return 'zh-HK'
+  }
+
+  if (lang === 'zh-tw' || lang === 'zh-hant' || lang === 'zh-hant-tw') {
+    return 'zh-TW'
+  }
+  if (lang.indexOf('zh-tw') === 0 || lang.indexOf('zh-hant-tw') === 0) {
+    return 'zh-TW'
+  }
+  if (lang.indexOf('zh-hant') === 0) {
+    return 'zh-TW'
+  }
+
+  if (lang === 'zh-cn' || lang === 'zh-hans' || lang === 'zh-hans-cn' || lang === 'zh') {
     return 'zh-CN'
-  if (lang === 'zh-hk' || lang === 'zh-hant-hk') return 'zh-HK'
-  if (lang === 'zh-tw' || lang === 'zh-hant' || lang === 'zh-hant-tw') return 'zh-TW'
-  if (lang.indexOf('zh-hk') === 0) return 'zh-HK'
-  if (lang.indexOf('zh-tw') === 0 || lang.indexOf('zh-hant') === 0) return 'zh-TW'
-  if (lang.indexOf('zh') === 0) return 'zh-CN'
-  if (lang.indexOf('en') === 0) return 'en'
-  if (lang.indexOf('ja') === 0) return 'ja'
-  if (lang.indexOf('ko') === 0) return 'ko'
+  }
+  if (lang.indexOf('zh-hans') === 0 || lang.indexOf('zh') === 0) {
+    return 'zh-CN'
+  }
+
+  if (lang.indexOf('en') === 0) {
+    return 'en'
+  }
+  if (lang.indexOf('ja') === 0) {
+    return 'ja'
+  }
+  if (lang.indexOf('ko') === 0) {
+    return 'ko'
+  }
+  // Unknown tags (including yue) fall back to zh-CN; supported set stays the existing six.
   return 'zh-CN'
 }
 

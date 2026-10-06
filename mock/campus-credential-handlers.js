@@ -1,4 +1,5 @@
 const { maskAccount } = require('../utils/mask.js')
+const i18n = require('../utils/i18n.js')
 
 function nowText() {
   return '2026-05-11 10:00:00'
@@ -62,9 +63,10 @@ function handleCampusCredentialConsent(token, payload, utils) {
     revokedAt: '',
     policyDate: String((payload && payload.policyDate) || '2026-04-25'),
     effectiveDate: String((payload && payload.effectiveDate) || '2026-05-11'),
-    maskedCampusAccount: nextState.profile && nextState.profile.username
-      ? maskAccount(nextState.profile.username)
-      : current.maskedCampusAccount
+    maskedCampusAccount:
+      nextState.profile && nextState.profile.username
+        ? maskAccount(nextState.profile.username)
+        : current.maskedCampusAccount
   })
   utils.writeState(nextState)
   return utils.resolveWithDelay(utils.buildSuccess(buildStatusPayload(nextState)))
@@ -125,10 +127,10 @@ function handleCampusCredentialQuickAuth(token, payload, utils) {
   var current = getCampusCredentialState(nextState)
 
   if (enabled && !current.hasActiveConsent) {
-    return utils.rejectWithMessage('Campus credential consent is required before enabling quick auth')
+    return utils.rejectWithMessage(i18n.t('settingsPage.campusCredentialEnableNeedConsent'))
   }
   if (enabled && !current.hasSavedCredential) {
-    return utils.rejectWithMessage('Saved campus credentials are required before enabling quick auth')
+    return utils.rejectWithMessage(i18n.t('settingsPage.campusCredentialEnableNeedCredential'))
   }
 
   writeCampusCredentialState(nextState, {

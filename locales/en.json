@@ -770,6 +770,7 @@
       "search": "Search",
       "clear": "Clear",
       "loading": "Loading",
+"loadMore": "Load more",
       "noMore": "No more data",
       "emptyTitle": "No content",
       "emptySummary": "Try different filters, or post something new.",

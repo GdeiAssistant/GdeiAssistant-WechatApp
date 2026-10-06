@@ -901,6 +901,7 @@
       "search": "搜尋",
       "clear": "清空",
       "loading": "正在載入",
+"loadMore": "載入更多",
       "noMore": "沒有更多資料了",
       "emptyTitle": "暫無內容",
       "emptySummary": "換個篩選條件試試，或者發佈一則新的內容。",
@@ -1202,7 +1203,7 @@
     },
     "privacy": {
       "navTitle": "誰可以私訊我",
-      "hint": "每次傳送都會按對方目前設定判斷權限。",
+      "hint": "每次傳送私訊時，都會依對方目前的設定判斷權限。",
       "selected": "已選擇",
       "saved": "已儲存",
       "all": "所有人",
@@ -1210,10 +1211,10 @@
       "mutual": "互相追蹤的人",
       "none": "不允許任何人",
       "desc": {
-        "all": "所有已登入用戶都可以給你發私訊",
-        "following": "只有你追蹤的人可以給你發私訊",
-        "mutual": "只有互相追蹤的人可以給你發私訊",
-        "none": "不接收任何私訊，你仍可主動發出"
+        "all": "所有已登入使用者都能傳送私訊給你",
+        "following": "只有你追蹤的人能傳送私訊給你",
+        "mutual": "只有互相追蹤的人能傳送私訊給你",
+        "none": "不接收私訊，但你仍可主動傳送"
       }
     },
     "blocks": {
@@ -1233,7 +1234,7 @@
     "errors": {
       "userNotFound": "用戶不存在",
       "conversationNotFound": "會話不存在",
-      "contactUnavailable": "暫時無法聯繫該用戶",
+      "contactUnavailable": "暫時無法聯繫該使用者",
       "privacyRestricted": "對方的私訊設定不允許傳送",
       "invalidRequest": "請求無效",
       "clientMessageConflict": "訊息衝突，請重新編輯後再傳送",

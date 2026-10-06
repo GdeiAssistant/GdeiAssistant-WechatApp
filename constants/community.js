@@ -95,15 +95,35 @@ function normalizeCommunityLocale(locale) {
   if (typeof i18n.normalizeLocale === 'function') {
     return i18n.normalizeLocale(locale)
   }
-
-  const lang = String(locale || '').trim().replace(/_/g, '-').toLowerCase()
+  // Keep fallback aligned with utils/i18n.normalizeLocale when i18n is unavailable.
+  var lang = String(locale || '').trim()
+  if (lang.indexOf(',') !== -1) {
+    lang = lang.split(',')[0]
+  }
+  var semi = lang.indexOf(';')
+  if (semi !== -1) {
+    lang = lang.slice(0, semi)
+  }
+  lang = lang.trim().replace(/_/g, '-').toLowerCase()
   if (!lang) return 'zh-CN'
-  if (lang === 'zh-cn' || lang === 'zh-hans' || lang === 'zh-hans-cn' || lang === 'zh') return 'zh-CN'
-  if (lang === 'zh-hk' || lang === 'zh-hant-hk') return 'zh-HK'
+  if (
+    lang === 'zh-hk' ||
+    lang === 'zh-hant-hk' ||
+    lang === 'zh-mo' ||
+    lang === 'zh-hant-mo' ||
+    lang.indexOf('zh-hk') === 0 ||
+    lang.indexOf('zh-hant-hk') === 0 ||
+    lang.indexOf('zh-mo') === 0 ||
+    lang.indexOf('zh-hant-mo') === 0
+  ) {
+    return 'zh-HK'
+  }
   if (lang === 'zh-tw' || lang === 'zh-hant' || lang === 'zh-hant-tw') return 'zh-TW'
-  if (lang.indexOf('zh-hk') === 0) return 'zh-HK'
-  if (lang.indexOf('zh-tw') === 0 || lang.indexOf('zh-hant') === 0) return 'zh-TW'
-  if (lang.indexOf('zh') === 0) return 'zh-CN'
+  if (lang.indexOf('zh-tw') === 0 || lang.indexOf('zh-hant-tw') === 0) return 'zh-TW'
+  if (lang.indexOf('zh-hant') === 0) return 'zh-TW'
+  if (lang === 'zh-cn' || lang === 'zh-hans' || lang === 'zh-hans-cn' || lang === 'zh')
+    return 'zh-CN'
+  if (lang.indexOf('zh-hans') === 0 || lang.indexOf('zh') === 0) return 'zh-CN'
   if (lang.indexOf('en') === 0) return 'en'
   if (lang.indexOf('ja') === 0) return 'ja'
   if (lang.indexOf('ko') === 0) return 'ko'
@@ -111,9 +131,8 @@ function normalizeCommunityLocale(locale) {
 }
 
 function getDeliveryDefaultOrderName(locale) {
-  const currentLocale = typeof i18n.getCurrentLocale === 'function'
-    ? i18n.getCurrentLocale()
-    : 'zh-CN'
+  const currentLocale =
+    typeof i18n.getCurrentLocale === 'function' ? i18n.getCurrentLocale() : 'zh-CN'
   const normalizedLocale = normalizeCommunityLocale(locale || currentLocale)
 
   return normalizedLocale === 'zh-CN'
@@ -298,7 +317,7 @@ function getCommunityModules() {
 }
 
 function getCommunityModuleMap() {
-  return getCommunityModules().reduce(function(result, moduleItem) {
+  return getCommunityModules().reduce(function (result, moduleItem) {
     result[moduleItem.id] = moduleItem
     return result
   }, {})
@@ -396,5 +415,6 @@ module.exports = {
   getDeliveryDefaultOrderName,
   DELIVERY_PLACEHOLDER_PICKUP_CODE,
   getCommunityModule,
-  getCommunityPageTitle
+  getCommunityPageTitle,
+  normalizeCommunityLocale
 }

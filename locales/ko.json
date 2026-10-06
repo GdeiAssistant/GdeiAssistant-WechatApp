@@ -901,6 +901,7 @@
       "search": "검색",
       "clear": "초기화",
       "loading": "로딩 중",
+"loadMore": "더 불러오기",
       "noMore": "더 이상 데이터 없음",
       "emptyTitle": "콘텐츠 없음",
       "emptySummary": "필터를 변경하거나 새로 게시해 보세요.",
