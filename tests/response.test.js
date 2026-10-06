@@ -67,3 +67,8 @@ test('pickMessage prefers available aliases and falls back to a default message'
   assert.equal(pickMessage({}), '服务暂不可用，请稍后再试')
   assert.equal(pickMessage(null), '服务暂不可用，请稍后再试')
 })
+
+test('normalizePayload preserves zero and false data', function () {
+  assert.equal(normalizePayload({ code: 200, data: 0 }).data, 0)
+  assert.equal(normalizePayload({ status: 200, data: false }).data, false)
+})

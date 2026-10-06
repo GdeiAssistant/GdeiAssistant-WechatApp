@@ -125,24 +125,24 @@ module.exports = {
   community: {
     secondhand: {
       list: function (start) {
-        return `/api/ershou/item/start/${start}`
+        return `/api/marketplace/item/start/${start}`
       },
       keyword: function (keyword, start) {
-        return `/api/ershou/keyword/${keyword}/start/${start}`
+        return `/api/marketplace/keyword/${keyword}/start/${start}`
       },
       type: function (type, start) {
-        return `/api/ershou/item/type/${type}/start/${start}`
+        return `/api/marketplace/item/type/${type}/start/${start}`
       },
       detail: function (id) {
-        return `/api/ershou/item/id/${id}`
+        return `/api/marketplace/item/id/${id}`
       },
       update: function (id) {
-        return `/api/ershou/item/id/${id}`
+        return `/api/marketplace/item/id/${id}`
       },
-      publish: '/api/ershou/item',
-      profile: '/api/ershou/profile',
+      publish: '/api/marketplace/item',
+      profile: '/api/marketplace/profile',
       state: function (id) {
-        return `/api/ershou/item/state/id/${id}`
+        return `/api/marketplace/item/state/id/${id}`
       }
     },
     lostAndFound: {

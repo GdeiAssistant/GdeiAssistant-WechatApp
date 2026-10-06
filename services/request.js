@@ -143,8 +143,8 @@ function request(options) {
               'ms'
           )
 
-          if (res.statusCode === 200) {
-            resolvePayload(res.data)
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            resolvePayload(res.statusCode === 204 ? { success: true, data: null } : res.data)
           } else if (res.statusCode === 401) {
             if (shouldClearSessionFor401()) {
               auth.clearSession()

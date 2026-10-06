@@ -325,7 +325,7 @@ module.exports = {
 
   // --- Detail: build detail view ---
   buildDetailView: function (payload) {
-    var item = payload.secondhandItem || {}
+    var item = payload.item || {}
     var profile = payload.profile || {}
     return {
       images: item.pictureURL || [],
@@ -334,9 +334,9 @@ module.exports = {
       description: item.description || '',
       priceText: Number(item.price || 0).toFixed(2),
       publishTime: item.publishTime || '',
-      sellerName: profile.nickname || profile.username || i18n.t('community.list.anonStudent'),
+      sellerName: profile.displayName || i18n.t('community.list.anonStudent'),
       sellerAvatar: profile.avatarURL || '/image/default.png',
-      authorId: profile.authorId || payload.authorId || null,
+      authorId: profile.authorId || item.authorId || null,
       qqText: maskContactId(item.qq || ''),
       wechatText: '',
       phone: item.phone || '',

@@ -54,3 +54,8 @@ npm run smoke
 ## 开源协议
 
 本项目采用 [Apache License 2.0](LICENSE.md) 开源协议。
+
+
+## 2026-10-07 演示环境架构升级
+
+默认远端 API 使用现有 Azure 演示服务 `https://gdeiassistant.azurewebsites.net/`，可通过本仓配置入口调整。公共商品/跑腿信息使用展示名称及不透明作者 ID，不再返回校园账号；市场路由统一 `/api/marketplace`。跑腿发布使用 JSON 与明确的 taskName、pickupCode、contactPhone、pickupLocation、deliveryAddress 字段；图书借阅与账号注销密码放入 JSON 请求体。旧请求的认证失败不能清除换号后的新会话，缺失关键标识/状态不推造正常值。

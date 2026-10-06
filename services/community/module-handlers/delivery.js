@@ -1,15 +1,13 @@
 const endpoints = require('../../endpoints.js')
 const { request } = require('../../request.js')
-const { encodeForm } = require('../../../utils/form.js')
 const { maskAddress, maskPhone, maskPickupCode } = require('../../../utils/mask.js')
 const i18n = require('../../../utils/i18n.js')
 const {
   getDeliveryStatusOptions,
-  getDeliveryDefaultOrderName,
-  DELIVERY_PLACEHOLDER_PICKUP_CODE
+  getDeliveryDefaultOrderName
 } = require('../../../constants/community.js')
 
-var DELIVERY_COMPANY_MAX_LENGTH = 10
+var DELIVERY_PICKUP_LOCATION_MAX_LENGTH = 100
 var DELIVERY_ADDRESS_MAX_LENGTH = 50
 var DELIVERY_REMARKS_MAX_LENGTH = 100
 var CONTACT_PHONE_MAX_LENGTH = 11
@@ -20,14 +18,6 @@ function trimValue(value) {
 
 function getMaxLengthMessage(value, maxLength, message) {
   return trimValue(value).length > maxLength ? message : ''
-}
-
-function getExactLengthMessage(value, expectedLength, message) {
-  var normalizedValue = trimValue(value)
-  if (!normalizedValue) {
-    return ''
-  }
-  return normalizedValue.length !== expectedLength ? message : ''
 }
 
 function findLabel(options, value, fallback) {
@@ -83,8 +73,8 @@ module.exports = {
           url: endpoints.community.delivery.publish,
           method: 'POST',
           authRequired: true,
-          data: encodeForm(payload),
-          contentType: 'application/x-www-form-urlencoded'
+          data: payload,
+          contentType: 'application/json'
         }
       )
     )
@@ -100,8 +90,8 @@ module.exports = {
     var rawItem = item || {}
     return {
       id: rawItem.orderId,
-      title: rawItem.company || i18n.t('community.list.campusErrand'),
-      summary: maskAddress(rawItem.address || ''),
+      title: rawItem.pickupLocation || i18n.t('community.list.campusErrand'),
+      summary: maskAddress(rawItem.deliveryAddress || ''),
       priceText: formatPrice(rawItem.price),
       badgeText: findLabel(
         getDeliveryStatusOptions(),
@@ -144,9 +134,9 @@ module.exports = {
       published: (payload.published || []).map(function (item) {
         return normalizeStandardItem(item, {
           id: item.orderId,
-          title: item.company || i18n.t('community.modules.delivery.title'),
+          title: item.pickupLocation || i18n.t('community.modules.delivery.title'),
           subtitle: item.orderTime,
-          summary: maskAddress(item.address),
+          summary: maskAddress(item.deliveryAddress),
           priceText: Number(item.price || 0).toFixed(2),
           actions: []
         })
@@ -154,9 +144,9 @@ module.exports = {
       accepted: (payload.accepted || []).map(function (item) {
         return normalizeStandardItem(item, {
           id: item.orderId,
-          title: item.company || i18n.t('community.modules.delivery.title'),
+          title: item.pickupLocation || i18n.t('community.modules.delivery.title'),
           subtitle: item.orderTime,
-          summary: maskAddress(item.address),
+          summary: maskAddress(item.deliveryAddress),
           priceText: Number(item.price || 0).toFixed(2),
           actions: []
         })
@@ -183,17 +173,20 @@ module.exports = {
     if (
       getMaxLengthMessage(
         pickupAddress,
-        DELIVERY_COMPANY_MAX_LENGTH,
-        i18n.tReplace('community.publish.v.pickupTooLong', { max: DELIVERY_COMPANY_MAX_LENGTH })
+        DELIVERY_PICKUP_LOCATION_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.pickupTooLong', {
+          max: DELIVERY_PICKUP_LOCATION_MAX_LENGTH
+        })
       )
     )
       return getMaxLengthMessage(
         pickupAddress,
-        DELIVERY_COMPANY_MAX_LENGTH,
-        i18n.tReplace('community.publish.v.pickupTooLong', { max: DELIVERY_COMPANY_MAX_LENGTH })
+        DELIVERY_PICKUP_LOCATION_MAX_LENGTH,
+        i18n.tReplace('community.publish.v.pickupTooLong', {
+          max: DELIVERY_PICKUP_LOCATION_MAX_LENGTH
+        })
       )
-    if (getExactLengthMessage(pickupCode, 11, i18n.t('community.publish.v.pickupCodeLength')))
-      return getExactLengthMessage(pickupCode, 11, i18n.t('community.publish.v.pickupCodeLength'))
+    if (pickupCode.length > 64) return i18n.t('community.publish.v.pickupCodeLength')
     if (!deliveryAddress) return i18n.t('community.publish.v.deliveryAddrRequired')
     if (
       getMaxLengthMessage(
@@ -245,12 +238,12 @@ module.exports = {
     var form = data.form || {}
 
     return Promise.resolve({
-      name: getDeliveryDefaultOrderName(),
-      number: String(form.pickupCode || '').trim() || DELIVERY_PLACEHOLDER_PICKUP_CODE,
-      phone: String(form.contactPhone || '').trim(),
+      taskName: getDeliveryDefaultOrderName(),
+      pickupCode: String(form.pickupCode || '').trim(),
+      contactPhone: String(form.contactPhone || '').trim(),
       price: Number(form.reward || 0),
-      company: String(form.pickupAddress || '').trim(),
-      address: String(form.deliveryAddress || '').trim(),
+      pickupLocation: String(form.pickupAddress || '').trim(),
+      deliveryAddress: String(form.deliveryAddress || '').trim(),
       remarks: String(form.description || '').trim()
     })
   },
@@ -261,7 +254,7 @@ module.exports = {
     var order = detailPayload.order || {}
     var detailType = Number(detailPayload.detailType)
     var canViewSensitiveInfo = detailType === 0 || detailType === 3
-    var status = Number(order.state || 0)
+    var status = order.state == null ? -1 : Number(order.state)
     var trade = detailPayload.trade || null
 
     var roleTitle = ''
@@ -294,21 +287,21 @@ module.exports = {
       title: i18n.t('community.detail.detail'),
       description: order.remarks || '',
       publishTime: order.orderTime || '',
-      pickupAddress: order.company || '',
-      deliveryAddress: order.address || '',
+      pickupAddress: order.pickupLocation || '',
+      deliveryAddress: order.deliveryAddress || '',
       pickupAddressText: canViewSensitiveInfo
-        ? String(order.company || '')
-        : maskAddress(order.company || ''),
+        ? String(order.pickupLocation || '')
+        : maskAddress(order.pickupLocation || ''),
       deliveryAddressText: canViewSensitiveInfo
-        ? String(order.address || '')
-        : maskAddress(order.address || ''),
-      pickupCodeText: order.number
+        ? String(order.deliveryAddress || '')
+        : maskAddress(order.deliveryAddress || ''),
+      pickupCodeText: order.pickupCode
         ? canViewSensitiveInfo
-          ? String(order.number)
-          : maskPickupCode(order.number)
+          ? String(order.pickupCode)
+          : maskPickupCode(order.pickupCode)
         : '',
-      phone: order.phone || '',
-      phoneText: maskPhone(order.phone || ''),
+      phone: order.contactPhone || '',
+      phoneText: maskPhone(order.contactPhone || ''),
       priceText: formatPrice(order.price),
       userRoleTitle: roleTitle,
       statusDescription: statusDescription,

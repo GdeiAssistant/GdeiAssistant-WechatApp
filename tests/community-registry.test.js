@@ -76,14 +76,6 @@ test('getModuleHandler returns null for unknown moduleId', function () {
   assert.equal(getModuleHandler(undefined), null)
 })
 
-test('ershou alias resolves to same handler as marketplace', function () {
-  const marketplace = getModuleHandler('marketplace')
-  const ershou = getModuleHandler('ershou')
-  assert.ok(marketplace, 'marketplace handler should exist')
-  assert.ok(ershou, 'ershou handler should exist')
-  assert.equal(marketplace, ershou, 'ershou should be the same handler as marketplace')
-})
-
 test('marketplace normalizeItem produces expected shape', function () {
   const handler = getModuleHandler('marketplace')
   const result = handler.normalizeItem({
@@ -345,8 +337,8 @@ test('delivery normalizeItem produces expected shape', function () {
   const handler = getModuleHandler('delivery')
   const result = handler.normalizeItem({
     orderId: 50,
-    company: 'EMS',
-    address: 'Building A',
+    pickupLocation: 'EMS',
+    deliveryAddress: 'Building A',
     price: 5.5,
     state: 0,
     remarks: 'Handle with care',
@@ -438,8 +430,8 @@ test('delivery normalizeCenterData produces published and accepted lists', funct
   }
   const result = handler.normalizeCenterData(
     {
-      published: [{ orderId: 1, company: 'SF' }],
-      accepted: [{ orderId: 2, company: 'EMS' }]
+      published: [{ orderId: 1, pickupLocation: 'SF' }],
+      accepted: [{ orderId: 2, pickupLocation: 'EMS' }]
     },
     normalizeStandardItem
   )
@@ -634,7 +626,7 @@ test('lostandfound validateForm rejects when no contact info', function () {
 test('marketplace buildDetailView produces expected shape', function () {
   var handler = getModuleHandler('marketplace')
   var result = handler.buildDetailView({
-    secondhandItem: {
+    item: {
       pictureURL: ['/img/a.png'],
       name: 'Widget',
       price: 50,
@@ -642,7 +634,7 @@ test('marketplace buildDetailView produces expected shape', function () {
       qq: 'mock_contact_id',
       phone: '13000000000'
     },
-    profile: { nickname: 'Alice' }
+    profile: { displayName: 'Alice' }
   })
   assert.equal(result.title, 'Widget')
   assert.equal(result.sellerName, 'Alice')
@@ -681,10 +673,10 @@ test('delivery buildDetailView masks sensitive fields for public viewers', funct
   var handler = getModuleHandler('delivery')
   var result = handler.buildDetailView({
     order: {
-      company: 'Example Pickup Point',
-      address: 'Example Building 301',
-      number: 'ABC123456',
-      phone: '13000000000',
+      pickupLocation: 'Example Pickup Point',
+      deliveryAddress: 'Example Building 301',
+      pickupCode: 'ABC123456',
+      contactPhone: '13000000000',
       price: 6,
       remarks: 'Handle with care',
       state: 0

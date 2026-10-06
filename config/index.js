@@ -8,7 +8,7 @@ const ENV_CONFIG = {
     requestTimeout: 15000
   },
   prod: {
-    resourceDomain: 'https://gdeiassistant.cn/',
+    resourceDomain: 'https://gdeiassistant.azurewebsites.net/',
     requestTimeout: 15000
   }
 }

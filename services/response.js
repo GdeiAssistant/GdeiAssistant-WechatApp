@@ -54,7 +54,7 @@ function normalizePayload(rawPayload) {
     const normalized = {
       success: successCode,
       message: pickMessage(rawPayload),
-      data: rawPayload.data || null,
+      data: Object.prototype.hasOwnProperty.call(rawPayload, 'data') ? rawPayload.data : null,
       raw: rawPayload
     }
     if (rawPayload.errorCode) {
@@ -68,7 +68,7 @@ function normalizePayload(rawPayload) {
     const normalized = {
       success: successStatus,
       message: pickMessage(rawPayload),
-      data: rawPayload.data || null,
+      data: Object.prototype.hasOwnProperty.call(rawPayload, 'data') ? rawPayload.data : null,
       raw: rawPayload
     }
     if (rawPayload.errorCode) {

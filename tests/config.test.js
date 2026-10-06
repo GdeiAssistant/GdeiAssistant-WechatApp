@@ -70,7 +70,7 @@ test('release runtime uses production domain', function () {
   })
 
   assert.equal(config.currentEnv, 'prod')
-  assert.equal(config.resourceDomain, 'https://gdeiassistant.cn/')
+  assert.equal(config.resourceDomain, 'https://gdeiassistant.azurewebsites.net/')
   assert.equal(config.allowRuntimeDebugOptions, false)
 })
 

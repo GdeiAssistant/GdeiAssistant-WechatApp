@@ -135,7 +135,11 @@ test('mock smoke covers academic, campus, info and message flows', async functio
   const libraryDetail = await request(router, '/api/library/detail?detailURL=detail_swiftui')
   assert.ok(libraryDetail.data.bookname)
 
-  const borrowed = await request(router, '/api/library/borrow?password=library123', { token })
+  const borrowed = await request(router, '/api/library/borrow', {
+    method: 'POST',
+    token,
+    data: { password: 'library123' }
+  })
   assert.ok(Array.isArray(borrowed.data) && borrowed.data.length > 0)
 
   const renew = await request(router, '/api/library/renew', {
@@ -240,13 +244,17 @@ test('mock smoke covers community feature flows', async function () {
   const router = setupMockRouter()
   const token = await login(router)
 
-  const marketplace = await request(router, '/api/ershou/item/start/0', { token })
+  const marketplace = await request(router, '/api/marketplace/item/start/0', { token })
   assert.ok(Array.isArray(marketplace.data) && marketplace.data.length > 0)
-  const marketplaceDetail = await request(router, `/api/ershou/item/id/${marketplace.data[0].id}`, {
-    token
-  })
-  assert.equal(marketplaceDetail.data.secondhandItem.id, marketplace.data[0].id)
-  const marketplaceProfile = await request(router, '/api/ershou/profile', { token })
+  const marketplaceDetail = await request(
+    router,
+    `/api/marketplace/item/id/${marketplace.data[0].id}`,
+    {
+      token
+    }
+  )
+  assert.equal(marketplaceDetail.data.item.id, marketplace.data[0].id)
+  const marketplaceProfile = await request(router, '/api/marketplace/profile', { token })
   assert.ok(Object.prototype.hasOwnProperty.call(marketplaceProfile.data, 'doing'))
 
   const lostFound = await request(router, '/api/lostandfound/lostitem/start/0', { token })

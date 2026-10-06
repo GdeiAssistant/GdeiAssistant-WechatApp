@@ -136,7 +136,7 @@
     <view wx:if="{{moduleId === 'delivery'}}">
       <view class="weui-cells weui-cells_form">
         <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="{{t.pickupLocation}}" maxlength="10" value="{{form.pickupAddress}}" data-field="pickupAddress" bindinput="setFieldValue" /></view></view>
-        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="{{t.pickupCodeOptional}}" maxlength="11" value="{{form.pickupCode}}" data-field="pickupCode" bindinput="setFieldValue" /></view></view>
+        <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="{{t.pickupCodeOptional}}" maxlength="64" value="{{form.pickupCode}}" data-field="pickupCode" bindinput="setFieldValue" /></view></view>
         <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="{{t.deliveryAddress}}" maxlength="50" value="{{form.deliveryAddress}}" data-field="deliveryAddress" bindinput="setFieldValue" /></view></view>
         <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="{{t.contactPhone}}" maxlength="11" value="{{form.contactPhone}}" data-field="contactPhone" bindinput="setFieldValue" /></view></view>
         <view class="weui-cell"><view class="weui-cell__bd"><input class="weui-input" placeholder="{{t.errandFee}}" type="digit" value="{{form.reward}}" data-field="reward" bindinput="setFieldValue" /></view></view>

@@ -510,7 +510,13 @@ test('community picker/category/gender/status locale refresh retains form, selec
   publish.data.secondhandTypeIndex = 3
   list.data.moduleId = 'delivery'
   list.data.activeTabIndex = 1
-  const item = { orderId: 1, state: 1, company: '广东订单', remarks: '中国广东用户备注', price: 10 }
+  const item = {
+    orderId: 1,
+    state: 1,
+    pickupLocation: '广东订单',
+    remarks: '中国广东用户备注',
+    price: 10
+  }
   list.data.items = [delivery.normalizeItem(item)]
   for (const locale of Object.keys(EXPECTED)) {
     i18n.setLocale(locale)
@@ -553,8 +559,8 @@ test('delivery detail locale refresh recalculates system state and role without 
     order: {
       orderId: 3,
       state: 1,
-      company: '广东取件点',
-      address: '中国广东地址',
+      pickupLocation: '广东取件点',
+      deliveryAddress: '中国广东地址',
       remarks: '未翻译正文 English🙂',
       price: 10
     },

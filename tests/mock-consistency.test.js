@@ -83,7 +83,7 @@ function callHandler(handler, apiPath) {
 
 test('secondhand mock items have required fields', async function () {
   var handler = loadCommunityHandler()
-  var result = await callHandler(handler, '/api/ershou/item/start/0')
+  var result = await callHandler(handler, '/api/marketplace/item/start/0')
 
   assert.ok(result && result.success, 'secondhand list request should succeed')
   var items = result.data
@@ -141,9 +141,13 @@ test('delivery mock orders have required fields', async function () {
   assert.ok(Array.isArray(orders) && orders.length > 0, 'deliveryOrders should not be empty')
 
   orders.forEach(function (order) {
+    assert.equal(order.pickupCode, '')
+    assert.equal(order.contactPhone, '')
+    assert.equal(order.deliveryAddress, '')
+    assert.equal(order.publisher, undefined)
     requiresFields(
       order,
-      ['orderId', 'name', 'number', 'phone', 'price', 'company', 'address', 'state', 'orderTime'],
+      ['orderId', 'taskName', 'price', 'pickupLocation', 'state', 'orderTime'],
       'delivery'
     )
   })
@@ -210,8 +214,8 @@ test('endpoints.js returns correct URL patterns for key routes', function () {
   )
   assert.match(endpoints.info.newsDetail('abc'), /^\/api\/information\/news\/id\/abc$/)
 
-  assert.match(endpoints.community.secondhand.list(0), /^\/api\/ershou\/item\/start\/0$/)
-  assert.match(endpoints.community.secondhand.detail(42), /^\/api\/ershou\/item\/id\/42$/)
+  assert.match(endpoints.community.secondhand.list(0), /^\/api\/marketplace\/item\/start\/0$/)
+  assert.match(endpoints.community.secondhand.detail(42), /^\/api\/marketplace\/item\/id\/42$/)
   assert.match(
     endpoints.community.lostAndFound.lost(0),
     /^\/api\/lostandfound\/lostitem\/start\/0$/
