@@ -12,37 +12,20 @@ const {
   fetchProfileOptions,
   getFacultyCodeByLabel,
   getFacultyOptions,
+  getFacultyDictionaryOptions,
   getEnrollmentYearOptions,
   getMajorCodeByLabel,
   getMajorOptions,
+  getMajorLabelByCode,
   canSelectMajor,
-  formatLocationDisplay
+  formatLocationDisplay,
+  getLocationNodeName,
+  getLocationDisplay,
+  localizeIpArea
 } = require('../../constants/profile.js')
 
 const NICKNAME_MAX_LENGTH = 32
 const INTRODUCTION_MAX_LENGTH = 80
-
-function getLocationNodeName(node, locale) {
-  if (!node || typeof node !== 'object') {
-    return ''
-  }
-
-  var normalizedLocale = typeof i18n.normalizeLocale === 'function'
-    ? i18n.normalizeLocale(locale || (typeof i18n.getCurrentLocale === 'function' ? i18n.getCurrentLocale() : 'zh-CN'))
-    : 'zh-CN'
-
-  if (normalizedLocale === 'en' || normalizedLocale === 'ja' || normalizedLocale === 'ko') {
-    var localizedNames = node.localizedNames || {}
-    if (localizedNames[normalizedLocale]) {
-      return String(localizedNames[normalizedLocale]).trim()
-    }
-    if (node.latinName) {
-      return String(node.latinName).trim()
-    }
-  }
-
-  return String(node.aliasesName || node.name || '').trim()
-}
 
 function buildLocationDisplay(region, state, city, locale) {
   return formatLocationDisplay(
@@ -50,15 +33,6 @@ function buildLocationDisplay(region, state, city, locale) {
     getLocationNodeName(state, locale),
     getLocationNodeName(city, locale),
     locale
-  )
-}
-
-function hasLocationValue(codes) {
-  const locationCodes = codes || {}
-  return !!(
-    String(locationCodes.region || '').trim() ||
-    String(locationCodes.state || '').trim() ||
-    String(locationCodes.city || '').trim()
   )
 }
 
@@ -179,19 +153,36 @@ function findLocationIndices(locationTree, codes) {
 
 function normalizeProfile(profile, avatar) {
   const safeProfile = profile || {}
-  const faculty = safeProfile.faculty || {}
-  const major = safeProfile.major || {}
-  const location = safeProfile.location || {}
-  const hometown = safeProfile.hometown || {}
+  const faculty = typeof safeProfile.faculty === 'string'
+    ? { label: safeProfile.faculty, code: safeProfile.facultyCode }
+    : (safeProfile.faculty || {})
+  const major = typeof safeProfile.major === 'string'
+    ? { label: safeProfile.major, code: safeProfile.majorCode }
+    : (safeProfile.major || {})
+  const facultyOption = getFacultyDictionaryOptions().find(function(option) { return option.code === faculty.code })
+  const facultyLabel = facultyOption ? facultyOption.label : (faculty.label || NOT_SELECTED)
+  const majorLabel = getMajorLabelByCode(facultyLabel, major.code) || major.label || NOT_SELECTED
+  const location = typeof safeProfile.location === 'string' ? {
+    displayName: safeProfile.location,
+    region: safeProfile.locationRegion,
+    state: safeProfile.locationState,
+    city: safeProfile.locationCity
+  } : (safeProfile.location || {})
+  const hometown = typeof safeProfile.hometown === 'string' ? {
+    displayName: safeProfile.hometown,
+    region: safeProfile.hometownRegion,
+    state: safeProfile.hometownState,
+    city: safeProfile.hometownCity
+  } : (safeProfile.hometown || {})
   return {
     username: safeProfile.username || '',
     maskedUsername: maskAccount(safeProfile.username || ''),
     nickname: safeProfile.nickname || '',
     avatar: avatar || safeProfile.avatar || '/image/default.png',
     birthday: safeProfile.birthday || '',
-    faculty: faculty.label || NOT_SELECTED,
+    faculty: facultyLabel,
     facultyCode: typeof faculty.code === 'number' ? faculty.code : null,
-    major: major.label || NOT_SELECTED,
+    major: majorLabel,
     majorCode: major.code || '',
     enrollment: safeProfile.enrollment ? String(safeProfile.enrollment) : '',
     location: location.displayName || '',
@@ -203,7 +194,8 @@ function normalizeProfile(profile, avatar) {
     hometownState: hometown.state || '',
     hometownCity: hometown.city || '',
     introduction: safeProfile.introduction || '',
-    ipArea: safeProfile.ipArea || ''
+    ipArea: safeProfile.ipArea || '',
+    displayIpArea: localizeIpArea(safeProfile.ipArea || '')
   }
 }
 
@@ -213,45 +205,14 @@ function createEmptyProfile(avatar) {
 
 function syncProfileLocationDisplay(profile, locationTree) {
   const nextProfile = Object.assign({}, profile || {})
-  const locationIndices = hasLocationValue({
-    region: nextProfile.locationRegion,
-    state: nextProfile.locationState,
-    city: nextProfile.locationCity
+  ;['location', 'hometown'].forEach(function(field) {
+    nextProfile[field] = getLocationDisplay({
+      region: nextProfile[field + 'Region'],
+      state: nextProfile[field + 'State'],
+      city: nextProfile[field + 'City']
+    }, nextProfile[field], i18n.getCurrentLocale(), locationTree)
   })
-    ? findLocationIndices(locationTree, {
-      region: nextProfile.locationRegion,
-      state: nextProfile.locationState,
-      city: nextProfile.locationCity
-    })
-    : null
-  const hometownIndices = hasLocationValue({
-    region: nextProfile.hometownRegion,
-    state: nextProfile.hometownState,
-    city: nextProfile.hometownCity
-  })
-    ? findLocationIndices(locationTree, {
-      region: nextProfile.hometownRegion,
-      state: nextProfile.hometownState,
-      city: nextProfile.hometownCity
-    })
-    : null
-  const locationSelection = locationIndices ? buildLocationSelection(locationTree, locationIndices) : null
-  const hometownSelection = hometownIndices ? buildLocationSelection(locationTree, hometownIndices) : null
-
-  if (locationSelection) {
-    nextProfile.location = locationSelection.display
-    nextProfile.locationRegion = locationSelection.codes.region
-    nextProfile.locationState = locationSelection.codes.state
-    nextProfile.locationCity = locationSelection.codes.city
-  }
-
-  if (hometownSelection) {
-    nextProfile.hometown = hometownSelection.display
-    nextProfile.hometownRegion = hometownSelection.codes.region
-    nextProfile.hometownState = hometownSelection.codes.state
-    nextProfile.hometownCity = hometownSelection.codes.city
-  }
-
+  nextProfile.displayIpArea = localizeIpArea(nextProfile.ipArea || '')
   return nextProfile
 }
 
@@ -436,13 +397,31 @@ Page({
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
     // Refresh display options and display values after locale change
     var updateData = {
-      facultyDisplayOptions: toDisplayOptions(this.data.facultyOptions || getFacultyOptions()),
-      majorDisplayOptions: toDisplayOptions(this.data.majorOptions || [NOT_SELECTED]),
+      facultyOptions: getFacultyOptions(),
+      facultyDisplayOptions: toDisplayOptions(getFacultyOptions()),
       enrollmentDisplayOptions: toDisplayOptions(this.data.enrollmentOptions || getEnrollmentYearOptions())
     }
     if (this.data.form) {
-      updateData.displayFaculty = displayValue(this.data.form.faculty)
-      updateData.displayMajor = displayValue(this.data.form.major)
+      const tree = this.getLocationTree()
+      const form = this.data.form
+      const faculty = getFacultyDictionaryOptions().find(function(option) { return option.code === form.facultyCode })
+      const facultyLabel = faculty ? faculty.label : form.faculty
+      const majorLabel = getMajorLabelByCode(facultyLabel, form.majorCode) || form.major
+      updateData['form.faculty'] = facultyLabel
+      updateData['form.major'] = majorLabel
+      updateData.displayFaculty = displayValue(facultyLabel)
+      updateData.displayMajor = displayValue(majorLabel)
+      updateData.majorOptions = getMajorOptions(facultyLabel)
+      updateData.majorDisplayOptions = toDisplayOptions(updateData.majorOptions)
+      updateData.facultyIndex = getSafeIndex(updateData.facultyOptions, facultyLabel)
+      updateData.majorIndex = getSafeIndex(updateData.majorOptions, majorLabel)
+      updateData['form.location'] = getLocationDisplay(form.locationCodes, form.location, i18n.getCurrentLocale(), tree)
+      updateData['form.hometown'] = getLocationDisplay(form.hometownCodes, form.hometown, i18n.getCurrentLocale(), tree)
+      updateData.locationRanges = buildLocationRanges(tree, this.data.locationPickerIndex).ranges
+      updateData.hometownRanges = buildLocationRanges(tree, this.data.hometownPickerIndex).ranges
+    }
+    if (this.data.profile) {
+      updateData.profile = syncProfileLocationDisplay(normalizeProfile(this.data.profile), this.getLocationTree())
     }
     this.setData(updateData)
   },
@@ -510,7 +489,10 @@ Page({
   },
 
   applyProfilePatch: function(patch) {
-    const nextProfile = normalizeProfile(Object.assign({}, this.data.profile || {}, patch || {}))
+    const nextProfile = syncProfileLocationDisplay(
+      normalizeProfile(Object.assign({}, this.data.profile || {}, patch || {})),
+      this.getLocationTree()
+    )
     this.setData({
       profile: nextProfile
     })

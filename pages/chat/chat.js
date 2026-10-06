@@ -61,6 +61,9 @@ Page({
 
   refreshI18n: function () {
     this.setData({
+      messages: (this.data.messages || []).map(function (item) {
+        return Object.assign({}, item, { statusLabel: item.mine ? statusLabel(item.status) : '' })
+      }),
       t: {
         navTitle: i18n.t('social.chat.navTitle'),
         loadEarlier: i18n.t('social.chat.loadEarlier'),

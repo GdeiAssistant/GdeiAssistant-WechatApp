@@ -101,6 +101,18 @@ Page({
       t: tData
     })
 
+    if (this.data.moduleId === 'delivery' && this.data.detail && this._detailPayload) {
+      const localizedDetail = buildDetail('delivery', this._detailPayload)
+      this.setData({
+        detail: Object.assign({}, this.data.detail, {
+          title: localizedDetail.title,
+          userRoleTitle: localizedDetail.userRoleTitle,
+          statusDescription: localizedDetail.statusDescription,
+          sensitiveHint: localizedDetail.sensitiveHint
+        })
+      })
+    }
+
     if (moduleConfig && this.data.moduleId) {
       wx.setNavigationBarTitle({
         title: getCommunityPageTitle(this.data.moduleId, 'detail', moduleConfig.title)
@@ -140,6 +152,7 @@ Page({
       }
 
       var payload = result.data || {}
+      this._detailPayload = payload
       var detail = buildDetail(this.data.moduleId, payload)
       if (detail.authorId && detail.sellerAvatar) {
         detail.sellerAvatar = await socialAvatar.resolve(detail.sellerAvatar)
@@ -495,6 +508,7 @@ Page({
   },
 
   onUnload: function() {
+    this._detailPayload = null
     if (secretVoicePlayer) {
       secretVoicePlayer.stop()
       if (typeof secretVoicePlayer.destroy === 'function') {

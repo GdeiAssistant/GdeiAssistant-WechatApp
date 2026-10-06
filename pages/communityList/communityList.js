@@ -214,6 +214,7 @@ Page({
     this.setData({
       moduleConfig: moduleConfig,
       tabs: tabs,
+      items: (this.data.items || []).map((item) => item.raw ? normalizeItem(this.data.moduleId, item.raw) : item),
       t: tData
     })
 
