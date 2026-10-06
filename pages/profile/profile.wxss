@@ -130,7 +130,9 @@
 }
 
 .introduction_cell {
+  flex-direction: column;
   align-items: flex-start;
+  gap: 12rpx;
 }
 
 .profile_stats {

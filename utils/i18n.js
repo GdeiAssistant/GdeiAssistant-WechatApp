@@ -1,15 +1,8 @@
-const localeCache = {}
+const localeMessages = require('../locales/messages.generated.js')
 const SUPPORTED_LOCALES = ['zh-CN', 'zh-HK', 'zh-TW', 'en', 'ja', 'ko']
 
 function loadLocale(lang) {
-  if (!localeCache[lang]) {
-    try {
-      localeCache[lang] = require('../locales/' + lang + '.json')
-    } catch (e) {
-      localeCache[lang] = require('../locales/zh-CN.json')
-    }
-  }
-  return localeCache[lang]
+  return localeMessages[lang] || localeMessages['zh-CN']
 }
 
 function t(key) {

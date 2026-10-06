@@ -1,0 +1,17 @@
+# 地区名称来源与覆盖范围
+
+地区代码、顺序及原始中文名称继续沿用项目 `location.xml` 目录，前端保存地区代码，不用翻译后的文本作为身份。
+
+本轮为 2,144 个已匹配节点补充英文、日文和韩文显示名称。数据来自 [GeoNames 公开数据快照](https://download.geonames.org/export/dump/)（2026-10-06），按 CC BY 4.0 使用，署名 GeoNames。以国家和层级信息核对节点后采用其标准名及语言别名；没有可靠日文、韩文名称时使用标准英文或当地原名。
+
+每种外语现在有 2,380 个节点的显式名称，共 4,279 个节点。剩余 1,899 个未可靠匹配的节点继续使用原有回退文本，尚未完成全部人工核译。原有明确译名，包括广东、广州、汕头和佛山的已审核日文、韩文名称，继续保留。
+
+日本栃木的原目录中文写作“枥木”。参照 GeoNames 行政区记录 1850310 及[栃木县官网](https://www.pref.tochigi.lg.jp/)，显示名称修正为“栃木”，日文为“栃木県”；原代码和原始名称仍保留，便于追溯。
+
+另按 [GeoNames 国家目录](https://download.geonames.org/export/dump/countryInfo.txt)将法属圭亚那节点 `GUF` 的 ISO 更正为 `GF`，其六语言显示名明确为法属圭亚那 / French Guiana，与圭亚那 `GUY` / `GY` 分开；保留原业务代码和原始中文名称。原来的“圭亚那”存在重名歧义，识别不到明确地区时保持原串。
+
+纽约市采用 GeoNames 主记录 5128581 的标准名 `New York City`，与纽约州 `New York` 分开显示；可参照[纽约市政府的正式名称](https://www.nyc.gov/main/about-our-content)。
+
+仅完整、可识别的目录名称或代码路径参与地区本地化。重名或不确定名称、用户自由填写的内容保持原文。昵称、自我介绍及用户发布内容不通过地区字典改写。
+
+共享筛选快照位于 `GdeiAssistant/frontend/scripts/location-names-geonames.json`，包含代码路径、GeoNames ID、匹配依据及采用名称。法属圭亚那的六语言国家显示名使用 Node 24.14.1 Intl/CLDR，GeoNames 国家表用于核对 ISO；更新后应核对四端全部对应节点，不能按位置猜测身份。
