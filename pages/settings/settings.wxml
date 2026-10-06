@@ -7,7 +7,7 @@
       <view class="weui-cell weui-cell_switch">
         <view class="weui-cell__bd">{{t.useMockData}}</view>
         <view class="weui-cell__ft">
-          <switch checked="{{useMockData}}" bindchange="handleDataSourceChange" />
+          <switch checked="{{useMockData}}" color="{{themeClass === 'theme-dark' ? '#34C79A' : '#0E8F6E'}}" bindchange="handleDataSourceChange" />
         </view>
       </view>
       <view class="weui-cell">
@@ -104,7 +104,7 @@
       <view wx:for="{{section.features}}" wx:key="id" wx:for-item="feature" class="weui-cell weui-cell_switch">
         <view class="weui-cell__bd">{{feature.title}}</view>
         <view class="weui-cell__ft">
-          <switch checked="{{feature.visible}}" data-feature-id="{{feature.id}}" bindchange="handleFeatureSwitch" />
+          <switch checked="{{feature.visible}}" color="{{themeClass === 'theme-dark' ? '#34C79A' : '#0E8F6E'}}" data-feature-id="{{feature.id}}" bindchange="handleFeatureSwitch" />
         </view>
       </view>
     </view>

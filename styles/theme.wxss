@@ -1,35 +1,66 @@
-/* Theme CSS Variables — Light (default) and Dark */
+/* GdeiAssistant brand tokens, shared with Web / Android / iOS. Light (default) and Dark. */
 
 page {
-  --color-bg-primary: #F8F8F8;
-  --color-bg-secondary: #f2f2f2;
-  --color-bg-tertiary: #ebebeb;
-  --color-surface: #ffffff;
-  --color-surface-raised: #ffffff;
-  --color-text-primary: #333333;
-  --color-text-secondary: #666666;
-  --color-text-tertiary: #999999;
-  --color-border: #e5e7eb;
-  --color-divider: #ececec;
-  --color-primary: #07C160;
-  --color-primary-hover: #06AD56;
-  --color-danger: #e94747;
-  --color-link: #576b95;
+  --color-primary: #0E8F6E;
+  --color-primary-hover: #0A7559;
+  --color-primary-soft: #E3F3EE;
+  --color-on-primary: #FFFFFF;
+
+  --color-bg-primary: #F4F7F6;
+  --color-bg-secondary: #EAF0EE;
+  --color-bg-tertiary: #E1E9E6;
+  --color-surface: #FFFFFF;
+  --color-surface-raised: #FFFFFF;
+
+  --color-text-primary: #11201C;
+  --color-text-secondary: #4E5F5A;
+  --color-text-tertiary: #6F7F7A;
+  --color-border: #DDE6E3;
+  --color-divider: #E9EFED;
+
+  --color-danger: #D14343;
+  --color-danger-soft: #FBEAEA;
+  --color-warning: #B7791F;
+  --color-warning-soft: #F8EEDC;
+  --color-link: #0E8F6E;
+  --color-overlay: rgba(17, 32, 28, 0.5);
+
+  --radius-card: 28rpx;
+  --radius-control: 20rpx;
+  --radius-full: 999rpx;
+  --shadow-card: 0 4rpx 20rpx rgba(17, 32, 28, 0.05);
+  --shadow-raised: 0 12rpx 40rpx rgba(17, 32, 28, 0.12);
 }
 
 .theme-dark {
-  --color-bg-primary: #121212;
-  --color-bg-secondary: #1a1a1a;
-  --color-bg-tertiary: #242424;
-  --color-surface: #1e1e1e;
-  --color-surface-raised: #2a2a2a;
-  --color-text-primary: #e5e7eb;
-  --color-text-secondary: #9ca3af;
-  --color-text-tertiary: #9295a0;
-  --color-border: #374151;
-  --color-divider: #2a2a2a;
-  --color-primary: #34D399;
-  --color-primary-hover: #6EE7B7;
-  --color-danger: #ff7c7c;
-  --color-link: #60a5fa;
+  --color-primary: #34C79A;
+  --color-primary-hover: #5AD6AE;
+  --color-primary-soft: #12332A;
+  --color-on-primary: #0E1513;
+
+  --color-bg-primary: #0E1513;
+  --color-bg-secondary: #1C2724;
+  --color-bg-tertiary: #222D2A;
+  --color-surface: #151E1B;
+  --color-surface-raised: #1C2724;
+
+  --color-text-primary: #E6EEEB;
+  --color-text-secondary: #A3B3AE;
+  --color-text-tertiary: #84948F;
+  --color-border: #2A3733;
+  --color-divider: #222D2A;
+
+  --color-danger: #F07171;
+  --color-danger-soft: #3A1E1E;
+  --color-warning: #E0A54A;
+  --color-warning-soft: #352915;
+  --color-link: #34C79A;
+  --color-overlay: rgba(0, 0, 0, 0.6);
+
+  --shadow-card: 0 4rpx 20rpx rgba(0, 0, 0, 0.24);
+  --shadow-raised: 0 12rpx 40rpx rgba(0, 0, 0, 0.4);
+
+  min-height: 100vh;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
 }

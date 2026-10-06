@@ -14,8 +14,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 20rpx;
-  border-radius: 18rpx;
+  border-radius: var(--radius-card);
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .hero_content {
@@ -46,8 +47,9 @@
   margin-bottom: 20rpx;
   padding: 26rpx;
   background: var(--color-surface);
-  border-radius: 16rpx;
+  border-radius: var(--radius-card);
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .section_title {
@@ -92,7 +94,7 @@
   position: relative;
   width: 200rpx;
   height: 200rpx;
-  border-radius: 22rpx;
+  border-radius: var(--radius-control);
   overflow: hidden;
   background: var(--color-bg-secondary);
 }
@@ -109,7 +111,7 @@
   width: 40rpx;
   height: 40rpx;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--color-overlay);
   color: var(--color-surface);
   text-align: center;
   line-height: 40rpx;
@@ -126,4 +128,10 @@
 
 .submit_area {
   margin-top: 30rpx;
+}
+
+.publish_card .weui-cells {
+  margin: 16rpx 0 0;
+  border-radius: var(--radius-control);
+  box-shadow: none;
 }

@@ -1,11 +1,15 @@
 @import "../../common/lib/weui.wxss";
 
+.container {
+  background: var(--color-bg-primary);
+}
+
 .page-section {
-  margin-bottom: 35rpx;
+  margin-bottom: 20rpx;
 }
 
 .page-body {
-  margin-top: 35rpx;
+  margin-top: 40rpx;
 }
 
 form {
@@ -13,32 +17,41 @@ form {
 }
 
 .userinfo {
-  margin-top: 20rpx;
+  margin-top: 72rpx;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
+  width: 144rpx;
+  height: 144rpx;
+  margin: 12rpx 20rpx 24rpx;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
 }
 
 .userinfo-nickname {
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+  font-size: 40rpx;
+  font-weight: 700;
 }
 
 .userinfo-source {
+  margin-top: 8rpx;
   color: var(--color-text-tertiary);
-  font-size: 26rpx;
+  font-size: 24rpx;
+}
+
+.weui-cells {
+  margin-left: 24rpx;
+  margin-right: 24rpx;
 }
 
 .login_aux {
-  margin-top: 36rpx;
+  margin: 40rpx 48rpx 0;
   padding-top: 24rpx;
-  border-top: 1rpx solid var(--color-border);
+  border-top: 1rpx solid var(--color-divider);
 }
 
 .mock_toolbar {
@@ -75,7 +88,7 @@ form {
 }
 
 .consent_section {
-  margin: 24rpx 0 28rpx;
+  margin: 32rpx 48rpx 8rpx;
 }
 
 .consent_label {
@@ -98,11 +111,13 @@ form {
 .consent_detail_link {
   margin-left: 12rpx;
   color: var(--color-link);
+  font-weight: 600;
 }
 
 .version_info {
-  margin-top: 35rpx;
-  margin-bottom: 35rpx;
+  margin: 48rpx 0 40rpx;
   text-align: center;
   color: var(--color-text-tertiary);
+  font-size: 24rpx;
+  font-variant-numeric: tabular-nums;
 }

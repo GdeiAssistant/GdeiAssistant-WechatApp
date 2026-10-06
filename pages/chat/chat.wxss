@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #f5f7f5;
+  background: var(--color-bg-primary);
 }
 
 .chat_header {
@@ -12,15 +12,15 @@
   align-items: center;
   gap: 20rpx;
   padding: 20rpx 24rpx;
-  background: #ffffff;
-  border-bottom: 1rpx solid #e4ebe4;
+  background: var(--color-surface);
+  border-bottom: 1rpx solid var(--color-divider);
 }
 
 .chat_header_avatar {
   width: 72rpx;
   height: 72rpx;
   border-radius: 50%;
-  background: #e8f5e9;
+  background: var(--color-primary-soft);
 }
 
 .chat_header_meta {
@@ -31,13 +31,13 @@
 .chat_header_name {
   font-size: 32rpx;
   font-weight: 600;
-  color: #1f2a1f;
+  color: var(--color-text-primary);
 }
 
 .chat_header_sub {
   margin-top: 4rpx;
   font-size: 22rpx;
-  color: #6b7b6b;
+  color: var(--color-text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -66,25 +66,29 @@
 .time {
   margin-bottom: 8rpx;
   font-size: 20rpx;
-  color: #8a968a;
+  color: var(--color-text-tertiary);
   text-align: center;
 }
 
 .bubble {
   padding: 18rpx 22rpx;
-  border-radius: 18rpx;
-  background: #ffffff;
-  color: #1f2a1f;
+  border-radius: var(--radius-card);
+  border-bottom-left-radius: 8rpx;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
   font-size: 28rpx;
   line-height: 1.5;
   word-break: break-word;
-  border: 1rpx solid #dce6dc;
+  border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .bubble_row.mine .bubble {
-  background: #07c160;
-  color: #fff;
-  border-color: #07c160;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
+  border-bottom-left-radius: var(--radius-card);
+  border-bottom-right-radius: 8rpx;
 }
 
 .bubble_image {
@@ -99,17 +103,17 @@
 .chat_image {
   width: 320rpx;
   height: 320rpx;
-  border-radius: 12rpx;
-  background: #eef5ee;
+  border-radius: var(--radius-control);
+  background: var(--color-bg-secondary);
   display: block;
 }
 
 .chat_image_placeholder {
   width: 320rpx;
   height: 320rpx;
-  border-radius: 12rpx;
-  background: #eef5ee;
-  color: #6b7b6b;
+  border-radius: var(--radius-control);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
   font-size: 24rpx;
   display: flex;
   align-items: center;
@@ -119,16 +123,16 @@
 .status {
   margin-top: 8rpx;
   font-size: 20rpx;
-  color: #8a968a;
+  color: var(--color-text-tertiary);
   text-align: right;
 }
 
 .hint {
   padding: 12rpx 24rpx;
-  color: #6b7b6b;
+  color: var(--color-text-secondary);
   font-size: 22rpx;
-  background: #ffffff;
-  border-top: 1rpx solid #e4ebe4;
+  background: var(--color-surface);
+  border-top: 1rpx solid var(--color-divider);
 }
 
 .composer {
@@ -136,8 +140,8 @@
   align-items: flex-end;
   gap: 12rpx;
   padding: 16rpx 20rpx;
-  background: #ffffff;
-  border-top: 1rpx solid #e4ebe4;
+  background: var(--color-surface);
+  border-top: 1rpx solid var(--color-divider);
 }
 
 .safe_composer {
@@ -149,9 +153,9 @@
   min-height: 72rpx;
   max-height: 180rpx;
   padding: 16rpx 20rpx;
-  border-radius: 12rpx;
-  background: #f5f7f5;
-  color: #1f2a1f;
+  border-radius: var(--radius-control);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
   font-size: 28rpx;
 }
 
@@ -163,18 +167,18 @@
   padding: 0 20rpx;
   margin: 0;
   font-size: 26rpx;
-  border-radius: 12rpx;
+  border-radius: var(--radius-control);
 }
 
 .composer_icon_btn {
-  background: #e8f5e9;
-  color: #07c160;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
 }
 
 .load_earlier {
   text-align: center;
   padding: 12rpx;
-  color: #6b7b6b;
+  color: var(--color-text-secondary);
   font-size: 24rpx;
 }
 
@@ -184,7 +188,7 @@
   right: 0;
   top: 0;
   bottom: 0;
-  background: rgba(20, 28, 20, 0.55);
+  background: var(--color-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -196,16 +200,16 @@
 .image_draft_card {
   width: 100%;
   max-width: 640rpx;
-  background: #ffffff;
-  border-radius: 20rpx;
+  background: var(--color-surface);
+  border-radius: var(--radius-card);
   padding: 24rpx;
 }
 
 .image_draft_preview {
   width: 100%;
   height: 480rpx;
-  background: #f5f7f5;
-  border-radius: 12rpx;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-control);
 }
 
 .image_draft_actions {

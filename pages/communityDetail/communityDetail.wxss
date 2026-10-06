@@ -32,8 +32,9 @@
   margin: 20rpx 24rpx 0;
   padding: 26rpx;
   background: var(--color-surface);
-  border-radius: 18rpx;
+  border-radius: var(--radius-card);
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .detail_head_meta {
@@ -50,7 +51,7 @@
   align-items: center;
   justify-content: center;
   padding: 8rpx 18rpx;
-  border-radius: 999rpx;
+  border-radius: var(--radius-full);
   background: var(--color-bg-secondary);
   color: var(--color-text-secondary);
   font-size: 22rpx;
@@ -99,7 +100,7 @@
 
 .detail_badge {
   padding: 8rpx 18rpx;
-  border-radius: 999rpx;
+  border-radius: var(--radius-full);
   background: var(--color-bg-tertiary);
   color: var(--color-primary);
   font-size: 22rpx;
@@ -175,4 +176,10 @@
 
 .comment_item:last-child {
   border-bottom: none;
+}
+
+.detail_card .weui-cells {
+  margin: 16rpx 0 0;
+  border-radius: var(--radius-control);
+  box-shadow: none;
 }

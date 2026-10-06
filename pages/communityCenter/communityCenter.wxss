@@ -7,14 +7,16 @@
 }
 
 .hero_card {
+  background: var(--color-primary-soft);
   margin: 20rpx 24rpx 0;
   padding: 30rpx;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20rpx;
-  border-radius: 18rpx;
+  border-radius: var(--radius-card);
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .hero_content {
@@ -48,8 +50,9 @@
   align-items: center;
   gap: 20rpx;
   background: var(--color-surface);
-  border-radius: 16rpx;
+  border-radius: var(--radius-card);
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .summary_avatar {
@@ -92,7 +95,7 @@
 
 .tab_item {
   padding: 18rpx 28rpx;
-  border-radius: 999rpx;
+  border-radius: var(--radius-full);
   background: var(--color-surface);
   color: var(--color-text-secondary);
   font-size: 26rpx;
@@ -101,8 +104,9 @@
 }
 
 .tab_item_active {
-  background: var(--color-text-primary);
-  color: var(--color-surface);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
 }
 
 .loading_box,
@@ -113,8 +117,9 @@
   color: var(--color-text-tertiary);
   font-size: 26rpx;
   background: var(--color-surface);
-  border-radius: 16rpx;
+  border-radius: var(--radius-card);
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .list_section {
@@ -124,9 +129,10 @@
 .center_card {
   margin-bottom: 20rpx;
   background: var(--color-surface);
-  border-radius: 18rpx;
+  border-radius: var(--radius-card);
   overflow: hidden;
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .standard_card {
@@ -195,7 +201,7 @@
 }
 
 .bottom_button {
-  border-radius: 999rpx;
+  border-radius: var(--radius-full);
 }
 
 .empty_title {

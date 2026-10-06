@@ -19,9 +19,9 @@
 .shortcut_card {
   display: block;
   padding: 24rpx;
-  border-radius: 20rpx;
-  background: linear-gradient(135deg, #eef5ff 0%, #f9fbff 100%);
-  border: 1rpx solid rgba(45, 90, 160, 0.12);
+  border-radius: var(--radius-card);
+  background: var(--color-primary-soft);
+  border: 1rpx solid var(--color-primary-soft);
 }
 
 .shortcut_card_active {
@@ -31,11 +31,11 @@
 .shortcut_title {
   font-size: 30rpx;
   font-weight: 600;
-  color: #1f3655;
+  color: var(--color-text-primary);
 }
 
 .shortcut_desc {
   margin-top: 8rpx;
   font-size: 24rpx;
-  color: #5f7694;
+  color: var(--color-text-secondary);
 }

@@ -28,6 +28,6 @@
 }
 
 .checked {
-  color: #07c160;
+  color: var(--color-primary);
   font-size: 24rpx;
 }

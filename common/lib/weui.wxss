@@ -1198,3 +1198,238 @@ icon {
     color: #09bb07;
     white-space: nowrap;
 }
+
+/* GdeiAssistant brand overlay: replace WeChat green language with emerald tokens. */
+
+.weui-cells,
+.weui-form-preview,
+.weui-panel {
+    margin: 24rpx 24rpx 0;
+    background-color: var(--color-surface);
+    border: 1rpx solid var(--color-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    color: var(--color-text-primary);
+}
+
+.weui-cells:before,
+.weui-cells:after,
+.weui-form-preview:before,
+.weui-form-preview:after,
+.weui-panel:before,
+.weui-panel:after {
+    display: none;
+}
+
+.weui-cells__title {
+    margin-top: 40rpx;
+    margin-bottom: 12rpx;
+    padding-left: 48rpx;
+    padding-right: 48rpx;
+    color: var(--color-text-secondary);
+    font-size: 26rpx;
+    font-weight: 600;
+}
+
+.weui-cells__title + .weui-cells,
+.weui-cells_after-title {
+    margin-top: 0;
+}
+
+.weui-cells__tips {
+    padding-left: 48rpx;
+    padding-right: 48rpx;
+    color: var(--color-text-tertiary);
+}
+
+.weui-cell {
+    min-height: 96rpx;
+    box-sizing: border-box;
+    padding: 24rpx 32rpx;
+    color: var(--color-text-primary);
+}
+
+.weui-cell:before {
+    left: 32rpx;
+    border-top-color: var(--color-divider);
+    color: var(--color-divider);
+}
+
+.weui-cell_active,
+.weui-cell_link:active,
+.weui-check__label:active {
+    background-color: var(--color-bg-secondary);
+}
+
+.weui-cell__ft {
+    color: var(--color-text-secondary);
+}
+
+.weui-cell__ft_in-access:after {
+    border-color: var(--color-text-tertiary);
+}
+
+.weui-cell_link,
+.weui-msg__link,
+.weui-agree__link,
+.weui-footer__link {
+    color: var(--color-link);
+}
+
+.weui-label,
+.weui-input,
+.weui-textarea,
+.weui-media-box__title {
+    color: var(--color-text-primary);
+}
+
+.weui-toptips {
+    color: #ffffff;
+}
+
+.weui-toptips_warn,
+.weui-badge {
+    background-color: var(--color-danger);
+}
+
+.weui-cell_warn,
+.weui-textarea-counter_warn {
+    color: var(--color-danger);
+}
+
+.weui-form-preview__label,
+.weui-form-preview__bd,
+.weui-msg__desc,
+.weui-agree__text,
+.weui-footer,
+.weui-media-box__desc,
+.weui-panel__hd {
+    color: var(--color-text-tertiary);
+}
+
+.weui-form-preview__value {
+    color: var(--color-text-primary);
+}
+
+.weui-form-preview__value_in-hd {
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.weui-form-preview__btn,
+.weui-form-preview__btn_primary,
+.weui-vcode-btn {
+    color: var(--color-primary);
+}
+
+.weui-vcode-btn:active {
+    color: var(--color-primary-hover);
+}
+
+.weui-form-preview__btn_active,
+.weui-grid_active {
+    background-color: var(--color-bg-secondary);
+}
+
+.weui-grids {
+    margin: 0 16rpx 8rpx;
+    overflow: visible;
+    border: 0;
+    background: transparent;
+}
+
+.weui-grids:after {
+    content: "";
+    display: table;
+    clear: both;
+    height: 0;
+    border: 0;
+    visibility: hidden;
+}
+
+.weui-grid {
+    width: 31.4%;
+    margin: 0 0.96% 16rpx;
+    padding: 28rpx 8rpx 22rpx;
+    box-sizing: border-box;
+    background-color: var(--color-surface);
+    border: 1rpx solid var(--color-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+}
+
+.weui-grid__icon {
+    width: 48rpx;
+    height: 48rpx;
+    padding: 18rpx;
+    border-radius: var(--radius-control);
+    background-color: var(--color-primary-soft);
+}
+
+.weui-grid__label {
+    margin-top: 14rpx;
+    color: var(--color-text-primary);
+    font-size: 26rpx;
+}
+
+.weui-navbar {
+    background-color: var(--color-surface);
+    border-bottom: 1rpx solid var(--color-divider);
+}
+
+.weui-navbar__item {
+    color: var(--color-text-secondary);
+}
+
+.weui-navbar__item.weui-bar__item_on {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.weui-navbar__slider {
+    height: 6rpx;
+    border-radius: var(--radius-full);
+    background-color: var(--color-primary);
+}
+
+.weui-btn-area {
+    margin: 48rpx 24rpx 24rpx;
+}
+
+.weui-loadmore__tips,
+.weui-search-bar__text {
+    color: var(--color-text-tertiary);
+}
+
+.weui-loadmore__tips_in-line {
+    background-color: var(--color-bg-primary);
+}
+
+.weui-search-bar {
+    background-color: var(--color-bg-primary);
+    border-color: var(--color-divider);
+}
+
+.weui-search-bar__form,
+.weui-search-bar__label {
+    background: var(--color-surface);
+    border-radius: var(--radius-control);
+    border-color: var(--color-border);
+}
+
+.weui-search-bar__cancel-btn {
+    color: var(--color-primary);
+}
+
+.weui-msg__title {
+    color: var(--color-text-primary);
+}
+
+.page__bd,
+.page,
+.page-root {
+    min-height: 100%;
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+}

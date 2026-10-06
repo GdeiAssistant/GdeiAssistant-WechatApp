@@ -10,8 +10,9 @@
   margin: 24rpx;
   padding: 30rpx;
   background: var(--color-surface);
-  border-radius: 18rpx;
+  border-radius: var(--radius-card);
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .header {
