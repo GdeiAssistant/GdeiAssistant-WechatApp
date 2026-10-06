@@ -1,8 +1,8 @@
 const { maskAccount } = require('../../utils/mask.js')
 const i18n = require('../../utils/i18n')
 const {
-  NOT_SELECTED, getEnrollmentYearOptions, getFacultyCodeByLabel, getFacultyOptions, getFacultyDictionaryOptions,
-  getMajorCodeByLabel, getMajorLabelByCode, getMajorOptions, canSelectMajor,
+  NOT_SELECTED, getEnrollmentYearOptions, getFacultyOptions, getFacultyDictionaryOptions,
+  getMajorLabelByCode, getMajorOptions, canSelectMajor,
   formatLocationDisplay, getLocationNodeName, getLocationDisplay, localizeIpArea
 } = require('../../constants/profile.js')
 const NICKNAME_MAX_LENGTH = 32

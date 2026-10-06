@@ -26,7 +26,7 @@ const {
 const NICKNAME_MAX_LENGTH = 32
 const INTRODUCTION_MAX_LENGTH = 80
 
-const { buildLocationDisplay, getSafeIndex, clampLocationIndices, buildLocationRanges, buildLocationSelection, findLocationIndices, normalizeProfile, createEmptyProfile, syncProfileLocationDisplay, displayValue, toDisplayOptions, buildEditableState, parseBirthdayPayload, buildInteractionPromise, buildTodayDate, buildAvatarFile, buildAvatarFileName, validateNickname, validateIntroduction } = require('./profile-view-model.js')
+const { getSafeIndex, buildLocationRanges, buildLocationSelection, normalizeProfile, createEmptyProfile, syncProfileLocationDisplay, displayValue, toDisplayOptions, buildEditableState, parseBirthdayPayload, buildInteractionPromise, buildTodayDate, buildAvatarFile, buildAvatarFileName, validateNickname, validateIntroduction } = require('./profile-view-model.js')
 
 Page({
   onShow: function () {
