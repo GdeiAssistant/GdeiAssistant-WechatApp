@@ -1,5 +1,7 @@
 {
   "common": {
+    "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
+    "rightsReserved": "版权所有",
     "loading": "加载中...",
     "retry": "重试",
     "confirm": "确认",
@@ -150,6 +152,7 @@
     "nicknameEmpty": "昵称不能为空",
     "nicknameTooLong": "昵称长度不能超过{{max}}个字符",
     "introTooLong": "个人简介长度不能超过{{max}}个字符",
+    "saveIntroduction": "保存简介",
     "saved": "已保存",
     "loadProfileFailed": "加载个人资料失败",
     "optionsFallback": "资料字典加载失败，已使用本地兜底选项",
@@ -1020,6 +1023,7 @@
       "emptyList": "暂无内容"
     },
     "search": {
+      "hint": "输入昵称或公开 ID 找人",
       "navTitle": "搜索用户",
       "placeholder": "搜索昵称或公开 ID",
       "empty": "没有找到用户"
@@ -1049,6 +1053,7 @@
       "unblockConfirm": "解除拉黑后不会自动恢复之前的关注关系。"
     },
     "conversations": {
+      "searchUsers": "搜索用户",
       "navTitle": "私信",
       "empty": "暂无私信会话",
       "noMessage": "暂无消息",
@@ -1091,9 +1096,6 @@
     "entry": {
       "searchUsers": "搜索用户",
       "directMessages": "私信",
-      "following": "我的关注",
-      "followers": "我的粉丝",
-      "friends": "我的好友",
       "privacy": "私信设置",
       "blocks": "黑名单",
       "authorProfile": "查看主页"

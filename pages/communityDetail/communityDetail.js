@@ -378,7 +378,8 @@ Page({
         title: i18n.t('community.detail.acceptSuccess'),
         icon: 'success'
       })
-      this.loadDetail()
+      // 延时刷新，避免 toast 遮挡刷新后的新状态
+      setTimeout(() => this.loadDetail(), 1600)
     }).catch((error) => {
       pageUtils.showTopTips(this, error.message)
     })
@@ -398,7 +399,8 @@ Page({
         title: i18n.t('community.detail.confirmSuccess'),
         icon: 'success'
       })
-      this.loadDetail()
+      // 延时刷新，避免 toast 遮挡刷新后的新状态
+      setTimeout(() => this.loadDetail(), 1600)
     }).catch((error) => {
       pageUtils.showTopTips(this, error.message)
     })

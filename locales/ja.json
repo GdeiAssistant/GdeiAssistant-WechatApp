@@ -1,5 +1,7 @@
 {
   "common": {
+    "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
+    "rightsReserved": "All rights reserved",
     "loading": "読み込み中...",
     "retry": "再試行",
     "confirm": "確認",
@@ -175,6 +177,7 @@
     "nicknameEmpty": "ニックネームを入力してください",
     "nicknameTooLong": "ニックネームは{{max}}文字以内で入力してください",
     "introTooLong": "自己紹介は{{max}}文字以内で入力してください",
+    "saveIntroduction": "紹介を保存",
     "saved": "保存しました",
     "loadProfileFailed": "プロフィールの読み込みに失敗しました",
     "optionsFallback": "オプションの読み込みに失敗しました。ローカルデフォルトを使用します",
@@ -1151,6 +1154,7 @@
       "emptyList": "内容がありません"
     },
     "search": {
+      "hint": "ニックネームまたは公開IDでユーザーを検索",
       "navTitle": "ユーザー検索",
       "placeholder": "ニックネームまたは公開 ID",
       "empty": "ユーザーが見つかりません"
@@ -1180,6 +1184,7 @@
       "unblockConfirm": "ブロック解除しても以前のフォローは戻りません。"
     },
     "conversations": {
+      "searchUsers": "ユーザーを検索",
       "navTitle": "メッセージ",
       "empty": "会話はまだありません",
       "noMessage": "メッセージなし",
@@ -1222,9 +1227,6 @@
     "entry": {
       "searchUsers": "ユーザー検索",
       "directMessages": "メッセージ",
-      "following": "フォロー",
-      "followers": "フォロワー",
-      "friends": "相互",
       "privacy": "メッセージ設定",
       "blocks": "ブロック",
       "authorProfile": "プロフィールを見る"

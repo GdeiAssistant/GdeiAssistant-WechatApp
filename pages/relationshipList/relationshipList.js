@@ -55,7 +55,10 @@ Page({
         return socialAvatar.attachDisplayAvatars(page.items).then((resolved) => {
           const users = resolved.map(function (item) {
             return Object.assign({}, item, {
-              relationshipLabel: socialUtils.relationshipLabel(item.relationship)
+              // Subtitle shows the user's own introduction (signature);
+              // fall back to the mutual-follow badge only when there is no bio.
+              subtitle: item.introduction
+                || (item.relationship === 'MUTUAL' ? socialUtils.relationshipLabel('MUTUAL') : '')
             })
           })
           this.setData({

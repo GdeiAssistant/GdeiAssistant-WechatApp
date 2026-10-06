@@ -1,5 +1,7 @@
 {
   "common": {
+    "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
+    "rightsReserved": "All rights reserved",
     "loading": "Loading...",
     "retry": "Retry",
     "confirm": "Confirm",
@@ -150,6 +152,7 @@
     "nicknameEmpty": "Nickname cannot be empty",
     "nicknameTooLong": "Nickname cannot exceed {{max}} characters",
     "introTooLong": "Bio cannot exceed {{max}} characters",
+    "saveIntroduction": "Save intro",
     "saved": "Saved",
     "loadProfileFailed": "Failed to load profile",
     "optionsFallback": "Failed to load options, using local defaults",
@@ -1020,6 +1023,7 @@
       "emptyList": "Nothing here yet"
     },
     "search": {
+      "hint": "Search people by nickname or public ID",
       "navTitle": "Search users",
       "placeholder": "Search nickname or public ID",
       "empty": "No users found"
@@ -1049,6 +1053,7 @@
       "unblockConfirm": "Unblocking does not restore previous follows."
     },
     "conversations": {
+      "searchUsers": "Search users",
       "navTitle": "Messages",
       "empty": "No conversations yet",
       "noMessage": "No messages",
@@ -1091,9 +1096,6 @@
     "entry": {
       "searchUsers": "Search users",
       "directMessages": "Direct messages",
-      "following": "Following",
-      "followers": "Followers",
-      "friends": "Friends",
       "privacy": "Message settings",
       "blocks": "Blocked",
       "authorProfile": "View profile"

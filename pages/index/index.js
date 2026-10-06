@@ -36,7 +36,9 @@ Page({
         appName: i18n.t('index.appName'),
         navTitle: i18n.t('index.navTitle'),
         viewProfile: i18n.t('index.viewProfile'),
-        settingsSection: i18n.t('index.settingsSection')
+        settingsSection: i18n.t('index.settingsSection'),
+        copyright: i18n.t('common.copyright'),
+        rightsReserved: i18n.t('common.rightsReserved')
       },
       systemActions: getSystemActions()
     })

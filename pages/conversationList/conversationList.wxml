@@ -1,5 +1,11 @@
 <view class="page {{themeClass}}" style="{{fontStyle}}">
   <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+  <view class="weui-cells search_cells">
+    <view class="weui-cell weui-cell_access" bindtap="openUserSearch">
+      <view class="weui-cell__bd search_hint">{{t.searchUsers}}</view>
+      <view class="weui-cell__ft"></view>
+    </view>
+  </view>
   <view class="weui-cells" wx:if="{{conversations.length}}">
     <view
       class="weui-cell weui-cell_access"

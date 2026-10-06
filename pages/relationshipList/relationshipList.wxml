@@ -12,7 +12,7 @@
         <image class="avatar" src="{{item.displayAvatar || '/image/default.png'}}" mode="aspectFill"></image>
         <view>
           <view class="nickname">{{item.nickname}}</view>
-          <view class="meta">{{item.relationshipLabel}}</view>
+          <view class="meta" wx:if="{{item.subtitle}}">{{item.subtitle}}</view>
         </view>
       </view>
     </view>

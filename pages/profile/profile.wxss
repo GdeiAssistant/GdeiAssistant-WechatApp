@@ -192,3 +192,12 @@
   line-height: 1.6;
   text-align: left;
 }
+
+.save_wrap {
+  margin: 40rpx var(--gutter) 0;
+  padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
+}
+
+.save_btn {
+  width: 100%;
+}

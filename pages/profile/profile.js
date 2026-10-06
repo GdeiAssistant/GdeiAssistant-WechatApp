@@ -6,7 +6,6 @@ const { maskAccount } = require('../../utils/mask.js')
 const LOCATION_REGIONS = require('../../constants/location-regions.js')
 var themeUtil = require('../../utils/theme')
 var i18n = require('../../utils/i18n')
-const socialUtils = require('../../utils/social.js')
 const {
   NOT_SELECTED,
   fetchProfileOptions,
@@ -389,9 +388,10 @@ Page({
         following: i18n.t('social.stats.following'),
         followers: i18n.t('social.stats.followers'),
         friends: i18n.t('social.stats.friends'),
-        searchUsers: i18n.t('social.entry.searchUsers'),
         directMessages: i18n.t('social.entry.directMessages'),
-        socialSection: i18n.t('social.entry.directMessages')
+        socialSection: i18n.t('social.entry.directMessages'),
+        saveIntroduction: i18n.t('profilePage.saveIntroduction'),
+        savingIntroduction: i18n.t('profilePage.savingProfile')
       }
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
@@ -489,6 +489,11 @@ Page({
   },
 
   applyProfilePatch: function(patch) {
+    const introductionDraft = this.data.form && this.data.form.introduction
+    const hasIntroductionPatch = Object.prototype.hasOwnProperty.call(patch || {}, 'introduction')
+    const preserveIntroductionDraft = typeof introductionDraft === 'string'
+      && introductionDraft !== String((this.data.profile || {}).introduction || '')
+      && (!hasIntroductionPatch || introductionDraft.trim() !== String(patch.introduction || '').trim())
     const nextProfile = syncProfileLocationDisplay(
       normalizeProfile(Object.assign({}, this.data.profile || {}, patch || {})),
       this.getLocationTree()
@@ -497,6 +502,9 @@ Page({
       profile: nextProfile
     })
     this.setEditableState(nextProfile)
+    if (preserveIntroductionDraft) {
+      this.setData({ 'form.introduction': introductionDraft })
+    }
   },
 
   queueProfileSave: function(fieldKey, promiseFactory, patch) {
@@ -514,8 +522,12 @@ Page({
         this.applyProfilePatch(patch)
         this.setSaveStatus(i18n.t('profilePage.saved'))
       }).catch((error) => {
+        const introductionDraft = this.data.form && this.data.form.introduction
         if (this.data.profile) {
           this.setEditableState(this.data.profile)
+          if (typeof introductionDraft === 'string') {
+            this.setData({ 'form.introduction': introductionDraft })
+          }
         }
         pageUtils.showTopTips(this, error.message)
       }).finally(() => {
@@ -589,10 +601,6 @@ Page({
 
   openSocialEntry: function(event) {
     const target = event.currentTarget.dataset.target
-    if (target === 'search') {
-      wx.navigateTo({ url: '/pages/userSearch/userSearch' })
-      return
-    }
     if (target === 'messages') {
       wx.navigateTo({ url: '/pages/conversationList/conversationList' })
       return
@@ -612,10 +620,28 @@ Page({
     })
   },
 
-  openOwnSocialProfile: function() {
-    if (this.data.socialMe && this.data.socialMe.id) {
-      socialUtils.openUserProfile(this.data.socialMe.id)
+  saveIntroduction: function() {
+    if (!this.data.profile || !this.data.form || this.data.savingField === 'introduction') {
+      return
     }
+
+    const introduction = String(this.data.form.introduction || '').trim()
+    const introductionErrorMessage = validateIntroduction(introduction)
+    if (introductionErrorMessage) {
+      pageUtils.showTopTips(this, introductionErrorMessage)
+      return
+    }
+
+    if (introduction === String(this.data.profile.introduction || '').trim()) {
+      this.setSaveStatus(i18n.t('profilePage.saved'))
+      return
+    }
+
+    this.queueProfileSave('introduction', function() {
+      return userApi.updateIntroduction(introduction)
+    }, {
+      introduction: introduction
+    })
   },
 
   refreshAvatar: function(successText) {
@@ -774,12 +800,7 @@ Page({
       })
       return
     }
-
-    this.queueProfileSave('introduction', function() {
-      return userApi.updateIntroduction(introduction)
-    }, {
-      introduction: introduction
-    })
+    // Save is triggered explicitly via the save button (saveIntroduction)
   },
 
   openNicknameEditor: function() {

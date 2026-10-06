@@ -27,10 +27,15 @@ Page({
         navTitle: i18n.t('social.conversations.navTitle'),
         empty: i18n.t('social.conversations.empty'),
         loading: i18n.t('common.loading'),
-        noMessage: i18n.t('social.conversations.noMessage')
+        noMessage: i18n.t('social.conversations.noMessage'),
+        searchUsers: i18n.t('social.conversations.searchUsers')
       }
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
+  },
+
+  openUserSearch: function () {
+    wx.navigateTo({ url: '/pages/userSearch/userSearch' })
   },
 
   normalizeConversation: function (item) {

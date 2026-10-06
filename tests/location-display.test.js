@@ -78,6 +78,10 @@ function setup(locale, options) {
     updateHometown(codes) {
       requests.push(['hometown', clone(codes)])
       return Promise.resolve({ success: true })
+    },
+    updateIntroduction(introduction) {
+      requests.push(['introduction', introduction])
+      return Promise.resolve({ success: true })
     }
   })
   stubModule(path.join(ROOT, 'services/apis/social.js'), {
@@ -154,6 +158,36 @@ test('six locale onShow refreshes system regions and picker but preserves drafts
     assert.equal(page.data.profile.introduction, raw.introduction)
   }
   assert.deepEqual(requests, [])
+})
+
+test('introduction saves explicitly and other profile updates preserve its draft', async function () {
+  const { page, raw, requests } = setup()
+  await page.loadProfilePage()
+  const draft = '尚未提交的简介 English🙂'
+  page.handleTextInput({
+    currentTarget: { dataset: { field: 'introduction' } },
+    detail: { value: draft }
+  })
+  page.handleTextBlur({ currentTarget: { dataset: { field: 'introduction' } } })
+  assert.deepEqual(requests, [])
+  assert.equal(page.data.profile.introduction, raw.introduction)
+  page.applyProfilePatch({ nickname: '新的昵称' })
+  assert.equal(page.data.form.introduction, draft)
+  page.saveIntroduction()
+  await page._saveQueue
+  assert.deepEqual(requests, [['introduction', draft]])
+  assert.equal(page.data.profile.introduction, draft)
+  assert.equal(page.data.form.introduction, draft)
+  page.onUnload()
+})
+
+test('a submitted introduction response does not discard a newer draft', async function () {
+  const { page } = setup()
+  await page.loadProfilePage()
+  page.data.form.introduction = '提交后继续编辑的内容'
+  page.applyProfilePatch({ introduction: '先前提交的内容' })
+  assert.equal(page.data.profile.introduction, '先前提交的内容')
+  assert.equal(page.data.form.introduction, '提交后继续编辑的内容')
 })
 
 test('localized picker saves original codes and an unrelated patch preserves location codes', async function () {
