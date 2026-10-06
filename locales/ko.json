@@ -312,6 +312,7 @@
   "inboxPage": {
     "navTitle": "받은 편지함",
     "tabAnnouncement": "공지사항",
+    "tabDirect": "쪽지",
     "tabInteraction": "메시지",
     "loadingAnnouncement": "공지사항 로딩 중",
     "noMoreAnnouncement": "더 이상 공지사항이 없습니다",
@@ -321,6 +322,9 @@
     "loadingInteraction": "메시지 로딩 중",
     "noMoreInteraction": "더 이상 메시지가 없습니다",
     "noInteraction": "메시지가 없습니다",
+    "loadingDirect": "쪽지 로딩 중",
+    "noDirect": "쪽지가 없습니다",
+    "openAllDirect": "전체 쪽지",
     "navigationUnsupported": "이 메시지는 이동을 지원하지 않습니다",
     "shareTitle": "알림",
     "read": "읽음",
@@ -1140,6 +1144,101 @@
         "moduleNotSupported": "지원되지 않는 모듈입니다",
         "editNotSupported": "이 모듈은 편집을 지원하지 않습니다"
       }
+    }
+  },
+  "social": {
+    "common": {
+      "noIntro": "소개 없음",
+      "emptyList": "내용이 없습니다"
+    },
+    "search": {
+      "navTitle": "사용자 검색",
+      "placeholder": "닉네임 또는 공개 ID",
+      "empty": "사용자를 찾을 수 없습니다"
+    },
+    "profile": {
+      "navTitle": "프로필"
+    },
+    "stats": {
+      "following": "팔로잉",
+      "followers": "팔로워",
+      "friends": "친구"
+    },
+    "relationship": {
+      "self": "나",
+      "none": "팔로우 안 함",
+      "following": "팔로잉 중",
+      "followedBy": "상대가 나를 팔로우",
+      "mutual": "맞팔"
+    },
+    "actions": {
+      "follow": "팔로우",
+      "unfollow": "언팔로우",
+      "message": "쪽지",
+      "block": "차단",
+      "unblock": "차단 해제",
+      "blockConfirm": "차단하면 서로 팔로우가 해제되며 다시 팔로우하거나 쪽지를 보낼 수 없습니다.",
+      "unblockConfirm": "차단을 해제해도 이전 팔로우가 복구되지 않습니다."
+    },
+    "conversations": {
+      "navTitle": "쪽지",
+      "empty": "쪽지 대화가 없습니다",
+      "noMessage": "메시지 없음",
+      "imageMessage": "[이미지]"
+    },
+    "chat": {
+      "navTitle": "채팅",
+      "loadEarlier": "이전 메시지 불러오기",
+      "inputPlaceholder": "메시지 입력",
+      "send": "보내기",
+      "image": "이미지",
+      "imageLoading": "이미지 불러오는 중",
+      "imageTooLarge": "이미지는 5MB 이하여야 합니다",
+      "imageTypeInvalid": "JPEG/PNG만 지원합니다",
+      "imageDisabled": "이미지 쪽지가 아직 켜져 있지 않습니다",
+      "pending": "보내는 중",
+      "sent": "전송됨",
+      "failedRetry": "실패. 눌러서 재시도"
+    },
+    "privacy": {
+      "navTitle": "누구에게 쪽지를 받을까요",
+      "hint": "보낼 때마다 상대의 현재 설정으로 권한을 확인합니다.",
+      "selected": "선택됨",
+      "saved": "저장됨",
+      "all": "모두",
+      "following": "내가 팔로우하는 사람",
+      "mutual": "맞팔인 사람",
+      "none": "아무도 안 됨",
+      "desc": {
+        "all": "로그인한 모든 사용자가 쪽지를 보낼 수 있습니다",
+        "following": "내가 팔로우하는 사람만 보낼 수 있습니다",
+        "mutual": "맞팔인 사람만 보낼 수 있습니다",
+        "none": "쪽지를 받지 않지만 내가 먼저 보낼 수는 있습니다"
+      }
+    },
+    "blocks": {
+      "navTitle": "차단 목록",
+      "empty": "차단한 사용자가 없습니다"
+    },
+    "entry": {
+      "searchUsers": "사용자 검색",
+      "directMessages": "쪽지",
+      "following": "내 팔로잉",
+      "followers": "내 팔로워",
+      "friends": "내 친구",
+      "privacy": "쪽지 설정",
+      "blocks": "차단 목록",
+      "authorProfile": "프로필 보기"
+    },
+    "errors": {
+      "userNotFound": "사용자를 찾을 수 없습니다",
+      "conversationNotFound": "대화를 찾을 수 없습니다",
+      "contactUnavailable": "이 사용자에게 연락할 수 없습니다",
+      "privacyRestricted": "상대의 쪽지 설정으로 보낼 수 없습니다",
+      "invalidRequest": "잘못된 요청입니다",
+      "clientMessageConflict": "메시지 충돌입니다. 수정 후 다시 보내세요",
+      "invalidImage": "이미지 형식이 올바르지 않습니다",
+      "imageMessagingDisabled": "이미지 쪽지가 아직 켜져 있지 않습니다"
     }
   }
 }

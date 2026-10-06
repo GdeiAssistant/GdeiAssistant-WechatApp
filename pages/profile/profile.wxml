@@ -24,6 +24,46 @@
       </view>
     </view>
 
+    <view class="weui-cells__title" wx:if="{{socialMe}}">{{t.socialSection}}</view>
+    <view class="weui-cells weui-cells_after-title profile_cells" wx:if="{{socialMe}}">
+      <view class="weui-cell">
+        <view class="weui-cell__bd social_stats">
+          <view class="social_stat" data-target="following" bindtap="openSocialEntry">
+            <view class="social_stat_value">{{socialMe.followingCount}}</view>
+            <view class="social_stat_label">{{t.following}}</view>
+          </view>
+          <view class="social_stat" data-target="followers" bindtap="openSocialEntry">
+            <view class="social_stat_value">{{socialMe.followerCount}}</view>
+            <view class="social_stat_label">{{t.followers}}</view>
+          </view>
+          <view class="social_stat" data-target="friends" bindtap="openSocialEntry">
+            <view class="social_stat_value">{{socialMe.friendCount}}</view>
+            <view class="social_stat_label">{{t.friends}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="weui-cell weui-cell_access" data-target="search" bindtap="openSocialEntry">
+        <view class="weui-cell__bd">{{t.searchUsers}}</view>
+        <view class="weui-cell__ft"></view>
+      </view>
+      <view class="weui-cell weui-cell_access" data-target="messages" bindtap="openSocialEntry">
+        <view class="weui-cell__bd">{{t.directMessages}}</view>
+        <view class="weui-cell__ft"></view>
+      </view>
+      <view class="weui-cell weui-cell_access" data-target="privacy" bindtap="openSocialEntry">
+        <view class="weui-cell__bd">{{t.privacy}}</view>
+        <view class="weui-cell__ft"></view>
+      </view>
+      <view class="weui-cell weui-cell_access" data-target="blocks" bindtap="openSocialEntry">
+        <view class="weui-cell__bd">{{t.blocks}}</view>
+        <view class="weui-cell__ft"></view>
+      </view>
+      <view class="weui-cell weui-cell_access" bindtap="openOwnSocialProfile">
+        <view class="weui-cell__bd">{{t.navTitle}}</view>
+        <view class="weui-cell__ft"></view>
+      </view>
+    </view>
+
     <view class="weui-cells__title">{{t.accountInfo}}</view>
     <view class="weui-cells weui-cells_after-title profile_cells">
       <view class="weui-cell weui-cell_access" bindtap="openNicknameEditor">

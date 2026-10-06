@@ -56,6 +56,8 @@ if (!String.prototype.padStart) {
 
 var i18n = require('./utils/i18n')
 var themeUtil = require('./utils/theme')
+var auth = require('./services/auth')
+var socialRealtime = require('./services/social-realtime')
 
 App({
   onLaunch: function () {
@@ -67,6 +69,14 @@ App({
     this.globalData.theme = themeUtil.getEffectiveTheme()
     this.globalData.fontScaleStep = themeUtil.getFontScaleStep()
     themeUtil.initThemeListener()
+  },
+  onShow: function () {
+    if (auth.getSessionToken()) {
+      socialRealtime.ensureConnected()
+    }
+  },
+  onHide: function () {
+    // Keep socket for quick resume; pages stop their own polling on hide.
   },
   globalData: {
     userInfo: null,

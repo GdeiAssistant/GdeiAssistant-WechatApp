@@ -336,6 +336,7 @@ module.exports = {
       publishTime: item.publishTime || '',
       sellerName: profile.nickname || profile.username || i18n.t('community.list.anonStudent'),
       sellerAvatar: profile.avatarURL || '/image/default.png',
+      authorId: profile.authorId || payload.authorId || null,
       qqText: maskContactId(item.qq || ''),
       wechatText: '',
       phone: item.phone || '',

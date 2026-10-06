@@ -172,10 +172,16 @@ module.exports = {
   },
 
   // --- Detail: build detail view ---
-  buildDetailView: function () {
+  buildDetailView: function (payload) {
+    var item = payload || {}
     return {
-      title: i18n.t('community.detail.detail'),
-      description: ''
+      title: item.topic ? '#' + item.topic : i18n.t('community.detail.detail'),
+      description: item.content || '',
+      publishTime: item.publishTime || '',
+      likeCount: Number(item.likeCount || 0),
+      liked: !!item.liked,
+      authorId: item.authorId || null,
+      canLike: true
     }
   },
 

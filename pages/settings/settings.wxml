@@ -85,6 +85,18 @@
     </button>
   </view>
 
+  <view class="weui-cells__title">{{t.privacySection}}</view>
+  <view class="weui-cells weui-cells_after-title">
+    <view class="weui-cell weui-cell_access" bindtap="openDmPrivacy">
+      <view class="weui-cell__bd">{{t.dmPrivacy}}</view>
+      <view class="weui-cell__ft"></view>
+    </view>
+    <view class="weui-cell weui-cell_access" bindtap="openBlockList">
+      <view class="weui-cell__bd">{{t.blockList}}</view>
+      <view class="weui-cell__ft"></view>
+    </view>
+  </view>
+
   <view class="weui-cells__title">{{t.featureDisplayTitle}}</view>
   <block wx:for="{{featureSections}}" wx:key="id" wx:for-item="section">
     <view class="section_title">{{section.title}}</view>

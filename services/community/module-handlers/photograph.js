@@ -197,10 +197,18 @@ module.exports = {
   },
 
   // --- Detail: build detail view ---
-  buildDetailView: function () {
+  buildDetailView: function (payload) {
+    var item = payload || {}
     return {
-      title: i18n.t('community.detail.detail'),
-      description: ''
+      title: item.title || i18n.t('community.detail.detail'),
+      description: item.content || '',
+      images: item.imageUrls || [],
+      publishTime: item.publishTime || '',
+      likeCount: Number(item.likeCount || 0),
+      commentCount: Number(item.commentCount || 0),
+      liked: !!item.liked,
+      authorId: item.authorId || null,
+      canLike: true
     }
   },
 

@@ -1,10 +1,12 @@
 const userApi = require('../../services/apis/user.js')
+const socialApi = require('../../services/apis/social.js')
 const uploadService = require('../../services/upload.js')
 const pageUtils = require('../../utils/page.js')
 const { maskAccount } = require('../../utils/mask.js')
 const LOCATION_REGIONS = require('../../constants/location-regions.js')
 var themeUtil = require('../../utils/theme')
 var i18n = require('../../utils/i18n')
+const socialUtils = require('../../utils/social.js')
 const {
   NOT_SELECTED,
   fetchProfileOptions,
@@ -422,7 +424,15 @@ Page({
         hometown: i18n.t('profilePage.hometown'),
         introduction: i18n.t('profilePage.introduction'),
         introPlaceholder: i18n.t('profilePage.introPlaceholder'),
-        notSelected: i18n.t('profilePage.notSelected')
+        notSelected: i18n.t('profilePage.notSelected'),
+        following: i18n.t('social.stats.following'),
+        followers: i18n.t('social.stats.followers'),
+        friends: i18n.t('social.stats.friends'),
+        searchUsers: i18n.t('social.entry.searchUsers'),
+        directMessages: i18n.t('social.entry.directMessages'),
+        privacy: i18n.t('social.entry.privacy'),
+        blocks: i18n.t('social.entry.blocks'),
+        socialSection: i18n.t('social.entry.directMessages')
       }
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
@@ -445,6 +455,7 @@ Page({
     errorMessage: null,
     todayDate: '',
     profile: null,
+    socialMe: null,
     form: null,
     facultyOptions: getFacultyOptions(),
     facultyDisplayOptions: toDisplayOptions(getFacultyOptions()),
@@ -542,12 +553,14 @@ Page({
       return Promise.allSettled([
         userApi.getAvatar(),
         userApi.getProfile(),
-        fetchProfileOptions()
+        fetchProfileOptions(),
+        socialApi.getMe()
       ])
     }).then((results) => {
       const avatarResult = results[0] && results[0].status === 'fulfilled' ? results[0].value : null
       const profileResult = results[1] && results[1].status === 'fulfilled' ? results[1].value : null
       const profileOptionsResult = results[2] && results[2].status === 'fulfilled' ? results[2].value : null
+      const socialResult = results[3] && results[3].status === 'fulfilled' ? results[3].value : null
 
       const locationTree = this.getLocationTree()
       const avatarValue = avatarResult && avatarResult.success ? avatarResult.data : ''
@@ -563,6 +576,7 @@ Page({
 
       this.setData({
         profile: normalizedProfile,
+        socialMe: socialResult && socialResult.success ? socialResult.data : null,
         todayDate: buildTodayDate(),
         facultyOptions: getFacultyOptions(),
         facultyDisplayOptions: toDisplayOptions(getFacultyOptions())
@@ -591,6 +605,42 @@ Page({
         loading: false
       })
     })
+  },
+
+  openSocialEntry: function(event) {
+    const target = event.currentTarget.dataset.target
+    if (target === 'search') {
+      wx.navigateTo({ url: '/pages/userSearch/userSearch' })
+      return
+    }
+    if (target === 'messages') {
+      wx.navigateTo({ url: '/pages/conversationList/conversationList' })
+      return
+    }
+    if (target === 'privacy') {
+      wx.navigateTo({ url: '/pages/dmPrivacy/dmPrivacy' })
+      return
+    }
+    if (target === 'blocks') {
+      wx.navigateTo({ url: '/pages/blockList/blockList' })
+      return
+    }
+    if (!this.data.socialMe || !this.data.socialMe.id) {
+      return
+    }
+    wx.navigateTo({
+      url:
+        '/pages/relationshipList/relationshipList?id=' +
+        encodeURIComponent(this.data.socialMe.id) +
+        '&kind=' +
+        encodeURIComponent(target)
+    })
+  },
+
+  openOwnSocialProfile: function() {
+    if (this.data.socialMe && this.data.socialMe.id) {
+      socialUtils.openUserProfile(this.data.socialMe.id)
+    }
   },
 
   refreshAvatar: function(successText) {

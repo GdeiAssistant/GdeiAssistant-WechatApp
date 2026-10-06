@@ -124,3 +124,25 @@
 .introduction_cell {
   align-items: flex-start;
 }
+
+.social_stats {
+  display: flex;
+  width: 100%;
+}
+
+.social_stat {
+  flex: 1;
+  text-align: center;
+  padding: 8rpx 0;
+}
+
+.social_stat_value {
+  font-size: 32rpx;
+  color: var(--color-text-primary);
+}
+
+.social_stat_label {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: var(--color-text-tertiary);
+}

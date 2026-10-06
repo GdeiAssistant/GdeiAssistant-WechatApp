@@ -1,0 +1,97 @@
+<view class="page {{themeClass}}" style="{{fontStyle}}">
+  <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
+
+  <view class="chat_header" wx:if="{{conversation}}">
+    <image
+      class="chat_header_avatar"
+      src="{{peerDisplayAvatar || '/image/default.png'}}"
+      mode="aspectFill"
+    ></image>
+    <view class="chat_header_meta">
+      <view class="chat_header_name">{{conversation.peer.nickname}}</view>
+      <view class="chat_header_sub">{{sendHint || t.navTitle}}</view>
+    </view>
+  </view>
+
+  <scroll-view
+    class="messages"
+    scroll-y
+    scroll-into-view="{{scrollIntoView}}"
+    scroll-with-animation="{{true}}"
+  >
+    <view class="load_earlier" wx:if="{{hasMoreEarlier}}" bindtap="loadEarlier">{{t.loadEarlier}}</view>
+    <block wx:for="{{messages}}" wx:key="localKey">
+      <view id="msg-{{item.localKey}}" class="bubble_row {{item.mine ? 'mine' : ''}}">
+        <view class="bubble_wrap">
+          <view class="time" wx:if="{{item.timeText}}">{{item.timeText}}</view>
+          <view
+            wx:if="{{item.isImage}}"
+            class="bubble bubble_image {{item.status === 'failed' ? 'bubble_failed' : ''}}"
+            data-client-id="{{item.clientMessageId}}"
+            data-local-key="{{item.localKey}}"
+            bindtap="onImageTap"
+          >
+            <image
+              wx:if="{{item.displayPath}}"
+              class="chat_image"
+              src="{{item.displayPath}}"
+              mode="aspectFill"
+            ></image>
+            <view wx:else class="chat_image_placeholder">{{t.imageLoading}}</view>
+          </view>
+          <view
+            wx:else
+            class="bubble {{item.status === 'failed' ? 'bubble_failed' : ''}}"
+            data-client-id="{{item.clientMessageId}}"
+            bindtap="retryMessage"
+          >
+            {{item.content}}
+          </view>
+          <view class="status" wx:if="{{item.mine}}">{{item.statusLabel}}</view>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+
+  <view class="hint" wx:if="{{!canSend}}">{{sendHint}}</view>
+
+  <view class="composer safe_composer">
+    <button
+      class="composer_icon_btn"
+      disabled="{{sending || !canSend || !imageMessagingEnabled}}"
+      bindtap="chooseImage"
+    >
+      {{t.image}}
+    </button>
+    <textarea
+      class="composer_input"
+      value="{{draft}}"
+      maxlength="1000"
+      auto-height
+      adjust-position="{{true}}"
+      disabled="{{!canSend}}"
+      placeholder="{{t.inputPlaceholder}}"
+      bindinput="onDraftInput"
+    ></textarea>
+    <button
+      class="composer_send_btn"
+      type="primary"
+      disabled="{{sending || !canSend || !draft}}"
+      bindtap="send"
+    >
+      {{t.send}}
+    </button>
+  </view>
+
+  <view class="image_draft_mask" wx:if="{{imageDraftPath}}">
+    <view class="image_draft_card">
+      <image class="image_draft_preview" src="{{imageDraftPath}}" mode="aspectFit"></image>
+      <view class="image_draft_actions">
+        <button class="composer_send_btn" bindtap="cancelImageDraft">{{t.cancel}}</button>
+        <button class="composer_send_btn" type="primary" disabled="{{sending}}" bindtap="confirmImageDraft">
+          {{t.send}}
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

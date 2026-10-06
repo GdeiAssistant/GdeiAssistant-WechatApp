@@ -74,6 +74,48 @@ module.exports = {
     },
     markAllRead: '/api/information/message/readall'
   },
+  social: {
+    me: '/api/social/me',
+    users: '/api/social/users',
+    user: function (id) {
+      return `/api/social/users/${encodeURIComponent(id)}`
+    },
+    userAvatar: function (id) {
+      return `/api/social/users/${encodeURIComponent(id)}/avatar`
+    },
+    relationships: function (id) {
+      return `/api/social/users/${encodeURIComponent(id)}/relationships`
+    },
+    follow: function (id) {
+      return `/api/social/users/${encodeURIComponent(id)}/follow`
+    },
+    block: function (id) {
+      return `/api/social/users/${encodeURIComponent(id)}/block`
+    },
+    blocks: '/api/social/blocks',
+    privacy: '/api/social/privacy',
+    unread: '/api/social/unread',
+    conversations: '/api/social/conversations',
+    conversation: function (id) {
+      return `/api/social/conversations/${encodeURIComponent(id)}`
+    },
+    messages: function (id) {
+      return `/api/social/conversations/${encodeURIComponent(id)}/messages`
+    },
+    messageImage: function (id) {
+      return `/api/social/conversations/${encodeURIComponent(id)}/messages/image`
+    },
+    messageImageContent: function (id, messageId) {
+      return (
+        `/api/social/conversations/${encodeURIComponent(id)}/messages/` +
+        `${encodeURIComponent(messageId)}/image`
+      )
+    },
+    read: function (id) {
+      return `/api/social/conversations/${encodeURIComponent(id)}/read`
+    },
+    realtime: '/api/social/realtime'
+  },
   module: {
     stateDetail: '/api/module/state/detail'
   },

@@ -7,6 +7,8 @@ var profileHandlers = require('./profile-handlers.js')
 var campusHandlers = require('./campus-handlers.js')
 var infoHandlers = require('./info-handlers.js')
 var messageHandlers = require('./message-handlers.js')
+var socialHandlers = require('./social-handlers.js')
+var socialData = require('./social-data.js')
 var i18n = require('../utils/i18n.js')
 
 // ---------------------------------------------------------------------------
@@ -29,7 +31,8 @@ function buildDefaultState(locale) {
       data.buildBaseProfile(normalizedLocale).username
     ),
     profile: cloneValue(data.buildBaseProfile(normalizedLocale)),
-    interactionMessages: cloneValue(data.getInteractionMessages(normalizedLocale))
+    interactionMessages: cloneValue(data.getInteractionMessages(normalizedLocale)),
+    social: socialData.createDefaultSocialState()
   }
 }
 
@@ -65,7 +68,10 @@ function readState() {
         profile: Object.assign({}, cloneValue(data.buildBaseProfile(currentLocale)), state.profile || {}),
         interactionMessages: localizeInteractionMessages(state.interactionMessages, currentLocale),
         community: state.community,
-        communityLocale: state.communityLocale || ''
+        communityLocale: state.communityLocale || '',
+        social: state.social && typeof state.social === 'object'
+          ? state.social
+          : socialData.createDefaultSocialState()
       }
     }
   } catch (error) {
@@ -402,6 +408,14 @@ function handleRequest(options) {
 
   if (path === '/api/information/message/readall' && method === 'POST') {
     return messageHandlers.handleMessageReadAll(token, utils)
+  }
+
+  // --- Social ---
+  if (path.indexOf('/api/social/') === 0) {
+    var socialResponse = socialHandlers.handleRequest(path, method, query, payload, token, utils)
+    if (socialResponse) {
+      return socialResponse
+    }
   }
 
   // --- Community (delegated to community.js) ---

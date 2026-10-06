@@ -47,6 +47,47 @@
     </view>
   </block>
 
+  <block wx:elif="{{activeTab === 'direct'}}">
+    <view class="section_card">
+      <view class="interaction_meta">
+        <view class="meta_badge" wx:if="{{directUnreadCount}}">{{directUnreadCount}} {{t.unreadCount}}</view>
+        <view class="meta_badge" wx:else>{{t.openAllDirect}}</view>
+        <view class="meta_action" bindtap="openUserSearch">{{t.searchUsers}}</view>
+      </view>
+
+      <view class="interaction_list" wx:if="{{directList.length}}">
+        <view
+          wx:for="{{directList}}"
+          wx:key="id"
+          wx:for-item="conversationItem"
+          data-id="{{conversationItem.id}}"
+          data-peer="{{conversationItem.peer.id}}"
+          bindtap="openDirectConversation"
+          class="interaction_card"
+          hover-class="interaction_card_active"
+        >
+          <view class="interaction_header">
+            <view class="interaction_title">{{conversationItem.peer.nickname}}</view>
+            <view class="interaction_read {{conversationItem.unreadCount ? 'interaction_read_pending' : 'interaction_read_done'}}">
+              {{conversationItem.unreadCount || ''}}
+            </view>
+          </view>
+          <view class="interaction_content">{{conversationItem.previewText}}</view>
+          <view class="interaction_time">{{conversationItem.updatedAtText}}</view>
+        </view>
+      </view>
+
+      <view class="weui-loadmore" wx:if="{{directLoading}}">
+        <i class="weui-loading"></i>
+        <view class="weui-loadmore__tips">{{t.loadingDirect}}</view>
+      </view>
+      <view class="weui-loadmore" wx:if="{{!directLoading && !directList.length}}">
+        <view class="weui-loadmore__tips">{{t.noDirect}}</view>
+      </view>
+      <view class="meta_action direct_all" bindtap="openConversationList">{{t.openAllDirect}}</view>
+    </view>
+  </block>
+
   <block wx:else>
     <view class="section_card">
       <view class="interaction_meta" wx:if="{{interactionUnreadCount}}">

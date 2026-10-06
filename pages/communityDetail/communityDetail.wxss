@@ -150,6 +150,15 @@
 }
 
 .seller_text,
+.seller_link {
+  color: var(--color-text-secondary);
+  font-size: 24rpx;
+}
+
+.seller_link {
+  margin-left: auto;
+  color: var(--color-text-primary);
+}
 .comment_name {
   font-size: 26rpx;
   color: var(--color-text-secondary);

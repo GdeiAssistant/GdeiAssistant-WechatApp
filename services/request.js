@@ -72,17 +72,34 @@ function request(options) {
         resolve(normalizePayload(payload))
       }
 
+      const shouldClearSessionFor401 = function () {
+        const currentToken = auth.getSessionToken() || ''
+        return !!(sessionToken && currentToken && sessionToken === currentToken)
+      }
+
       const rejectPayload = function (error) {
         if (error && error.statusCode === 401) {
-          auth.clearSession()
-          auth.reLaunchToLogin(i18n.t('auth.loginExpiredTitle'), i18n.t('auth.loginExpiredMessage'))
+          if (shouldClearSessionFor401()) {
+            auth.clearSession()
+            auth.reLaunchToLogin(
+              i18n.t('auth.loginExpiredTitle'),
+              i18n.t('auth.loginExpiredMessage')
+            )
+          }
           reject(new Error(i18n.t('auth.loginExpiredMessage')))
           return
         }
 
-        reject(
-          new Error(error && error.message ? error.message : i18n.t('common.serviceUnavailable'))
+        const nextError = new Error(
+          error && error.message ? error.message : i18n.t('common.serviceUnavailable')
         )
+        if (error && error.statusCode) {
+          nextError.statusCode = error.statusCode
+        }
+        if (error && error.errorCode) {
+          nextError.errorCode = error.errorCode
+        }
+        reject(nextError)
       }
 
       const requestId = header['X-Request-ID']
@@ -129,14 +146,21 @@ function request(options) {
           if (res.statusCode === 200) {
             resolvePayload(res.data)
           } else if (res.statusCode === 401) {
-            auth.clearSession()
-            auth.reLaunchToLogin(
-              i18n.t('auth.loginExpiredTitle'),
-              i18n.t('auth.loginExpiredMessage')
-            )
+            if (shouldClearSessionFor401()) {
+              auth.clearSession()
+              auth.reLaunchToLogin(
+                i18n.t('auth.loginExpiredTitle'),
+                i18n.t('auth.loginExpiredMessage')
+              )
+            }
             reject(new Error(i18n.t('auth.loginExpiredMessage')))
           } else {
-            reject(new Error(pickMessage(res.data)))
+            const nextError = new Error(pickMessage(res.data))
+            nextError.statusCode = res.statusCode
+            if (res.data && res.data.errorCode) {
+              nextError.errorCode = res.data.errorCode
+            }
+            reject(nextError)
           }
         },
         fail: function () {

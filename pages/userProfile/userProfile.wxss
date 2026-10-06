@@ -1,0 +1,86 @@
+@import "../../common/lib/weui.wxss";
+
+.page {
+  min-height: 100vh;
+  background: var(--color-bg-primary);
+  padding-bottom: 48rpx;
+}
+
+.card {
+  margin: 24rpx;
+  padding: 30rpx;
+  background: var(--color-surface);
+  border-radius: 18rpx;
+  border: 1rpx solid var(--color-border);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+}
+
+.avatar {
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 50%;
+  margin-right: 24rpx;
+  background: var(--color-bg-secondary);
+}
+
+.name {
+  font-size: 34rpx;
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.intro {
+  margin-top: 10rpx;
+  color: var(--color-text-secondary);
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.relation {
+  margin-top: 10rpx;
+  color: var(--color-text-tertiary);
+  font-size: 24rpx;
+}
+
+.stats {
+  display: flex;
+  margin-top: 28rpx;
+}
+
+.stat {
+  flex: 1;
+  text-align: center;
+}
+
+.stat_value {
+  font-size: 32rpx;
+  color: var(--color-text-primary);
+}
+
+.stat_label {
+  margin-top: 6rpx;
+  font-size: 22rpx;
+  color: var(--color-text-tertiary);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 28rpx;
+}
+
+.actions button {
+  margin: 0;
+}
+
+.loading_box,
+.empty {
+  padding: 80rpx 24rpx;
+  text-align: center;
+  color: var(--color-text-tertiary);
+}

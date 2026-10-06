@@ -1,0 +1,36 @@
+@import "../../common/lib/weui.wxss";
+
+.page {
+  min-height: 100vh;
+  background: var(--color-bg-primary);
+}
+
+.user_row {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 0;
+}
+
+.avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+  background: var(--color-bg-secondary);
+}
+
+.nickname {
+  color: var(--color-text-primary);
+}
+
+.meta {
+  margin-top: 4rpx;
+  color: var(--color-text-tertiary);
+  font-size: 22rpx;
+}
+
+.empty {
+  padding: 80rpx 24rpx;
+  text-align: center;
+  color: var(--color-text-tertiary);
+}

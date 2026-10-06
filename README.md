@@ -13,6 +13,7 @@
 - Promise 风格服务层
 - `mock` / `remote` 双数据源
 - i18n 国际化（6 种语言）
+- 社交：关注/粉丝/好友、私信与四档隐私（见 `docs/SOCIAL_MESSAGING_IMPLEMENTATION.zh-CN.md`）
 
 ## 快速开始
 

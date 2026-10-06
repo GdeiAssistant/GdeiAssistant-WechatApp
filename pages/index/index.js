@@ -1,6 +1,8 @@
 const { getSystemActions } = require('../../constants/features.js')
 const auth = require('../../services/auth.js')
 const messagesApi = require('../../services/apis/messages.js')
+const socialApi = require('../../services/apis/social.js')
+const socialRealtime = require('../../services/social-realtime.js')
 const userApi = require('../../services/apis/user.js')
 const featureConfig = require('../../services/feature-config.js')
 const dataSource = require('../../services/data-source.js')
@@ -129,12 +131,18 @@ Page({
   },
 
   loadInboxStatus: function() {
-    messagesApi.getUnreadCount().then((result) => {
-      if (!result.success) {
-        throw new Error(result.message || i18n.t('index.unreadFailed'))
-      }
-
-      const unreadCount = Number(result.data || 0)
+    Promise.all([
+      messagesApi.getUnreadCount().catch(function() {
+        return { success: true, data: 0 }
+      }),
+      socialApi.getUnread().catch(function() {
+        return { success: true, data: { total: 0 } }
+      })
+    ]).then((results) => {
+      const interactionUnread = results[0] && results[0].success ? Number(results[0].data || 0) : 0
+      const directUnread =
+        results[1] && results[1].success ? Number((results[1].data && results[1].data.total) || 0) : 0
+      const unreadCount = interactionUnread + directUnread
       this.setData({
         inboxUnreadCount: unreadCount,
         inboxBadgeText: formatInboxBadge(unreadCount)
@@ -157,6 +165,9 @@ Page({
     this.loadProfile()
     this.loadInboxStatus()
     this.loadHomeSections()
+    if (auth.getSessionToken()) {
+      socialRealtime.ensureConnected()
+    }
   },
 
   onShareAppMessage: function() {

@@ -312,6 +312,7 @@
   "inboxPage": {
     "navTitle": "收件箱",
     "tabAnnouncement": "系統公告",
+    "tabDirect": "私信",
     "tabInteraction": "互動消息",
     "loadingAnnouncement": "正在載入系統公告",
     "noMoreAnnouncement": "沒有更多系統公告了",
@@ -321,6 +322,9 @@
     "loadingInteraction": "正在載入互動消息",
     "noMoreInteraction": "沒有更多互動消息了",
     "noInteraction": "暫無互動消息",
+    "loadingDirect": "正在載入私信",
+    "noDirect": "暫無私信",
+    "openAllDirect": "全部私信",
     "navigationUnsupported": "該互動消息暫不支持跳轉",
     "shareTitle": "收件通知",
     "read": "已讀",
@@ -1140,6 +1144,101 @@
         "moduleNotSupported": "暫不支持當前模塊",
         "editNotSupported": "當前模塊暫不支持編輯"
       }
+    }
+  },
+  "social": {
+    "common": {
+      "noIntro": "暫無簡介",
+      "emptyList": "暫無內容"
+    },
+    "search": {
+      "navTitle": "搜索用戶",
+      "placeholder": "搜索暱稱或公開 ID",
+      "empty": "沒有找到用戶"
+    },
+    "profile": {
+      "navTitle": "用戶主頁"
+    },
+    "stats": {
+      "following": "關注",
+      "followers": "粉絲",
+      "friends": "好友"
+    },
+    "relationship": {
+      "self": "我自己",
+      "none": "未關注",
+      "following": "已關注",
+      "followedBy": "對方關注了你",
+      "mutual": "互相關注"
+    },
+    "actions": {
+      "follow": "關注",
+      "unfollow": "取消關注",
+      "message": "私信",
+      "block": "拉黑",
+      "unblock": "解除拉黑",
+      "blockConfirm": "拉黑後雙方將取消關注，且無法再互相關注或私信。",
+      "unblockConfirm": "解除拉黑後不會自動恢復之前的關注關係。"
+    },
+    "conversations": {
+      "navTitle": "私信",
+      "empty": "暫無私信會話",
+      "noMessage": "暫無消息",
+      "imageMessage": "[圖片]"
+    },
+    "chat": {
+      "navTitle": "聊天",
+      "loadEarlier": "加載更早消息",
+      "inputPlaceholder": "輸入文字消息",
+      "send": "發送",
+      "image": "圖片",
+      "imageLoading": "圖片載入中",
+      "imageTooLarge": "圖片不能超過 5MB",
+      "imageTypeInvalid": "僅支持 JPEG/PNG 圖片",
+      "imageDisabled": "圖片私信暫未啟用",
+      "pending": "發送中",
+      "sent": "已發送",
+      "failedRetry": "發送失敗，點擊重試"
+    },
+    "privacy": {
+      "navTitle": "誰可以私信我",
+      "hint": "每次發送都會按對方當前設置判斷權限。",
+      "selected": "已選擇",
+      "saved": "已保存",
+      "all": "所有人",
+      "following": "我關注的人",
+      "mutual": "互相關注的人",
+      "none": "不允許任何人",
+      "desc": {
+        "all": "所有已登錄用戶都可以給你發私信",
+        "following": "只有你關注的人可以給你發私信",
+        "mutual": "只有互相關注的人可以給你發私信",
+        "none": "不接收任何私信，你仍可主動發出"
+      }
+    },
+    "blocks": {
+      "navTitle": "黑名單",
+      "empty": "黑名單為空"
+    },
+    "entry": {
+      "searchUsers": "搜索用戶",
+      "directMessages": "私信",
+      "following": "我的關注",
+      "followers": "我的粉絲",
+      "friends": "我的好友",
+      "privacy": "私信設置",
+      "blocks": "黑名單",
+      "authorProfile": "查看主頁"
+    },
+    "errors": {
+      "userNotFound": "用戶不存在",
+      "conversationNotFound": "會話不存在",
+      "contactUnavailable": "暫時無法聯繫該用戶",
+      "privacyRestricted": "對方的私信設置不允許發送",
+      "invalidRequest": "請求無效",
+      "clientMessageConflict": "消息衝突，請重新編輯後再發送",
+      "invalidImage": "圖片格式無效",
+      "imageMessagingDisabled": "圖片私信暫未啟用"
     }
   }
 }
