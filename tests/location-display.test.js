@@ -164,7 +164,10 @@ test('introduction saves explicitly and other profile updates preserve its draft
   const { page, raw, requests } = setup()
   await page.loadProfilePage()
   const draft = '尚未提交的简介 English🙂'
-  page.handleTextInput({ currentTarget: { dataset: { field: 'introduction' } }, detail: { value: draft } })
+  page.handleTextInput({
+    currentTarget: { dataset: { field: 'introduction' } },
+    detail: { value: draft }
+  })
   page.handleTextBlur({ currentTarget: { dataset: { field: 'introduction' } } })
   assert.deepEqual(requests, [])
   assert.equal(page.data.profile.introduction, raw.introduction)
