@@ -1,16 +1,27 @@
 .page {
   min-height: 100vh;
+  padding-bottom: 48rpx;
   background: var(--color-bg-primary);
 }
 .section-title {
+  margin: 40rpx 0 12rpx;
+  padding: 0 48rpx;
   font-size: 26rpx;
+  font-weight: 600;
   color: var(--color-text-secondary);
-  padding: 24rpx 32rpx 12rpx;
 }
-.option-list {
+.option-list,
+.font-card {
+  margin: 0 24rpx;
   background: var(--color-surface);
+  border: 1rpx solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
 }
 .option-item {
+  min-height: 96rpx;
+  box-sizing: border-box;
   padding: 24rpx 32rpx;
   display: flex;
   align-items: center;
@@ -18,12 +29,15 @@
   border-bottom: 1rpx solid var(--color-divider);
   color: var(--color-text-primary);
 }
+.option-item:last-child {
+  border-bottom: 0;
+}
 .check {
   color: var(--color-primary);
+  font-weight: 700;
 }
 .font-card {
-  background: var(--color-surface);
-  padding: 24rpx 32rpx;
+  padding: 24rpx 32rpx 32rpx;
 }
 .font-labels {
   display: flex;
@@ -34,6 +48,9 @@
 }
 .font-preview {
   display: block;
-  margin-top: 20rpx;
+  margin-top: 24rpx;
+  padding: 24rpx;
+  border-radius: var(--radius-control);
+  background: var(--color-bg-secondary);
   color: var(--color-text-primary);
 }

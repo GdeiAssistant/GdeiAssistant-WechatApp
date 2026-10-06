@@ -87,7 +87,7 @@
         <view class="weui-cell weui-cell_switch">
           <view class="weui-cell__bd">{{t.autoDelete24h}}</view>
           <view class="weui-cell__ft">
-            <switch checked="{{secretDeleteAfter24Hours}}" color="#3cb395" bindchange="handleSecretTimerChange" />
+            <switch checked="{{secretDeleteAfter24Hours}}" color="{{themeClass === 'theme-dark' ? '#34C79A' : '#0E8F6E'}}" bindchange="handleSecretTimerChange" />
           </view>
         </view>
         <view class="weui-cell" wx:if="{{secretTypeIndex === 0}}">

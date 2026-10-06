@@ -1,21 +1,19 @@
 @import "../../common/lib/weui.wxss";
 
-.copyright_info {
-  margin-top: 35rpx;
-  margin-bottom: 35rpx;
-  text-align: center;
-  color: var(--color-text-tertiary);
+.container {
+  background: var(--color-bg-primary);
 }
 
 .userinfo_card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 20rpx 24rpx 0;
-  padding: 28rpx 30rpx;
+  margin: 24rpx 24rpx 0;
+  padding: 32rpx;
   background: var(--color-surface);
-  border-radius: 18rpx;
+  border-radius: var(--radius-card);
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .userinfo {
@@ -26,14 +24,16 @@
 }
 
 .page-body {
-  margin-top: 25rpx;
+  margin-top: 8rpx;
 }
 
 .userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
+  width: 112rpx;
+  height: 112rpx;
+  margin-right: 24rpx;
   border-radius: 50%;
+  background: var(--color-bg-secondary);
+  flex-shrink: 0;
 }
 
 .userinfo_meta {
@@ -58,10 +58,11 @@
 }
 
 .userinfo-entry {
-  margin-top: 14rpx;
-  color: var(--color-text-secondary);
-  font-size: 24rpx;
-  text-decoration: underline;
+  margin-top: 12rpx;
+  padding: 8rpx 0;
+  color: var(--color-primary);
+  font-size: 26rpx;
+  font-weight: 600;
 }
 
 .userinfo_notice {
@@ -69,11 +70,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 84rpx;
-  height: 84rpx;
+  width: 88rpx;
+  height: 88rpx;
   margin-left: 24rpx;
-  border-radius: 24rpx;
-  background: var(--color-bg-secondary);
+  border-radius: var(--radius-control);
+  background: var(--color-primary-soft);
   flex-shrink: 0;
 }
 
@@ -88,22 +89,81 @@
   right: -12rpx;
   min-width: 36rpx;
   padding: 4rpx 10rpx;
-  border-radius: 999rpx;
+  border-radius: var(--radius-full);
   background: var(--color-danger);
-  color: var(--color-surface);
+  color: #ffffff;
   font-size: 22rpx;
   text-align: center;
   line-height: 1.2;
-  box-shadow: 0 8rpx 18rpx rgba(233, 71, 71, 0.22);
+  font-variant-numeric: tabular-nums;
 }
 
 .section_title {
-  padding: 0 30rpx;
-  margin-bottom: 10rpx;
-  color: var(--color-text-tertiary);
-  font-size: 28rpx;
+  margin: 36rpx 0 8rpx;
+  padding: 0 40rpx;
+  color: var(--color-text-secondary);
+  font-size: 26rpx;
+  font-weight: 600;
 }
 
 .weui-grids {
-  margin-bottom: 20rpx;
+  margin: 0 16rpx 8rpx;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.weui-grids:before {
+  display: none;
+}
+
+.weui-grids:after {
+  content: " ";
+  display: table;
+  clear: both;
+}
+
+.weui-grid {
+  float: left;
+  width: 31.4%;
+  margin: 0 0.96% 16rpx;
+  padding: 28rpx 8rpx 22rpx;
+  box-sizing: border-box;
+  background: var(--color-surface);
+  border: 1rpx solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.weui-grid:before,
+.weui-grid:after {
+  display: none;
+}
+
+.weui-grid_active {
+  background: var(--color-primary-soft);
+}
+
+.weui-grid__icon {
+  width: 48rpx;
+  height: 48rpx;
+  padding: 18rpx;
+  border-radius: var(--radius-control);
+  background: var(--color-primary-soft);
+}
+
+.weui-grid__label {
+  margin-top: 14rpx;
+  color: var(--color-text-primary);
+  font-size: 24rpx;
+}
+
+.copyright_info {
+  margin: 24rpx 0 40rpx;
+  text-align: center;
+  color: var(--color-text-tertiary);
+  font-size: 22rpx;
+  line-height: 1.6;
 }

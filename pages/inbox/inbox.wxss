@@ -16,9 +16,10 @@
 .section_card {
   margin: 24rpx 24rpx 0;
   background: var(--color-surface);
-  border-radius: 16rpx;
+  border-radius: var(--radius-card);
   overflow: hidden;
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .item_title {
@@ -62,7 +63,7 @@
 .interaction_card {
   margin-top: 16rpx;
   padding: 24rpx;
-  border-radius: 18rpx;
+  border-radius: var(--radius-card);
   background: var(--color-bg-primary);
 }
 
@@ -94,7 +95,7 @@
 .interaction_read {
   flex-shrink: 0;
   padding: 4rpx 12rpx;
-  border-radius: 999rpx;
+  border-radius: var(--radius-full);
   font-size: 22rpx;
 }
 
@@ -117,7 +118,7 @@
 
 .interaction_tag {
   padding: 4rpx 12rpx;
-  border-radius: 999rpx;
+  border-radius: var(--radius-full);
   background: var(--color-bg-tertiary);
   color: var(--color-text-secondary);
   font-size: 22rpx;
@@ -143,4 +144,11 @@
 .direct_all {
   padding: 16rpx 28rpx 24rpx;
   text-align: right;
+}
+
+.section_card .weui-cells {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }

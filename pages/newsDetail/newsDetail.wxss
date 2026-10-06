@@ -22,6 +22,6 @@
 .detail_content {
   padding: 0 30rpx 40rpx;
   white-space: pre-wrap;
-  color: #555;
+  color: var(--color-text-secondary);
   line-height: 1.8;
 }

@@ -30,7 +30,7 @@ const FEATURE_DEFS = [
     id: 'graduateExam',
     titleKey: 'features.graduateExam.title',
     descKey: 'features.graduateExam.desc',
-    icon: '/image/mono/graduateExam.png',
+    icon: '/image/mono/kaoyan.png',
     page: '/pages/graduateExam/graduateExam',
     section: 'campus'
   },
@@ -110,7 +110,7 @@ const FEATURE_DEFS = [
     id: 'marketplace',
     titleKey: 'features.marketplace.title',
     descKey: 'features.marketplace.desc',
-    icon: '/image/mono/marketplace.png',
+    icon: '/image/mono/ershou.png',
     page: '/pages/communityList/communityList?module=marketplace',
     section: 'community'
   },

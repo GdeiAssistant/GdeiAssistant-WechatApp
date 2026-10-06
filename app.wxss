@@ -2,58 +2,109 @@
 
 page {
   background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
   height: 100%;
   font-size: 32rpx;
   line-height: 1.6;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-variant-numeric: tabular-nums;
   padding-bottom: env(safe-area-inset-bottom);
 }
-checkbox, radio{
+
+checkbox,
+radio {
   margin-right: 10rpx;
 }
-.btn-area button{
-  margin-top: 20rpx;
-  margin-bottom: 20rpx;
-}
-form{
+
+form {
   width: 100%;
 }
 
-/* lib */
-.strong{
-  font-weight: bold;
+button {
+  border-radius: var(--radius-control);
+  font-weight: 600;
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
 }
-.tc{
+
+button::after {
+  border-color: var(--color-border);
+  border-radius: calc(var(--radius-control) * 2);
+}
+
+button[type="primary"] {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+button[type="primary"]::after {
+  border-color: transparent;
+}
+
+.button-hover[type="primary"] {
+  background-color: var(--color-primary-hover);
+  color: var(--color-on-primary);
+}
+
+button[type="primary"][disabled] {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  opacity: 0.5;
+}
+
+.button-hover {
+  background-color: var(--color-bg-secondary);
+}
+
+button[type="default"][disabled] {
+  background-color: var(--color-surface);
+  color: var(--color-text-tertiary);
+}
+
+button[type="warn"] {
+  background-color: var(--color-danger);
+  color: #ffffff;
+}
+
+button[type="warn"]::after {
+  border-color: transparent;
+}
+
+button[size="mini"] {
+  border-radius: var(--radius-full);
+  font-size: 26rpx;
+  line-height: 2.3;
+  padding: 0 28rpx;
+}
+
+button[size="mini"]::after {
+  border-radius: var(--radius-full);
+}
+
+input,
+textarea {
+  color: var(--color-text-primary);
+  caret-color: var(--color-primary);
+}
+
+.input-placeholder,
+.textarea-placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.strong {
+  font-weight: 700;
+}
+
+.tc {
   text-align: center;
 }
 
-/* page */
 .container {
   display: flex;
   flex-direction: column;
   min-height: 100%;
   justify-content: space-between;
-  font-size: 32rpx;
-  font-family: -apple-system-font,Helvetica Neue,Helvetica,sans-serif;
-}
-.page-head{
-  padding: 60rpx 50rpx 80rpx;
-  text-align: center;
-}
-.page-head-title{
-  display: inline-block;
-  padding: 0 40rpx 20rpx 40rpx;
-  font-size: 32rpx;
-  color: var(--color-text-tertiary);
-}
-.page-head-line{
-  margin: 0 auto;
-  width: 150rpx;
-  height: 2rpx;
-  background-color: var(--color-divider);
-}
-.page-head-desc{
-  padding-top: 20rpx;
-  color: var(--color-text-tertiary);
   font-size: 32rpx;
 }
 
@@ -62,164 +113,33 @@ form{
   flex-grow: 1;
   overflow-x: hidden;
 }
-.page-body-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+.page-section {
   width: 100%;
-}
-.page-body-wording {
-  text-align: center;
-  padding: 200rpx 100rpx;
-}
-.page-body-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: var(--color-surface);
-  width: 100%;
-  padding: 50rpx 0 150rpx 0;
-}
-.page-body-title {
-  margin-bottom: 100rpx;
-  font-size: 32rpx;
-}
-.page-body-text {
-  font-size: 30rpx;
-  line-height: 26px;
-  color: var(--color-text-tertiary);
-}
-.page-body-text-small {
-  font-size: 24rpx;
-  color: var(--color-text-primary);
-  margin-bottom: 100rpx;
+  margin-bottom: 24rpx;
 }
 
-.page-foot{
-  margin: 100rpx 0 30rpx 0;
-  text-align: center;
-  color: var(--color-primary);
-  font-size: 0;
-}
-.icon-foot{
-  width: 152rpx;
-  height: 23rpx;
-}
-
-.page-section{
-  width: 100%;
-  margin-bottom: 60rpx;
-}
-.page-section_center{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.page-section:last-child{
+.page-section:last-child {
   margin-bottom: 0;
 }
-.page-section-gap{
-  box-sizing: border-box;
-  padding: 0 30rpx;
-}
-.page-section-spacing{
-  box-sizing: border-box;
-  padding: 0 80rpx;
-}
-.page-section-title{
-  font-size: 28rpx;
-  color: var(--color-text-tertiary);
-  margin-bottom: 10rpx;
-  padding-left: 30rpx;
-  padding-right: 30rpx;
-}
-.page-section-gap .page-section-title{
-  padding-left: 0;
-  padding-right: 0;
+
+.page-section-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 12rpx;
+  padding-left: 48rpx;
+  padding-right: 48rpx;
 }
 
-/* widget */
-.btn-area{
-  margin-top: 60rpx;
+.btn-area {
+  margin-top: 40rpx;
   box-sizing: border-box;
   width: 100%;
-  padding: 0 30rpx;
+  padding: 0 24rpx;
 }
 
-.image-plus {
-  width: 150rpx;
-  height: 150rpx;
-  border: 2rpx solid var(--color-divider);
-  position: relative;
-}
-.image-plus-nb{
-  border: 0;
-}
-.image-plus-text{
-  color: var(--color-text-tertiary);
-  font-size: 28rpx;
-}
-.image-plus-horizontal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  background-color: var(--color-divider);
-  width: 4rpx;
-  height: 80rpx;
-  transform: translate(-50%, -50%);
-}
-.image-plus-vertical {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  background-color: var(--color-divider);
-  width: 80rpx;
-  height: 4rpx;
-  transform: translate(-50%, -50%);
-}
-
-.demo-text-1{
-  position: relative;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-primary);
-  color: var(--color-surface);
-  font-size: 36rpx;
-}
-.demo-text-1:before{
-  content: 'A';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.demo-text-2{
-  position: relative;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-link);
-  color: var(--color-surface);
-  font-size: 36rpx;
-}
-.demo-text-2:before{
-  content: 'B';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.demo-text-3{
-  position: relative;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-bg-secondary);
-  color: var(--color-text-primary);
-  font-size: 36rpx;
-}
-.demo-text-3:before{
-  content: 'C';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.btn-area button {
+  margin-top: 16rpx;
+  margin-bottom: 16rpx;
 }

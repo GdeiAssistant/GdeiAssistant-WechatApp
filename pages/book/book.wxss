@@ -8,7 +8,7 @@
 .borrow-empty {
   margin-top: 20rpx;
   padding: 32rpx 24rpx;
-  border-radius: 24rpx;
+  border-radius: var(--radius-card);
   background: var(--color-bg-secondary);
   color: var(--color-text-secondary);
   line-height: 1.6;
@@ -22,14 +22,14 @@
   align-items: center;
   justify-content: center;
   padding: 32rpx;
-  background: rgba(14, 24, 37, 0.48);
+  background: var(--color-overlay);
 }
 
 .renew-dialog {
   width: 100%;
   max-width: 640rpx;
   padding: 36rpx 32rpx;
-  border-radius: 28rpx;
+  border-radius: var(--radius-card);
   background: var(--color-surface);
   box-sizing: border-box;
 }
@@ -50,7 +50,7 @@
 .renew-dialog__input {
   margin-top: 24rpx;
   padding: 24rpx;
-  border-radius: 20rpx;
+  border-radius: var(--radius-control);
   background: var(--color-bg-secondary);
 }
 

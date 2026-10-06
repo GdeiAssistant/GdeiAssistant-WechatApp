@@ -53,9 +53,9 @@
   margin-left: 12rpx;
   min-width: 36rpx;
   padding: 2rpx 10rpx;
-  border-radius: 999rpx;
-  background: #e64340;
-  color: #fff;
+  border-radius: var(--radius-full);
+  background: var(--color-danger);
+  color: #FFFFFF;
   font-size: 20rpx;
   text-align: center;
 }

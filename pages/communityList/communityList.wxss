@@ -7,14 +7,16 @@
 }
 
 .hero_card {
+  background: var(--color-primary-soft);
   margin: 20rpx 24rpx 0;
   padding: 30rpx;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20rpx;
-  border-radius: 18rpx;
+  border-radius: var(--radius-card);
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .hero_content {
@@ -48,8 +50,9 @@
   display: flex;
   justify-content: space-between;
   background: var(--color-surface);
-  border-radius: 16rpx;
+  border-radius: var(--radius-card);
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .stat_item {
@@ -63,6 +66,7 @@
   font-size: 36rpx;
   font-weight: 600;
   color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
 }
 
 .stat_label {
@@ -80,8 +84,9 @@
   align-items: center;
   padding: 14rpx;
   background: var(--color-surface);
-  border-radius: 16rpx;
+  border-radius: var(--radius-card);
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .search_input {
@@ -89,13 +94,13 @@
   height: 76rpx;
   padding: 0 24rpx;
   background: var(--color-bg-secondary);
-  border-radius: 999rpx;
+  border-radius: var(--radius-full);
   font-size: 28rpx;
 }
 
 .search_button {
   margin: 0;
-  border-radius: 999rpx;
+  border-radius: var(--radius-full);
 }
 
 .search_button_secondary {
@@ -116,7 +121,7 @@
 
 .tab_item {
   padding: 16rpx 28rpx;
-  border-radius: 999rpx;
+  border-radius: var(--radius-full);
   background: var(--color-surface);
   color: var(--color-text-secondary);
   font-size: 28rpx;
@@ -125,8 +130,9 @@
 }
 
 .tab_item_active {
-  background: var(--color-text-primary);
-  color: var(--color-surface);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
 }
 
 .list_section {
@@ -139,9 +145,10 @@
 .photo_card {
   margin-bottom: 20rpx;
   background: var(--color-surface);
-  border-radius: 18rpx;
+  border-radius: var(--radius-card);
   overflow: hidden;
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .market_card {
@@ -175,9 +182,10 @@
   width: 48.2%;
   margin-bottom: 20rpx;
   background: var(--color-surface);
-  border-radius: 18rpx;
+  border-radius: var(--radius-card);
   overflow: hidden;
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .lost_cover,
@@ -240,7 +248,7 @@
   align-items: center;
   justify-content: center;
   padding: 6rpx 14rpx;
-  border-radius: 999rpx;
+  border-radius: var(--radius-full);
   background: var(--color-bg-tertiary);
   color: var(--color-primary);
   font-size: 22rpx;
@@ -255,8 +263,8 @@
 }
 
 .delivery_badge {
-  background: #fff3e6;
-  color: #f78b28;
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
 }
 
 .card_meta {
@@ -351,7 +359,7 @@
 .bottom_button {
   flex: 1;
   margin: 0;
-  border-radius: 999rpx;
+  border-radius: var(--radius-full);
 }
 
 .bottom_button_secondary {
@@ -363,9 +371,10 @@
   margin: 24rpx;
   padding: 52rpx 32rpx;
   background: var(--color-surface);
-  border-radius: 16rpx;
+  border-radius: var(--radius-card);
   text-align: center;
   border: 1rpx solid var(--color-border);
+  box-shadow: var(--shadow-card);
 }
 
 .empty_title {

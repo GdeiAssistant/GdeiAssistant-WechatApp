@@ -49,8 +49,9 @@ page,
   color: var(--color-text-primary);
   background-color: var(--color-surface);
   border: 1rpx solid var(--color-border);
-  border-radius: 16rpx;
+  border-radius: var(--radius-card);
   box-sizing: border-box;
+  box-shadow: var(--shadow-card);
 }
 
 .schedule-card__topline {

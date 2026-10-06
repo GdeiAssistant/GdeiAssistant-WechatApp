@@ -9,7 +9,7 @@
       <view class="weui-cell weui-cell_switch">
         <view class="weui-cell__bd">{{t.autoSubmitLabel}}</view>
         <view class="weui-cell__ft">
-          <switch checked="{{checked}}" bindchange="changeSwitch" />
+          <switch checked="{{checked}}" color="{{themeClass === 'theme-dark' ? '#34C79A' : '#0E8F6E'}}" bindchange="changeSwitch" />
         </view>
       </view>
     </view>
