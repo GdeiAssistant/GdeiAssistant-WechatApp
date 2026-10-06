@@ -52,7 +52,7 @@
     </view>
   </scroll-view>
 
-  <view class="list_section" wx:if="{{moduleId === 'ershou'}}">
+  <view class="list_section" wx:if="{{moduleId === 'marketplace'}}">
     <view wx:for="{{items}}" wx:key="id" wx:for-item="item" data-index="{{index}}" bindtap="openDetail" class="market_card">
       <image class="market_cover" src="{{item.cover}}" mode="aspectFit"></image>
       <view class="market_content">
