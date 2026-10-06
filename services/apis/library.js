@@ -4,7 +4,7 @@ const { request } = require('../request.js')
 function queryBook(password) {
   return request({
     url: endpoints.library.borrow,
-    method: 'GET',
+    method: 'POST',
     authRequired: true,
     data: { password }
   })

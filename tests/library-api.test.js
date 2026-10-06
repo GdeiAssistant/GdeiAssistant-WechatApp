@@ -27,7 +27,7 @@ test('library api uses canonical borrow and renew contracts', async function () 
   assert.deepEqual(calls, [
     {
       url: '/api/library/borrow',
-      method: 'GET',
+      method: 'POST',
       authRequired: true,
       data: { password: 'library123' }
     },

@@ -207,12 +207,12 @@ const COMMUNITY_DEFAULT_STATE = {
   deliveryOrders: [
     {
       orderId: 601,
-      name: getDeliveryDefaultOrderName(),
-      number: 'mock_pickup_code_a',
-      phone: '13000000000',
+      taskName: getDeliveryDefaultOrderName(),
+      pickupCode: 'mock_pickup_code_a',
+      contactPhone: '13000000000',
       price: 4,
-      company: '菜鸟驿站',
-      address: '示例楼栋 A 区',
+      pickupLocation: '菜鸟驿站',
+      deliveryAddress: '示例楼栋 A 区',
       remarks: '一个中号纸箱，麻烦轻拿轻放。',
       orderTime: '2026-03-15 12:08',
       state: 0,
@@ -222,12 +222,12 @@ const COMMUNITY_DEFAULT_STATE = {
     },
     {
       orderId: 602,
-      name: getDeliveryDefaultOrderName(),
-      number: 'mock_pickup_code_b',
-      phone: '13000000003',
+      taskName: getDeliveryDefaultOrderName(),
+      pickupCode: 'mock_pickup_code_b',
+      contactPhone: '13000000003',
       price: 6,
-      company: '京东站点',
-      address: '示例楼栋 B 区',
+      pickupLocation: '京东站点',
+      deliveryAddress: '示例楼栋 B 区',
       remarks: '已付款，直接放宿舍门口即可。',
       orderTime: '2026-03-14 17:30',
       state: 1,
@@ -680,8 +680,8 @@ function buildLocalizedCommunityState(locale) {
     '자습실은 몇 층이 암기하기에 가장 좋나요?'
   )
 
-  state.deliveryOrders[0].name = getDeliveryDefaultOrderName(normalizedLocale)
-  state.deliveryOrders[0].company = localizedCommunityText(
+  state.deliveryOrders[0].taskName = getDeliveryDefaultOrderName(normalizedLocale)
+  state.deliveryOrders[0].pickupLocation = localizedCommunityText(
     normalizedLocale,
     '菜鸟驿站',
     '菜鳥驛站',
@@ -689,7 +689,7 @@ function buildLocalizedCommunityState(locale) {
     '菜鳥ステーション',
     '차이냐오 스테이션'
   )
-  state.deliveryOrders[0].address = localizedCommunityText(
+  state.deliveryOrders[0].deliveryAddress = localizedCommunityText(
     normalizedLocale,
     '示例楼栋 A 区',
     '示例樓棟 A 區',
@@ -705,8 +705,8 @@ function buildLocalizedCommunityState(locale) {
     '中サイズの段ボールです。丁寧に扱ってください。',
     '중간 크기 상자예요. 조심히 다뤄 주세요.'
   )
-  state.deliveryOrders[1].name = getDeliveryDefaultOrderName(normalizedLocale)
-  state.deliveryOrders[1].company = localizedCommunityText(
+  state.deliveryOrders[1].taskName = getDeliveryDefaultOrderName(normalizedLocale)
+  state.deliveryOrders[1].pickupLocation = localizedCommunityText(
     normalizedLocale,
     '京东站点',
     '京東站點',
@@ -714,7 +714,7 @@ function buildLocalizedCommunityState(locale) {
     'JD受取所',
     'JD 수령 지점'
   )
-  state.deliveryOrders[1].address = localizedCommunityText(
+  state.deliveryOrders[1].deliveryAddress = localizedCommunityText(
     normalizedLocale,
     '示例楼栋 B 区',
     '示例樓棟 B 區',
@@ -1361,6 +1361,16 @@ function createComment(list, nickname, comment) {
   }
 }
 
+function deliveryResponse(order, sensitive) {
+  return {
+    orderId: order.orderId, displayName: 'Campus user', orderTime: order.orderTime,
+    taskName: order.taskName, pickupCode: sensitive ? order.pickupCode : '',
+    contactPhone: sensitive ? order.contactPhone : '', price: order.price,
+    pickupLocation: order.pickupLocation, deliveryAddress: sensitive ? order.deliveryAddress : '',
+    state: order.state, remarks: sensitive ? order.remarks : ''
+  }
+}
+
 function getDeliveryDetailType(order, username) {
   if (!order) {
     return 2
@@ -1385,7 +1395,7 @@ function buildRoommatePickPayload(pick, communityState) {
 }
 
 function handleSecondhand(path, method, data, token, utils) {
-  if (!/^\/api\/ershou\//.test(path)) {
+  if (!/^\/api\/marketplace\//.test(path)) {
     return null
   }
 
@@ -1397,7 +1407,7 @@ function handleSecondhand(path, method, data, token, utils) {
   const communityState = ensureCommunityState(utils)
   const username = getCurrentUsername(utils)
 
-  if (/^\/api\/ershou\/item\/start\/\d+$/.test(path) && method === 'GET') {
+  if (/^\/api\/marketplace\/item\/start\/\d+$/.test(path) && method === 'GET') {
     const matched = /\/start\/(\d+)$/.exec(path)
     const start = Number(matched[1])
     const list = communityState.secondhandItems
@@ -1408,8 +1418,8 @@ function handleSecondhand(path, method, data, token, utils) {
     return utils.resolveWithDelay(utils.buildSuccess(list))
   }
 
-  if (/^\/api\/ershou\/keyword\/.+\/start\/\d+$/.test(path) && method === 'GET') {
-    const matched = /^\/api\/ershou\/keyword\/(.+)\/start\/(\d+)$/.exec(path)
+  if (/^\/api\/marketplace\/keyword\/.+\/start\/\d+$/.test(path) && method === 'GET') {
+    const matched = /^\/api\/marketplace\/keyword\/(.+)\/start\/(\d+)$/.exec(path)
     const keyword = decodeURIComponent(matched[1]).toLowerCase()
     const start = Number(matched[2])
     const list = communityState.secondhandItems
@@ -1424,8 +1434,8 @@ function handleSecondhand(path, method, data, token, utils) {
     return utils.resolveWithDelay(utils.buildSuccess(list))
   }
 
-  if (/^\/api\/ershou\/item\/type\/\d+\/start\/\d+$/.test(path) && method === 'GET') {
-    const matched = /^\/api\/ershou\/item\/type\/(\d+)\/start\/(\d+)$/.exec(path)
+  if (/^\/api\/marketplace\/item\/type\/\d+\/start\/\d+$/.test(path) && method === 'GET') {
+    const matched = /^\/api\/marketplace\/item\/type\/(\d+)\/start\/(\d+)$/.exec(path)
     const type = Number(matched[1])
     const start = Number(matched[2])
     const list = communityState.secondhandItems
@@ -1436,7 +1446,7 @@ function handleSecondhand(path, method, data, token, utils) {
     return utils.resolveWithDelay(utils.buildSuccess(list))
   }
 
-  if (path === '/api/ershou/profile' && method === 'GET') {
+  if (path === '/api/marketplace/profile' && method === 'GET') {
     const mine = communityState.secondhandItems.filter(function (item) {
       return item.owner === username
     })
@@ -1455,21 +1465,21 @@ function handleSecondhand(path, method, data, token, utils) {
     )
   }
 
-  if (/^\/api\/ershou\/item\/id\/\d+$/.test(path) && method === 'GET') {
-    const matched = /^\/api\/ershou\/item\/id\/(\d+)$/.exec(path)
+  if (/^\/api\/marketplace\/item\/id\/\d+$/.test(path) && method === 'GET') {
+    const matched = /^\/api\/marketplace\/item\/id\/(\d+)$/.exec(path)
     const item = findById(communityState.secondhandItems, 'id', matched[1])
     if (!item) {
       return utils.rejectWithMessage(communityMessage(utils, 'marketItemNotFound'))
     }
     return utils.resolveWithDelay(
       utils.buildSuccess({
-        secondhandItem: item,
+        item: item,
         profile: buildProfile(item.owner, utils)
       })
     )
   }
 
-  if (path === '/api/ershou/item' && method === 'POST') {
+  if (path === '/api/marketplace/item' && method === 'POST') {
     const nextItem = {
       id: nextId(communityState.secondhandItems, 'id', 100),
       name: String(data.name || '').trim(),
@@ -1500,8 +1510,8 @@ function handleSecondhand(path, method, data, token, utils) {
     return utils.resolveWithDelay(utils.buildSuccess(null))
   }
 
-  if (/^\/api\/ershou\/item\/id\/\d+$/.test(path) && method === 'POST') {
-    const matched = /^\/api\/ershou\/item\/id\/(\d+)$/.exec(path)
+  if (/^\/api\/marketplace\/item\/id\/\d+$/.test(path) && method === 'POST') {
+    const matched = /^\/api\/marketplace\/item\/id\/(\d+)$/.exec(path)
     const item = findById(communityState.secondhandItems, 'id', matched[1])
     if (!item || item.owner !== username) {
       return utils.rejectWithMessage(communityMessage(utils, 'marketEditDenied'))
@@ -1526,8 +1536,8 @@ function handleSecondhand(path, method, data, token, utils) {
     return utils.resolveWithDelay(utils.buildSuccess(null))
   }
 
-  if (/^\/api\/ershou\/item\/state\/id\/\d+$/.test(path) && method === 'POST') {
-    const matched = /^\/api\/ershou\/item\/state\/id\/(\d+)$/.exec(path)
+  if (/^\/api\/marketplace\/item\/state\/id\/\d+$/.test(path) && method === 'POST') {
+    const matched = /^\/api\/marketplace\/item\/state\/id\/(\d+)$/.exec(path)
     const item = findById(communityState.secondhandItems, 'id', matched[1])
     if (!item || item.owner !== username) {
       return utils.rejectWithMessage(communityMessage(utils, 'marketOperateDenied'))
@@ -2144,7 +2154,7 @@ function handleDelivery(path, method, data, token, utils) {
     const start = Number(matched[1])
     const size = Number(matched[2])
     return utils.resolveWithDelay(
-      utils.buildSuccess(communityState.deliveryOrders.slice(start, start + size))
+      utils.buildSuccess(communityState.deliveryOrders.filter((order) => order.state === 0).slice(start, start + size).map((order) => deliveryResponse(order, false)))
     )
   }
 
@@ -2157,9 +2167,12 @@ function handleDelivery(path, method, data, token, utils) {
     if (!order) {
       return utils.rejectWithMessage(communityMessage(utils, 'deliveryNotFound'))
     }
+    if (getDeliveryDetailType(order, username) === 2) {
+      return utils.rejectWithMessage(communityMessage(utils, 'deliveryNotFound'))
+    }
     return utils.resolveWithDelay(
       utils.buildSuccess({
-        order: order,
+        order: deliveryResponse(order, [0, 3].includes(getDeliveryDetailType(order, username))),
         detailType: getDeliveryDetailType(order, username),
         trade: order.tradeId
           ? {
@@ -2223,12 +2236,12 @@ function handleDelivery(path, method, data, token, utils) {
   if (path === '/api/delivery/order' && method === 'POST') {
     const nextOrder = {
       orderId: nextId(communityState.deliveryOrders, 'orderId', 600),
-      name: String(data.name || getDeliveryDefaultOrderName(getCommunityLocale(utils))).trim(),
-      number: String(data.number || '').trim(),
-      phone: String(data.phone || '').trim(),
+      taskName: String(data.taskName || getDeliveryDefaultOrderName(getCommunityLocale(utils))).trim(),
+      pickupCode: String(data.pickupCode || '').trim(),
+      contactPhone: String(data.contactPhone || '').trim(),
       price: Number(data.price || 0),
-      company: String(data.company || '').trim(),
-      address: String(data.address || '').trim(),
+      pickupLocation: String(data.pickupLocation || '').trim(),
+      deliveryAddress: String(data.deliveryAddress || '').trim(),
       remarks: String(data.remarks || '').trim(),
       orderTime: nowText(),
       state: 0,
@@ -2236,7 +2249,7 @@ function handleDelivery(path, method, data, token, utils) {
       acceptor: '',
       tradeId: null
     }
-    if (!nextOrder.phone || !nextOrder.company || !nextOrder.address || !(nextOrder.price > 0)) {
+    if (!nextOrder.contactPhone || !nextOrder.pickupLocation || !nextOrder.deliveryAddress || !(nextOrder.price > 0)) {
       return utils.rejectWithMessage(communityMessage(utils, 'deliveryIncomplete'))
     }
     communityState.deliveryOrders.unshift(nextOrder)

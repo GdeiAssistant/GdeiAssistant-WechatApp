@@ -448,3 +448,17 @@ test('request normalizes unsupported locale before sending Accept-Language', asy
 
   assert.equal(capturedHeader['Accept-Language'], 'zh-CN')
 })
+
+test('request accepts created responses and no-content success', async function () {
+  for (const statusCode of [201, 204]) {
+    const { request } = setup(function (options) {
+      options.success({
+        statusCode,
+        data: statusCode === 204 ? '' : { success: true, data: { id: 1 } }
+      })
+    })
+    const result = await request({ url: '/api/public/test', method: 'POST' })
+    assert.equal(result.success, true)
+    assert.deepEqual(result.data, statusCode === 204 ? null : { id: 1 })
+  }
+})

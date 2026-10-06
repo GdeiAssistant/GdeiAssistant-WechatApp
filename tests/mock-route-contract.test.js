@@ -142,7 +142,7 @@ function buildRouteContracts(endpoints) {
       data: { cardPassword: '246810' }
     }),
 
-    routeContract('library.borrow', 'GET', endpoints.library.borrow, {
+    routeContract('library.borrow', 'POST', endpoints.library.borrow, {
       data: { password: 'library123' }
     }),
     routeContract('library.renew', 'POST', endpoints.library.renew, {
@@ -388,15 +388,15 @@ function buildRouteContracts(endpoints) {
     routeContract('delivery.list', 'GET', endpoints.community.delivery.list(0, 10)),
     routeContract('delivery.detail', 'GET', endpoints.community.delivery.detail(601)),
     routeContract('delivery.publish', 'POST', endpoints.community.delivery.publish, {
-      data: form({
-        name: '快递代拿',
-        number: '00000000000',
-        phone: '13000000000',
+      data: {
+        taskName: '快递代拿',
+        pickupCode: '00000000000',
+        contactPhone: '13000000000',
         price: 4,
-        company: '菜鸟驿站',
-        address: '示例楼栋',
+        pickupLocation: '菜鸟驿站',
+        deliveryAddress: '示例楼栋',
         remarks: '轻拿轻放'
-      })
+      }
     }),
     routeContract('delivery.mine', 'GET', endpoints.community.delivery.mine),
     routeContract('delivery.accept', 'POST', endpoints.community.delivery.accept, {
