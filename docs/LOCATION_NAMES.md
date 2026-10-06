@@ -13,3 +13,5 @@
 纽约市采用 GeoNames 主记录 5128581 的标准名 `New York City`，与纽约州 `New York` 分开显示；可参照[纽约市政府的正式名称](https://www.nyc.gov/main/about-our-content)。
 
 仅完整、可识别的目录名称或代码路径参与地区本地化。重名或不确定名称、用户自由填写的内容保持原文。昵称、自我介绍及用户发布内容不通过地区字典改写。
+
+共享筛选快照位于 `GdeiAssistant/frontend/scripts/location-names-geonames.json`，包含代码路径、GeoNames ID、匹配依据及采用名称。法属圭亚那的六语言国家显示名使用 Node 24.14.1 Intl/CLDR，GeoNames 国家表用于核对 ISO；更新后应核对四端全部对应节点，不能按位置猜测身份。
