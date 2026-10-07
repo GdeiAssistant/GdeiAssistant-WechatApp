@@ -1,8 +1,13 @@
 {
+  "tabBar": {
+    "home": "首頁",
+    "messages": "訊息",
+    "profile": "我的"
+  },
   "common": {
     "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
     "rightsReserved": "版權所有",
-    "loading": "載入中...",
+    "loading": "載入中……",
     "retry": "重試",
     "confirm": "確認",
     "cancel": "取消",
@@ -20,37 +25,13 @@
     "publishFailed": "發佈失敗",
     "queryFailed": "查詢失敗"
   },
-  "tab": {
-    "home": "首頁",
-    "info": "資訊",
-    "profile": "我的"
-  },
-  "feature": {
-    "grade": "成績查詢",
-    "schedule": "課表查詢",
-    "cet": "四六級查詢",
-    "graduateExam": "考研查詢",
-    "spare": "教室查詢",
-    "library": "圖書館",
-    "card": "校園卡",
-    "dataCenter": "資料查詢",
-    "evaluate": "教學評量",
-    "marketplace": "二手交易",
-    "delivery": "全民快遞",
-    "lostFound": "失物招領",
-    "secret": "校園樹洞",
-    "dating": "賣室友",
-    "express": "表白牆",
-    "topic": "話題",
-    "photograph": "拍好校園"
-  },
   "login": {
     "navTitle": "歡迎使用廣東二師助手",
     "title": "登入",
     "username": "帳號",
     "password": "密碼",
     "button": "登入",
-    "loading": "登入中...",
+    "loading": "登入中……",
     "appName": "廣東二師助手",
     "usernamePlaceholder": "請輸入校園網帳號",
     "passwordPlaceholder": "請輸入校園網密碼",
@@ -91,7 +72,7 @@
     "weekRange": "第{{min}}週至第{{max}}週"
   },
   "index": {
-    "navTitle": "功能列表",
+    "navTitle": "廣東二師助手",
     "appName": "廣東二師助手",
     "viewProfile": "查看個人資料",
     "defaultNickname": "廣東二師助手使用者",
@@ -115,7 +96,6 @@
   "profile": {
     "settings": "設定",
     "language": "語言",
-    "theme": "主題色",
     "logout": "登出",
     "privacy": "隱私權設定",
     "feedback": "協助與回饋"
@@ -160,8 +140,8 @@
     "usernameLabel": "帳號：",
     "ipAreaLabel": "IP 屬地：",
     "empty": "空",
-    "updatingAvatar": "正在更新頭像...",
-    "savingProfile": "正在儲存資料...",
+    "updatingAvatar": "正在更新頭像……",
+    "savingProfile": "正在儲存資料……",
     "accountInfo": "帳號資料",
     "nickname": "暱稱",
     "birthday": "生日",
@@ -180,7 +160,7 @@
     "saveIntroduction": "儲存簡介",
     "saved": "已儲存",
     "loadProfileFailed": "載入個人資料失敗",
-    "optionsFallback": "資料字典載入失敗，已使用本機預設選項",
+    "optionsFallback": "部分選項載入失敗，顯示為預設選項",
     "avatarRefreshFailed": "頭像重新整理失敗",
     "avatarUpdated": "頭像已更新",
     "changeAvatarAction": "更換頭像",
@@ -257,7 +237,7 @@
     "campusCredentialTitle": "校園憑證管理",
     "campusCredentialDangerTitle": "危險操作",
     "campusCredentialLoginFirst": "請先登入後查看校園憑證狀態。",
-    "campusCredentialLoadingText": "正在載入校園憑證狀態...",
+    "campusCredentialLoadingText": "正在載入校園憑證狀態……",
     "campusCredentialLoadFailed": "校園憑證狀態載入失敗，請稍後再試。",
     "campusCredentialAuthStatus": "授權狀態",
     "campusCredentialAuthorized": "已授權",
@@ -333,10 +313,10 @@
     "newInteractionMessage": "你有一則新的互動訊息",
     "moduleMarketplace": "二手交易",
     "moduleLostFound": "失物招領",
-    "moduleSecret": "校園樹洞",
+    "moduleSecret": "樹洞",
     "moduleExpress": "表白牆",
     "moduleTopic": "校園話題",
-    "moduleDelivery": "全民快遞",
+    "moduleDelivery": "快遞代取",
     "moduleDating": "賣室友",
     "modulePhotograph": "拍好校園",
     "actionComment": "留言",
@@ -438,7 +418,7 @@
       "desc": "發佈尋物與招領資訊"
     },
     "secret": {
-      "title": "校園樹洞",
+      "title": "樹洞",
       "desc": "匿名說說心裡話"
     },
     "express": {
@@ -450,7 +430,7 @@
       "desc": "參與熱門校園討論"
     },
     "delivery": {
-      "title": "全民快遞",
+      "title": "快遞代取",
       "desc": "發佈與接取校園跑腿"
     },
     "dating": {
@@ -824,7 +804,7 @@
         "searchPlaceholder": "搜尋失物關鍵字"
       },
       "secret": {
-        "title": "校園樹洞",
+        "title": "樹洞",
         "summary": "匿名記錄心情，分享不想說出口的話"
       },
       "express": {
@@ -838,7 +818,7 @@
         "searchPlaceholder": "搜尋話題關鍵字"
       },
       "delivery": {
-        "title": "全民快遞",
+        "title": "快遞代取",
         "summary": "代拿快遞與校園跑腿互助"
       },
       "dating": {
@@ -879,9 +859,9 @@
         "publish": "發佈話題"
       },
       "delivery": {
-        "center": "我的跑腿",
+        "center": "我的快遞",
         "detail": "任務詳情",
-        "publish": "發佈全民快遞"
+        "publish": "發佈快遞代取"
       },
       "dating": {
         "center": "互動中心",
@@ -1030,7 +1010,7 @@
     },
     "publish": {
       "basicInfo": "基礎資訊",
-      "loadingExisting": "正在載入已有內容...",
+      "loadingExisting": "正在載入已有內容……",
       "imageUpload": "圖片上傳",
       "editImageNotSupported": "編輯模式暫不支援修改圖片",
       "datingImageHint": "賣室友僅展示第一張圖片",

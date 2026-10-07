@@ -1,4 +1,9 @@
 {
+  "tabBar": {
+    "home": "Home",
+    "messages": "Messages",
+    "profile": "Profile"
+  },
   "common": {
     "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
     "rightsReserved": "All rights reserved",
@@ -19,30 +24,6 @@
     "publishSuccess": "Published",
     "publishFailed": "Publish failed",
     "queryFailed": "Query failed"
-  },
-  "tab": {
-    "home": "Home",
-    "info": "News",
-    "profile": "Me"
-  },
-  "feature": {
-    "grade": "Grades",
-    "schedule": "Schedule",
-    "cet": "CET Score",
-    "graduateExam": "Postgrad Exam",
-    "spare": "Spare Rooms",
-    "library": "Library",
-    "card": "Campus Card",
-    "dataCenter": "Data Center",
-    "evaluate": "Evaluation",
-    "marketplace": "Marketplace",
-    "delivery": "Delivery",
-    "lostFound": "Lost & Found",
-    "secret": "Secret",
-    "dating": "Roommate",
-    "express": "Confession",
-    "topic": "Topics",
-    "photograph": "Photo Wall"
   },
   "login": {
     "navTitle": "Welcome to GdeiAssistant",
@@ -83,7 +64,7 @@
     "weekRange": "Week {{min}} to Week {{max}}"
   },
   "index": {
-    "navTitle": "Features",
+    "navTitle": "GdeiAssistant",
     "appName": "GdeiAssistant",
     "viewProfile": "View profile",
     "defaultNickname": "GdeiAssistant User",
@@ -102,7 +83,6 @@
   "profile": {
     "settings": "Settings",
     "language": "Language",
-    "theme": "Theme",
     "logout": "Logout",
     "privacy": "Privacy",
     "feedback": "Help & Feedback"
@@ -155,7 +135,7 @@
     "saveIntroduction": "Save intro",
     "saved": "Saved",
     "loadProfileFailed": "Failed to load profile",
-    "optionsFallback": "Failed to load options, using local defaults",
+    "optionsFallback": "Some options failed to load, so defaults are shown",
     "avatarRefreshFailed": "Failed to refresh avatar",
     "avatarUpdated": "Avatar updated",
     "changeAvatarAction": "Change Avatar",
@@ -311,9 +291,9 @@
     "moduleSecret": "Secret",
     "moduleExpress": "Confession",
     "moduleTopic": "Topics",
-    "moduleDelivery": "Delivery",
+    "moduleDelivery": "Express Pickup",
     "moduleDating": "Roommate",
-    "modulePhotograph": "Photo Wall",
+    "modulePhotograph": "Campus Photos",
     "actionComment": "Comment",
     "actionLike": "Like",
     "actionGuess": "Guess Name",
@@ -370,9 +350,9 @@
     "secret": { "title": "Secret Wall", "desc": "Post anonymously" },
     "express": { "title": "Confession Wall", "desc": "View and post confessions" },
     "topic": { "title": "Campus Topics", "desc": "Join popular campus discussions" },
-    "delivery": { "title": "Delivery", "desc": "Post and accept campus errands" },
+    "delivery": { "title": "Express Pickup", "desc": "Post and accept campus errands" },
     "dating": { "title": "Roommate Market", "desc": "Browse profiles, post and interact" },
-    "photograph": { "title": "Photo Wall", "desc": "View and share campus photos" },
+    "photograph": { "title": "Campus Photos", "desc": "View and share campus photos" },
     "sections": {
       "campus": "Campus Services",
       "information": "Info Center",
@@ -741,7 +721,7 @@
         "searchPlaceholder": "Search topic keyword"
       },
       "delivery": {
-        "title": "Delivery",
+        "title": "Express Pickup",
         "summary": "Campus errand and package pickup"
       },
       "dating": {
@@ -749,7 +729,7 @@
         "summary": "Browse and post roommate profiles"
       },
       "photograph": {
-        "title": "Photo Wall",
+        "title": "Campus Photos",
         "summary": "Share campus moments and works"
       }
     },
@@ -759,7 +739,7 @@
       "secret": { "center": "My Secrets", "detail": "Anonymous Detail", "publish": "Post Secret" },
       "express": { "center": "My Posts", "detail": "Details", "publish": "Post Confession" },
       "topic": { "center": "My Posts", "detail": "Topic Details", "publish": "Post Topic" },
-      "delivery": { "center": "My Errands", "detail": "Task Details", "publish": "Post Delivery" },
+      "delivery": { "center": "My Errands", "detail": "Task Details", "publish": "Post Express Pickup" },
       "dating": { "center": "Interaction Center", "detail": "Roommate", "publish": "Post Profile" },
       "photograph": { "center": "My Works", "detail": "Work Details", "publish": "Post Work" }
     },

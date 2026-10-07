@@ -1,8 +1,13 @@
 {
+  "tabBar": {
+    "home": "ホーム",
+    "messages": "メッセージ",
+    "profile": "マイページ"
+  },
   "common": {
     "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
     "rightsReserved": "All rights reserved",
-    "loading": "読み込み中...",
+    "loading": "読み込み中……",
     "retry": "再試行",
     "confirm": "確認",
     "cancel": "キャンセル",
@@ -20,37 +25,13 @@
     "publishFailed": "投稿に失敗しました",
     "queryFailed": "検索に失敗しました"
   },
-  "tab": {
-    "home": "ホーム",
-    "info": "お知らせ",
-    "profile": "マイページ"
-  },
-  "feature": {
-    "grade": "成績照会",
-    "schedule": "時間割",
-    "cet": "CET成績",
-    "graduateExam": "大学院入試",
-    "spare": "空き教室",
-    "library": "図書館",
-    "card": "学生証",
-    "dataCenter": "データ照会",
-    "evaluate": "授業評価",
-    "marketplace": "フリマ",
-    "delivery": "デリバリー",
-    "lostFound": "落とし物",
-    "secret": "秘密の木",
-    "dating": "ルームメイト",
-    "express": "告白の壁",
-    "topic": "トピック",
-    "photograph": "フォトウォール"
-  },
   "login": {
     "navTitle": "GdeiAssistantへようこそ",
     "title": "ログイン",
     "username": "ユーザー名",
     "password": "パスワード",
     "button": "ログイン",
-    "loading": "ログイン中...",
+    "loading": "ログイン中……",
     "appName": "GdeiAssistant",
     "usernamePlaceholder": "キャンパスアカウントを入力",
     "passwordPlaceholder": "キャンパスパスワードを入力",
@@ -91,7 +72,7 @@
     "weekRange": "第{{min}}週〜第{{max}}週"
   },
   "index": {
-    "navTitle": "機能一覧",
+    "navTitle": "GdeiAssistant",
     "appName": "GdeiAssistant",
     "viewProfile": "プロフィールを見る",
     "defaultNickname": "GdeiAssistantユーザー",
@@ -115,7 +96,6 @@
   "profile": {
     "settings": "設定",
     "language": "言語",
-    "theme": "テーマカラー",
     "logout": "ログアウト",
     "privacy": "プライバシー",
     "feedback": "ヘルプ"
@@ -160,8 +140,8 @@
     "usernameLabel": "ユーザー名：",
     "ipAreaLabel": "IP地域：",
     "empty": "空",
-    "updatingAvatar": "アイコンを更新中...",
-    "savingProfile": "プロフィールを保存中...",
+    "updatingAvatar": "アイコンを更新中……",
+    "savingProfile": "プロフィールを保存中……",
     "accountInfo": "アカウント情報",
     "nickname": "ニックネーム",
     "birthday": "生年月日",
@@ -180,7 +160,7 @@
     "saveIntroduction": "紹介を保存",
     "saved": "保存しました",
     "loadProfileFailed": "プロフィールの読み込みに失敗しました",
-    "optionsFallback": "オプションの読み込みに失敗しました。ローカルデフォルトを使用します",
+    "optionsFallback": "一部のオプションを読み込めなかったため、既定値を表示しています",
     "avatarRefreshFailed": "アイコンの更新に失敗しました",
     "avatarUpdated": "アイコンを更新しました",
     "changeAvatarAction": "アイコンを変更",
@@ -257,7 +237,7 @@
     "campusCredentialTitle": "学内資格情報の管理",
     "campusCredentialDangerTitle": "危険な操作",
     "campusCredentialLoginFirst": "学内資格情報の状態を確認するには先にログインしてください。",
-    "campusCredentialLoadingText": "学内資格情報の状態を読み込み中...",
+    "campusCredentialLoadingText": "学内資格情報の状態を読み込み中……",
     "campusCredentialLoadFailed": "学内資格情報の状態を読み込めませんでした。",
     "campusCredentialAuthStatus": "同意状態",
     "campusCredentialAuthorized": "同意済み",
@@ -1030,7 +1010,7 @@
     },
     "publish": {
       "basicInfo": "基本情報",
-      "loadingExisting": "既存データを読み込み中...",
+      "loadingExisting": "既存データを読み込み中……",
       "imageUpload": "画像アップロード",
       "editImageNotSupported": "編集モードでは画像を変更できません",
       "datingImageHint": "最初の画像のみ表示されます",

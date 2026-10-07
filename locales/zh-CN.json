@@ -1,8 +1,13 @@
 {
+  "tabBar": {
+    "home": "首页",
+    "messages": "消息",
+    "profile": "我的"
+  },
   "common": {
     "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
     "rightsReserved": "版权所有",
-    "loading": "加载中...",
+    "loading": "加载中……",
     "retry": "重试",
     "confirm": "确认",
     "cancel": "取消",
@@ -20,37 +25,13 @@
     "publishFailed": "发布失败",
     "queryFailed": "查询失败"
   },
-  "tab": {
-    "home": "首页",
-    "info": "资讯",
-    "profile": "我的"
-  },
-  "feature": {
-    "grade": "成绩查询",
-    "schedule": "课表查询",
-    "cet": "四六级查询",
-    "graduateExam": "考研查询",
-    "spare": "教室查询",
-    "library": "图书馆",
-    "card": "校园卡",
-    "dataCenter": "数据查询",
-    "evaluate": "教学评价",
-    "marketplace": "二手交易",
-    "delivery": "全民快递",
-    "lostFound": "失物招领",
-    "secret": "校园树洞",
-    "dating": "卖室友",
-    "express": "表白墙",
-    "topic": "话题",
-    "photograph": "拍好校园"
-  },
   "login": {
     "navTitle": "欢迎使用广东二师助手",
     "title": "登录",
     "username": "用户名",
     "password": "密码",
     "button": "登录",
-    "loading": "登录中...",
+    "loading": "登录中……",
     "appName": "广东二师助手",
     "usernamePlaceholder": "请输入校园网账号",
     "passwordPlaceholder": "请输入校园网密码",
@@ -83,7 +64,7 @@
     "weekRange": "第{{min}}周至第{{max}}周"
   },
   "index": {
-    "navTitle": "功能列表",
+    "navTitle": "广东二师助手",
     "appName": "广东二师助手",
     "viewProfile": "查看个人资料",
     "defaultNickname": "广东二师助手用户",
@@ -102,7 +83,6 @@
   "profile": {
     "settings": "设置",
     "language": "语言",
-    "theme": "主题色",
     "logout": "退出登录",
     "privacy": "隐私设置",
     "feedback": "帮助与反馈"
@@ -135,8 +115,8 @@
     "usernameLabel": "用户名：",
     "ipAreaLabel": "IP 属地：",
     "empty": "空",
-    "updatingAvatar": "正在更新头像...",
-    "savingProfile": "正在保存资料...",
+    "updatingAvatar": "正在更新头像……",
+    "savingProfile": "正在保存资料……",
     "accountInfo": "账号资料",
     "nickname": "昵称",
     "birthday": "生日",
@@ -155,7 +135,7 @@
     "saveIntroduction": "保存简介",
     "saved": "已保存",
     "loadProfileFailed": "加载个人资料失败",
-    "optionsFallback": "资料字典加载失败，已使用本地兜底选项",
+    "optionsFallback": "部分选项加载失败，显示为默认选项",
     "avatarRefreshFailed": "头像刷新失败",
     "avatarUpdated": "头像已更新",
     "changeAvatarAction": "更换头像",
@@ -232,7 +212,7 @@
     "campusCredentialTitle": "校园凭证管理",
     "campusCredentialDangerTitle": "危险操作",
     "campusCredentialLoginFirst": "请先登录后查看校园凭证状态。",
-    "campusCredentialLoadingText": "正在加载校园凭证状态...",
+    "campusCredentialLoadingText": "正在加载校园凭证状态……",
     "campusCredentialLoadFailed": "校园凭证状态加载失败，请稍后重试。",
     "campusCredentialAuthStatus": "授权状态",
     "campusCredentialAuthorized": "已授权",
@@ -308,10 +288,10 @@
     "newInteractionMessage": "你有一条新的互动消息",
     "moduleMarketplace": "二手交易",
     "moduleLostFound": "失物招领",
-    "moduleSecret": "校园树洞",
+    "moduleSecret": "树洞",
     "moduleExpress": "表白墙",
     "moduleTopic": "校园话题",
-    "moduleDelivery": "全民快递",
+    "moduleDelivery": "快递代取",
     "moduleDating": "卖室友",
     "modulePhotograph": "拍好校园",
     "actionComment": "评论",
@@ -367,10 +347,10 @@
     "news": { "title": "信息中心", "desc": "查看校园新闻、系统公告与互动消息" },
     "marketplace": { "title": "二手交易", "desc": "浏览与发布校园闲置" },
     "lostandfound": { "title": "失物招领", "desc": "发布寻物与招领信息" },
-    "secret": { "title": "校园树洞", "desc": "匿名说说心里话" },
+    "secret": { "title": "树洞", "desc": "匿名说说心里话" },
     "express": { "title": "表白墙", "desc": "查看与发布校园表白" },
     "topic": { "title": "校园话题", "desc": "参与热门校园讨论" },
-    "delivery": { "title": "全民快递", "desc": "发布与接取校园跑腿" },
+    "delivery": { "title": "快递代取", "desc": "发布与接取校园跑腿" },
     "dating": { "title": "卖室友", "desc": "浏览资料、发布内容并处理互动" },
     "photograph": { "title": "拍好校园", "desc": "查看与分享校园摄影" },
     "sections": {
@@ -727,7 +707,7 @@
         "searchPlaceholder": "搜索失物关键词"
       },
       "secret": {
-        "title": "校园树洞",
+        "title": "树洞",
         "summary": "匿名记录心情，分享不想说出口的话"
       },
       "express": {
@@ -741,7 +721,7 @@
         "searchPlaceholder": "搜索话题关键词"
       },
       "delivery": {
-        "title": "全民快递",
+        "title": "快递代取",
         "summary": "代拿快递与校园跑腿互助"
       },
       "dating": {
@@ -759,7 +739,7 @@
       "secret": { "center": "我的树洞", "detail": "匿名详情", "publish": "发布树洞" },
       "express": { "center": "我的", "detail": "详情", "publish": "发布表白" },
       "topic": { "center": "我的", "detail": "话题详情", "publish": "发布话题" },
-      "delivery": { "center": "我的跑腿", "detail": "任务详情", "publish": "发布全民快递" },
+      "delivery": { "center": "我的快递", "detail": "任务详情", "publish": "发布快递代取" },
       "dating": { "center": "互动中心", "detail": "卖室友", "publish": "发布资料" },
       "photograph": { "center": "我的作品", "detail": "作品详情", "publish": "发布作品" }
     },
@@ -899,7 +879,7 @@
     },
     "publish": {
       "basicInfo": "基础信息",
-      "loadingExisting": "正在加载已有内容...",
+      "loadingExisting": "正在加载已有内容……",
       "imageUpload": "图片上传",
       "editImageNotSupported": "编辑模式暂不支持修改图片",
       "datingImageHint": "卖室友仅展示第一张图片",
