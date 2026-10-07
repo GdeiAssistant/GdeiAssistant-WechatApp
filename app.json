@@ -36,11 +36,33 @@
     "pages/appearance/appearance"
   ],
   "darkmode": true,
+  "themeLocation": "theme.json",
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "广东二师助手",
     "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#4E5F5A",
+    "selectedColor": "#0E8F6E",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/conversationList/conversationList",
+        "text": "消息"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
   },
   "networkTimeout": {
     "request": 15000
