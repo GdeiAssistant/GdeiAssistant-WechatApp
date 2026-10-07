@@ -43,9 +43,11 @@ Page({
   },
 
   getGrade: function() {
+    const generation = this.requestGeneration = (this.requestGeneration || 0) + 1
     const page = this
     wx.showNavigationBarLoading()
     campusApi.getGrade(this.data.activeIndex).then((result) => {
+      if (page.unloaded || generation !== page.requestGeneration) return
       wx.hideNavigationBarLoading()
       if (result.success) {
         page.setData({
@@ -57,9 +59,16 @@ Page({
         utils.showModal(i18n.t('common.queryFailed'), result.message)
       }
     }).catch((error) => {
+      if (page.unloaded || generation !== page.requestGeneration) return
       wx.hideNavigationBarLoading()
       utils.showModal(i18n.t('common.queryFailed'), error.message)
     })
+  },
+
+  onUnload: function() {
+    this.unloaded = true
+    this.requestGeneration = (this.requestGeneration || 0) + 1
+    wx.hideNavigationBarLoading()
   },
 
   onLoad: function() {
