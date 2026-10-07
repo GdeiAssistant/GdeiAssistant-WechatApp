@@ -6,6 +6,7 @@ const socialRealtime = require('../../services/social-realtime.js')
 const userApi = require('../../services/apis/user.js')
 const featureConfig = require('../../services/feature-config.js')
 var themeUtil = require('../../utils/theme')
+var tabBarUtil = require('../../utils/tab-bar')
 var i18n = require('../../utils/i18n')
 
 function formatInboxBadge(unreadCount) {
@@ -72,7 +73,7 @@ Page({
   },
 
   openProfile: function() {
-    wx.navigateTo({
+    wx.switchTab({
       url: '/pages/profile/profile'
     })
   },
@@ -158,6 +159,7 @@ Page({
 
   onShow: function() {
     themeUtil.applyTheme(this)
+    tabBarUtil.syncTabBar(this, 0)
     this.refreshI18n()
     this.loadProfile()
     this.loadInboxStatus()

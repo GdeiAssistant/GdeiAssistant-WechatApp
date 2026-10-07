@@ -25,6 +25,7 @@ function setupWxRuntime(initialStorage) {
     navigateTo: [],
     redirectTo: [],
     reLaunch: [],
+    switchTab: [],
     showModal: [],
     setNavigationBarTitle: [],
     showTopTips: [],
@@ -51,6 +52,9 @@ function setupWxRuntime(initialStorage) {
     },
     reLaunch(options) {
       calls.reLaunch.push(options)
+    },
+    switchTab(options) {
+      calls.switchTab.push(options)
     },
     showModal(options) {
       calls.showModal.push(options)
@@ -297,8 +301,8 @@ test('mock UI smoke covers login page bootstrap and submit flow', async function
 
   assert.equal(runtime.storage[storageKeys.username], 'gdeiassistant')
   assert.equal(authState.token, 'mock-session-token')
-  assert.equal(runtime.calls.redirectTo.length, 1)
-  assert.equal(runtime.calls.redirectTo[0].url, '../index/index')
+  assert.equal(runtime.calls.switchTab.length, 1)
+  assert.equal(runtime.calls.switchTab[0].url, '/pages/index/index')
   assert.equal(runtime.calls.showNavigationBarLoading, 1)
   assert.equal(runtime.calls.hideNavigationBarLoading, 1)
 })
@@ -447,9 +451,10 @@ test('mock UI smoke covers index page profile, inbox badge and feature actions',
 
   page.openProfile()
   page.openInbox()
-  assert.equal(runtime.calls.navigateTo.length, 2)
-  assert.equal(runtime.calls.navigateTo[0].url, '/pages/profile/profile')
-  assert.equal(runtime.calls.navigateTo[1].url, '/pages/inbox/inbox')
+  assert.equal(runtime.calls.switchTab.length, 1)
+  assert.equal(runtime.calls.switchTab[0].url, '/pages/profile/profile')
+  assert.equal(runtime.calls.navigateTo.length, 1)
+  assert.equal(runtime.calls.navigateTo[0].url, '/pages/inbox/inbox')
 
   page.handleActionTap({ currentTarget: { dataset: { action: 'logout' } } })
   await waitForSettled()
