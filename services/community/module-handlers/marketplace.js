@@ -77,12 +77,29 @@ module.exports = {
   },
 
   // --- Center ---
-  getCenter: function () {
-    return request({
-      url: endpoints.community.secondhand.profile,
-      method: 'GET',
-      authRequired: true
-    })
+  getCenter: async function () {
+    const result = { success: true, data: {} }
+    result.data.doing = []
+    result.data.sold = []
+    result.data.off = []
+    let start = 0
+    do {
+      const page = await request({
+        url: endpoints.community.secondhand.profile,
+        method: 'GET',
+        authRequired: true,
+        data: { start }
+      })
+      const data = page.data || {}
+      result.data.doing.push(...(data.doing || []))
+      result.data.sold.push(...(data.sold || []))
+      result.data.off.push(...(data.off || []))
+      if (data.hasMore !== true) break
+      if (!Number.isInteger(data.nextStart) || data.nextStart <= start)
+        throw new Error('Invalid next page')
+      start = data.nextStart
+    } while (true)
+    return result
   },
 
   // --- Publish ---
