@@ -59,24 +59,39 @@
   "schedule": {
     "navTitle": "My Schedule",
     "title": "Schedule",
-    "tabs": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "tabs": [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ],
     "currentWeek": "Current week: Week {{week}}",
     "weekRange": "Week {{min}} to Week {{max}}"
   },
   "index": {
     "navTitle": "GdeiAssistant",
     "appName": "GdeiAssistant",
-    "viewProfile": "View profile",
-    "defaultNickname": "GdeiAssistant User",
     "settingsSection": "Settings",
     "logoutTitle": "Logout",
     "logoutContent": "Are you sure you want to logout?",
-    "unreadFailed": "Failed to fetch unread messages"
+    "greetingMorning": "Good morning",
+    "greetingNoon": "Good afternoon",
+    "greetingAfternoon": "Good afternoon",
+    "greetingEvening": "Good evening",
+    "greetingNight": "It's getting late"
   },
   "grade": {
     "navTitle": "Grades",
     "title": "Grades",
-    "tabs": ["Year 1", "Year 2", "Year 3", "Year 4"],
+    "tabs": [
+      "Year 1",
+      "Year 2",
+      "Year 3",
+      "Year 4"
+    ],
     "firstTerm": "First Semester",
     "secondTerm": "Second Semester"
   },
@@ -100,10 +115,22 @@
     "noMoreNews": "No more news",
     "loadNewsFailed": "Failed to load news",
     "newsTabs": [
-      { "type": 1, "label": "University News" },
-      { "type": 2, "label": "Department Notices" },
-      { "type": 3, "label": "Announcements" },
-      { "type": 4, "label": "Academic News" }
+      {
+        "type": 1,
+        "label": "University News"
+      },
+      {
+        "type": 2,
+        "label": "Department Notices"
+      },
+      {
+        "type": 3,
+        "label": "Announcements"
+      },
+      {
+        "type": 4,
+        "label": "Academic News"
+      }
     ]
   },
   "profilePage": {
@@ -132,7 +159,6 @@
     "nicknameEmpty": "Nickname cannot be empty",
     "nicknameTooLong": "Nickname cannot exceed {{max}} characters",
     "introTooLong": "Bio cannot exceed {{max}} characters",
-    "saveIntroduction": "Save intro",
     "saved": "Saved",
     "loadProfileFailed": "Failed to load profile",
     "optionsFallback": "Some options failed to load, so defaults are shown",
@@ -148,7 +174,12 @@
     "editNicknameTitle": "Edit Nickname",
     "editNicknamePlaceholder": "Enter new nickname",
     "facultyInvalid": "Invalid faculty option, please refresh and try again",
-    "shareTitle": "Profile"
+    "shareTitle": "Profile",
+    "save": "Save",
+    "unsavedBar": "Unsaved changes",
+    "unsavedReminderTitle": "Unsaved changes",
+    "unsavedReminderContent": "Your previous edits were not saved and are kept on this page.",
+    "savePartialFailed": "Failed to save: {{fields}}"
   },
   "upload": {
     "readLocalFileFailed": "Failed to read the local file",
@@ -302,7 +333,8 @@
     "actionSent": "Sent",
     "actionReceived": "Received",
     "actionPosts": "My Posts",
-    "actionNew": "New Activity"
+    "actionNew": "New Activity",
+    "tabService": "Service & system reminders"
   },
   "appearance": {
     "title": "Interface & Appearance",
@@ -332,36 +364,108 @@
     "remote": "Live API"
   },
   "features": {
-    "grade": { "title": "Grades", "desc": "View annual and semester grades" },
-    "schedule": { "title": "Schedule", "desc": "View weekly class schedule" },
-    "cet": { "title": "CET Score", "desc": "Query CET scores and save ticket number" },
-    "graduateExam": { "title": "Postgrad Exam", "desc": "Query postgraduate exam scores" },
-    "spare": { "title": "Spare Rooms", "desc": "Find available classrooms" },
-    "bill": { "title": "Card Transactions", "desc": "View campus card transaction history" },
-    "card": { "title": "Campus Card", "desc": "View campus card info and balance" },
-    "cardLost": { "title": "Report Lost Card", "desc": "Report campus card as lost" },
-    "evaluate": { "title": "Evaluation", "desc": "Complete teaching evaluations" },
-    "collection": { "title": "Library", "desc": "Search catalog, borrow and renew books" },
-    "book": { "title": "My Loans", "desc": "View loan records and renew books" },
-    "data": { "title": "Campus Data", "desc": "Electricity and directory info" },
-    "news": { "title": "Info Center", "desc": "View campus news, announcements and messages" },
-    "marketplace": { "title": "Marketplace", "desc": "Browse and post used items" },
-    "lostandfound": { "title": "Lost & Found", "desc": "Post lost and found items" },
-    "secret": { "title": "Secret Wall", "desc": "Post anonymously" },
-    "express": { "title": "Confession Wall", "desc": "View and post confessions" },
-    "topic": { "title": "Campus Topics", "desc": "Join popular campus discussions" },
-    "delivery": { "title": "Express Pickup", "desc": "Post and accept campus errands" },
-    "dating": { "title": "Roommate Market", "desc": "Browse profiles, post and interact" },
-    "photograph": { "title": "Campus Photos", "desc": "View and share campus photos" },
+    "grade": {
+      "title": "Grades",
+      "desc": "View annual and semester grades"
+    },
+    "schedule": {
+      "title": "Schedule",
+      "desc": "View weekly class schedule"
+    },
+    "cet": {
+      "title": "CET Score",
+      "desc": "Query CET scores and save ticket number"
+    },
+    "graduateExam": {
+      "title": "Postgrad Exam",
+      "desc": "Query postgraduate exam scores"
+    },
+    "spare": {
+      "title": "Spare Rooms",
+      "desc": "Find available classrooms"
+    },
+    "bill": {
+      "title": "Card Transactions",
+      "desc": "View campus card transaction history"
+    },
+    "card": {
+      "title": "Campus Card",
+      "desc": "View campus card info and balance"
+    },
+    "cardLost": {
+      "title": "Report Lost Card",
+      "desc": "Report campus card as lost"
+    },
+    "evaluate": {
+      "title": "Evaluation",
+      "desc": "Complete teaching evaluations"
+    },
+    "collection": {
+      "title": "Library",
+      "desc": "Search catalog, borrow and renew books"
+    },
+    "book": {
+      "title": "My Loans",
+      "desc": "View loan records and renew books"
+    },
+    "data": {
+      "title": "Campus Data",
+      "desc": "Electricity and directory info"
+    },
+    "news": {
+      "title": "Info Center",
+      "desc": "View campus news, announcements and messages"
+    },
+    "marketplace": {
+      "title": "Marketplace",
+      "desc": "Browse and post used items"
+    },
+    "lostandfound": {
+      "title": "Lost & Found",
+      "desc": "Post lost and found items"
+    },
+    "secret": {
+      "title": "Secret Wall",
+      "desc": "Post anonymously"
+    },
+    "express": {
+      "title": "Confession Wall",
+      "desc": "View and post confessions"
+    },
+    "topic": {
+      "title": "Campus Topics",
+      "desc": "Join popular campus discussions"
+    },
+    "delivery": {
+      "title": "Express Pickup",
+      "desc": "Post and accept campus errands"
+    },
+    "dating": {
+      "title": "Roommate Market",
+      "desc": "Browse profiles, post and interact"
+    },
+    "photograph": {
+      "title": "Campus Photos",
+      "desc": "View and share campus photos"
+    },
     "sections": {
       "campus": "Campus Services",
       "information": "Info Center",
       "community": "Campus Community"
     },
     "actions": {
-      "appearance": { "title": "Interface & Appearance", "desc": "Theme, font size, language" },
-      "settings": { "title": "Settings", "desc": "Manage home modules" },
-      "logout": { "title": "Logout", "desc": "Log out of current account" }
+      "appearance": {
+        "title": "Interface & Appearance",
+        "desc": "Theme, font size, language"
+      },
+      "settings": {
+        "title": "Settings",
+        "desc": "Manage home modules"
+      },
+      "logout": {
+        "title": "Logout",
+        "desc": "Log out of current account"
+      }
     }
   },
   "billPage": {
@@ -734,14 +838,48 @@
       }
     },
     "pageTitle": {
-      "marketplace": { "center": "My Center", "detail": "Product Details", "publish": "Post Product", "edit": "Edit Product" },
-      "lostandfound": { "center": "My Center", "detail": "Details", "publish": "Post Info", "edit": "Edit Info" },
-      "secret": { "center": "My Secrets", "detail": "Anonymous Detail", "publish": "Post Secret" },
-      "express": { "center": "My Posts", "detail": "Details", "publish": "Post Confession" },
-      "topic": { "center": "My Posts", "detail": "Topic Details", "publish": "Post Topic" },
-      "delivery": { "center": "My Errands", "detail": "Task Details", "publish": "Post Express Pickup" },
-      "dating": { "center": "Interaction Center", "detail": "Roommate", "publish": "Post Profile" },
-      "photograph": { "center": "My Works", "detail": "Work Details", "publish": "Post Work" }
+      "marketplace": {
+        "center": "My Center",
+        "detail": "Product Details",
+        "publish": "Post Product",
+        "edit": "Edit Product"
+      },
+      "lostandfound": {
+        "center": "My Center",
+        "detail": "Details",
+        "publish": "Post Info",
+        "edit": "Edit Info"
+      },
+      "secret": {
+        "center": "My Secrets",
+        "detail": "Anonymous Detail",
+        "publish": "Post Secret"
+      },
+      "express": {
+        "center": "My Posts",
+        "detail": "Details",
+        "publish": "Post Confession"
+      },
+      "topic": {
+        "center": "My Posts",
+        "detail": "Topic Details",
+        "publish": "Post Topic"
+      },
+      "delivery": {
+        "center": "My Errands",
+        "detail": "Task Details",
+        "publish": "Post Express Pickup"
+      },
+      "dating": {
+        "center": "Interaction Center",
+        "detail": "Roommate",
+        "publish": "Post Profile"
+      },
+      "photograph": {
+        "center": "My Works",
+        "detail": "Work Details",
+        "publish": "Post Work"
+      }
     },
     "pageTitleFallback": {
       "edit": "Edit {{title}}",
@@ -751,7 +889,7 @@
       "search": "Search",
       "clear": "Clear",
       "loading": "Loading",
-"loadMore": "Load more",
+      "loadMore": "Load more",
       "noMore": "No more data",
       "emptyTitle": "No content",
       "emptySummary": "Try different filters, or post something new.",

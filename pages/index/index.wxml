@@ -2,24 +2,11 @@
 
 <official-account></official-account>
 
-  <view class="home_band" wx:if="{{avatar}}">
-    <view class="userinfo_card">
-      <view class="home_band_top">
-        <image class="home_logo" src="/image/logo.png" mode="aspectFit"></image>
-        <view class="userinfo_notice" bindtap="openInbox">
-          <image class="userinfo_notice_icon" src="/image/mono/inbox.png" mode="aspectFit"></image>
-          <text class="userinfo_notice_badge" wx:if="{{inboxBadgeText}}">{{inboxBadgeText}}</text>
-        </view>
-      </view>
-
-      <view class="userinfo">
-        <image class="userinfo-avatar" src="{{avatar}}" mode="aspectFill"></image>
-        <view class="userinfo_meta">
-          <text class="userinfo-nickname">{{nickname}}</text>
-        </view>
-      </view>
-
-      <text class="userinfo-entry" bindtap="openProfile">{{t.viewProfile}}</text>
+  <view class="home_band">
+    <image class="home_logo" src="/image/logo.png" mode="aspectFit"></image>
+    <view class="home_band_meta">
+      <text class="home_greeting">{{t.greeting}}</text>
+      <text class="home_date">{{t.today}}</text>
     </view>
   </view>
 

@@ -1,4 +1,5 @@
 const socialApi = require('../../services/apis/social.js')
+const messagesApi = require('../../services/apis/messages.js')
 const socialRealtime = require('../../services/social-realtime.js')
 const socialAvatar = require('../../services/social-avatar.js')
 const pageUtils = require('../../utils/page.js')
@@ -17,6 +18,10 @@ Page({
     nextCursor: null,
     hasMore: false,
     loading: false,
+    listLoaded: false,
+    interactionBadgeText: '',
+    serviceBadgeText: '',
+    announcementBadgeText: '',
     errorMessage: null
   },
 
@@ -25,14 +30,34 @@ Page({
   refreshI18n: function () {
     this.setData({
       t: {
-        navTitle: i18n.t('social.conversations.navTitle'),
+        navTitle: i18n.t('tabBar.messages'),
         empty: i18n.t('social.conversations.empty'),
         loading: i18n.t('common.loading'),
         noMessage: i18n.t('social.conversations.noMessage'),
-        searchUsers: i18n.t('social.conversations.searchUsers')
+        searchUsers: i18n.t('social.conversations.searchUsers'),
+        noticesEntry: i18n.t('inboxPage.tabAnnouncement'),
+        interactionEntry: i18n.t('inboxPage.tabInteraction'),
+        serviceEntry: i18n.t('inboxPage.tabService'),
+        directSection: i18n.t('social.entry.directMessages')
       }
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
+  },
+
+  openInbox: function (event) {
+    var tab = (event && event.currentTarget && event.currentTarget.dataset.tab) || 'announcement'
+    wx.navigateTo({ url: '/pages/inbox/inbox?tab=' + tab })
+  },
+
+  loadInteractionMeta: function () {
+    const badge = count => count > 99 ? '99+' : count > 0 ? String(count) : ''
+    return Promise.allSettled([messagesApi.getCategoriesUnread(), messagesApi.getAnnouncementUnread()]).then(results => {
+      const categories = results[0].status === 'fulfilled' ? results[0].value : null
+      const announcement = results[1].status === 'fulfilled' ? results[1].value : null
+      if (categories && categories.success) this.setData({ interactionBadgeText: badge(categories.data.interaction), serviceBadgeText: badge(categories.data.service) })
+      if (announcement && announcement.success) this.setData({ announcementBadgeText: badge(announcement.data) })
+      if (!categories || !categories.success || !announcement || !announcement.success) pageUtils.showTopTips(this, i18n.t('common.networkError'))
+    })
   },
 
   openUserSearch: function () {
@@ -86,7 +111,8 @@ Page({
               conversations: reset ? conversations : this.data.conversations.concat(conversations),
               nextCursor: page.nextCursor,
               hasMore: page.hasMore,
-              loading: false
+              loading: false,
+              listLoaded: true
             })
           })
       })
@@ -130,14 +156,18 @@ Page({
       return
     }
     this.loadList(true)
+    this.loadInteractionMeta()
+    tabBarUtil.refreshUnreadBadge(this)
   },
 
   onShow: function () {
     this._pageVisible = true
     themeUtil.applyTheme(this)
     tabBarUtil.syncTabBar(this, 1)
+    tabBarUtil.refreshUnreadBadge(this)
     this.refreshI18n()
     socialRealtime.ensureConnected()
+    this.loadInteractionMeta()
     this.loadList(true)
     this.startPolling()
     this._offMessage = socialRealtime.on('message.created', this.onRealtimeEvent.bind(this))

@@ -18,8 +18,8 @@
           <view class="profile_name">{{profile.nickname || t.notFilled}}</view>
           <view class="profile_subtitle">{{t.usernameLabel}}{{profile.maskedUsername || t.notFilled}}</view>
           <view class="profile_subtitle">{{t.ipAreaLabel}}{{profile.displayIpArea || t.empty}}</view>
-          <view class="profile_status" wx:if="{{avatarUploading || savingField || saveStatusText}}">
-            {{avatarUploading ? t.updatingAvatar : (savingField ? t.savingProfile : saveStatusText)}}
+          <view class="profile_status" wx:if="{{avatarUploading || saving || saveStatusText}}">
+            {{avatarUploading ? t.updatingAvatar : (saving ? t.savingProfile : saveStatusText)}}
           </view>
           <view class="profile_intro">{{((form && form.introduction) || profile.introduction) || t.notFilled}}</view>
         </view>
@@ -123,19 +123,20 @@
             maxlength="80"
             data-field="introduction"
             bindinput="handleTextInput"
-            bindblur="handleTextBlur"
             placeholder="{{t.introPlaceholder}}"
           ></textarea>
         </view>
       </view>
     </view>
 
+    <view class="unsaved_bar" wx:if="{{hasDirty && !saving}}">{{t.unsavedBar}}</view>
+
     <view class="save_wrap">
       <button
         class="weui-btn weui-btn_primary save_btn"
-        bindtap="saveIntroduction"
-        disabled="{{savingField === 'introduction'}}"
-      >{{savingField === 'introduction' ? t.savingIntroduction : t.saveIntroduction}}</button>
+        bindtap="saveProfile"
+        disabled="{{!hasDirty || saving}}"
+      >{{saving ? t.savingProfile : t.save}}</button>
     </view>
   </block>
 </view>

@@ -71,6 +71,10 @@ function setup(locale, options) {
     getProfileOptions() {
       return Promise.resolve({ success: true, data: options || {} })
     },
+    updateProfile(payload) {
+      requests.push(['profile', clone(payload)])
+      return Promise.resolve({ success: true })
+    },
     updateLocation(codes) {
       requests.push(['location', clone(codes)])
       return Promise.resolve({ success: true })
@@ -160,7 +164,7 @@ test('six locale onShow refreshes system regions and picker but preserves drafts
   assert.deepEqual(requests, [])
 })
 
-test('introduction saves explicitly and other profile updates preserve its draft', async function () {
+test('introduction saves via the unified save button and unrelated patches preserve its draft', async function () {
   const { page, raw, requests } = setup()
   await page.loadProfilePage()
   const draft = '尚未提交的简介 English🙂'
@@ -168,16 +172,50 @@ test('introduction saves explicitly and other profile updates preserve its draft
     currentTarget: { dataset: { field: 'introduction' } },
     detail: { value: draft }
   })
-  page.handleTextBlur({ currentTarget: { dataset: { field: 'introduction' } } })
   assert.deepEqual(requests, [])
   assert.equal(page.data.profile.introduction, raw.introduction)
+  assert.equal(page.data.hasDirty, true)
   page.applyProfilePatch({ nickname: '新的昵称' })
   assert.equal(page.data.form.introduction, draft)
-  page.saveIntroduction()
-  await page._saveQueue
-  assert.deepEqual(requests, [['introduction', draft]])
+  await page.saveProfile()
+  assert.deepEqual(requests, [['profile', { introduction: draft }]])
   assert.equal(page.data.profile.introduction, draft)
   assert.equal(page.data.form.introduction, draft)
+  assert.equal(page.data.hasDirty, false)
+  page.onUnload()
+})
+
+test('an atomic save failure retains all edits and the complete saved snapshot', async function () {
+  const { page, raw, requests } = setup()
+  await page.loadProfilePage()
+  page.handleTextInput({
+    currentTarget: { dataset: { field: 'introduction' } },
+    detail: { value: '新的简介' }
+  })
+  const indices = page.data.locationPickerIndex.slice()
+  const state = TREE[indices[0]].states[indices[1]]
+  indices[2] = state.cities.findIndex((city) => city.code === '6')
+  page.handleLocationChange({
+    currentTarget: { dataset: { target: 'location' } },
+    detail: { value: indices }
+  })
+  const userApi = require(path.join(ROOT, 'services/apis/user.js'))
+  const original = userApi.updateProfile
+  userApi.updateProfile = (payload) => {
+    requests.push(['profile', payload])
+    return Promise.resolve({ success: false, message: '资料未保存' })
+  }
+  await page.saveProfile()
+  userApi.updateProfile = original
+  assert.deepEqual(requests, [
+    ['profile', { location: { region: 'CN', state: '44', city: '6' }, introduction: '新的简介' }]
+  ])
+  assert.equal(page.data.profile.introduction, raw.introduction)
+  assert.equal(page.data.profile.location, '中国 广东 广州')
+  assert.equal(page.data.form.introduction, '新的简介')
+  assert.equal(page.data.hasDirty, true)
+  assert.equal(page.data.saveStatusText, '')
+  assert.equal(page.data.errorMessage, '资料未保存')
   page.onUnload()
 })
 
@@ -190,7 +228,7 @@ test('a submitted introduction response does not discard a newer draft', async f
   assert.equal(page.data.form.introduction, '提交后继续编辑的内容')
 })
 
-test('localized picker saves original codes and an unrelated patch preserves location codes', async function () {
+test('localized picker stages original codes and the unified save submits them', async function () {
   const { page, requests } = setup('ja')
   await page.loadProfilePage()
   const indices = page.data.locationPickerIndex.slice()
@@ -200,8 +238,10 @@ test('localized picker saves original codes and an unrelated patch preserves loc
     currentTarget: { dataset: { target: 'location' } },
     detail: { value: indices }
   })
-  await page._saveQueue
-  assert.deepEqual(requests, [['location', { region: 'CN', state: '44', city: '6' }]])
+  assert.deepEqual(requests, [])
+  assert.equal(page.data.hasDirty, true)
+  await page.saveProfile()
+  assert.deepEqual(requests, [['profile', { location: { region: 'CN', state: '44', city: '6' } }]])
   assert.equal(page.data.form.location, '仏山, 広東, 中国')
   assert.deepEqual(page.data.form.locationCodes, { region: 'CN', state: '44', city: '6' })
   page.applyProfilePatch({ nickname: '广东新昵称' })

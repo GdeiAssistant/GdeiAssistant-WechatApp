@@ -74,12 +74,14 @@
   "index": {
     "navTitle": "廣東二師助手",
     "appName": "廣東二師助手",
-    "viewProfile": "查看個人資料",
-    "defaultNickname": "廣東二師助手用戶",
     "settingsSection": "功能設定",
     "logoutTitle": "登出賬號",
     "logoutContent": "你確定要登出而家呢個賬號嗎？",
-    "unreadFailed": "獲取未讀消息失敗"
+    "greetingMorning": "早上好",
+    "greetingNoon": "中午好",
+    "greetingAfternoon": "下午好",
+    "greetingEvening": "晚上好",
+    "greetingNight": "夜深了"
   },
   "grade": {
     "navTitle": "成績查詢",
@@ -157,7 +159,6 @@
     "nicknameEmpty": "暱稱不能為空",
     "nicknameTooLong": "暱稱長度不能超過{{max}}個字元",
     "introTooLong": "個人簡介長度不能超過{{max}}個字元",
-    "saveIntroduction": "儲存簡介",
     "saved": "已儲存",
     "loadProfileFailed": "載入個人資料失敗",
     "optionsFallback": "部分選項載入失敗，顯示為預設選項",
@@ -173,7 +174,12 @@
     "editNicknameTitle": "修改暱稱",
     "editNicknamePlaceholder": "請輸入新的暱稱",
     "facultyInvalid": "院系選項無效，請重新整理之後再試",
-    "shareTitle": "個人中心"
+    "shareTitle": "個人中心",
+    "save": "保存",
+    "unsavedBar": "有未保存的修改",
+    "unsavedReminderTitle": "未保存的修改",
+    "unsavedReminderContent": "你上次的資料修改還沒有保存，內容已保留在頁面上。",
+    "savePartialFailed": "以下內容保存失敗：{{fields}}"
   },
   "upload": {
     "readLocalFileFailed": "讀取本機檔案失敗",
@@ -327,7 +333,8 @@
     "actionSent": "我發出的",
     "actionReceived": "我收到的",
     "actionPosts": "我的發佈",
-    "actionNew": "新動態"
+    "actionNew": "新動態",
+    "tabService": "服務與系統提醒"
   },
   "appearance": {
     "title": "介面和外觀",
@@ -882,7 +889,7 @@
       "search": "搜索",
       "clear": "清空",
       "loading": "正在載入",
-"loadMore": "載入更多",
+      "loadMore": "載入更多",
       "noMore": "沒有更多數據了",
       "emptyTitle": "暫無內容",
       "emptySummary": "換個篩選條件試試，或者發佈一條新的內容。",

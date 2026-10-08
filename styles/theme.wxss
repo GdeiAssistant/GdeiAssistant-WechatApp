@@ -1,10 +1,12 @@
 /*
  * GdeiAssistant brand tokens (v2), shared with Web / Android / iOS.
  * Light is the default on `page`; `.theme-dark` is applied by utils/theme.js on each page root.
+ * Custom components (style-isolated) cannot see `page` vars, so isolated roots carry `.theme-root`.
  * Text-on-white uses --color-primary-ink so small text keeps WCAG AA contrast.
  */
 
-page {
+page,
+.theme-root {
   --color-primary: #0E8F6E;
   --color-primary-hover: #0A7559;
   --color-primary-pressed: #085E48;

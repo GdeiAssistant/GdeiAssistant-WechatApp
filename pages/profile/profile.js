@@ -24,17 +24,28 @@ const {
   localizeIpArea
 } = require('../../constants/profile.js')
 
-const NICKNAME_MAX_LENGTH = 32
-const INTRODUCTION_MAX_LENGTH = 80
-
 const { getSafeIndex, buildLocationRanges, buildLocationSelection, normalizeProfile, createEmptyProfile, syncProfileLocationDisplay, displayValue, toDisplayOptions, buildEditableState, parseBirthdayPayload, buildInteractionPromise, buildTodayDate, buildAvatarFile, buildAvatarFileName, validateNickname, validateIntroduction } = require('./profile-view-model.js')
 
 Page({
   onShow: function () {
     themeUtil.applyTheme(this)
     tabBarUtil.syncTabBar(this, 2)
+    tabBarUtil.refreshUnreadBadge(this)
     this.refreshI18n()
+    if (this._leftWithUnsaved && this.data.hasDirty && !this._unsavedReminderShown) {
+      this._unsavedReminderShown = true
+      wx.showModal({
+        title: i18n.t('profilePage.unsavedReminderTitle'),
+        content: i18n.t('profilePage.unsavedReminderContent'),
+        showCancel: false
+      })
+    }
   },
+
+  onHide: function () {
+    this._leftWithUnsaved = !!this.data.hasDirty
+  },
+
   refreshI18n: function () {
     this.setData({
       t: {
@@ -64,8 +75,8 @@ Page({
         friends: i18n.t('social.stats.friends'),
         directMessages: i18n.t('social.entry.directMessages'),
         socialSection: i18n.t('social.entry.directMessages'),
-        saveIntroduction: i18n.t('profilePage.saveIntroduction'),
-        savingIntroduction: i18n.t('profilePage.savingProfile')
+        save: i18n.t('profilePage.save'),
+        unsavedBar: i18n.t('profilePage.unsavedBar')
       }
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
@@ -126,7 +137,8 @@ Page({
     hometownPickerIndex: [0, 0, 0],
     locationPickerDisabled: true,
     hometownPickerDisabled: true,
-    savingField: '',
+    hasDirty: false,
+    saving: false,
     saveStatusText: '',
     avatarUploading: false
   },
@@ -134,6 +146,7 @@ Page({
   setEditableState: function(profile) {
     const editableState = buildEditableState(profile, this.getLocationTree())
     this.setData(editableState)
+    this.updateDirty()
   },
 
   getLocationTree: function() {
@@ -162,6 +175,57 @@ Page({
     }, 1800)
   },
 
+  // Dirty fields are computed by diffing the staged form against the saved profile.
+  computeDirtyFields: function() {
+    const form = this.data.form
+    const profile = this.data.profile
+    if (!form || !profile) {
+      return []
+    }
+    const dirty = []
+    if (String(form.nickname || '').trim() !== String(profile.nickname || '').trim()) {
+      dirty.push('nickname')
+    }
+    if (String(form.birthday || '') !== String(profile.birthday || '')) {
+      dirty.push('birthday')
+    }
+    if (
+      String(form.facultyCode == null ? '' : form.facultyCode) !== String(profile.facultyCode == null ? '' : profile.facultyCode) ||
+      String(form.majorCode || '') !== String(profile.majorCode || '')
+    ) {
+      dirty.push('facultyMajor')
+    }
+    if (String(form.enrollment || '') !== String(profile.enrollment || '')) {
+      dirty.push('enrollment')
+    }
+    ;['location', 'hometown'].forEach(function(field) {
+      const codes = form[field + 'Codes'] || {}
+      if (
+        String(codes.region || '') !== String(profile[field + 'Region'] || '') ||
+        String(codes.state || '') !== String(profile[field + 'State'] || '') ||
+        String(codes.city || '') !== String(profile[field + 'City'] || '')
+      ) {
+        dirty.push(field)
+      }
+    })
+    if (String(form.introduction || '').trim() !== String(profile.introduction || '').trim()) {
+      dirty.push('introduction')
+    }
+    return dirty
+  },
+
+  updateDirty: function() {
+    const dirtyFields = this.computeDirtyFields()
+    this._dirtyFields = dirtyFields
+    const hasDirty = dirtyFields.length > 0
+    if (!hasDirty) {
+      this._unsavedReminderShown = false
+    }
+    if (this.data.hasDirty !== hasDirty) {
+      this.setData({ hasDirty: hasDirty })
+    }
+  },
+
   applyProfilePatch: function(patch) {
     const introductionDraft = this.data.form && this.data.form.introduction
     const hasIntroductionPatch = Object.prototype.hasOwnProperty.call(patch || {}, 'introduction')
@@ -178,43 +242,12 @@ Page({
     this.setEditableState(nextProfile)
     if (preserveIntroductionDraft) {
       this.setData({ 'form.introduction': introductionDraft })
+      this.updateDirty()
     }
-  },
-
-  queueProfileSave: function(fieldKey, promiseFactory, patch) {
-    if (!this._saveQueue) {
-      this._saveQueue = Promise.resolve()
-    }
-
-    this._saveQueue = this._saveQueue.then(() => {
-      this.setData({
-        savingField: fieldKey
-      })
-      this.setSaveStatus('')
-
-      return buildInteractionPromise(promiseFactory).then(() => {
-        this.applyProfilePatch(patch)
-        this.setSaveStatus(i18n.t('profilePage.saved'))
-      }).catch((error) => {
-        const introductionDraft = this.data.form && this.data.form.introduction
-        if (this.data.profile) {
-          this.setEditableState(this.data.profile)
-          if (typeof introductionDraft === 'string') {
-            this.setData({ 'form.introduction': introductionDraft })
-          }
-        }
-        pageUtils.showTopTips(this, error.message)
-      }).finally(() => {
-        this.setData({
-          savingField: ''
-        })
-      })
-    })
-
-    return this._saveQueue
   },
 
   loadProfilePage: function() {
+    if (this.data.hasDirty || this.data.saving) return Promise.resolve()
     return pageUtils.runWithNavigationLoading(this, function() {
       return Promise.allSettled([
         userApi.getAvatar(),
@@ -294,28 +327,53 @@ Page({
     })
   },
 
-  saveIntroduction: function() {
-    if (!this.data.profile || !this.data.form || this.data.savingField === 'introduction') {
-      return
-    }
-
-    const introduction = String(this.data.form.introduction || '').trim()
-    const introductionErrorMessage = validateIntroduction(introduction)
-    if (introductionErrorMessage) {
-      pageUtils.showTopTips(this, introductionErrorMessage)
-      return
-    }
-
-    if (introduction === String(this.data.profile.introduction || '').trim()) {
-      this.setSaveStatus(i18n.t('profilePage.saved'))
-      return
-    }
-
-    this.queueProfileSave('introduction', function() {
-      return userApi.updateIntroduction(introduction)
-    }, {
-      introduction: introduction
+  // One request validates and commits all staged fields atomically.
+  saveProfile: function() {
+    if (this.data.saving || !this.data.hasDirty || !this.data.profile || !this.data.form) return
+    const form = JSON.parse(JSON.stringify(this.data.form))
+    const nickname = String(form.nickname || '').trim()
+    const introduction = String(form.introduction || '').trim()
+    const error = validateNickname(nickname) || validateIntroduction(introduction)
+    if (error) { pageUtils.showTopTips(this, error); return }
+    const fields = this.computeDirtyFields()
+    const payload = {}
+    const display = {}
+    fields.forEach(field => {
+      if (field === 'nickname' || field === 'introduction') {
+        payload[field] = field === 'nickname' ? nickname : introduction
+        display[field] = payload[field]
+      } else if (field === 'birthday') {
+        payload.birthday = form.birthday ? parseBirthdayPayload(form.birthday) : null
+        display.birthday = form.birthday
+      } else if (field === 'facultyMajor') {
+        payload.faculty = form.facultyCode
+        payload.major = form.majorCode || null
+        display.faculty = { code: payload.faculty, label: form.faculty }
+        display.major = { code: payload.major || 'unselected', label: form.major }
+      } else if (field === 'enrollment') {
+        payload.enrollment = form.enrollment ? Number(form.enrollment) : null
+        display.enrollment = form.enrollment
+      } else {
+        const codes = form[field + 'Codes'] || {}
+        payload[field] = codes.region ? codes : null
+        display[field] = payload[field] && Object.assign({}, codes, { displayName: form[field] })
+      }
     })
+    if (!fields.length) return
+    this.setData({ saving: true })
+    this.setSaveStatus('')
+    return buildInteractionPromise(() => userApi.updateProfile(payload)).then(() => {
+      const draft = JSON.parse(JSON.stringify(this.data.form))
+      this.applyProfilePatch(display)
+      // Retain any edits made while the request was pending.
+      if (JSON.stringify(draft) !== JSON.stringify(form)) {
+        this.setData({ form: draft })
+        this.updateDirty()
+      }
+      this.setSaveStatus(i18n.t('profilePage.saved'))
+    }).catch(error => {
+      pageUtils.showTopTips(this, error.message || i18n.t('profilePage.savePartialFailed'))
+    }).finally(() => this.setData({ saving: false }))
   },
 
   refreshAvatar: function(successText) {
@@ -324,9 +382,7 @@ Page({
         throw new Error(result.message || i18n.t('profilePage.avatarRefreshFailed'))
       }
 
-      this.applyProfilePatch({
-        avatar: result.data || '/image/default.png'
-      })
+      this.setData({ 'profile.avatar': result.data || '/image/default.png' })
       this.setSaveStatus(successText || i18n.t('profilePage.avatarUpdated'))
     })
   },
@@ -450,35 +506,11 @@ Page({
     this.setData({
       [`form.${field}`]: event.detail.value
     })
-  },
-
-  handleTextBlur: function(event) {
-    const field = event.currentTarget.dataset.field
-    if (field !== 'introduction' || !this.data.profile || !this.data.form) {
-      return
-    }
-
-    const introduction = String(this.data.form.introduction || '').trim()
-    const introductionErrorMessage = validateIntroduction(introduction)
-    if (introductionErrorMessage) {
-      this.setData({
-        'form.introduction': this.data.profile.introduction || ''
-      })
-      pageUtils.showTopTips(this, introductionErrorMessage)
-      return
-    }
-
-    if (introduction === String(this.data.profile.introduction || '').trim()) {
-      this.setData({
-        'form.introduction': this.data.profile.introduction || ''
-      })
-      return
-    }
-    // Save is triggered explicitly via the save button (saveIntroduction)
+    this.updateDirty()
   },
 
   openNicknameEditor: function() {
-    if (!this.data.profile || !this.data.form || this.data.savingField === 'nickname') {
+    if (!this.data.profile || !this.data.form || this.data.saving) {
       return
     }
 
@@ -503,42 +535,20 @@ Page({
           return
         }
 
-        if (nickname === String(this.data.profile.nickname || '').trim()) {
-          this.setData({
-            'form.nickname': this.data.profile.nickname || ''
-          })
-          return
-        }
-
+        // Stage only; the change is submitted by the unified save button.
         this.setData({
           'form.nickname': nickname
         })
-
-        this.queueProfileSave('nickname', function() {
-          return userApi.updateNickname(nickname)
-        }, {
-          nickname: nickname
-        })
+        this.updateDirty()
       }
     })
   },
 
   handleBirthdayChange: function(event) {
-    const birthday = event.detail.value
     this.setData({
-      'form.birthday': birthday
+      'form.birthday': event.detail.value
     })
-
-    if (birthday === String((this.data.profile && this.data.profile.birthday) || '')) {
-      return
-    }
-
-    const birthdayPayload = parseBirthdayPayload(birthday)
-    this.queueProfileSave('birthday', function() {
-      return userApi.updateBirthday(birthdayPayload)
-    }, {
-      birthday: birthday
-    })
+    this.updateDirty()
   },
 
   handleFacultyChange: function(event) {
@@ -566,36 +576,11 @@ Page({
       displayFaculty: displayValue(faculty),
       displayMajor: displayValue(nextMajor)
     })
+    this.updateDirty()
 
     if (facultyCode === null) {
       pageUtils.showTopTips(this, i18n.t('profilePage.facultyInvalid'))
-      return
     }
-
-    if (faculty === String(profile.faculty || '') && nextMajor === String(profile.major || '')) {
-      return
-    }
-
-    this.queueProfileSave('faculty', function() {
-      return buildInteractionPromise(function() {
-        return userApi.updateFaculty(facultyCode)
-      }).then(function() {
-        if (nextMajor && nextMajor !== NOT_SELECTED) {
-          return buildInteractionPromise(function() {
-            return userApi.updateMajor(getMajorCodeByLabel(faculty, nextMajor) || '')
-          })
-        }
-      })
-    }, {
-      faculty: {
-        code: facultyCode,
-        label: faculty
-      },
-      major: {
-        code: getMajorCodeByLabel(faculty, nextMajor) || 'unselected',
-        label: nextMajor
-      }
-    })
   },
 
   handleMajorChange: function(event) {
@@ -610,19 +595,7 @@ Page({
       'form.majorCode': majorCode,
       displayMajor: displayValue(major)
     })
-
-    if (major === String((this.data.profile && this.data.profile.major) || '')) {
-      return
-    }
-
-    this.queueProfileSave('major', function() {
-      return userApi.updateMajor(majorCode)
-    }, {
-      major: {
-        code: majorCode || 'unselected',
-        label: major
-      }
-    })
+    this.updateDirty()
   },
 
   handleEnrollmentChange: function(event) {
@@ -634,16 +607,7 @@ Page({
       enrollmentIndex: enrollmentIndex,
       'form.enrollment': nextEnrollment
     })
-
-    if (nextEnrollment === String((this.data.profile && this.data.profile.enrollment) || '')) {
-      return
-    }
-
-    this.queueProfileSave('enrollment', function() {
-      return userApi.updateEnrollment(nextEnrollment ? Number(nextEnrollment) : null)
-    }, {
-      enrollment: nextEnrollment
-    })
+    this.updateDirty()
   },
 
   handleLocationColumnChange: function(event) {
@@ -684,8 +648,6 @@ Page({
     const rangeKey = target === 'hometown' ? 'hometownRanges' : 'locationRanges'
     const fieldKey = target === 'hometown' ? 'hometown' : 'location'
     const codeKey = target === 'hometown' ? 'hometownCodes' : 'locationCodes'
-    const profile = this.data.profile || {}
-    const profilePrefix = target === 'hometown' ? 'hometown' : 'location'
 
     this.setData({
       [indexKey]: pickerState.indices,
@@ -693,34 +655,7 @@ Page({
       [`form.${fieldKey}`]: selection.display,
       [`form.${codeKey}`]: selection.codes
     })
-
-    if (
-      String(profile[`${profilePrefix}Region`] || '') === String(selection.codes.region || '') &&
-      String(profile[`${profilePrefix}State`] || '') === String(selection.codes.state || '') &&
-      String(profile[`${profilePrefix}City`] || '') === String(selection.codes.city || '')
-    ) {
-      return
-    }
-
-    this.queueProfileSave(fieldKey, function() {
-      return target === 'hometown'
-        ? userApi.updateHometown(selection.codes)
-        : userApi.updateLocation(selection.codes)
-    }, target === 'hometown' ? {
-      hometown: {
-        region: selection.codes.region,
-        state: selection.codes.state,
-        city: selection.codes.city,
-        displayName: selection.display
-      }
-    } : {
-      location: {
-        region: selection.codes.region,
-        state: selection.codes.state,
-        city: selection.codes.city,
-        displayName: selection.display
-      }
-    })
+    this.updateDirty()
   },
 
   onLoad: function() {

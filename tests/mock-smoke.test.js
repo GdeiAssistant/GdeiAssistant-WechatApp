@@ -334,3 +334,50 @@ test('mock smoke covers community feature flows', async function () {
   )
   assert.ok(Array.isArray(photographComments.data))
 })
+
+test('bulk profile mock is atomic and announcement receipts persist idempotently', async function () {
+  const router = setupMockRouter()
+  const token = await login(router)
+  const before = (await request(router, '/api/user/profile', { token })).data
+  await assert.rejects(
+    router.handleRequest({
+      path: '/api/profile',
+      method: 'POST',
+      sessionToken: token,
+      data: { nickname: 'changed', major: 'invalid' }
+    })
+  )
+  assert.equal(
+    (await request(router, '/api/user/profile', { token })).data.nickname,
+    before.nickname
+  )
+  await request(router, '/api/profile', {
+    token,
+    method: 'POST',
+    data: { nickname: 'changed', introduction: 'all saved' }
+  })
+  const saved = (await request(router, '/api/user/profile', { token })).data
+  assert.equal(saved.nickname, 'changed')
+  assert.equal(saved.introduction, 'all saved')
+  const initial = (await request(router, '/api/information/announcement/unread', { token })).data
+  const notices = (await request(router, '/api/information/announcement/start/0/size/3', { token }))
+    .data
+  const id = notices[0].id
+  await request(router, '/api/information/announcement/id/' + id + '/read', {
+    token,
+    method: 'POST'
+  })
+  await request(router, '/api/information/announcement/id/' + id + '/read', {
+    token,
+    method: 'POST'
+  })
+  assert.equal(
+    (await request(router, '/api/information/announcement/unread', { token })).data,
+    initial - 1
+  )
+  const categories = (
+    await request(router, '/api/information/message/categories/unread', { token })
+  ).data
+  const legacy = (await request(router, '/api/information/message/unread', { token })).data
+  assert.equal(categories.interaction + categories.service, legacy)
+})

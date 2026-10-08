@@ -7,107 +7,39 @@
 
 /* Brand band: the one loud element of the app. Solid emerald, no gradient. */
 .home_band {
-  background: var(--color-band);
-  padding: 24rpx var(--gutter) 48rpx;
-  border-radius: 0 0 var(--radius-card) var(--radius-card);
-}
-
-.userinfo_card {
-  display: flex;
-  flex-direction: column;
-}
-
-.home_band_top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  background: var(--color-band);
+  padding: 28rpx var(--gutter) 40rpx;
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
 }
 
 .home_logo {
   width: 64rpx;
   height: 64rpx;
   border-radius: 16rpx;
-}
-
-.userinfo_notice {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 88rpx;
-  height: 88rpx;
-  border-radius: var(--radius-full);
-  background: var(--color-band-chip);
-}
-
-.userinfo_notice_icon {
-  width: 44rpx;
-  height: 44rpx;
-  filter: brightness(0) invert(1);
-  opacity: 0.92;
-}
-
-.userinfo_notice_badge {
-  position: absolute;
-  top: 4rpx;
-  right: 0;
-  min-width: 32rpx;
-  padding: 2rpx 10rpx;
-  box-sizing: border-box;
-  border-radius: var(--radius-full);
-  border: 3rpx solid var(--color-band);
-  background: var(--color-danger);
-  color: var(--color-on-band);
-  font-size: 20rpx;
-  font-weight: 700;
-  text-align: center;
-  line-height: 1.3;
-  font-variant-numeric: tabular-nums;
-}
-
-.userinfo {
-  display: flex;
-  align-items: center;
-  margin-top: 40rpx;
-  min-width: 0;
-}
-
-.userinfo-avatar {
-  width: 120rpx;
-  height: 120rpx;
-  margin-right: 28rpx;
-  border-radius: 50%;
-  border: 4rpx solid var(--color-band-chip);
-  background: var(--color-band-chip);
   flex-shrink: 0;
 }
 
-.userinfo_meta {
+.home_band_meta {
   display: flex;
   flex-direction: column;
+  margin-left: 20rpx;
   min-width: 0;
-  flex: 1;
 }
 
-.userinfo-nickname {
+.home_greeting {
   color: var(--color-on-band);
-  font-size: var(--font-display);
+  font-size: var(--font-title);
   font-weight: 700;
-  line-height: 1.2;
-  word-break: break-word;
+  line-height: 1.3;
 }
 
-.userinfo-entry {
-  align-self: flex-start;
-  margin-top: 32rpx;
-  padding: 0 32rpx;
-  min-height: 72rpx;
-  line-height: 72rpx;
-  border-radius: var(--radius-full);
-  background: var(--color-band-chip);
-  color: var(--color-on-band);
-  font-size: var(--font-meta);
-  font-weight: 600;
+.home_date {
+  margin-top: 4rpx;
+  color: var(--color-on-band-muted);
+  font-size: var(--font-caption);
+  line-height: 1.4;
 }
 
 /* Service sections sit on the canvas below the band. */

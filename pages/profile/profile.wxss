@@ -193,8 +193,18 @@
   text-align: left;
 }
 
+.unsaved_bar {
+  margin: 32rpx var(--gutter) 0;
+  padding: 16rpx 24rpx;
+  border-radius: var(--radius-control);
+  background: var(--color-warning-soft);
+  color: var(--color-warning-ink);
+  font-size: var(--font-meta);
+  line-height: 1.5;
+}
+
 .save_wrap {
-  margin: 40rpx var(--gutter) 0;
+  margin: 24rpx var(--gutter) 0;
   padding-bottom: calc(48rpx + env(safe-area-inset-bottom));
 }
 

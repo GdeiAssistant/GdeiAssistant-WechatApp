@@ -11,6 +11,24 @@
   margin-top: 24rpx;
 }
 
+.category_cells {
+  margin-top: 24rpx;
+}
+
+.cell_badge_wrap {
+  display: flex;
+  align-items: center;
+}
+
+.section_label {
+  margin-top: 40rpx;
+  padding: 0 calc(var(--gutter) + 8rpx) 16rpx;
+  color: var(--color-text-secondary);
+  font-size: var(--font-meta);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
 .search_cells {
   margin-top: 24rpx;
 }

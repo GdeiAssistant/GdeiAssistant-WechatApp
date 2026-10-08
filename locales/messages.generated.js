@@ -76,12 +76,14 @@ module.exports = {
     "index": {
       "navTitle": "广东二师助手",
       "appName": "广东二师助手",
-      "viewProfile": "查看个人资料",
-      "defaultNickname": "广东二师助手用户",
       "settingsSection": "功能设置",
       "logoutTitle": "退出账号",
       "logoutContent": "你确定要退出当前账号吗？",
-      "unreadFailed": "获取未读消息失败"
+      "greetingMorning": "早上好",
+      "greetingNoon": "中午好",
+      "greetingAfternoon": "下午好",
+      "greetingEvening": "晚上好",
+      "greetingNight": "夜深了"
     },
     "grade": {
       "navTitle": "成绩查询",
@@ -159,7 +161,6 @@ module.exports = {
       "nicknameEmpty": "昵称不能为空",
       "nicknameTooLong": "昵称长度不能超过{{max}}个字符",
       "introTooLong": "个人简介长度不能超过{{max}}个字符",
-      "saveIntroduction": "保存简介",
       "saved": "已保存",
       "loadProfileFailed": "加载个人资料失败",
       "optionsFallback": "部分选项加载失败，显示为默认选项",
@@ -175,7 +176,12 @@ module.exports = {
       "editNicknameTitle": "修改昵称",
       "editNicknamePlaceholder": "请输入新的昵称",
       "facultyInvalid": "院系选项无效，请刷新后重试",
-      "shareTitle": "个人中心"
+      "shareTitle": "个人中心",
+      "save": "保存",
+      "unsavedBar": "有未保存的修改",
+      "unsavedReminderTitle": "未保存的修改",
+      "unsavedReminderContent": "你上次的资料修改还没有保存，内容已保留在页面上。",
+      "savePartialFailed": "以下内容保存失败：{{fields}}"
     },
     "upload": {
       "readLocalFileFailed": "读取本地文件失败",
@@ -329,7 +335,8 @@ module.exports = {
       "actionSent": "我发出的",
       "actionReceived": "我收到的",
       "actionPosts": "我的发布",
-      "actionNew": "新动态"
+      "actionNew": "新动态",
+      "tabService": "服务与系统提醒"
     },
     "appearance": {
       "title": "界面和外观",
@@ -1301,12 +1308,14 @@ module.exports = {
     "index": {
       "navTitle": "廣東二師助手",
       "appName": "廣東二師助手",
-      "viewProfile": "查看個人資料",
-      "defaultNickname": "廣東二師助手用戶",
       "settingsSection": "功能設定",
       "logoutTitle": "登出賬號",
       "logoutContent": "你確定要登出而家呢個賬號嗎？",
-      "unreadFailed": "獲取未讀消息失敗"
+      "greetingMorning": "早上好",
+      "greetingNoon": "中午好",
+      "greetingAfternoon": "下午好",
+      "greetingEvening": "晚上好",
+      "greetingNight": "夜深了"
     },
     "grade": {
       "navTitle": "成績查詢",
@@ -1384,7 +1393,6 @@ module.exports = {
       "nicknameEmpty": "暱稱不能為空",
       "nicknameTooLong": "暱稱長度不能超過{{max}}個字元",
       "introTooLong": "個人簡介長度不能超過{{max}}個字元",
-      "saveIntroduction": "儲存簡介",
       "saved": "已儲存",
       "loadProfileFailed": "載入個人資料失敗",
       "optionsFallback": "部分選項載入失敗，顯示為預設選項",
@@ -1400,7 +1408,12 @@ module.exports = {
       "editNicknameTitle": "修改暱稱",
       "editNicknamePlaceholder": "請輸入新的暱稱",
       "facultyInvalid": "院系選項無效，請重新整理之後再試",
-      "shareTitle": "個人中心"
+      "shareTitle": "個人中心",
+      "save": "保存",
+      "unsavedBar": "有未保存的修改",
+      "unsavedReminderTitle": "未保存的修改",
+      "unsavedReminderContent": "你上次的資料修改還沒有保存，內容已保留在頁面上。",
+      "savePartialFailed": "以下內容保存失敗：{{fields}}"
     },
     "upload": {
       "readLocalFileFailed": "讀取本機檔案失敗",
@@ -1554,7 +1567,8 @@ module.exports = {
       "actionSent": "我發出的",
       "actionReceived": "我收到的",
       "actionPosts": "我的發佈",
-      "actionNew": "新動態"
+      "actionNew": "新動態",
+      "tabService": "服務與系統提醒"
     },
     "appearance": {
       "title": "介面和外觀",
@@ -2526,12 +2540,14 @@ module.exports = {
     "index": {
       "navTitle": "廣東二師助手",
       "appName": "廣東二師助手",
-      "viewProfile": "查看個人資料",
-      "defaultNickname": "廣東二師助手使用者",
       "settingsSection": "功能設定",
       "logoutTitle": "登出帳號",
       "logoutContent": "你確定要登出目前帳號嗎？",
-      "unreadFailed": "取得未讀訊息失敗"
+      "greetingMorning": "早安",
+      "greetingNoon": "午安",
+      "greetingAfternoon": "下午好",
+      "greetingEvening": "晚上好",
+      "greetingNight": "夜深了"
     },
     "grade": {
       "navTitle": "成績查詢",
@@ -2609,7 +2625,6 @@ module.exports = {
       "nicknameEmpty": "暱稱不能為空",
       "nicknameTooLong": "暱稱長度不能超過{{max}}個字元",
       "introTooLong": "個人簡介長度不能超過{{max}}個字元",
-      "saveIntroduction": "儲存簡介",
       "saved": "已儲存",
       "loadProfileFailed": "載入個人資料失敗",
       "optionsFallback": "部分選項載入失敗，顯示為預設選項",
@@ -2625,7 +2640,12 @@ module.exports = {
       "editNicknameTitle": "修改暱稱",
       "editNicknamePlaceholder": "請輸入新的暱稱",
       "facultyInvalid": "院系選項無效，請重新整理後重試",
-      "shareTitle": "個人中心"
+      "shareTitle": "個人中心",
+      "save": "儲存",
+      "unsavedBar": "有未儲存的修改",
+      "unsavedReminderTitle": "未儲存的修改",
+      "unsavedReminderContent": "你上次的資料修改還沒有儲存，內容已保留在頁面上。",
+      "savePartialFailed": "以下內容儲存失敗：{{fields}}"
     },
     "upload": {
       "readLocalFileFailed": "讀取本機檔案失敗",
@@ -2779,7 +2799,8 @@ module.exports = {
       "actionSent": "我發出的",
       "actionReceived": "我收到的",
       "actionPosts": "我的發佈",
-      "actionNew": "新動態"
+      "actionNew": "新動態",
+      "tabService": "服務與系統提醒"
     },
     "appearance": {
       "title": "介面和外觀",
@@ -3751,12 +3772,14 @@ module.exports = {
     "index": {
       "navTitle": "GdeiAssistant",
       "appName": "GdeiAssistant",
-      "viewProfile": "View profile",
-      "defaultNickname": "GdeiAssistant User",
       "settingsSection": "Settings",
       "logoutTitle": "Logout",
       "logoutContent": "Are you sure you want to logout?",
-      "unreadFailed": "Failed to fetch unread messages"
+      "greetingMorning": "Good morning",
+      "greetingNoon": "Good afternoon",
+      "greetingAfternoon": "Good afternoon",
+      "greetingEvening": "Good evening",
+      "greetingNight": "It's getting late"
     },
     "grade": {
       "navTitle": "Grades",
@@ -3834,7 +3857,6 @@ module.exports = {
       "nicknameEmpty": "Nickname cannot be empty",
       "nicknameTooLong": "Nickname cannot exceed {{max}} characters",
       "introTooLong": "Bio cannot exceed {{max}} characters",
-      "saveIntroduction": "Save intro",
       "saved": "Saved",
       "loadProfileFailed": "Failed to load profile",
       "optionsFallback": "Some options failed to load, so defaults are shown",
@@ -3850,7 +3872,12 @@ module.exports = {
       "editNicknameTitle": "Edit Nickname",
       "editNicknamePlaceholder": "Enter new nickname",
       "facultyInvalid": "Invalid faculty option, please refresh and try again",
-      "shareTitle": "Profile"
+      "shareTitle": "Profile",
+      "save": "Save",
+      "unsavedBar": "Unsaved changes",
+      "unsavedReminderTitle": "Unsaved changes",
+      "unsavedReminderContent": "Your previous edits were not saved and are kept on this page.",
+      "savePartialFailed": "Failed to save: {{fields}}"
     },
     "upload": {
       "readLocalFileFailed": "Failed to read the local file",
@@ -4004,7 +4031,8 @@ module.exports = {
       "actionSent": "Sent",
       "actionReceived": "Received",
       "actionPosts": "My Posts",
-      "actionNew": "New Activity"
+      "actionNew": "New Activity",
+      "tabService": "Service & system reminders"
     },
     "appearance": {
       "title": "Interface & Appearance",
@@ -4976,12 +5004,14 @@ module.exports = {
     "index": {
       "navTitle": "GdeiAssistant",
       "appName": "GdeiAssistant",
-      "viewProfile": "プロフィールを見る",
-      "defaultNickname": "GdeiAssistantユーザー",
       "settingsSection": "設定",
       "logoutTitle": "ログアウト",
       "logoutContent": "ログアウトしてもよろしいですか？",
-      "unreadFailed": "未読メッセージの取得に失敗しました"
+      "greetingMorning": "おはようございます",
+      "greetingNoon": "こんにちは",
+      "greetingAfternoon": "こんにちは",
+      "greetingEvening": "こんばんは",
+      "greetingNight": "もう遅い時間です"
     },
     "grade": {
       "navTitle": "成績照会",
@@ -5059,7 +5089,6 @@ module.exports = {
       "nicknameEmpty": "ニックネームを入力してください",
       "nicknameTooLong": "ニックネームは{{max}}文字以内で入力してください",
       "introTooLong": "自己紹介は{{max}}文字以内で入力してください",
-      "saveIntroduction": "紹介を保存",
       "saved": "保存しました",
       "loadProfileFailed": "プロフィールの読み込みに失敗しました",
       "optionsFallback": "一部のオプションを読み込めなかったため、既定値を表示しています",
@@ -5075,7 +5104,12 @@ module.exports = {
       "editNicknameTitle": "ニックネームを変更",
       "editNicknamePlaceholder": "新しいニックネームを入力",
       "facultyInvalid": "学部オプションが無効です。更新してからやり直してください",
-      "shareTitle": "マイページ"
+      "shareTitle": "マイページ",
+      "save": "保存",
+      "unsavedBar": "未保存の変更があります",
+      "unsavedReminderTitle": "未保存の変更",
+      "unsavedReminderContent": "前回の変更は保存されていません。内容はページに残っています。",
+      "savePartialFailed": "保存に失敗しました：{{fields}}"
     },
     "upload": {
       "readLocalFileFailed": "ローカルファイルの読み込みに失敗しました",
@@ -5229,7 +5263,8 @@ module.exports = {
       "actionSent": "送信済み",
       "actionReceived": "受信済み",
       "actionPosts": "マイ投稿",
-      "actionNew": "新着"
+      "actionNew": "新着",
+      "tabService": "サービス・システム通知"
     },
     "appearance": {
       "title": "インターフェースと外観",
@@ -6201,12 +6236,14 @@ module.exports = {
     "index": {
       "navTitle": "GdeiAssistant",
       "appName": "GdeiAssistant",
-      "viewProfile": "프로필 보기",
-      "defaultNickname": "GdeiAssistant 사용자",
       "settingsSection": "설정",
       "logoutTitle": "로그아웃",
       "logoutContent": "정말 로그아웃하시겠습니까?",
-      "unreadFailed": "읽지 않은 메시지를 가져오지 못했습니다"
+      "greetingMorning": "좋은 아침이에요",
+      "greetingNoon": "점심 시간이에요",
+      "greetingAfternoon": "좋은 오후예요",
+      "greetingEvening": "좋은 저녁이에요",
+      "greetingNight": "밤이 늦었어요"
     },
     "grade": {
       "navTitle": "성적 조회",
@@ -6284,7 +6321,6 @@ module.exports = {
       "nicknameEmpty": "닉네임을 입력하세요",
       "nicknameTooLong": "닉네임은 {{max}}자 이내로 입력하세요",
       "introTooLong": "자기소개는 {{max}}자 이내로 입력하세요",
-      "saveIntroduction": "소개 저장",
       "saved": "저장됨",
       "loadProfileFailed": "프로필 로딩 실패",
       "optionsFallback": "일부 옵션을 불러오지 못해 기본 옵션을 표시합니다",
@@ -6300,7 +6336,12 @@ module.exports = {
       "editNicknameTitle": "닉네임 변경",
       "editNicknamePlaceholder": "새 닉네임을 입력하세요",
       "facultyInvalid": "학과 옵션이 유효하지 않습니다. 새로고침 후 다시 시도하세요",
-      "shareTitle": "마이페이지"
+      "shareTitle": "마이페이지",
+      "save": "저장",
+      "unsavedBar": "저장되지 않은 변경 사항",
+      "unsavedReminderTitle": "저장되지 않은 변경 사항",
+      "unsavedReminderContent": "이전 수정 내용이 저장되지 않았습니다. 내용은 페이지에 유지되어 있습니다.",
+      "savePartialFailed": "저장 실패: {{fields}}"
     },
     "upload": {
       "readLocalFileFailed": "로컬 파일을 읽지 못했습니다",
@@ -6454,7 +6495,8 @@ module.exports = {
       "actionSent": "보냄",
       "actionReceived": "받음",
       "actionPosts": "내 게시물",
-      "actionNew": "새 소식"
+      "actionNew": "새 소식",
+      "tabService": "서비스 및 시스템 알림"
     },
     "appearance": {
       "title": "인터페이스 및 외관",
