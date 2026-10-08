@@ -131,7 +131,7 @@
   height: 44rpx;
   border-radius: 50%;
   background: var(--color-overlay);
-  color: #ffffff;
+  color: var(--color-on-band);
   text-align: center;
   line-height: 44rpx;
   font-size: var(--font-meta);

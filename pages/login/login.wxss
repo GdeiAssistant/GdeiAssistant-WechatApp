@@ -23,12 +23,12 @@
   height: 112rpx;
   margin-bottom: 32rpx;
   border-radius: 28rpx;
-  background: #ffffff;
+  background: var(--color-on-band);
 }
 
 .userinfo-nickname {
   color: var(--color-on-band);
-  font-size: 52rpx;
+  font-size: var(--font-display);
   font-weight: 700;
   line-height: 1.2;
 }

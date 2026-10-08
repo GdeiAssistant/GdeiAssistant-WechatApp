@@ -146,8 +146,8 @@ textarea {
   font-weight: 600;
   color: var(--color-text-secondary);
   margin-bottom: 12rpx;
-  padding-left: 48rpx;
-  padding-right: 48rpx;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
 }
 
 .btn-area {
@@ -164,4 +164,28 @@ textarea {
 
 .btn-area button:first-child {
   margin-top: 0;
+}
+
+/*
+ * Press feedback shared by navigator/cell/card hovers: 0.12s ease with a
+ * subtle 0.98 scale, plus a tint shift for full-width rows where scaling
+ * would show page background at the edges.
+ */
+.weui-cell,
+.weui-grid,
+.shortcut_card,
+.interaction_card,
+.weui-form-preview__btn {
+  transition: transform var(--duration-press) ease, background-color var(--duration-press) ease, opacity var(--duration-press) ease;
+}
+
+.weui-grid_active,
+.shortcut_card_active,
+.interaction_card_active,
+.weui-form-preview__btn_active {
+  transform: scale(var(--scale-press));
+}
+
+navigator[hover-class="none"] {
+  transition: none;
 }

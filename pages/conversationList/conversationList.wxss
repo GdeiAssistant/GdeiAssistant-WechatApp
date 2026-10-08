@@ -82,7 +82,7 @@
   box-sizing: border-box;
   border-radius: var(--radius-full);
   background: var(--color-danger);
-  color: #ffffff;
+  color: var(--color-on-band);
   font-size: var(--font-caption);
   font-weight: 700;
   text-align: center;

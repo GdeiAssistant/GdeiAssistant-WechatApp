@@ -46,10 +46,22 @@ page {
 
   --radius-card: 28rpx;
   --radius-control: 20rpx;
+  --radius-compact: 12rpx;
+  --radius-sheet: 40rpx;
   --radius-full: 999rpx;
+  --space-1: 8rpx;
+  --space-2: 16rpx;
+  --space-3: 24rpx;
+  --space-4: 32rpx;
+  --space-5: 40rpx;
+  --space-6: 48rpx;
+  --space-7: 64rpx;
   --gutter: 32rpx;
   --shadow-card: 0 2rpx 6rpx rgba(17, 54, 44, 0.04), 0 8rpx 24rpx rgba(17, 54, 44, 0.05);
   --shadow-raised: 0 12rpx 40rpx rgba(17, 54, 44, 0.14);
+
+  --duration-press: 0.12s;
+  --scale-press: 0.98;
 
   --font-display: 44rpx;
   --font-title: 34rpx;

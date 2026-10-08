@@ -222,7 +222,7 @@ Page({
   },
 
   openConversationList: function () {
-    wx.navigateTo({ url: '/pages/conversationList/conversationList' })
+    wx.switchTab({ url: '/pages/conversationList/conversationList' })
   },
 
   openUserSearch: function () {

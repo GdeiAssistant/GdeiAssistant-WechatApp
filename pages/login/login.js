@@ -97,8 +97,8 @@ Page({
       if (result.success && result.data && result.data.token) {
         wx.setStorageSync(storageKeys.username, username)
         auth.setSessionToken(result.data.token)
-        wx.redirectTo({
-          url: '../index/index'
+        wx.switchTab({
+          url: '/pages/index/index'
         })
         return
       }
@@ -154,8 +154,8 @@ Page({
 
     auth.validateSessionToken().then((valid) => {
       if (valid) {
-        wx.redirectTo({
-          url: '../index/index'
+        wx.switchTab({
+          url: '/pages/index/index'
         })
         return
       }

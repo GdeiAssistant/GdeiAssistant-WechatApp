@@ -5,6 +5,7 @@ const pageUtils = require('../../utils/page.js')
 const { maskAccount } = require('../../utils/mask.js')
 const LOCATION_REGIONS = require('../../constants/location-regions.js')
 var themeUtil = require('../../utils/theme')
+var tabBarUtil = require('../../utils/tab-bar')
 var i18n = require('../../utils/i18n')
 const {
   NOT_SELECTED,
@@ -31,6 +32,7 @@ const { getSafeIndex, buildLocationRanges, buildLocationSelection, normalizeProf
 Page({
   onShow: function () {
     themeUtil.applyTheme(this)
+    tabBarUtil.syncTabBar(this, 2)
     this.refreshI18n()
   },
   refreshI18n: function () {
@@ -274,7 +276,7 @@ Page({
   openSocialEntry: function(event) {
     const target = event.currentTarget.dataset.target
     if (target === 'messages') {
-      wx.navigateTo({ url: '/pages/conversationList/conversationList' })
+      wx.switchTab({ url: '/pages/conversationList/conversationList' })
       return
     }
     if (target !== 'following' && target !== 'followers' && target !== 'friends') {

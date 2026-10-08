@@ -1,0 +1,13 @@
+<view class="tabbar {{themeClass}}">
+  <view
+    wx:for="{{list}}"
+    wx:key="index"
+    class="tabbar_item {{selected === index ? 'is_selected' : ''}}"
+    data-index="{{index}}"
+    bindtap="switchTab"
+    hover-class="tabbar_item_hover"
+  >
+    <view class="tabbar_icon tabbar_icon_{{item.icon}}"></view>
+    <view class="tabbar_label">{{t[item.labelKey]}}</view>
+  </view>
+</view>

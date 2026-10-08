@@ -18,7 +18,7 @@ function setupWxRuntime() {
   const storage = {}
   const calls = {
     noActionModal: [],
-    redirectTo: [],
+    switchTab: [],
     showModal: [],
     showNavigationBarLoading: 0,
     hideNavigationBarLoading: 0
@@ -40,8 +40,8 @@ function setupWxRuntime() {
     hideNavigationBarLoading() {
       calls.hideNavigationBarLoading += 1
     },
-    redirectTo(options) {
-      calls.redirectTo.push(options)
+    switchTab(options) {
+      calls.switchTab.push(options)
     },
     showModal(options) {
       calls.showModal.push(options)
@@ -235,5 +235,5 @@ test('login sends campus credential consent metadata when checked', async functi
     effectiveDate: '2026-05-11'
   })
   assert.equal(runtime.storage[storageKeys.username], 'gdeiassistant')
-  assert.equal(runtime.calls.redirectTo[0].url, '../index/index')
+  assert.equal(runtime.calls.switchTab[0].url, '/pages/index/index')
 })

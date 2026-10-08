@@ -4,6 +4,7 @@ const socialAvatar = require('../../services/social-avatar.js')
 const pageUtils = require('../../utils/page.js')
 const socialUtils = require('../../utils/social.js')
 const themeUtil = require('../../utils/theme')
+const tabBarUtil = require('../../utils/tab-bar')
 const i18n = require('../../utils/i18n.js')
 
 const POLL_MS = 30000
@@ -134,6 +135,7 @@ Page({
   onShow: function () {
     this._pageVisible = true
     themeUtil.applyTheme(this)
+    tabBarUtil.syncTabBar(this, 1)
     this.refreshI18n()
     socialRealtime.ensureConnected()
     this.loadList(true)

@@ -1,8 +1,13 @@
 {
+  "tabBar": {
+    "home": "홈",
+    "messages": "메시지",
+    "profile": "내 정보"
+  },
   "common": {
     "copyright": "Copyright © 2016 - 2026 GdeiAssistant",
     "rightsReserved": "All rights reserved",
-    "loading": "로딩 중...",
+    "loading": "로딩 중……",
     "retry": "재시도",
     "confirm": "확인",
     "cancel": "취소",
@@ -20,37 +25,13 @@
     "publishFailed": "게시 실패",
     "queryFailed": "조회 실패"
   },
-  "tab": {
-    "home": "홈",
-    "info": "소식",
-    "profile": "마이페이지"
-  },
-  "feature": {
-    "grade": "성적 조회",
-    "schedule": "시간표",
-    "cet": "CET 성적",
-    "graduateExam": "대학원 시험",
-    "spare": "빈 강의실",
-    "library": "도서관",
-    "card": "학생증",
-    "dataCenter": "데이터 조회",
-    "evaluate": "수업 평가",
-    "marketplace": "중고거래",
-    "delivery": "배달",
-    "lostFound": "분실물",
-    "secret": "비밀나무",
-    "dating": "룸메이트",
-    "express": "고백벽",
-    "topic": "토픽",
-    "photograph": "포토월"
-  },
   "login": {
     "navTitle": "GdeiAssistant에 오신 것을 환영합니다",
     "title": "로그인",
     "username": "아이디",
     "password": "비밀번호",
     "button": "로그인",
-    "loading": "로그인 중...",
+    "loading": "로그인 중……",
     "appName": "GdeiAssistant",
     "usernamePlaceholder": "캠퍼스 계정을 입력하세요",
     "passwordPlaceholder": "캠퍼스 비밀번호를 입력하세요",
@@ -91,7 +72,7 @@
     "weekRange": "{{min}}주~{{max}}주"
   },
   "index": {
-    "navTitle": "기능 목록",
+    "navTitle": "GdeiAssistant",
     "appName": "GdeiAssistant",
     "viewProfile": "프로필 보기",
     "defaultNickname": "GdeiAssistant 사용자",
@@ -115,7 +96,6 @@
   "profile": {
     "settings": "설정",
     "language": "언어",
-    "theme": "테마",
     "logout": "로그아웃",
     "privacy": "개인정보",
     "feedback": "도움말"
@@ -160,8 +140,8 @@
     "usernameLabel": "아이디: ",
     "ipAreaLabel": "IP 지역: ",
     "empty": "없음",
-    "updatingAvatar": "프로필 사진 업데이트 중...",
-    "savingProfile": "프로필 저장 중...",
+    "updatingAvatar": "프로필 사진 업데이트 중……",
+    "savingProfile": "프로필 저장 중……",
     "accountInfo": "계정 정보",
     "nickname": "닉네임",
     "birthday": "생일",
@@ -180,7 +160,7 @@
     "saveIntroduction": "소개 저장",
     "saved": "저장됨",
     "loadProfileFailed": "프로필 로딩 실패",
-    "optionsFallback": "옵션 로딩 실패, 로컬 기본값을 사용합니다",
+    "optionsFallback": "일부 옵션을 불러오지 못해 기본 옵션을 표시합니다",
     "avatarRefreshFailed": "프로필 사진 새로고침 실패",
     "avatarUpdated": "프로필 사진이 업데이트되었습니다",
     "changeAvatarAction": "프로필 사진 변경",
@@ -257,7 +237,7 @@
     "campusCredentialTitle": "캠퍼스 자격정보 관리",
     "campusCredentialDangerTitle": "위험한 작업",
     "campusCredentialLoginFirst": "캠퍼스 자격정보 상태를 보려면 먼저 로그인해 주세요.",
-    "campusCredentialLoadingText": "캠퍼스 자격정보 상태를 불러오는 중...",
+    "campusCredentialLoadingText": "캠퍼스 자격정보 상태를 불러오는 중……",
     "campusCredentialLoadFailed": "캠퍼스 자격정보 상태를 불러오지 못했습니다.",
     "campusCredentialAuthStatus": "동의 상태",
     "campusCredentialAuthorized": "동의함",
@@ -1030,7 +1010,7 @@
     },
     "publish": {
       "basicInfo": "기본 정보",
-      "loadingExisting": "기존 데이터 로딩 중...",
+      "loadingExisting": "기존 데이터 로딩 중……",
       "imageUpload": "이미지 업로드",
       "editImageNotSupported": "편집 모드에서는 이미지를 변경할 수 없습니다",
       "datingImageHint": "첫 번째 이미지만 표시됩니다",

@@ -57,7 +57,7 @@
   border-radius: var(--radius-full);
   border: 3rpx solid var(--color-band);
   background: var(--color-danger);
-  color: #ffffff;
+  color: var(--color-on-band);
   font-size: 20rpx;
   font-weight: 700;
   text-align: center;
