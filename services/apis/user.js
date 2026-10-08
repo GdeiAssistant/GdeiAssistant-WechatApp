@@ -135,7 +135,12 @@ function deleteAvatar() {
   })
 }
 
+function updateProfile(data) {
+  return request({ url: '/api/profile', method: 'POST', authRequired: true, data })
+}
+
 module.exports = {
+  updateProfile,
   getAvatar,
   getProfile,
   updateNickname,

@@ -49,7 +49,43 @@ function markAllMessagesRead() {
   })
 }
 
+function getCategoriesUnread() {
+  return request({
+    url: '/api/information/message/categories/unread',
+    method: 'GET',
+    authRequired: true
+  })
+}
+function getAnnouncementUnread() {
+  return request({ url: '/api/information/announcement/unread', method: 'GET', authRequired: true })
+}
+function getCategoryList(category, start, size) {
+  return request({
+    url: '/api/information/message/' + category + '/start/' + start + '/size/' + size,
+    method: 'GET',
+    authRequired: true
+  })
+}
+function markCategoryRead(category) {
+  return request({
+    url: '/api/information/message/' + category + '/readall',
+    method: 'POST',
+    authRequired: true
+  })
+}
+function markAnnouncementRead(id) {
+  return request({
+    url: '/api/information/announcement/id/' + encodeURIComponent(id) + '/read',
+    method: 'POST',
+    authRequired: true
+  })
+}
 module.exports = {
+  getCategoriesUnread,
+  getAnnouncementUnread,
+  getCategoryList,
+  markCategoryRead,
+  markAnnouncementRead,
   getAnnouncementList,
   getAnnouncementDetail,
   getInteractionList,

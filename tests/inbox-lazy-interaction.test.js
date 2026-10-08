@@ -59,18 +59,18 @@ function installInboxTestStubs() {
       apiCallLog.push({ method: 'getAnnouncementList', args: [start, size] })
       return Promise.resolve({ success: true, data: [] })
     },
-    getInteractionList: function (start, size) {
-      apiCallLog.push({ method: 'getInteractionList', args: [start, size] })
+    getCategoryList: function (category, start, size) {
+      apiCallLog.push({ method: 'getCategoryList', args: [category, start, size] })
       return Promise.resolve({ success: true, data: [] })
     },
-    getUnreadCount: function () {
-      apiCallLog.push({ method: 'getUnreadCount' })
-      return Promise.resolve({ success: true, data: 3 })
+    getCategoriesUnread: function () {
+      apiCallLog.push({ method: 'getCategoriesUnread' })
+      return Promise.resolve({ success: true, data: { interaction: 3, service: 1 } })
     },
     markMessageRead: function () {
       return Promise.resolve({ success: true })
     },
-    markAllMessagesRead: function () {
+    markCategoryRead: function () {
       return Promise.resolve({ success: true })
     }
   })
@@ -139,7 +139,7 @@ function createPageInstance() {
   return instance
 }
 
-test('initial load does NOT call interaction list — zero getInteractionList requests on onLoad', async function () {
+test('initial load does NOT call interaction list — zero getCategoryList requests on onLoad', async function () {
   apiCallLog = []
   var page = createPageInstance()
   page.onLoad()
@@ -149,10 +149,10 @@ test('initial load does NOT call interaction list — zero getInteractionList re
   })
 
   var interactionListCalls = apiCallLog.filter(function (c) {
-    return c.method === 'getInteractionList'
+    return c.method === 'getCategoryList'
   })
   var unreadCountCalls = apiCallLog.filter(function (c) {
-    return c.method === 'getUnreadCount'
+    return c.method === 'getCategoriesUnread'
   })
   var announcementCalls = apiCallLog.filter(function (c) {
     return c.method === 'getAnnouncementList'
@@ -179,7 +179,7 @@ test('switching to interaction tab triggers list fetch on first activation', asy
   })
 
   var interactionListCalls = apiCallLog.filter(function (c) {
-    return c.method === 'getInteractionList'
+    return c.method === 'getCategoryList'
   })
   assert.equal(interactionListCalls.length, 1, 'should fetch interaction list on first tab switch')
   assert.equal(page.data.interactionLoaded, true, 'interactionLoaded flag should be true')
@@ -211,7 +211,7 @@ test('switching to interaction tab a second time does NOT re-fetch list', async 
   })
 
   var interactionListCalls = apiCallLog.filter(function (c) {
-    return c.method === 'getInteractionList'
+    return c.method === 'getCategoryList'
   })
   assert.equal(
     interactionListCalls.length,
@@ -237,7 +237,7 @@ test('pull-down refresh on interaction tab fetches list and sets interactionLoad
   })
 
   var interactionListCalls = apiCallLog.filter(function (c) {
-    return c.method === 'getInteractionList'
+    return c.method === 'getCategoryList'
   })
   assert.equal(interactionListCalls.length, 1, 'pull-down refresh should fetch interaction list')
   assert.equal(page.data.interactionLoaded, true, 'interactionLoaded should be true after refresh')
@@ -251,7 +251,7 @@ test('onReachBottom does not paginate interaction if not yet loaded', function (
   page.onReachBottom()
 
   var interactionListCalls = apiCallLog.filter(function (c) {
-    return c.method === 'getInteractionList'
+    return c.method === 'getCategoryList'
   })
   assert.equal(
     interactionListCalls.length,

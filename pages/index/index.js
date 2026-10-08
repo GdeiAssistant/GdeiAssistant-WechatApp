@@ -1,20 +1,58 @@
 const { getSystemActions } = require('../../constants/features.js')
 const auth = require('../../services/auth.js')
-const messagesApi = require('../../services/apis/messages.js')
-const socialApi = require('../../services/apis/social.js')
 const socialRealtime = require('../../services/social-realtime.js')
-const userApi = require('../../services/apis/user.js')
 const featureConfig = require('../../services/feature-config.js')
 var themeUtil = require('../../utils/theme')
 var tabBarUtil = require('../../utils/tab-bar')
 var i18n = require('../../utils/i18n')
 
-function formatInboxBadge(unreadCount) {
-  const count = Number(unreadCount || 0)
-  if (count <= 0) {
-    return ''
+const GREETING_KEYS = [
+  'index.greetingNight',
+  'index.greetingMorning',
+  'index.greetingNoon',
+  'index.greetingAfternoon',
+  'index.greetingEvening',
+  'index.greetingNight'
+]
+
+function greetingKeyByHour(hour) {
+  if (hour >= 5 && hour <= 11) {
+    return GREETING_KEYS[1]
   }
-  return count > 99 ? '99+' : String(count)
+  if (hour >= 12 && hour <= 13) {
+    return GREETING_KEYS[2]
+  }
+  if (hour >= 14 && hour <= 17) {
+    return GREETING_KEYS[3]
+  }
+  if (hour >= 18 && hour <= 23) {
+    return GREETING_KEYS[4]
+  }
+  return GREETING_KEYS[0]
+}
+
+function formatToday() {
+  const now = new Date()
+  const locale = i18n.getCurrentLocale ? i18n.getCurrentLocale() : 'zh-CN'
+  const month = now.getMonth() + 1
+  const date = now.getDate()
+  const day = now.getDay()
+
+  if (locale === 'en') {
+    const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    return weekDays[day] + ', ' + months[month - 1] + ' ' + date
+  }
+  if (locale === 'ja') {
+    const weekDays = ['日', '月', '火', '水', '木', '金', '土']
+    return month + '月' + date + '日（' + weekDays[day] + '）'
+  }
+  if (locale === 'ko') {
+    const weekDays = ['일', '월', '화', '수', '목', '금', '토']
+    return month + '월 ' + date + '일 (' + weekDays[day] + ')'
+  }
+  const weekDays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+  return month + '月' + date + '日 ' + weekDays[day]
 }
 
 Page({
@@ -22,13 +60,9 @@ Page({
     themeClass: '',
     fontStyle: '',
     t: {},
-    avatar: null,
-    nickname: null,
     homeSections: [],
     systemActions: [],
-    hiddenFeatureIds: [],
-    inboxUnreadCount: 0,
-    inboxBadgeText: ''
+    hiddenFeatureIds: []
   },
 
   refreshI18n: function () {
@@ -36,7 +70,8 @@ Page({
       t: {
         appName: i18n.t('index.appName'),
         navTitle: i18n.t('index.navTitle'),
-        viewProfile: i18n.t('index.viewProfile'),
+        greeting: i18n.t(greetingKeyByHour(new Date().getHours())),
+        today: formatToday(),
         settingsSection: i18n.t('index.settingsSection'),
         copyright: i18n.t('common.copyright'),
         rightsReserved: i18n.t('common.rightsReserved')
@@ -72,18 +107,6 @@ Page({
     }
   },
 
-  openProfile: function() {
-    wx.switchTab({
-      url: '/pages/profile/profile'
-    })
-  },
-
-  openInbox: function() {
-    wx.navigateTo({
-      url: '/pages/inbox/inbox'
-    })
-  },
-
   loadHomeSections: function() {
     const hiddenFeatureIds = this.data.hiddenFeatureIds || []
     const homeSections = featureConfig.getHomeSections().map(function(section) {
@@ -103,56 +126,6 @@ Page({
     })
   },
 
-  loadProfile: function() {
-    const page = this
-    var defaultNickname = i18n.t('index.defaultNickname')
-
-    userApi.getAvatar().then(function(result) {
-      page.setData({
-        avatar: result.success && result.data ? result.data : '../../image/default.png'
-      })
-    }).catch(function() {
-      page.setData({
-        avatar: '../../image/default.png'
-      })
-    })
-
-    userApi.getProfile().then(function(result) {
-      page.setData({
-        nickname: result.success && result.data && result.data.nickname ? result.data.nickname : defaultNickname
-      })
-    }).catch(function() {
-      page.setData({
-        nickname: defaultNickname
-      })
-    })
-  },
-
-  loadInboxStatus: function() {
-    Promise.all([
-      messagesApi.getUnreadCount().catch(function() {
-        return { success: true, data: 0 }
-      }),
-      socialApi.getUnread().catch(function() {
-        return { success: true, data: { total: 0 } }
-      })
-    ]).then((results) => {
-      const interactionUnread = results[0] && results[0].success ? Number(results[0].data || 0) : 0
-      const directUnread =
-        results[1] && results[1].success ? Number((results[1].data && results[1].data.total) || 0) : 0
-      const unreadCount = interactionUnread + directUnread
-      this.setData({
-        inboxUnreadCount: unreadCount,
-        inboxBadgeText: formatInboxBadge(unreadCount)
-      })
-    }).catch(() => {
-      this.setData({
-        inboxUnreadCount: 0,
-        inboxBadgeText: ''
-      })
-    })
-  },
-
   onLoad: function() {
     this.setData({ hiddenFeatureIds: [] })
   },
@@ -160,9 +133,8 @@ Page({
   onShow: function() {
     themeUtil.applyTheme(this)
     tabBarUtil.syncTabBar(this, 0)
+    tabBarUtil.refreshUnreadBadge(this)
     this.refreshI18n()
-    this.loadProfile()
-    this.loadInboxStatus()
     this.loadHomeSections()
     if (auth.getSessionToken()) {
       socialRealtime.ensureConnected()

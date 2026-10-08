@@ -61,6 +61,9 @@ Page({
         }),
         errorMessage: null
       })
+      if (mode === 'announcement') return messagesApi.markAnnouncementRead(id).then(receipt => {
+        if (!receipt.success) throw new Error(receipt.message || this.data.t.loadFailed)
+      })
     }).catch((error) => {
       pageUtils.showTopTips(this, error.message || this.data.t.loadFailed)
       this.setData({

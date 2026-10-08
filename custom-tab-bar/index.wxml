@@ -1,4 +1,4 @@
-<view class="tabbar {{themeClass}}">
+<view class="tabbar theme-root {{themeClass}}">
   <view
     wx:for="{{list}}"
     wx:key="index"
@@ -7,7 +7,9 @@
     bindtap="switchTab"
     hover-class="tabbar_item_hover"
   >
-    <view class="tabbar_icon tabbar_icon_{{item.icon}}"></view>
+    <view class="tabbar_icon tabbar_icon_{{item.icon}}">
+      <text class="tabbar_badge" wx:if="{{index === 1 && badge}}">{{badge}}</text>
+    </view>
     <view class="tabbar_label">{{t[item.labelKey]}}</view>
   </view>
 </view>

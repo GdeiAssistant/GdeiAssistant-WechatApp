@@ -5,6 +5,7 @@ Component({
   data: {
     themeClass: '',
     selected: 0,
+    badge: '',
     list: [
       { pagePath: '/pages/index/index', icon: 'home', labelKey: 'home' },
       { pagePath: '/pages/conversationList/conversationList', icon: 'messages', labelKey: 'messages' },
@@ -36,6 +37,9 @@ Component({
       }
       if (options && typeof options.selected === 'number') {
         patch.selected = options.selected
+      }
+      if (options && typeof options.badge === 'string') {
+        patch.badge = options.badge
       }
       this.setData(patch)
     },

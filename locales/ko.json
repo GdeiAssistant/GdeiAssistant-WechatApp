@@ -74,12 +74,14 @@
   "index": {
     "navTitle": "GdeiAssistant",
     "appName": "GdeiAssistant",
-    "viewProfile": "프로필 보기",
-    "defaultNickname": "GdeiAssistant 사용자",
     "settingsSection": "설정",
     "logoutTitle": "로그아웃",
     "logoutContent": "정말 로그아웃하시겠습니까?",
-    "unreadFailed": "읽지 않은 메시지를 가져오지 못했습니다"
+    "greetingMorning": "좋은 아침이에요",
+    "greetingNoon": "점심 시간이에요",
+    "greetingAfternoon": "좋은 오후예요",
+    "greetingEvening": "좋은 저녁이에요",
+    "greetingNight": "밤이 늦었어요"
   },
   "grade": {
     "navTitle": "성적 조회",
@@ -157,7 +159,6 @@
     "nicknameEmpty": "닉네임을 입력하세요",
     "nicknameTooLong": "닉네임은 {{max}}자 이내로 입력하세요",
     "introTooLong": "자기소개는 {{max}}자 이내로 입력하세요",
-    "saveIntroduction": "소개 저장",
     "saved": "저장됨",
     "loadProfileFailed": "프로필 로딩 실패",
     "optionsFallback": "일부 옵션을 불러오지 못해 기본 옵션을 표시합니다",
@@ -173,7 +174,12 @@
     "editNicknameTitle": "닉네임 변경",
     "editNicknamePlaceholder": "새 닉네임을 입력하세요",
     "facultyInvalid": "학과 옵션이 유효하지 않습니다. 새로고침 후 다시 시도하세요",
-    "shareTitle": "마이페이지"
+    "shareTitle": "마이페이지",
+    "save": "저장",
+    "unsavedBar": "저장되지 않은 변경 사항",
+    "unsavedReminderTitle": "저장되지 않은 변경 사항",
+    "unsavedReminderContent": "이전 수정 내용이 저장되지 않았습니다. 내용은 페이지에 유지되어 있습니다.",
+    "savePartialFailed": "저장 실패: {{fields}}"
   },
   "upload": {
     "readLocalFileFailed": "로컬 파일을 읽지 못했습니다",
@@ -327,7 +333,8 @@
     "actionSent": "보냄",
     "actionReceived": "받음",
     "actionPosts": "내 게시물",
-    "actionNew": "새 소식"
+    "actionNew": "새 소식",
+    "tabService": "서비스 및 시스템 알림"
   },
   "appearance": {
     "title": "인터페이스 및 외관",
@@ -882,7 +889,7 @@
       "search": "검색",
       "clear": "초기화",
       "loading": "로딩 중",
-"loadMore": "더 불러오기",
+      "loadMore": "더 불러오기",
       "noMore": "더 이상 데이터 없음",
       "emptyTitle": "콘텐츠 없음",
       "emptySummary": "필터를 변경하거나 새로 게시해 보세요.",

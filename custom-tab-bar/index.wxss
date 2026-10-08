@@ -43,6 +43,23 @@
   height: 36rpx;
 }
 
+.tabbar_badge {
+  position: absolute;
+  top: -12rpx;
+  left: 24rpx;
+  min-width: 32rpx;
+  padding: 2rpx 8rpx;
+  box-sizing: border-box;
+  border-radius: var(--radius-full);
+  background: var(--color-danger);
+  color: var(--color-on-band);
+  font-size: 18rpx;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+}
+
 .tabbar_label {
   margin-top: 4rpx;
   font-size: 20rpx;

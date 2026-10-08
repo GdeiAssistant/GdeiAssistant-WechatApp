@@ -12,7 +12,8 @@ function getInboxTabs() {
   return [
     { key: 'announcement', label: i18n.t('inboxPage.tabAnnouncement') },
     { key: 'direct', label: i18n.t('inboxPage.tabDirect') },
-    { key: 'interaction', label: i18n.t('inboxPage.tabInteraction') }
+    { key: 'interaction', label: i18n.t('inboxPage.tabInteraction') },
+    { key: 'service', label: i18n.t('inboxPage.tabService') }
   ]
 }
 
@@ -267,14 +268,14 @@ Page({
 
   loadInteractionMeta: function () {
     return messagesApi
-      .getUnreadCount()
+      .getCategoriesUnread()
       .then((result) => {
         if (!result.success) {
           throw new Error(result.message)
         }
 
         this.setData({
-          interactionUnreadCount: Number(result.data || 0)
+          interactionUnreadCount: Number(result.data[this.data.activeTab === 'service' ? 'service' : 'interaction'])
         })
       })
       .catch((error) => {
@@ -283,15 +284,15 @@ Page({
   },
 
   loadInteractionList: function (pageNumber, reset) {
-    if (this.data.interactionLoading) {
-      return Promise.resolve()
-    }
+    if (this.data.interactionLoading && !reset) return Promise.resolve()
+    const epoch = this._interactionEpoch = (this._interactionEpoch || 0) + 1
 
+    const category = this.data.activeTab === 'service' ? 'service' : 'community'
     return pageUtils
       .runWithNavigationLoading(
         this,
         function () {
-          return messagesApi.getInteractionList((pageNumber - 1) * PAGE_SIZE, PAGE_SIZE)
+          return messagesApi.getCategoryList(category, (pageNumber - 1) * PAGE_SIZE, PAGE_SIZE)
         },
         {
           loadingKey: 'interactionLoading'
@@ -302,6 +303,7 @@ Page({
           throw new Error(result.message)
         }
 
+        if (epoch !== this._interactionEpoch || category !== (this.data.activeTab === 'service' ? 'service' : 'community')) return
         const interactionList = (Array.isArray(result.data) ? result.data : []).map(
           normalizeInteractionItem
         )
@@ -325,12 +327,13 @@ Page({
       return
     }
 
-    this.setData({
-      activeTab: nextTab
-    })
+    const oldCategory = this.data.activeTab === 'service' ? 'service' : 'community'
+    const newCategory = nextTab === 'service' ? 'service' : 'community'
+    this.setData(Object.assign({ activeTab: nextTab }, oldCategory !== newCategory ? { interactionLoaded: false, interactionList: [] } : {}))
 
-    if (nextTab === 'interaction' && !this.data.interactionLoaded) {
+    if ((nextTab === 'interaction' || nextTab === 'service') && !this.data.interactionLoaded) {
       var self = this
+      this.loadInteractionMeta()
       this.loadInteractionList(1, true)
         .then(function () {
           self.setData({ interactionLoaded: true })
@@ -431,7 +434,7 @@ Page({
     })
 
     messagesApi
-      .markAllMessagesRead()
+      .markCategoryRead(this.data.activeTab === 'service' ? 'service' : 'community')
       .then((result) => {
         if (!result.success) {
           throw new Error(result.message)
@@ -446,10 +449,26 @@ Page({
     return Promise.all([this.loadInteractionMeta(), this.loadInteractionList(1, true)])
   },
 
-  onLoad: function () {
+  onLoad: function (options) {
+    var initialTab = options && options.tab
+    if (initialTab === 'interaction' || initialTab === 'service' || initialTab === 'direct') {
+      this.setData({ activeTab: initialTab })
+    }
     this.loadAnnouncementList(1, true)
     this.loadInteractionMeta()
     this.loadDirectMeta()
+    if (initialTab === 'interaction' || initialTab === 'service') {
+      this.loadInteractionList(1, true)
+        .then(() => {
+          this.setData({ interactionLoaded: true })
+        })
+        .catch(() => {
+          // Keep interactionLoaded false so a later tab switch retries
+        })
+    }
+    if (initialTab === 'direct') {
+      this.loadDirectList().catch(() => {})
+    }
   },
 
   onShow: function () {
@@ -457,7 +476,7 @@ Page({
     this.refreshI18n()
     socialRealtime.ensureConnected()
     this.loadDirectMeta()
-    if (this.data.activeTab === 'interaction') {
+    if (this.data.activeTab === 'interaction' || this.data.activeTab === 'service') {
       this.loadInteractionMeta()
     }
     if (this.data.activeTab === 'direct') {

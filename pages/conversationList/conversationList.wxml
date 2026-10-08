@@ -1,11 +1,29 @@
 <view class="page {{themeClass}}" style="{{fontStyle}}">
   <view class="weui-toptips weui-toptips_warn" wx:if="{{errorMessage}}">{{errorMessage}}</view>
-  <view class="weui-cells search_cells">
+
+  <view class="weui-cells category_cells">
+    <view class="weui-cell weui-cell_access" data-tab="announcement" bindtap="openInbox">
+      <view class="weui-cell__bd">{{t.noticesEntry}}</view>
+      <view class="weui-cell__ft cell_badge_wrap"><view class="badge" wx:if="{{announcementBadgeText}}">{{announcementBadgeText}}</view></view>
+    </view>
+    <view class="weui-cell weui-cell_access" data-tab="interaction" bindtap="openInbox">
+      <view class="weui-cell__bd">{{t.interactionEntry}}</view>
+      <view class="weui-cell__ft cell_badge_wrap">
+        <view class="badge" wx:if="{{interactionBadgeText}}">{{interactionBadgeText}}</view>
+      </view>
+    </view>
+    <view class="weui-cell weui-cell_access" data-tab="service" bindtap="openInbox">
+      <view class="weui-cell__bd">{{t.serviceEntry}}</view>
+      <view class="weui-cell__ft cell_badge_wrap"><view class="badge" wx:if="{{serviceBadgeText}}">{{serviceBadgeText}}</view></view>
+    </view>
     <view class="weui-cell weui-cell_access" bindtap="openUserSearch">
       <view class="weui-cell__bd search_hint">{{t.searchUsers}}</view>
       <view class="weui-cell__ft"></view>
     </view>
   </view>
+
+  <view class="section_label">{{t.directSection}}</view>
+
   <view class="weui-cells" wx:if="{{conversations.length}}">
     <view
       class="weui-cell weui-cell_access"
@@ -30,7 +48,7 @@
       </view>
     </view>
   </view>
-  <view class="empty" wx:if="{{!loading && !conversations.length}}">{{t.empty}}</view>
+  <view class="empty" wx:if="{{!loading && !conversations.length && listLoaded}}">{{t.empty}}</view>
   <view class="weui-loadmore" wx:if="{{loading}}">
     <i class="weui-loading"></i>
     <view class="weui-loadmore__tips">{{t.loading}}</view>

@@ -111,10 +111,8 @@ function stubCommonModules(options) {
       'login.defaultError': '请稍后再试',
       'index.appName': '广东二师助手',
       'index.navTitle': '首页',
-      'index.viewProfile': '查看资料',
       'index.settingsSection': '系统功能',
-      'index.defaultNickname': '校园用户',
-      'index.unreadFailed': '消息加载失败',
+      'index.greetingMorning': '早上好',
       'info.navTitle': '资讯',
       'info.loadingNews': '加载中',
       'info.noMoreNews': '没有更多了',
@@ -352,7 +350,7 @@ test('appearance page labels traditional Chinese variants as Hong Kong/Macau and
   assert.ok(!page.data.locales.some((locale) => locale.label === '繁體中文（台灣）'))
 })
 
-test('mock UI smoke covers index page profile, inbox badge and feature actions', async function () {
+test('mock UI smoke covers index page greeting band and feature actions', async function () {
   const runtime = setupWxRuntime()
   stubCommonModules()
 
@@ -400,15 +398,6 @@ test('mock UI smoke covers index page profile, inbox badge and feature actions',
     }
   })
 
-  stubModule(path.join(ROOT, 'services/apis/user.js'), {
-    getAvatar() {
-      return Promise.resolve({ success: true, data: 'https://example.com/avatar.png' })
-    },
-    getProfile() {
-      return Promise.resolve({ success: true, data: { nickname: '测试用户' } })
-    }
-  })
-
   stubModule(path.join(ROOT, 'services/feature-config.js'), {
     getHomeSections() {
       return [
@@ -440,21 +429,16 @@ test('mock UI smoke covers index page profile, inbox badge and feature actions',
   page.onShow()
   await waitForSettled()
 
+  // The home band shows a greeting and date only; personal info lives in the profile tab.
   assert.equal(runtime.calls.setNavigationBarTitle.at(-1).title, '首页')
-  assert.equal(page.data.nickname, '测试用户')
-  assert.equal(page.data.avatar, 'https://example.com/avatar.png')
-  assert.equal(page.data.inboxUnreadCount, 7)
-  assert.equal(page.data.inboxBadgeText, '7')
+  assert.ok(page.data.t.greeting)
+  assert.ok(page.data.t.today)
+  assert.equal(page.data.avatar, undefined)
+  assert.equal(page.data.nickname, undefined)
+  assert.equal(page.data.inboxBadgeText, undefined)
   assert.equal(page.data.homeSections.length, 1)
   assert.equal(page.data.homeSections[0].features.length, 2)
   assert.equal(page.data.systemActions.length, 2)
-
-  page.openProfile()
-  page.openInbox()
-  assert.equal(runtime.calls.switchTab.length, 1)
-  assert.equal(runtime.calls.switchTab[0].url, '/pages/profile/profile')
-  assert.equal(runtime.calls.navigateTo.length, 1)
-  assert.equal(runtime.calls.navigateTo[0].url, '/pages/inbox/inbox')
 
   page.handleActionTap({ currentTarget: { dataset: { action: 'logout' } } })
   await waitForSettled()
