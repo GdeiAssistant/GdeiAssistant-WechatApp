@@ -34,7 +34,7 @@
         <text class="today-card__period">{{item.lesson}}</text>
         <view class="today-card__detail"><text class="today-card__name">{{item.name}}</text><text class="today-card__location" wx:if="{{item.location}}">{{item.location}}</text></view>
       </view>
-      <view class="today-card__footer"><text>{{t.todayHint}}</text><text>{{t.viewSchedule}} ›</text></view>
+      <view class="today-card__footer"><text>{{t.viewSchedule}} ›</text></view>
     </navigator>
     <view class="page__bd" wx:if="{{homeSections.length}}">
       <block wx:for="{{homeSections}}" wx:key="id" wx:for-item="section">

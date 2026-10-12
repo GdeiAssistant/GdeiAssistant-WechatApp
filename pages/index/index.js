@@ -49,7 +49,6 @@ Page({
         copyright: i18n.t('common.copyright'),
         rightsReserved: i18n.t('common.rightsReserved'),
         todayTitle: i18n.t('index.todayTitle'),
-        todayHint: i18n.t('index.todayHint'),
         todayEmpty: i18n.t('index.todayEmpty'),
         todayUnavailable: i18n.t('index.todayUnavailable'),
         todayLoading: i18n.t('common.loading'),
