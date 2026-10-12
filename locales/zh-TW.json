@@ -72,6 +72,10 @@
     "weekRange": "第{{min}}週至第{{max}}週"
   },
   "index": {
+    "todayTitle": "今日課程",
+    "todayHint": "介面僅提供節次，請查看課表",
+    "todayEmpty": "今日無課程",
+    "todayUnavailable": "今日課表暫不可用",
     "navTitle": "廣東二師助手",
     "appName": "廣東二師助手",
     "viewProfile": "查看個人資料",

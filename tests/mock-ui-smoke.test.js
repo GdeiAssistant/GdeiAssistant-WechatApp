@@ -356,6 +356,16 @@ test('mock UI smoke covers index page profile, inbox badge and feature actions',
   const runtime = setupWxRuntime()
   stubCommonModules()
 
+  stubModule(path.join(ROOT, 'services/apis/campus.js'), {
+    getSchedule() {
+      const today = require('../utils/today-schedule.js').campusDate(new Date())
+      return Promise.resolve({ success: true, data: { week: 5, scheduleList: [{
+        column: today.column, scheduleLesson: '第 3-4 节', scheduleName: '软件测试',
+        minScheduleWeek: 1, maxScheduleWeek: 16, scheduleLocation: '教学楼 C402'
+      }] } })
+    }
+  })
+
   stubModule(path.join(ROOT, 'constants/features.js'), {
     getSystemActions() {
       return [
@@ -417,6 +427,7 @@ test('mock UI smoke covers index page profile, inbox badge and feature actions',
           title: '校园服务',
           features: [
             { id: 'grade', title: '成绩查询', page: '/pages/grade/grade' },
+            { id: 'schedule', title: '课表查询', page: '/pages/schedule/schedule' },
             { id: 'news', title: '校园新闻', page: '/pages/news/news' }
           ]
         }
@@ -445,8 +456,11 @@ test('mock UI smoke covers index page profile, inbox badge and feature actions',
   assert.equal(page.data.avatar, 'https://example.com/avatar.png')
   assert.equal(page.data.inboxUnreadCount, 7)
   assert.equal(page.data.inboxBadgeText, '7')
+  assert.equal(page.data.today.status, 'ready')
+  assert.equal(page.data.today.lessons[0].name, '软件测试')
+  assert.equal(page.data.todaySource, '模拟数据')
   assert.equal(page.data.homeSections.length, 1)
-  assert.equal(page.data.homeSections[0].features.length, 2)
+  assert.equal(page.data.homeSections[0].features.length, 3)
   assert.equal(page.data.systemActions.length, 2)
 
   page.openProfile()

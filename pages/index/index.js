@@ -5,6 +5,10 @@ const socialApi = require('../../services/apis/social.js')
 const socialRealtime = require('../../services/social-realtime.js')
 const userApi = require('../../services/apis/user.js')
 const featureConfig = require('../../services/feature-config.js')
+const campusApi = require('../../services/apis/campus.js')
+const dataSource = require('../../services/data-source.js')
+const todaySchedule = require('../../utils/today-schedule.js')
+const homeIcons = require('../../constants/home-icons.js')
 var themeUtil = require('../../utils/theme')
 var tabBarUtil = require('../../utils/tab-bar')
 var i18n = require('../../utils/i18n')
@@ -28,7 +32,11 @@ Page({
     systemActions: [],
     hiddenFeatureIds: [],
     inboxUnreadCount: 0,
-    inboxBadgeText: ''
+    inboxBadgeText: '',
+    today: { status: 'loading', lessons: [] },
+    todayVisible: false,
+    todayDate: '',
+    todaySource: ''
   },
 
   refreshI18n: function () {
@@ -39,9 +47,15 @@ Page({
         viewProfile: i18n.t('index.viewProfile'),
         settingsSection: i18n.t('index.settingsSection'),
         copyright: i18n.t('common.copyright'),
-        rightsReserved: i18n.t('common.rightsReserved')
+        rightsReserved: i18n.t('common.rightsReserved'),
+        todayTitle: i18n.t('index.todayTitle'),
+        todayHint: i18n.t('index.todayHint'),
+        todayEmpty: i18n.t('index.todayEmpty'),
+        todayUnavailable: i18n.t('index.todayUnavailable'),
+        todayLoading: i18n.t('common.loading'),
+        viewSchedule: i18n.t('features.schedule.title')
       },
-      systemActions: getSystemActions()
+      systemActions: getSystemActions().map((action) => this.withHomeIcon(action))
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
   },
@@ -85,6 +99,7 @@ Page({
   },
 
   loadHomeSections: function() {
+    const page = this
     const hiddenFeatureIds = this.data.hiddenFeatureIds || []
     const homeSections = featureConfig.getHomeSections().map(function(section) {
       return {
@@ -92,14 +107,44 @@ Page({
         title: section.title,
         features: section.features.filter(function(feature) {
           return hiddenFeatureIds.indexOf(feature.id) === -1
-        })
+        }).map(function(feature) { return page.withHomeIcon(feature) })
       }
     }).filter(function(section) {
       return section.features.length > 0
     })
 
     this.setData({
-      homeSections: homeSections
+      homeSections: homeSections,
+      todayVisible: homeSections.some(function(section) {
+        return section.features.some(function(feature) { return feature.id === 'schedule' })
+      })
+    })
+  },
+
+  withHomeIcon: function(item) {
+    return Object.assign({}, item, { icon: homeIcons.getIcon(item.id, false), iconDark: homeIcons.getIcon(item.id, true) })
+  },
+
+  loadTodaySchedule: function() {
+    const generation = this.todayGeneration = (this.todayGeneration || 0) + 1
+    const now = new Date()
+    const date = todaySchedule.campusDate(now).label
+    this.setData({ todayDate: date, todaySource: dataSource.getDataSourceLabel(), today: { status: 'loading', lessons: [] } })
+    if (!this.data.todayVisible || !auth.getSessionToken()) {
+      this.setData({ today: { status: 'unavailable', lessons: [] } })
+      return
+    }
+    campusApi.getSchedule().then((result) => {
+      if (this.unloaded || !this.data.todayVisible || generation !== this.todayGeneration) return
+      // A response that crossed campus midnight is not today's timetable.
+      if (todaySchedule.campusDate(new Date()).label !== date) {
+        this.loadTodaySchedule()
+        return
+      }
+      this.setData({ today: result && result.success ? todaySchedule.getTodaySchedule(result.data, now) : { status: 'unavailable', lessons: [] } })
+    }).catch(() => {
+      if (this.unloaded || !this.data.todayVisible || generation !== this.todayGeneration) return
+      this.setData({ today: { status: 'unavailable', lessons: [] } })
     })
   },
 
@@ -164,9 +209,19 @@ Page({
     this.loadProfile()
     this.loadInboxStatus()
     this.loadHomeSections()
+    this.loadTodaySchedule()
     if (auth.getSessionToken()) {
       socialRealtime.ensureConnected()
     }
+  },
+
+  onHide: function() {
+    this.todayGeneration = (this.todayGeneration || 0) + 1
+  },
+
+  onUnload: function() {
+    this.unloaded = true
+    this.todayGeneration = (this.todayGeneration || 0) + 1
   },
 
   onShareAppMessage: function() {
