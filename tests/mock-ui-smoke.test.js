@@ -359,10 +359,22 @@ test('mock UI smoke covers index page profile, inbox badge and feature actions',
   stubModule(path.join(ROOT, 'services/apis/campus.js'), {
     getSchedule() {
       const today = require('../utils/today-schedule.js').campusDate(new Date())
-      return Promise.resolve({ success: true, data: { week: 5, scheduleList: [{
-        column: today.column, scheduleLesson: '第 3-4 节', scheduleName: '软件测试',
-        minScheduleWeek: 1, maxScheduleWeek: 16, scheduleLocation: '教学楼 C402'
-      }] } })
+      return Promise.resolve({
+        success: true,
+        data: {
+          week: 5,
+          scheduleList: [
+            {
+              column: today.column,
+              scheduleLesson: '第 3-4 节',
+              scheduleName: '软件测试',
+              minScheduleWeek: 1,
+              maxScheduleWeek: 16,
+              scheduleLocation: '教学楼 C402'
+            }
+          ]
+        }
+      })
     }
   })
 
