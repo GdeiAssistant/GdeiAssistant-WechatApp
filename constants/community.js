@@ -363,6 +363,11 @@ function getPhotographTabOptions() {
   return PHOTOGRAPH_TAB_DEFS.map(resolveOptionDef)
 }
 
+// Legacy notification payloads and shared links use these marketplace aliases.
+function normalizeCommunityModuleId(moduleId) {
+  return moduleId === 'ershou' || moduleId === 'secondhand' ? 'marketplace' : moduleId
+}
+
 function getCommunityModule(moduleId) {
   var moduleMap = getCommunityModuleMap()
   return moduleMap[moduleId] || null
@@ -414,6 +419,7 @@ module.exports = {
   DELIVERY_DEFAULT_ORDER_NAME: getDeliveryDefaultOrderName(),
   getDeliveryDefaultOrderName,
   DELIVERY_PLACEHOLDER_PICKUP_CODE,
+  normalizeCommunityModuleId,
   getCommunityModule,
   getCommunityPageTitle,
   normalizeCommunityLocale

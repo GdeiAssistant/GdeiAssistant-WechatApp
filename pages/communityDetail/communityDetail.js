@@ -1,4 +1,5 @@
 const {
+  normalizeCommunityModuleId,
   getCommunityModule,
   getCommunityPageTitle
 } = require('../../constants/community.js')
@@ -190,7 +191,7 @@ Page({
   },
 
   ensureProfileOptions: function() {
-    if (this.data.moduleId !== 'ershou' && this.data.moduleId !== 'lostandfound') {
+    if (this.data.moduleId !== 'marketplace' && this.data.moduleId !== 'lostandfound') {
       return Promise.resolve()
     }
 
@@ -483,7 +484,7 @@ Page({
   },
 
   onLoad: function(options) {
-    const moduleId = options && options.module ? options.module : ''
+    const moduleId = normalizeCommunityModuleId(options && options.module ? options.module : '')
     const moduleConfig = getCommunityModule(moduleId)
     if (!moduleConfig || !options.id) {
       wx.showModal({

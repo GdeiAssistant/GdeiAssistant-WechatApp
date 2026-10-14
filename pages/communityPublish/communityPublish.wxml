@@ -13,7 +13,7 @@
     <view class="section_title">{{t.basicInfo}}</view>
     <view class="page_hint" wx:if="{{pageLoading}}">{{t.loadingExisting}}</view>
 
-    <view wx:if="{{moduleId === 'ershou'}}">
+    <view wx:if="{{moduleId === 'marketplace'}}">
       <view class="weui-cells weui-cells_form">
         <view class="weui-cell">
           <view class="weui-cell__bd"><input class="weui-input" placeholder="{{t.productName}}" maxlength="25" value="{{form.name}}" data-field="name" bindinput="setFieldValue" /></view>
@@ -184,7 +184,7 @@
     </view>
   </view>
 
-  <view class="publish_card" wx:if="{{moduleId === 'ershou' || moduleId === 'lostandfound' || moduleId === 'topic' || moduleId === 'dating' || moduleId === 'photograph'}}">
+  <view class="publish_card" wx:if="{{moduleId === 'marketplace' || moduleId === 'lostandfound' || moduleId === 'topic' || moduleId === 'dating' || moduleId === 'photograph'}}">
     <view class="section_title">{{t.imageUpload}}</view>
     <view class="image_list">
       <view wx:for="{{images}}" wx:key="path" wx:for-item="imageItem" class="image_item">
@@ -193,7 +193,7 @@
       </view>
       <view class="image_add" wx:if="{{!isEditMode && images.length < imageLimit}}" bindtap="chooseImages">+</view>
     </view>
-    <view class="upload_hint" wx:if="{{isEditMode && (moduleId === 'ershou' || moduleId === 'lostandfound')}}">{{t.editImageNotSupported}}</view>
+    <view class="upload_hint" wx:if="{{isEditMode && (moduleId === 'marketplace' || moduleId === 'lostandfound')}}">{{t.editImageNotSupported}}</view>
     <view class="upload_hint" wx:elif="{{moduleId === 'dating'}}">{{t.datingImageHint}}</view>
   </view>
 

@@ -1,4 +1,4 @@
-const { getCommunityModule, getCommunityPageTitle } = require('../../constants/community.js')
+const { normalizeCommunityModuleId, getCommunityModule, getCommunityPageTitle } = require('../../constants/community.js')
 const communityApi = require('../../services/apis/community.js')
 const { getModuleHandler } = require('../../services/community/registry.js')
 const userApi = require('../../services/apis/user.js')
@@ -80,7 +80,7 @@ Page({
 
   loadSummaryProfile: function() {
     var handler = getModuleHandler(this.data.moduleId)
-    var shouldShowProfile = handler ? !!handler.showSummaryProfile : (['ershou', 'lostandfound'].indexOf(this.data.moduleId) !== -1)
+    var shouldShowProfile = handler ? !!handler.showSummaryProfile : (['marketplace', 'lostandfound'].indexOf(this.data.moduleId) !== -1)
 
     if (!shouldShowProfile) {
       this.setData({
@@ -308,7 +308,7 @@ Page({
   },
 
   onLoad: function(options) {
-    const moduleId = options && options.module ? options.module : ''
+    const moduleId = normalizeCommunityModuleId(options && options.module ? options.module : '')
     const moduleConfig = getCommunityModule(moduleId)
     if (!moduleConfig) {
       wx.showModal({

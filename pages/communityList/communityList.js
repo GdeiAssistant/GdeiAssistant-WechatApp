@@ -1,4 +1,5 @@
 const {
+  normalizeCommunityModuleId,
   getCommunityModule
 } = require('../../constants/community.js')
 const { fetchProfileOptions } = require('../../constants/profile.js')
@@ -226,7 +227,7 @@ Page({
   },
 
   onLoad: function(options) {
-    const moduleId = options && options.module ? options.module : ''
+    const moduleId = normalizeCommunityModuleId(options && options.module ? options.module : '')
     const moduleConfig = getCommunityModule(moduleId)
     if (!moduleConfig) {
       wx.showModal({

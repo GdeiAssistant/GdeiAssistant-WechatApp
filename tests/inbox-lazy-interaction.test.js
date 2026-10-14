@@ -9,6 +9,8 @@ const INBOX_MODULE = path.join(ROOT, 'pages/inbox/inbox.js')
 
 var apiCallLog = []
 var capturedPageConfig = null
+var interactionItems = []
+var navigationUrls = []
 
 function installInboxTestStubs() {
   global.wx = {
@@ -17,7 +19,9 @@ function installInboxTestStubs() {
     },
     setStorageSync: function () {},
     removeStorageSync: function () {},
-    navigateTo: function () {},
+    navigateTo: function (options) {
+      navigationUrls.push(options.url)
+    },
     setNavigationBarTitle: function () {},
     stopPullDownRefresh: function () {},
     showModal: function () {},
@@ -61,7 +65,7 @@ function installInboxTestStubs() {
     },
     getInteractionList: function (start, size) {
       apiCallLog.push({ method: 'getInteractionList', args: [start, size] })
-      return Promise.resolve({ success: true, data: [] })
+      return Promise.resolve({ success: true, data: interactionItems })
     },
     getUnreadCount: function () {
       apiCallLog.push({ method: 'getUnreadCount' })
@@ -129,7 +133,9 @@ function installInboxTestStubs() {
   require(INBOX_MODULE)
 }
 
-function createPageInstance() {
+function createPageInstance(items) {
+  interactionItems = items || []
+  navigationUrls = []
   installInboxTestStubs()
   var instance = Object.create(capturedPageConfig)
   instance.data = JSON.parse(JSON.stringify(capturedPageConfig.data))
@@ -137,6 +143,26 @@ function createPageInstance() {
     Object.assign(instance.data, patch)
   }
   return instance
+}
+
+for (const moduleId of ['ershou', 'secondhand', 'marketplace']) {
+  for (const targetId of ['101', '']) {
+    test(`inbox ${moduleId} message opens the marketplace ${targetId ? 'detail' : 'list'}`, async function () {
+      const page = createPageInstance([{ id: 1, module: moduleId, targetId, isRead: false }])
+      await page.loadInteractionList(1, true)
+
+      assert.equal(page.data.interactionList[0].moduleId, 'marketplace')
+      assert.equal(page.data.interactionList[0].moduleLabel, 'inboxPage.moduleMarketplace')
+      page.openInteractionItem({ currentTarget: { dataset: { index: 0 } } })
+
+      assert.deepEqual(navigationUrls, [
+        targetId
+          ? '/pages/communityDetail/communityDetail?module=marketplace&id=101'
+          : '/pages/communityList/communityList?module=marketplace'
+      ])
+      assert.equal(page.data.interactionList[0].isRead, true)
+    })
+  }
 }
 
 test('initial load does NOT call interaction list — zero getInteractionList requests on onLoad', async function () {

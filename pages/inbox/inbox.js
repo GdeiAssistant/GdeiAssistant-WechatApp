@@ -1,4 +1,5 @@
 const storageKeys = require('../../constants/storage.js')
+const { normalizeCommunityModuleId } = require('../../constants/community.js')
 const messagesApi = require('../../services/apis/messages.js')
 const socialApi = require('../../services/apis/social.js')
 const socialRealtime = require('../../services/social-realtime.js')
@@ -26,14 +27,11 @@ function normalizeAnnouncementItem(item) {
 }
 
 function normalizeInteractionModule(moduleId) {
-  const normalizedModule = String(moduleId || '')
-    .trim()
-    .toLowerCase()
+  const normalizedModule = normalizeCommunityModuleId(
+    String(moduleId || '').trim().toLowerCase()
+  )
 
   switch (normalizedModule) {
-    case 'secondhand':
-    case 'marketplace':
-      return 'ershou'
     case 'lost_found':
     case 'lostfound':
       return 'lostandfound'
@@ -46,7 +44,7 @@ function normalizeInteractionModule(moduleId) {
 
 function buildInteractionModuleLabel(moduleId) {
   switch (moduleId) {
-    case 'ershou':
+    case 'marketplace':
       return i18n.t('inboxPage.moduleMarketplace')
     case 'lostandfound':
       return i18n.t('inboxPage.moduleLostFound')
@@ -117,7 +115,7 @@ function buildInteractionUrl(item) {
   const targetId = String(item.targetId || '').trim()
 
   switch (item.moduleId) {
-    case 'ershou':
+    case 'marketplace':
     case 'lostandfound':
     case 'secret':
     case 'express':

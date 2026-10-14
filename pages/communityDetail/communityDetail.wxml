@@ -30,7 +30,7 @@
       <view class="detail_time" wx:if="{{detail.publishTime}}">{{t.publishTime}}{{detail.publishTime}}</view>
     </view>
 
-    <view class="detail_card" wx:if="{{moduleId === 'ershou' || moduleId === 'lostandfound'}}">
+    <view class="detail_card" wx:if="{{moduleId === 'marketplace' || moduleId === 'lostandfound'}}">
       <view class="section_title">{{t.contactInfo}}</view>
       <view class="contact_row" wx:if="{{detail.qqText}}">
         <text>{{t.contactQQ}}{{detail.qqText}}</text>
