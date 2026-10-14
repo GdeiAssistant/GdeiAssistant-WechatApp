@@ -530,6 +530,7 @@ test('mock UI smoke covers community list loading, search and navigation actions
 
   const feedCalls = []
   stubModule(path.join(ROOT, 'constants/community.js'), {
+    normalizeCommunityModuleId: require('../constants/community.js').normalizeCommunityModuleId,
     getCommunityModule(moduleId) {
       if (moduleId !== 'marketplace') {
         return null

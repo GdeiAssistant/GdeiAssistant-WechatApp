@@ -244,6 +244,7 @@ stubModule(path.join(ROOT, 'services/apis/community.js'), {
 
 // Stub community constants
 stubModule(path.join(ROOT, 'constants/community.js'), {
+  normalizeCommunityModuleId: require('../constants/community.js').normalizeCommunityModuleId,
   getCommunityModule: function (moduleId) {
     if (moduleId === 'photograph') return { title: 'Photograph', moduleId: 'photograph' }
     if (moduleId === 'secret') return { title: 'Secret', moduleId: 'secret' }

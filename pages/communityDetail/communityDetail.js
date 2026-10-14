@@ -1,4 +1,5 @@
 const {
+  normalizeCommunityModuleId,
   getCommunityModule,
   getCommunityPageTitle
 } = require('../../constants/community.js')
@@ -483,7 +484,7 @@ Page({
   },
 
   onLoad: function(options) {
-    const moduleId = options && options.module ? options.module : ''
+    const moduleId = normalizeCommunityModuleId(options && options.module ? options.module : '')
     const moduleConfig = getCommunityModule(moduleId)
     if (!moduleConfig || !options.id) {
       wx.showModal({
