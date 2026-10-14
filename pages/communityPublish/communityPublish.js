@@ -19,7 +19,7 @@ const pageUtils = require('../../utils/page.js')
 const i18n = require('../../utils/i18n.js')
 var themeUtil = require('../../utils/theme')
 
-const EDITABLE_MODULE_IDS = ['ershou', 'lostandfound']
+const EDITABLE_MODULE_IDS = ['marketplace', 'lostandfound']
 
 let recorderManager = null
 let secretAudioPlayer = null
@@ -63,7 +63,7 @@ function findEditableItem(moduleId, payload, itemId) {
   const targetId = Number(itemId)
   let sourceList = []
 
-  if (moduleId === 'ershou') {
+  if (moduleId === 'marketplace') {
     sourceList = []
       .concat(payload.doing || [])
       .concat(payload.sold || [])
@@ -411,7 +411,7 @@ Page({
       return communityApi.publish(this.data.moduleId, payload)
     }
 
-    if (this.data.moduleId === 'ershou') {
+    if (this.data.moduleId === 'marketplace') {
       return communityApi.updateSecondhandItem(this.data.editItemId, payload)
     }
 
@@ -470,7 +470,7 @@ Page({
       return
     }
 
-    if (this.data.moduleId === 'ershou') {
+    if (this.data.moduleId === 'marketplace') {
       this.setData({
         form: {
           name: item.name || '',

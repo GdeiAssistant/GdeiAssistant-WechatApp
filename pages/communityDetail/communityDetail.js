@@ -190,7 +190,7 @@ Page({
   },
 
   ensureProfileOptions: function() {
-    if (this.data.moduleId !== 'ershou' && this.data.moduleId !== 'lostandfound') {
+    if (this.data.moduleId !== 'marketplace' && this.data.moduleId !== 'lostandfound') {
       return Promise.resolve()
     }
 

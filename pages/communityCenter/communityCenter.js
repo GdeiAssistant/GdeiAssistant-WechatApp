@@ -80,7 +80,7 @@ Page({
 
   loadSummaryProfile: function() {
     var handler = getModuleHandler(this.data.moduleId)
-    var shouldShowProfile = handler ? !!handler.showSummaryProfile : (['ershou', 'lostandfound'].indexOf(this.data.moduleId) !== -1)
+    var shouldShowProfile = handler ? !!handler.showSummaryProfile : (['marketplace', 'lostandfound'].indexOf(this.data.moduleId) !== -1)
 
     if (!shouldShowProfile) {
       this.setData({
