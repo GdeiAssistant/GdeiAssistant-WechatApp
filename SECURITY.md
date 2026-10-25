@@ -2,11 +2,9 @@
 
 这是 GdeiAssistant 的微信小程序客户端。服务端漏洞、账号体系问题请报到 [主仓](https://github.com/GdeiAssistant/GdeiAssistant)；这里只处理小程序本身的问题。
 
-## 怎么报
+## Reporting a vulnerability
 
-请通过 Issue 联系维护者。如果漏洞可以直接利用（越权、账号接管、本地数据泄露），**不要在公开 Issue 里贴完整利用步骤**，先说清影响范围和大致现象，等维护者给你一个更合适的渠道。
-
-报告里尽量带上：问题描述、影响范围、复现步骤、基础库版本与机型、日志或截图摘要。日志请先脱敏。
+Report security vulnerabilities through [GitHub private vulnerability reporting](https://github.com/GdeiAssistant/GdeiAssistant-WechatApp/security/advisories/new). Do not post exploit details, credentials, private sessions or personal data in public issues or PRs. Include the affected version, impact and minimal redacted reproduction. The maintainer handles reports on a best-effort basis; no bounty or response-time guarantee is implied.
 
 ## 小程序特有的风险面
 

@@ -56,3 +56,7 @@ docs: 补充部署步骤
 ## 许可
 
 向本仓库提交的代码和文档，默认按 [Apache License 2.0](LICENSE.md) 授权。提交前请确认你有权提交这些内容。
+
+## AI 辅助维护
+
+维护流程、文档更新和交付核对见 [AI 辅助维护约定](.github/engineering.md)，项目约束见 [AGENTS.md](AGENTS.md)。
