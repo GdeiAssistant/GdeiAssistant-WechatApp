@@ -28,8 +28,6 @@ pnpm-debug.log*
 project.private.config.json
 
 # AI assistant / agent configs (local only)
-AGENTS.md
-CLAUDE.md
 .claude/
 .codex/
 .cursor/
@@ -46,3 +44,7 @@ docs/audits/
 docs/plans/
 docs/handoffs/
 docs/superpowers/
+
+# AI 编程约束随仓库版本管理。
+!/AGENTS.md
+!/CLAUDE.md
