@@ -64,6 +64,10 @@
     "weekRange": "Week {{min}} to Week {{max}}"
   },
   "index": {
+    "todayTitle": "Today's classes",
+    "todayHint": "Only lesson periods are available; view the timetable",
+    "todayEmpty": "No classes today",
+    "todayUnavailable": "Today’s timetable is unavailable",
     "navTitle": "GdeiAssistant",
     "appName": "GdeiAssistant",
     "viewProfile": "View profile",

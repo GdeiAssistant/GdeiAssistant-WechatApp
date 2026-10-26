@@ -72,6 +72,10 @@
     "weekRange": "{{min}}주~{{max}}주"
   },
   "index": {
+    "todayTitle": "오늘 수업",
+    "todayHint": "교시 정보만 제공됩니다. 시간표를 확인하세요",
+    "todayEmpty": "오늘 수업이 없습니다",
+    "todayUnavailable": "오늘 시간표를 불러올 수 없습니다",
     "navTitle": "GdeiAssistant",
     "appName": "GdeiAssistant",
     "viewProfile": "프로필 보기",
