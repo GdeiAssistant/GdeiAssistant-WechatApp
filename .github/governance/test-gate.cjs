@@ -190,3 +190,10 @@ test('English and existing Gdei template headings are accepted', () => {
   assert.equal(gate.completeTemplate('## AI assistance\nCodex used.\n## 这个 PR 做了什么\n修复评审门槛。\n## 怎么验证的\n离线测试通过。'), true);
   assert.equal(gate.completeTemplate('## AI assistance\nTODO\n## What changed\nTODO\n## How verified\nTODO'), false);
 });
+
+test('template comments cannot manufacture headings or expose unfinished comments', () => {
+  const ai = '## AI assistance\nCodex used.\n';
+  assert.equal(gate.completeTemplate(ai + '<!-- unfinished\n## What changed\nHidden change.\n## How verified\nHidden test.'), false);
+  assert.equal(gate.completeTemplate(ai + '## W<!-- removed -->hat changed\nChange detail.\n## How verified\nTest detail.'), false);
+  assert.equal(gate.completeTemplate(ai + '<!-- ## What changed\nHidden change. -->\n## How verified\nTest detail.'), false);
+});

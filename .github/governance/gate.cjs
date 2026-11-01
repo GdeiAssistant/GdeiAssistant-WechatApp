@@ -190,7 +190,8 @@ function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 100
 }
 
 function completeTemplate(body) {
-  const text = (body || '').replace(/<!--[\s\S]*?-->/g, '');
+  // Whitespace prevents joining delimiters; an unterminated comment hides the rest.
+  const text = (body || '').replace(/<!--[\s\S]*?(?:-->|$)/g, ' ');
   const sections = [...text.matchAll(/^#{1,6}\s+(.+)\r?\n([\s\S]*?)(?=^#{1,6}\s|$(?![\s\S]))/gm)];
   const present = pattern => sections.some(([, heading, content]) => pattern.test(heading)
     && content.replace(/```[\s\S]*?```/g, '').replace(/[-*]\s*\[[ x]\]/g, '').trim().length > 3
