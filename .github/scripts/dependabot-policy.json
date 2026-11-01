@@ -1,0 +1,19 @@
+{
+  "repo": "GdeiAssistant/GdeiAssistant-WechatApp",
+  "branch": "master",
+  "files": ["package.json","package-lock.json"],
+  "directories": ["/"],
+  "required_checks": ["Unit Tests","Analyze (JavaScript)","Repository hygiene","Safe dependency update"],
+  "action_files": [
+    ".github/workflows/codeql.yml",
+    ".github/workflows/dependabot-auto-merge.yml",
+    ".github/workflows/dependabot-policy.yml",
+    ".github/workflows/engineering-governance.yml",
+    ".github/workflows/pr-governance-tests.yml",
+    ".github/workflows/pr-review-signal.yml",
+    ".github/workflows/repository-hygiene.yml",
+    ".github/workflows/risk-gate.yml",
+    ".github/workflows/wechat-ci.yml",
+    ".github/workflows/wechat-deploy.yml"
+  ]
+}
