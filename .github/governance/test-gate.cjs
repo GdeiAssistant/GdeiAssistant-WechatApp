@@ -204,3 +204,10 @@ test('R0 exemption cannot hide active review blockers', () => {
   f.snapshot.reviews = []; f.snapshot.threads.push({ id: 'thread', isResolved: false });
   assert.equal(evaluate(f).allowed, false);
 });
+
+test('provider bold summary markup preserves file coverage evidence', () => {
+  const f = fixture(); const review = approve(f);
+  review.body = review.body.replace('Files selected for processing: 1</summary>', '<strong>Files selected for processing: 1</strong></summary>');
+  assert.equal(evaluate(f).ai.coverage, 'reported_complete');
+  assert.equal(evaluate(f).allowed, true);
+});

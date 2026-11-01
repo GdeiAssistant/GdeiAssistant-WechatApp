@@ -162,7 +162,7 @@ function codeRabbit(snapshot, policy) {
   }
   const limitations = [];
   // Native provider metadata is used, never a receipt supplied by the PR author.
-  const scope = /Files selected for processing:\s*(\d+)<\/summary>([\s\S]*?)<\/details>/.exec(report.body);
+  const scope = /Files selected for processing:\s*(\d+)(?:<\/strong>)?\s*<\/summary>([\s\S]*?)<\/details>/.exec(report.body);
   const paths = scope ? [...scope[2].matchAll(/^\* `([^`]+)`\s*$/gm)].map(m => m[1]).sort() : [];
   const expectedPaths = snapshot.files.map(f => f.filename).sort();
   if (!scope || Number(scope[1]) !== paths.length || canonical(paths) !== canonical(expectedPaths)) limitations.push('file_coverage_partial');
