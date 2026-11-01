@@ -77,13 +77,24 @@ function binding(snapshot, policySha) {
   };
 }
 
+function stableComment(comment) {
+  // Reactions and profile decoration are not approval or review evidence.
+  const { id, body, created_at, updated_at, path, line, original_line, side,
+    start_line, start_side, commit_id, original_commit_id, in_reply_to_id,
+    pull_request_review_id } = comment;
+  return { id, body, created_at, updated_at, path, line, original_line, side,
+    start_line, start_side, commit_id, original_commit_id, in_reply_to_id,
+    pull_request_review_id,
+    user: { id: comment.user?.id, login: comment.user?.login, type: comment.user?.type } };
+}
+
 function discussion(snapshot) {
   // Review receipts are excluded to avoid a circular digest. Their exact bodies
   // are separately bound into the owner approval. QAS shadow output is advisory.
   const reviews = snapshot.reviews.filter(r => r.state === 'CHANGES_REQUESTED'
     || (!receipt(r.body, 'pr-review/v1') && !receipt(r.body, 'owner-approval/v1')));
-  const secondOpinions = snapshot.issueComments.filter(c => c.user?.type === 'Bot' && c.user?.login === 'coderabbitai[bot]');
-  return { reviews, comments: snapshot.reviewComments, threads: snapshot.threads, secondOpinions };
+  const secondOpinions = snapshot.issueComments.filter(c => c.user?.type === 'Bot' && c.user?.login === 'coderabbitai[bot]').map(stableComment);
+  return { reviews, comments: snapshot.reviewComments.map(stableComment), threads: snapshot.threads, secondOpinions };
 }
 
 function sameBinding(value, expected) {
@@ -172,9 +183,9 @@ function ownerOverride(snapshot, policy) {
   if (!comment) return null;
   const value = receipt(comment.body, 'owner-override/v1');
   if (!value || !['write', 'maintain', 'admin'].includes(snapshot.permissions[comment.user.login])
-    || value.repository !== snapshot.repository || value.pr_number !== snapshot.pr.number
-    || value.head_sha !== snapshot.pr.head.sha || value.decision !== 'approve'
-    || typeof value.reason !== 'string' || value.reason.trim().length < 8) return null;
+    || (value.repository !== undefined && value.repository !== snapshot.repository)
+    || (value.pr_number !== undefined && value.pr_number !== snapshot.pr.number)
+    || value.head_sha !== snapshot.pr.head.sha || value.decision !== 'approve') return null;
   return comment;
 }
 
@@ -197,7 +208,9 @@ function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 100
   const override = risk.tier === 'R2' ? ownerOverride(snapshot, policy) : null;
   if (override) return { ...result, allowed: true, reason: 'owner_override', route: 'owner-override',
     reviewer: override.user.login, override_comment_id: override.id,
-    evidence_sha256: digest({ binding: expected, discussion_sha256: discussionSha, override }) };
+    override: { actor_id: override.user.id, head_sha: expected.head_sha,
+      created_at: override.created_at, updated_at: override.updated_at, comment_sha256: digest(override.body) },
+    evidence_sha256: digest({ binding: expected, discussion_sha256: discussionSha, override: stableComment(override) }) };
   // Option A: the allowlisted publisher attests a completed AI review. Account
   // identity authenticates the record; it does not prove a separate human/model.
   const comment = latestReceipt(snapshot, policy.ai_review_actors, 'ai-review/v1');
@@ -210,7 +223,7 @@ function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 100
       && value.coverage.reviewed_files === snapshot.files.length
       && Array.isArray(value.limitations) && value.limitations.length === 0
       && validDispositions(value, snapshot)) {
-      const evidenceSha = digest({ binding: expected, discussion_sha256: discussionSha, review: comment });
+      const evidenceSha = digest({ binding: expected, discussion_sha256: discussionSha, review: stableComment(comment) });
       const approved = risk.tier !== 'R2' || ownerApproved(snapshot, policy, expected, evidenceSha, now);
       return { ...result, evidence_sha256: evidenceSha, review_comment_id: comment.id,
         reviewer: value.ai_review.provider, route: 'recorded-ai', allowed: approved,
@@ -248,11 +261,17 @@ function completeTemplate(body) {
   // Whitespace prevents joining delimiters; an unterminated comment hides the rest.
   const text = (body || '').replace(/<!--[\s\S]*?(?:-->|$)/g, ' ');
   const sections = [...text.matchAll(/^#{1,6}\s+(.+)\r?\n([\s\S]*?)(?=^#{1,6}\s|$(?![\s\S]))/gm)];
-  const present = pattern => sections.some(([, heading, content]) => pattern.test(heading)
-    && content.replace(/```[\s\S]*?```/g, '').replace(/[-*]\s*\[[ x]\]/g, '').trim().length > 3
-    && !/^\s*(?:TODO|TBD|N\/A|Describe the change.*|Which AI tool.*|List the checks.*)\s*$/i.test(content));
-  return present(/AI|模型|人工智能/i) && present(/what changed|summary|problem|changes|变更|改动|做了什么/i)
+  const used = new Set();
+  const present = pattern => {
+    const index = sections.findIndex(([, heading, content], i) => !used.has(i) && pattern.test(heading)
+      && content.replace(/```[\s\S]*?```/g, '').replace(/[-*]\s*\[[ x]\]/g, '').trim().length > 3
+      && !/^\s*(?:TODO|TBD|N\/A|Describe the change.*|Which AI tool.*|List the checks.*)\s*$/i.test(content));
+    if (index < 0) return false;
+    used.add(index);
+    return true;
+  };
+  return present(/\bAI\b|模型|人工智能/i) && present(/what changed|summary|problem|changes|变更|改动|做了什么/i)
     && present(/how verified|verif|validat|test(?:ing| plan)?|验证|测试/i);
 }
 
-module.exports = { canonical, digest, classify, pathTier, receipt, binding, discussion, evaluate, completeTemplate, evidenceComments };
+module.exports = { stableComment, canonical, digest, classify, pathTier, receipt, binding, discussion, evaluate, completeTemplate, evidenceComments };

@@ -83,7 +83,6 @@ for (const [name, mutate] of [
   ['wrong repository', f => { editReceipt(f.snapshot.issueComments[0], v => { v.repository = 'other/repo'; }); }],
   ['wrong PR', f => { editReceipt(f.snapshot.issueComments[0], v => { v.pr_number++; }); }],
   ['revoked decision', f => { editReceipt(f.snapshot.issueComments[0], v => { v.decision = 'revoke'; }); }],
-  ['missing reason', f => { editReceipt(f.snapshot.issueComments[0], v => { delete v.reason; }); }],
   ['self-review prose', f => { f.snapshot.issueComments[0].body = 'Self-review complete. Owner approval was authorized.'; }],
   ['unresolved thread', f => { f.snapshot.threads.push({ id: 'thread', isResolved: false }); }],
 ]) test(`owner override rejects ${name}`, () => {
@@ -104,4 +103,26 @@ test('override-only actor comments participate in readback race detection', () =
   const version = snapshotVersion(f.snapshot, f.policy);
   editReceipt(f.snapshot.issueComments[0], v => { v.decision = 'revoke'; });
   assert.notEqual(snapshotVersion(f.snapshot, f.policy), version);
+});
+
+
+test('current head alone is sufficient in a structured owner override', () => {
+  const f = overridden();
+  editReceipt(f.snapshot.issueComments[0], v => {
+    delete v.repository; delete v.pr_number; delete v.reason;
+  });
+  const result = evaluate(f);
+  assert.equal(result.allowed, true); assert.equal(result.route, 'owner-override');
+  assert.equal(result.override.actor_id, f.snapshot.issueComments[0].user.id);
+  assert.equal(result.override.head_sha, f.snapshot.pr.head.sha);
+  assert.match(result.override.comment_sha256, /^[a-f0-9]{64}$/);
+});
+for (const [name, mutate] of [
+  ['short SHA', f => editReceipt(f.snapshot.issueComments[0], v => { v.head_sha = v.head_sha.slice(0, 7); })],
+  ['absent SHA', f => editReceipt(f.snapshot.issueComments[0], v => { delete v.head_sha; })],
+  ['absent decision', f => editReceipt(f.snapshot.issueComments[0], v => { delete v.decision; })],
+  ['deleted comment', f => { f.snapshot.issueComments = []; }],
+  ['newer malformed comment', f => { f.snapshot.issueComments.push({ ...f.snapshot.issueComments[0], id: 31, body: 'Withdrawn' }); }],
+]) test(`minimal owner override rejects ${name}`, () => {
+  const f = overridden(); mutate(f); assert.equal(evaluate(f).allowed, false);
 });

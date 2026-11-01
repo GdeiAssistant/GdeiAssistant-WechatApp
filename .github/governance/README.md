@@ -222,40 +222,44 @@ was independent; publishing records and adding labels requires the user's scope.
 
 ## Explicit owner override
 
-The owner may personally post this complete JSON object in the PR Conversation:
+The owner may personally post this JSON object as a top-level PR Conversation
+comment, optionally in one JSON fence:
 
 ```json
 {
   "schema_version": "owner-override/v1",
-  "repository": "example/project",
-  "pr_number": 42,
   "head_sha": "<current full 40-character head SHA>",
-  "decision": "approve",
-  "reason": "<why the owner accepts this exact change>"
+  "decision": "approve"
 }
 ```
 
 Only the enabled `owner_override_actor` identity in the trusted policy can use
 this route. Its numeric GitHub ID, login and current repository permission are
 checked against GitHub metadata. This R2 route needs no AI review or separate
-approval receipt. The result records `route: owner-override`, the comment ID,
-reviewer and evidence digest.
+approval receipt.
 
-A new push makes the override stale; copying it
-to a different repository or PR fails. A newer override with `decision: revoke`
-or a malformed newer owner comment withdraws the prior override. Editing an
-older comment cannot override a newer revocation. Other structured review and
-approval receipts are evaluated independently.
+The comment's PR supplies its repository and PR context;
+`repository`, `pr_number` and `reason` are optional. If supplied, repository and
+PR number must match that context.
+
+The audit summary records `route: owner-override`, the comment ID, reviewer,
+actor ID, head SHA, comment timestamps, body digest and evidence digest. The
+collector re-reads this evidence before publishing the status.
+
+A new push makes the override stale. To revoke it, edit `decision` to `revoke`
+or post a newer override with that decision. A malformed newer owner comment
+also withdraws the prior override. Editing an older comment cannot override a
+newer revocation. Other structured review and approval receipts are evaluated
+independently. Preserve revocations: deleting them can expose an older approval.
 
 This is the user's own decision. A coding agent must not publish an override
 on the user's behalf or relabel its own self-review as the human override.
 GitHub cannot distinguish a person from automation using the same account;
 this operational limit is explicit and no signing key is introduced.
 
-Existing
-required CI, changes-requested reviews and unresolved threads still apply.
-An override authorizes this PR decision only, not deployment, IAM, secrets or
-trading changes.
+Existing required CI, changes-requested reviews and unresolved threads still
+apply. An override authorizes this PR decision only, not deployment, IAM,
+secrets or trading changes.
 
 ## Events, failure and operational limits
 
@@ -274,6 +278,11 @@ The existing `risk-gate` and `pr-template` status names are preserved. A draft P
 still runs the base branch's existing gate until this proposal is merged under
 explicit user authorization; this proposal cannot self-activate. Required CI and protection
 are not changed. API errors and incomplete evidence fail the evaluator closed.
+
+The single concurrency group serializes publication across PRs. GitHub can
+cancel an older pending run when a new run enters that group, including a run
+for another PR. The reconciliation sweep refreshes a skipped event; explicit
+default-branch dispatch is also available.
 
 GitHub commit statuses are asynchronous and have no automatic expiry. A
 dismissal, base update, runner outage or suppressed/delayed event can leave a

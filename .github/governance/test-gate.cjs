@@ -253,3 +253,19 @@ test('template comments cannot manufacture headings or expose unfinished comment
   assert.equal(gate.completeTemplate(ai + '## W<!-- removed -->hat changed\nChange detail.\n## How verified\nTest detail.'), false);
   assert.equal(gate.completeTemplate(ai + '<!-- ## What changed\nHidden change. -->\n## How verified\nTest detail.'), false);
 });
+
+
+test('PR template needs three distinct sections and an explicit AI heading', () => {
+  assert.equal(gate.completeTemplate('## Main changes and tests\nEverything is complete.'), false);
+  assert.equal(gate.completeTemplate('## AI changes and tests\nEverything is complete.'), false);
+  assert.equal(gate.completeTemplate('## Main work\nCompleted the task.\n## Changes\nUpdated the gate.\n## Tests\nAll tests passed.'), false);
+  assert.equal(gate.completeTemplate('## AI assistance\nCodex used.\n## Changes\nUpdated the gate.\n## Tests\nAll tests passed.'), true);
+});
+test('reactions do not invalidate SHA-bound AI and owner evidence', () => {
+  const f = fixture('src/ai_service/auth.py');
+  f.snapshot.issueComments.push({ id: 5, user: { type: 'Bot', login: 'coderabbitai[bot]' }, body: 'Second opinion' });
+  aiApproval(f); ownerApproval(f); const before = evaluate(f);
+  assert.equal(before.allowed, true);
+  for (const c of f.snapshot.issueComments) c.reactions = { '+1': 1, total_count: 1 };
+  assert.deepEqual(evaluate(f), before);
+});

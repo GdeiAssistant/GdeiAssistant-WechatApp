@@ -183,3 +183,70 @@ test('snapshot binds malformed allowlisted comments while ignoring unrelated com
   f.snapshot.issueComments.push({ id: 22, user: { id: 4, login: 'owner', type: 'User' }, body: 'Withdrawn' });
   assert.notEqual(snapshotVersion(f.snapshot, f.policy), before);
 });
+
+
+function overrideFixture() {
+  const f = fixture('src/ai_service/auth.py');
+  f.policy.owner_actors = []; f.policy.ai_review_actors = [];
+  f.policy.owner_override_actor = { user_id: 4, login: 'owner', enabled: true };
+  f.snapshot.issueComments.push({ id: 30, user: { id: 4, login: 'owner', type: 'User' },
+    created_at: '2033-05-18T03:34:00Z', updated_at: '2033-05-18T03:34:00Z',
+    body: JSON.stringify({ schema_version: 'owner-override/v1', head_sha: HEAD, decision: 'approve' }) });
+  f.snapshot.pr.body = '## AI assistance\nCodex used.\n## What changed\nOwner override.\n## How verified\nOffline tests passed.';
+  return f;
+}
+test('minimal human override publishes an audited status without AI evidence', async () => {
+  const f = overrideFixture(); const m = mock(f); const summaries = [];
+  m.core.summary.addCodeBlock = value => { summaries.push(JSON.parse(value)); return m.core.summary; };
+  await run(m); assert.equal(m.statuses.at(-1).state, 'success');
+  assert.equal(m.statuses.at(-1).description, 'R2: owner_override');
+  assert.equal(summaries[0].override_comment_id, 30); assert.equal(summaries[0].override.actor_id, 4);
+  assert.equal(m.failures.length, 0);
+});
+for (const field of ['head', 'edit', 'delete', 'revoke', 'permission', 'identity']) {
+  test(`minimal human override readback rejects concurrent ${field} change`, async () => {
+    const f = overrideFixture(); const c = f.snapshot.issueComments[0];
+    const m = mock(f); let reads = 0; const get = m.github.rest.pulls.get;
+    m.github.rest.pulls.get = async () => {
+      if (++reads === 3) {
+        if (field === 'head') f.snapshot.pr.head.sha = 'e'.repeat(40);
+        if (field === 'edit') c.body = '{}';
+        if (field === 'delete') f.snapshot.issueComments = [];
+        if (field === 'revoke') f.snapshot.issueComments.push({ ...c, id: 31, body: 'Withdrawn' });
+        if (field === 'permission') f.snapshot.permissions.owner = 'read';
+        if (field === 'identity') c.user.id = 999;
+      }
+      return get();
+    };
+    await run(m); assert.ok(m.statuses.some(s => s.context === 'risk-gate' && s.state === 'error'));
+    assert.ok(m.statuses.every(s => s.state !== 'success'));
+  });
+}
+
+
+test('reaction during owner override readback preserves approval but body edits do not', async () => {
+  const f = overrideFixture(); const m = mock(f); let reads = 0; const get = m.github.rest.pulls.get;
+  m.github.rest.pulls.get = async () => {
+    if (++reads === 3) f.snapshot.issueComments[0].reactions = { '+1': 1 };
+    return get();
+  };
+  await run(m); assert.equal(m.statuses.at(-1).state, 'success'); assert.equal(m.failures.length, 0);
+});
+test('review comment reactions do not affect snapshot but review content still does', () => {
+  const f = fixture(); f.snapshot.reviewComments.push({ id: 8, user: { id: 2, login: 'reviewer', type: 'User' }, body: 'Finding' });
+  const before = snapshotVersion(f.snapshot, f.policy);
+  f.snapshot.reviewComments[0].reactions = { '+1': 1 };
+  assert.equal(snapshotVersion(f.snapshot, f.policy), before);
+  f.snapshot.reviewComments[0].body = 'Changed finding';
+  assert.notEqual(snapshotVersion(f.snapshot, f.policy), before);
+});
+test('failed error status publication does not abort later PRs in a sweep', async () => {
+  const m = mock(); m.context.eventName = 'schedule'; const paginate = m.github.paginate;
+  m.github.paginate = async (method, params) => method === 'pulls' ? [{ number: 42 }, { number: 43 }] : paginate(method, params);
+  const evaluated = new Set(); const get = m.github.rest.pulls.get;
+  m.github.rest.pulls.get = async params => { evaluated.add(params.pull_number); return get(); };
+  m.github.rest.repos.createCommitStatus = async s => { m.statuses.push(s); throw new Error('status unavailable'); };
+  await run(m);
+  assert.deepEqual([...evaluated], [42, 43]); assert.equal(m.failures.length, 2);
+  assert.equal(m.statuses.filter(s => s.state === 'error').length, 4);
+});
