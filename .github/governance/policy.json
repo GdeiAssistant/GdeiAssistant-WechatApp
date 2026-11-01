@@ -1,5 +1,5 @@
 {
-  "version": "pr-governance/v1",
+  "version": "pr-governance/v2",
   "repository": "GdeiAssistant/GdeiAssistant-WechatApp",
   "r0_paths": [
     "README.md",
@@ -20,22 +20,17 @@
   ],
   "reviewers": {
     "R0": {
-      "primary": "deterministic-prose",
-      "fallback": "independent-maintainer"
+      "primary": "deterministic-prose"
     },
     "R1": {
-      "primary": "independent-maintainer",
-      "fallback": "independent-admin"
+      "primary": "coderabbit"
     },
     "R2": {
-      "primary": "independent-maintainer",
-      "fallback": "independent-admin"
+      "primary": "coderabbit"
     }
   },
   "providers": {
-    "codex": "recorded-review",
-    "coderabbit": "second-opinion",
-    "quantaiservice": "shadow"
+    "coderabbit": "sha-bound-review"
   },
   "owner_approval_max_hours": 24,
   "dependabot_template_exemption": false,
@@ -45,10 +40,10 @@
       "login": "Pigbibi"
     }
   ],
-  "ai_review_actors": [
-    {
-      "user_id": 20649888,
-      "login": "Pigbibi"
-    }
-  ]
+  "coderabbit": {
+    "app_id": 347564,
+    "app_slug": "coderabbitai",
+    "user_id": 136622811,
+    "login": "coderabbitai[bot]"
+  }
 }

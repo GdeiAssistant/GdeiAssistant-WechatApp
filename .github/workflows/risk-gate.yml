@@ -5,6 +5,8 @@ on:
     types: [opened, reopened, synchronize, edited, ready_for_review]
   issue_comment:
     types: [created, edited, deleted]
+  check_run:
+    types: [created, rerequested, completed]
   workflow_run:
     workflows: [PR review signal]
     types: [completed]
@@ -37,6 +39,7 @@ jobs:
       pull-requests: read
       issues: read
       statuses: write
+      checks: read
     steps:
       - name: Evaluate with current default-branch policy only
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
@@ -64,6 +67,11 @@ jobs:
             });
             if (workflow.type !== 'file' || workflow.encoding !== 'base64' || !workflow.content) throw new Error('Missing trusted workflow');
             sources['risk-gate.yml'] = Buffer.from(workflow.content, 'base64').toString('utf8');
+            const { data: config } = await github.rest.repos.getContent({
+              ...context.repo, path: '.coderabbit.yaml', ref: policyCommit,
+            });
+            if (config.type !== 'file' || config.encoding !== 'base64' || !config.content) throw new Error('Missing trusted reviewer config');
+            sources['.coderabbit.yaml'] = Buffer.from(config.content, 'base64').toString('utf8');
             const { digest } = require(path.join(folder, 'gate.cjs'));
             await require(path.join(folder, 'runner.cjs')).run({
               github, context, core, defaultBranch, policyCommit,

@@ -13,6 +13,14 @@ async function selectTargets(github, context, defaultBranch) {
     if (!Number.isSafeInteger(number) || number < 1) throw new Error('Invalid PR number');
     return [number];
   }
+  if (context.eventName === 'check_run') {
+    const check = event.check_run;
+    if (check.app?.id !== 347564 || check.app.slug !== 'coderabbitai') return [];
+    if (check.pull_requests?.length) return [...new Set(check.pull_requests.map(pr => pr.number))];
+    const prs = await github.paginate(github.rest.repos.listPullRequestsAssociatedWithCommit,
+      { ...repo, commit_sha: check.head_sha, per_page: 100 });
+    return prs.filter(pr => pr.state === 'open').map(pr => pr.number);
+  }
   if (context.eventName === 'workflow_run') {
     const run = event.workflow_run;
     // Associations only choose what to re-read, never what to approve. No relay artifacts.
@@ -63,8 +71,25 @@ async function collect(github, context, number, policyCommit, policy) {
   const issueComments = await github.paginate(github.rest.issues.listComments, { ...repo, issue_number: number, per_page: 100 });
   const commits = await github.paginate(github.rest.pulls.listCommits, params);
   const threads = await readThreads(github, repo, number);
+  const allChecks = await github.paginate(github.rest.checks.listForRef,
+    { ...repo, ref: pr.head.sha, filter: 'all', per_page: 100 });
+  const checkRuns = allChecks.filter(c => c.app?.id === policy?.coderabbit.app_id);
+  const statuses = await github.paginate(github.rest.repos.listCommitStatusesForRef,
+    { ...repo, ref: pr.head.sha, per_page: 100 });
+  const ownerWatermark = Math.max(0, ...statuses.filter(s => s.context === 'risk-gate'
+    && s.creator?.id === 41898282 && s.creator.login === 'github-actions[bot]')
+    .map(s => Number(/; owner=(\d+)$/.exec(s.description || '')?.[1] || 0)));
+  const configAt = async ref => {
+    try {
+      const { data } = await github.rest.repos.getContent({ ...repo, path: '.coderabbit.yaml', ref });
+      if (data.type !== 'file' || data.encoding !== 'base64' || !data.content) throw new Error('Invalid reviewer config');
+      return Buffer.from(data.content, 'base64').toString('utf8');
+    } catch (error) { if (error.status === 404) return null; throw error; }
+  };
+  const coderabbitConfig = await configAt(pr.head.sha);
+  const trustedCoderabbitConfig = await configAt(policyCommit);
   const permissions = {};
-  const actors = [...(policy?.owner_actors || []), ...(policy?.ai_review_actors || [])];
+  const actors = (policy?.owner_actors || []);
   const records = [...reviews, ...gate.evidenceComments({ issueComments }, actors)];
   for (const user of new Map(records.filter(r => r.user?.type === 'User').map(r => [r.user.login, r.user])).values()) {
     const { data } = await github.rest.repos.getCollaboratorPermissionLevel({ ...repo, username: user.login });
@@ -72,14 +97,15 @@ async function collect(github, context, number, policyCommit, policy) {
     permissions[user.login] = data.permission;
   }
   return { repository: `${repo.owner}/${repo.repo}`, policyCommit, pr, files, reviews,
-    reviewComments, issueComments, commits, threads, permissions, complete: true };
+    reviewComments, issueComments, commits, threads, permissions, checkRuns, ownerWatermark,
+    coderabbitConfig, trustedCoderabbitConfig, complete: true };
 }
 
 function snapshotVersion(snapshot, policy) {
   // Compare security-relevant fields, not changing mergeability/cache fields.
   const { pr, issueComments, ...rest } = snapshot;
   const secondOpinions = issueComments.filter(c => c.user?.type === 'Bot' && c.user?.login === 'coderabbitai[bot]');
-  const approvals = gate.evidenceComments(snapshot, [...(policy?.owner_actors || []), ...(policy?.ai_review_actors || [])]);
+  const approvals = gate.evidenceComments(snapshot, (policy?.owner_actors || []));
   return gate.digest({ ...rest, secondOpinions, approvals, pr: { state: pr.state, number: pr.number, body: pr.body,
     head: pr.head.sha, base: pr.base.sha, baseRef: pr.base.ref, baseRepo: pr.base.repo.id,
     author: pr.user.id, changed_files: pr.changed_files, commits: pr.commits } });
@@ -90,9 +116,9 @@ async function run({ github, context, core, policy, policySha, policyCommit, def
   const repo = context.repo;
   const target = `${context.serverUrl}/${repo.owner}/${repo.repo}/actions/runs/${context.runId}`;
   for (const number of numbers) {
-    let head;
+    let head, watermark = 0;
     const status = (name, state, description) => github.rest.repos.createCommitStatus({
-      ...repo, sha: head, context: name, state, description: description.slice(0, 140), target_url: target,
+      ...repo, sha: head, context: name, state, description: `${description.slice(0, 100)}; owner=${watermark}`, target_url: target,
     });
     try {
       const { data: initial } = await github.rest.pulls.get({ ...repo, pull_number: number });
@@ -104,6 +130,7 @@ async function run({ github, context, core, policy, policySha, policyCommit, def
       const before = await collect(github, context, number, policyCommit, policy);
       if (before.pr.head.sha !== head) throw new Error('Head changed during collection');
       const result = gate.evaluate(before, policy, policySha);
+      watermark = result.owner_watermark || before.ownerWatermark || 0;
       const templateOK = (policy.dependabot_template_exemption && before.pr.user.login === 'dependabot[bot]')
         || gate.completeTemplate(before.pr.body);
       const after = await collect(github, context, number, policyCommit, policy);
@@ -118,7 +145,7 @@ async function run({ github, context, core, policy, policySha, policyCommit, def
       // Only public evidence identifiers/digests; never echo external comment bodies.
       await core.summary.addHeading(`PR #${number}: ${result.tier}`)
         .addCodeBlock(JSON.stringify(result, null, 2), 'json')
-        .addRaw('\nRequired CI remains enforced by existing branch protection. QAS is non-blocking shadow; no provider was called.\n').write();
+        .addRaw('\n必需 CI 仍由现有分支保护约束。本记录只核验 CodeRabbit 原始证据，不调用模型或代发批准。\n').write();
       if (!result.allowed || !templateOK) core.setFailed(`PR #${number}: governance evidence missing or invalid`);
     } catch (error) {
       if (head) {

@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const gate = require('./gate.cjs');
 const actualPolicy = require('./policy.json');
-const { fixture, approve, aiApproval, ownerApproval, editReceipt, evaluate, HEAD, POLICY, NOW } = require('./fixtures.cjs');
+const { fixture, approve, ownerApproval, evaluate, HEAD, BASE, POLICY, NOW, at } = require('./fixtures.cjs');
 
 test('R0 prose passes with an explicit no-review decision and matched rule', () => {
   const f = fixture('README.md');
@@ -66,181 +66,6 @@ test('commit API cap is refused', () => {
   assert.throws(() => evaluate(f), /Incomplete/);
 });
 
-test('R1 primary is an authenticated current-head independent review', () => {
-  const f = fixture(); approve(f); assert.equal(evaluate(f).allowed, true); assert.equal(evaluate(f).route, 'primary');
-});
-test('R1 fallback requires a separate admin review and reason', () => {
-  const f = fixture(); const r = approve(f, 'fallback'); assert.equal(evaluate(f).allowed, true);
-  editReceipt(r, v => { delete v.fallback_reason; }); assert.equal(evaluate(f).allowed, false);
-});
-
-for (const [name, mutate] of [
-  ['new head', f => { f.snapshot.pr.head.sha = 'e'.repeat(40); }],
-  ['new base', f => { f.snapshot.pr.base.sha = 'e'.repeat(40); }],
-  ['wrong native review commit', f => { f.snapshot.reviews[0].commit_id = 'e'.repeat(40); }],
-  ['changed patch', f => { f.snapshot.files[0].patch = '@@ -1 +1 @@\n-before\n+changed'; }],
-  ['permission removed', f => { f.snapshot.permissions.reviewer = 'read'; }],
-  ['PR self-review', f => { f.snapshot.pr.user.id = 2; }],
-  ['commit author self-review', f => { f.snapshot.commits[0].author.id = 2; }],
-  ['commit committer self-review', f => { f.snapshot.commits[0].committer.id = 2; }],
-  ['bot impersonates reviewer', f => { f.snapshot.reviews[0].user.type = 'Bot'; }],
-  ['dismissed review', f => { f.snapshot.reviews[0].state = 'DISMISSED'; }],
-  ['commented review', f => { f.snapshot.reviews[0].state = 'COMMENTED'; }],
-  ['changes requested', f => { f.snapshot.reviews[0].state = 'CHANGES_REQUESTED'; }],
-  ['unresolved thread', f => { f.snapshot.threads.push({ id: 'thread', isResolved: false }); }],
-  ['late finding', f => { f.snapshot.reviewComments.push({ id: 50, body: 'New P1 finding', user: { login: 'reviewer' } }); }],
-  ['late CodeRabbit second opinion', f => { f.snapshot.issueComments.push({ id: 51, body: 'New finding', user: { login: 'coderabbitai[bot]', type: 'Bot' } }); }],
-]) test(`${name} invalidates approval`, () => {
-  const f = fixture(); approve(f); mutate(f); assert.equal(evaluate(f).allowed, false);
-});
-
-for (const [name, mutate] of [
-  ['wrong repository id', v => { v.repository_id = 101; }],
-  ['wrong PR', v => { v.pr_number = 43; }],
-  ['wrong policy', v => { v.policy_sha256 = '0'.repeat(64); }],
-  ['missing coverage', v => { delete v.coverage; }],
-  ['partial coverage', v => { v.coverage.reviewed_files = 0; }],
-  ['incomplete execution', v => { v.execution_status = 'incomplete'; }],
-  ['limitations', v => { v.limitations = ['Missing context']; }],
-  ['blocking findings', v => { v.blocking_findings = ['P1']; }],
-  ['wrong route provider', v => { v.reviewer = 'codex'; }],
-  ['wrong tier', v => { v.risk_tier = 'R0'; }],
-]) test(`${name} cannot pass`, () => {
-  const f = fixture(); editReceipt(approve(f), mutate); assert.equal(evaluate(f).allowed, false);
-});
-
-test('later COMMENTED review invalidates prior APPROVED on the same head', () => {
-  const f = fixture(); const r = approve(f); f.snapshot.reviews.push({ ...r, id: 11, state: 'COMMENTED' });
-  assert.equal(evaluate(f).allowed, false);
-});
-test('unknown submitted review metadata is an error', () => {
-  const f = fixture(); const r = approve(f); r.submitted_at = 'unknown'; assert.throws(() => evaluate(f));
-});
-test('fake labels, issue receipts and CI claims never replace reviews', () => {
-  const f = fixture(); const r = approve(f); f.snapshot.reviews = []; f.snapshot.pr.labels = [{ name: 'owner-approved' }];
-  f.snapshot.issueComments.push({ id: 30, body: r.body, user: r.user }); f.snapshot.ci = 'success';
-  assert.equal(evaluate(f).allowed, false);
-});
-test('CodeRabbit and Codex native approvals are not eligible primary routes', () => {
-  for (const login of ['coderabbitai[bot]', 'chatgpt-codex-connector[bot]']) {
-    const f = fixture(); const r = approve(f); r.user = { id: 90, login, type: 'Bot' }; f.snapshot.permissions[login] = 'admin';
-    assert.equal(evaluate(f).allowed, false);
-  }
-});
-test('QAS shadow failure or success does not affect a valid primary review', () => {
-  const f = fixture(); approve(f);
-  for (const state of ['success', 'failure', 'unavailable']) {
-    f.snapshot.issueComments = [{ id: 60, user: { login: 'quantaiservice[bot]', type: 'Bot' }, body: state }];
-    assert.equal(evaluate(f).allowed, true);
-  }
-});
-test('provider promotion is not a policy-only switch', () => {
-  const f = fixture(); f.policy.providers.codex = 'primary'; assert.throws(() => evaluate(f), /provider policy/);
-});
-test('resolved flag alone cannot dispose of an inline finding', () => {
-  const f = fixture(); f.snapshot.reviewComments.push({ id: 50, body: 'P1 finding' }); f.snapshot.threads.push({ id: 'thread', isResolved: true });
-  const r = approve(f); assert.equal(evaluate(f).allowed, false);
-  editReceipt(r, v => { v.dispositions = [{ source_id: 'comment:50', severity: 'P1', outcome: 'accepted', reason: 'Accepting the known issue', evidence: 'offline fixture result' }]; });
-  assert.equal(evaluate(f).allowed, false);
-  editReceipt(r, v => { v.dispositions[0].outcome = 'fixed'; v.dispositions[0].fixed_in = HEAD; });
-  assert.equal(evaluate(f).allowed, true);
-  f.snapshot.reviewComments[0].body = 'Edited material finding'; assert.equal(evaluate(f).allowed, false);
-});
-test('an admin fallback cannot override active changes requested', () => {
-  const f = fixture(); approve(f, 'fallback'); f.snapshot.reviews.push({ id: 30, user: { id: 2, login: 'reviewer', type: 'User' },
-    state: 'CHANGES_REQUESTED', commit_id: HEAD, submitted_at: '2033-05-18T03:33:20Z', body: 'Fix required' });
-  assert.equal(evaluate(f).reason, 'changes_requested');
-});
-
-test('R2 requires an owner comment even with a valid technical review', () => {
-  const f = fixture('src/ai_service/auth.py'); approve(f);
-  assert.equal(evaluate(f).reason, 'owner_approval_required');
-});
-test('R2 accepts an allowlisted Grok approval comment bound to exact AI evidence', () => {
-  const f = fixture('src/ai_service/auth.py'); aiApproval(f); ownerApproval(f);
-  assert.equal(evaluate(f).allowed, true); assert.equal(evaluate(f).route, 'recorded-ai');
-});
-test('R2 accepts AI-assisted independent native review plus owner comment', () => {
-  const f = fixture('src/ai_service/auth.py'); approve(f); ownerApproval(f); assert.equal(evaluate(f).allowed, true);
-});
-for (const [name, mutate] of [
-  ['expired approval', (f, r) => editReceipt(r, v => { v.expires_at = NOW; })],
-  ['wrong evidence', (f, r) => editReceipt(r, v => { v.evidence_sha256 = '0'.repeat(64); })],
-  ['wrong actor id', (f, r) => { r.user.id = 5; }],
-  ['wrong actor login', (f, r) => { r.user.login = 'impostor'; }],
-  ['bot impersonation', (f, r) => { r.user.type = 'Bot'; }],
-  ['actor removed', f => { f.policy.owner_actors = []; }],
-  ['actor permission removed', f => { f.snapshot.permissions.owner = 'read'; }],
-  ['new head', f => { f.snapshot.pr.head.sha = 'e'.repeat(40); }],
-  ['wrong approval head', (f, r) => editReceipt(r, v => { v.head_sha = 'e'.repeat(40); })],
-  ['wrong approval base', (f, r) => editReceipt(r, v => { v.base_sha = 'e'.repeat(40); })],
-  ['wrong approval repository', (f, r) => editReceipt(r, v => { v.repository = 'other/project'; })],
-  ['wrong approval PR', (f, r) => editReceipt(r, v => { v.pr_number = 43; })],
-  ['wrong approval policy', (f, r) => editReceipt(r, v => { v.policy_sha256 = '0'.repeat(64); })],
-  ['missing Grok record', (f, r) => editReceipt(r, v => { delete v.approval_ref; })],
-  ['wrong approval source', (f, r) => editReceipt(r, v => { v.approval_source = 'codex'; })],
-  ['future approval', (f, r) => editReceipt(r, v => { v.issued_at = NOW + 1; })],
-  ['excessive lifetime', (f, r) => editReceipt(r, v => { v.expires_at = NOW + 90000; })],
-  ['malformed approval', (f, r) => { r.body = 'not JSON'; }],
-  ['deleted approval', f => { f.snapshot.issueComments.pop(); }],
-  ['withdrawn approval', (f, r) => editReceipt(r, v => { v.decision = 'revoke'; })],
-  ['technical receipt edited', f => editReceipt(f.snapshot.reviews[0], v => { v.note = 'Edited after owner decision'; })],
-  ['approval copied to another comment', (f, r) => { f.snapshot.issueComments.push({ ...r, id: 21 }); }],
-]) test(`${name} blocks R2`, () => {
-  const f = fixture('src/ai_service/auth.py'); approve(f); const r = ownerApproval(f); mutate(f, r); assert.equal(evaluate(f).allowed, false);
-});
-test('time passing alone expires owner approval', () => {
-  const f = fixture('src/ai_service/auth.py'); approve(f); ownerApproval(f);
-  assert.equal(gate.evaluate(f.snapshot, f.policy, POLICY, NOW + 3601).allowed, false);
-});
-test('later owner comment withdraws approval; copied body cannot restore it', () => {
-  const f = fixture('src/ai_service/auth.py'); approve(f); const r = ownerApproval(f);
-  f.snapshot.issueComments.push({ ...r, id: 21, body: 'Withdraw approval' });
-  assert.equal(evaluate(f).allowed, false);
-  f.snapshot.issueComments.push({ ...r, id: 22 }); assert.equal(evaluate(f).allowed, false);
-});
-test('editing an older owner comment cannot outrank a newer revocation', () => {
-  const f = fixture('src/ai_service/auth.py'); approve(f); const r = ownerApproval(f);
-  const revoked = { ...r, id: 21 }; editReceipt(revoked, v => { v.comment_id = 21; v.decision = 'revoke'; });
-  f.snapshot.issueComments.push(revoked); r.updated_at = '2033-05-18T04:00:00Z';
-  assert.equal(evaluate(f).allowed, false);
-  revoked.body = 'malformed edit'; assert.equal(evaluate(f).allowed, false);
-});
-test('owner evidence and labels cannot replace AI review', () => {
-  const f = fixture('src/ai_service/auth.py'); approve(f); ownerApproval(f); f.snapshot.reviews = [];
-  f.snapshot.pr.labels = [{ name: 'owner-approved' }]; assert.equal(evaluate(f).allowed, false);
-});
-test('labels cannot replace the structured owner comment', () => {
-  const f = fixture('src/ai_service/auth.py'); aiApproval(f); f.snapshot.pr.labels = [{ name: 'owner-approved' }];
-  assert.equal(evaluate(f).allowed, false);
-});
-test('native technical review without AI provenance cannot pass', () => {
-  const f = fixture(); editReceipt(approve(f), v => { delete v.ai_review; }); assert.equal(evaluate(f).allowed, false);
-});
-test('R1 accepts a SHA-bound AI review with honest self-review provenance', () => {
-  const f = fixture(); aiApproval(f); assert.equal(evaluate(f).allowed, true);
-});
-for (const [name, mutate] of [
-  ['unlisted publisher', (f, c) => { c.user.id = 99; }],
-  ['read-only publisher', f => { f.snapshot.permissions.author = 'read'; }],
-  ['missing AI execution', (f, c) => editReceipt(c, v => { delete v.ai_review; })],
-  ['missing run reference', (f, c) => editReceipt(c, v => { v.ai_review.run_ref = ''; })],
-  ['incomplete AI', (f, c) => editReceipt(c, v => { v.execution_status = 'incomplete'; })],
-  ['failed AI', (f, c) => editReceipt(c, v => { v.verdict = 'fail'; })],
-  ['stale AI head', (f, c) => editReceipt(c, v => { v.head_sha = 'e'.repeat(40); })],
-  ['stale discussion', (f, c) => editReceipt(c, v => { v.discussion_sha256 = '0'.repeat(64); })],
-  ['partial AI coverage', (f, c) => editReceipt(c, v => { v.coverage.reviewed_files = 0; })],
-  ['AI limitation', (f, c) => editReceipt(c, v => { v.limitations = ['Missing file']; })],
-  ['AI finding', (f, c) => editReceipt(c, v => { v.blocking_findings = ['P1']; })],
-  ['copied AI record', (f, c) => { f.snapshot.issueComments.push({ ...c, id: 16 }); }],
-  ['malformed newer record', (f, c) => { f.snapshot.issueComments.push({ ...c, id: 16, body: 'Review withdrawn' }); }],
-]) test(`${name} cannot satisfy AI review`, () => {
-  const f = fixture(); const c = aiApproval(f); mutate(f, c); assert.equal(evaluate(f).allowed, false);
-});
-test('a failed new AI comment cannot fall back to an older native approval', () => {
-  const f = fixture(); approve(f); const c = aiApproval(f); editReceipt(c, v => { v.verdict = 'fail'; });
-  assert.equal(evaluate(f).allowed, false);
-});
 test('English and existing Gdei template headings are accepted', () => {
   assert.equal(gate.completeTemplate('## AI assistance\nCodex used.\n## What changed\nFixed governance.\n## How verified\nOffline tests passed.'), true);
   assert.equal(gate.completeTemplate('## AI assistance\nCodex used.\n## 这个 PR 做了什么\n修复评审门槛。\n## 怎么验证的\n离线测试通过。'), true);
@@ -252,4 +77,114 @@ test('template comments cannot manufacture headings or expose unfinished comment
   assert.equal(gate.completeTemplate(ai + '<!-- unfinished\n## What changed\nHidden change.\n## How verified\nHidden test.'), false);
   assert.equal(gate.completeTemplate(ai + '## W<!-- removed -->hat changed\nChange detail.\n## How verified\nTest detail.'), false);
   assert.equal(gate.completeTemplate(ai + '<!-- ## What changed\nHidden change. -->\n## How verified\nTest detail.'), false);
+});
+
+test('R1 uses completed current-head CodeRabbit evidence without human approval', () => {
+  const f = fixture(); approve(f); const r = evaluate(f);
+  assert.equal(r.allowed, true); assert.equal(r.ai.coverage, 'reported_complete');
+  assert.equal(r.ai.check_id, 100); assert.equal(r.ai.review_id, 10);
+});
+for (const [name, mutate] of [
+  ['stale SHA', f => { f.snapshot.pr.head.sha = 'e'.repeat(40); }],
+  ['stale native review SHA', f => { f.snapshot.reviews[0].commit_id = BASE; }],
+  ['wrong App ID', f => { f.snapshot.checkRuns[0].app.id = 1; }],
+  ['wrong App slug', f => { f.snapshot.checkRuns[0].app.slug = 'forged'; }],
+  ['wrong bot ID', f => { f.snapshot.reviews[0].user.id = 1; }],
+  ['wrong bot type', f => { f.snapshot.reviews[0].user.type = 'User'; }],
+  ['dismissed review', f => { f.snapshot.reviews[0].state = 'DISMISSED'; }],
+  ['skipped check', f => { f.snapshot.checkRuns[0].conclusion = 'skipped'; }],
+  ['rate-limited neutral', f => { f.snapshot.checkRuns[0].conclusion = 'neutral'; }],
+  ['rate-limit green wrapper', f => { f.snapshot.checkRuns[0].output.summary = 'Result: Success - Review rate limited'; }],
+  ['no files green wrapper', f => { f.snapshot.checkRuns[0].output.title = 'No files to review'; }],
+  ['cancelled', f => { f.snapshot.checkRuns[0].conclusion = 'cancelled'; }],
+  ['pending', f => { f.snapshot.checkRuns[0].status = 'in_progress'; }],
+  ['review publication missing', f => { f.snapshot.reviews = []; }],
+  ['different run ID', f => { f.snapshot.reviews[0].body = f.snapshot.reviews[0].body.replace('11111111', '99999999'); }],
+  ['approve command without completed review', f => { f.snapshot.reviews[0].state = 'APPROVED'; f.snapshot.reviews[0].body = 'Approved on request'; }],
+  ['review before check started', f => { f.snapshot.reviews[0].submitted_at = at(-200); }],
+  ['review after check completed', f => { f.snapshot.reviews[0].submitted_at = at(-10); }],
+  ['latest rerun skipped', f => { f.snapshot.checkRuns.push({ ...f.snapshot.checkRuns[0], id: 101, started_at: at(-10), conclusion: 'skipped' }); }],
+]) test(`${name} does not count as a completed review`, () => {
+  const f = fixture(); approve(f); mutate(f);
+  const r = evaluate(f); assert.equal(r.allowed, false); assert.equal(r.ai.execution_status, 'unavailable');
+});
+for (const [name, mutate] of [
+  ['unproven full range', f => { f.snapshot.pr.base.sha = 'e'.repeat(40); }],
+  ['missing coverage', f => { f.snapshot.reviews[0].body = f.snapshot.reviews[0].body.replace('Files selected for processing', 'Unknown format'); }],
+  ['wrong coverage path', f => { f.snapshot.reviews[0].body = f.snapshot.reviews[0].body.replace('src/view.js', 'src/other.js'); }],
+  ['explicit partial', f => { f.snapshot.reviews[0].body += '\nFiles not reviewed: oversized'; }],
+  ['no analysis stage', f => { f.snapshot.checkRuns[0].output.summary = f.snapshot.checkRuns[0].output.summary.replace('Generate review feedback', 'Other stage'); }],
+  ['candidate config relaxed', f => { f.snapshot.coderabbitConfig += '\n# changed'; }],
+  ['command config override', f => { f.snapshot.issueComments.push({ body: '@coderabbitai full review --with-config path_filters=[]' }); }],
+]) test(`${name} needs an explicit partial override`, () => {
+  const f = fixture(); approve(f); mutate(f);
+  assert.equal(evaluate(f).ai.coverage, 'partial'); assert.equal(evaluate(f).allowed, false);
+  ownerApproval(f, 'override'); assert.equal(evaluate(f).reason, 'approved_with_override');
+});
+test('R2 requires account approve bound to the completed review', () => {
+  const f = fixture('pages/login/login.js'); approve(f);
+  assert.equal(evaluate(f).reason, 'owner_approval_required'); ownerApproval(f);
+  assert.equal(evaluate(f).allowed, true);
+});
+for (const [name, mutate] of [
+  ['wrong login', (f, c) => { c.user.login = 'impostor'; }],
+  ['wrong numeric ID', (f, c) => { c.user.id = 99; }],
+  ['bot owner', (f, c) => { c.user.type = 'Bot'; }],
+  ['removed permission', f => { f.snapshot.permissions.owner = 'read'; }],
+  ['old head', f => { f.snapshot.pr.head.sha = 'e'.repeat(40); }],
+  ['old base', f => { f.snapshot.pr.base.sha = 'e'.repeat(40); }],
+  ['old evidence', f => { f.snapshot.reviews[0].body += '\nNew review content'; }],
+  ['old diff', f => { f.snapshot.files[0].patch = '@@ -1 +1 @@\n-before\n+different'; }],
+  ['wrong policy', (f, c) => { c.body = c.body.replace(POLICY, '0'.repeat(64)); }],
+  ['duplicate field', (f, c) => { c.body += `\nhead: ${HEAD}`; }],
+  ['missing reason', (f, c) => { c.body = c.body.replace(/^reason:.*\n?/m, ''); }],
+  ['edited approval', (f, c) => { c.updated_at = at(-10); }],
+  ['deleted approval', f => { f.snapshot.issueComments = []; }],
+  ['expired approval', (f, c) => { c.created_at = c.updated_at = at(-86401); }],
+  ['future approval', (f, c) => { c.created_at = c.updated_at = at(60); }],
+  ['copied to another PR', f => { f.snapshot.pr.number++; }],
+]) test(`${name} invalidates approval`, () => {
+  const f = fixture('pages/login/login.js'); approve(f); const c = ownerApproval(f); mutate(f, c);
+  assert.equal(evaluate(f).allowed, false);
+});
+test('ordinary approval cannot override skip or rate limit', () => {
+  for (const conclusion of ['skipped', 'neutral']) {
+    const f = fixture('pages/login/login.js'); approve(f); f.snapshot.checkRuns[0].conclusion = conclusion;
+    ownerApproval(f); assert.equal(evaluate(f).allowed, false);
+  }
+});
+test('unavailability override stays distinct from completed AI review', () => {
+  const f = fixture('pages/login/login.js'); ownerApproval(f, 'override'); const r = evaluate(f);
+  assert.equal(r.allowed, true); assert.equal(r.reason, 'approved_with_override'); assert.equal(r.ai.execution_status, 'unavailable');
+});
+test('findings override names every blocker and every missing-review scope', () => {
+  const f = fixture('pages/login/login.js'); approve(f); f.snapshot.reviews[0].state = 'CHANGES_REQUESTED';
+  f.snapshot.threads.push({ id: 'thread1', isResolved: false });
+  const c = ownerApproval(f, 'override'); assert.equal(evaluate(f).allowed, true);
+  c.body = c.body.replace(',thread:thread1', ''); assert.equal(evaluate(f).allowed, false);
+});
+test('revoke defeats older approval and older edits', () => {
+  const f = fixture('pages/login/login.js'); approve(f); const old = ownerApproval(f);
+  ownerApproval(f, 'revoke'); assert.equal(evaluate(f).reason, 'owner_revoked');
+  old.updated_at = at(0); assert.equal(evaluate(f).allowed, false);
+});
+test('deleting an observed revoke cannot resurrect an older approval', () => {
+  const f = fixture('pages/login/login.js'); approve(f); ownerApproval(f); ownerApproval(f, 'revoke');
+  f.snapshot.ownerWatermark = evaluate(f).owner_watermark;
+  f.snapshot.issueComments.pop(); assert.equal(evaluate(f).reason, 'owner_decision_invalid');
+});
+test('malformed latest command blocks old approval, ordinary conversation does not', () => {
+  const f = fixture('pages/login/login.js'); approve(f); const old = ownerApproval(f);
+  f.snapshot.issueComments.push({ ...old, id: 21, body: 'Thanks for reviewing' }); assert.equal(evaluate(f).allowed, true);
+  f.snapshot.issueComments[1].body = '/governance broken'; assert.equal(evaluate(f).allowed, false);
+});
+test('owner may be PR author but author-provided AI records cannot pass', () => {
+  const f = fixture('pages/login/login.js'); f.snapshot.pr.user.id = 4; approve(f); ownerApproval(f);
+  assert.equal(evaluate(f).allowed, true);
+  f.snapshot.reviews = []; assert.equal(evaluate(f).allowed, false);
+});
+test('labels and arbitrary self-attestations cannot replace native evidence', () => {
+  const f = fixture(); f.snapshot.pr.labels = [{ name: 'owner-approved' }];
+  f.snapshot.issueComments.push({ body: '{"schema_version":"ai-review/v1","verdict":"pass"}', user: { id: 1 } });
+  assert.equal(evaluate(f).allowed, false);
 });

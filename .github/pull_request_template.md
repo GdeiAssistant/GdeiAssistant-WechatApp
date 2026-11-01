@@ -39,4 +39,7 @@ npm ci && npm run lint && npm test
 
 ## 风险
 
-<!-- 说明风险等级、受影响的文件，以及兼容性或运行方面的影响。 -->
+<!-- 填写 R0/R1/R2、受影响文件及兼容性或运行影响。
+附可信 gate 的当前 SHA 审查记录链接；R2 附 Pigbibi 的 approve/override 评论链接。
+缺失证据写明待完成，不把 AI 自述或 owner-approved 标签作为批准。
+契约见 .github/governance/README.md。 -->

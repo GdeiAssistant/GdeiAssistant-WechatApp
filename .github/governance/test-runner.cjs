@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
-const { fixture, approve, aiApproval, ownerApproval, HEAD, BASE, POLICY } = require('./fixtures.cjs');
+const { fixture, approve, ownerApproval, HEAD, BASE, POLICY } = require('./fixtures.cjs');
 const { selectTargets, readThreads, collect, snapshotVersion, run } = require('./runner.cjs');
 
 function mock(f = fixture()) {
@@ -16,8 +16,12 @@ function mock(f = fixture()) {
       pulls: { get: async () => ({ data: structuredClone(f.snapshot.pr) }), list: 'pulls', listFiles: 'files',
         listReviews: 'reviews', listReviewComments: 'reviewComments', listCommits: 'commits' },
       issues: { listComments: 'issueComments' },
+      checks: { listForRef: 'checkRuns' },
       repos: {
         listPullRequestsAssociatedWithCommit: 'associated',
+        listCommitStatusesForRef: 'statuses',
+        getContent: async ({ ref }) => ({ data: { type: 'file', encoding: 'base64',
+          content: Buffer.from(ref === BASE ? f.snapshot.trustedCoderabbitConfig : f.snapshot.coderabbitConfig).toString('base64') } }),
         getBranch: async () => ({ data: { commit: { sha: BASE } } }),
         getCollaboratorPermissionLevel: async ({ username }) => ({ data: { permission: f.snapshot.permissions[username], user: { id: [...f.snapshot.reviews, ...f.snapshot.issueComments].find(r => r.user.login === username).user.id } } }),
         createCommitStatus: async s => { statuses.push(s); return {}; },
@@ -27,6 +31,7 @@ function mock(f = fixture()) {
       calls.push({ method, params });
       if (method === 'pulls') return [structuredClone(f.snapshot.pr)];
       if (method === 'associated') return [];
+      if (method === 'statuses') return structuredClone(f.snapshot.statuses || []);
       return structuredClone(f.snapshot[method]);
     },
     graphql: async () => ({ repository: { pullRequest: { reviewThreads: {
@@ -92,14 +97,14 @@ test('missing or repeating thread cursor is refused', async () => {
   await assert.rejects(readThreads(m.github, m.context.repo, 42), /page/);
 });
 test('all REST collection endpoints use the pagination helper', async () => {
-  const m = mock(); await collect(m.github, m.context, 42, BASE);
-  assert.deepEqual(m.calls.map(c => c.method).sort(), ['commits', 'files', 'issueComments', 'reviewComments', 'reviews']);
+  const m = mock(); await collect(m.github, m.context, 42, BASE, m.policy);
+  assert.deepEqual(m.calls.map(c => c.method).sort(), ['checkRuns', 'commits', 'files', 'issueComments', 'reviewComments', 'reviews', 'statuses']);
   assert.ok(m.calls.every(c => c.params.per_page === 100));
 });
 test('permission identity mismatch fails collection', async () => {
-  const f = fixture(); approve(f); const m = mock(f);
+  const f = fixture(); approve(f); ownerApproval(f); const m = mock(f);
   m.github.rest.repos.getCollaboratorPermissionLevel = async () => ({ data: { permission: 'admin', user: { id: 999 } } });
-  await assert.rejects(collect(m.github, m.context, 42, BASE), /permission/);
+  await assert.rejects(collect(m.github, m.context, 42, BASE, f.policy), /permission/);
 });
 test('native API errors never publish success', async () => {
   const m = mock(); m.github.paginate = async () => { throw new Error('API unavailable'); };
@@ -113,7 +118,7 @@ test('valid R1 publishes preserved contexts on actual head after a full readback
   assert.ok(m.statuses.every(s => s.sha === HEAD)); assert.equal(m.calls.filter(c => c.method === 'files').length, 2);
   assert.equal(m.failures.length, 0);
 });
-for (const field of ['head', 'base', 'body', 'review', 'permission', 'thread', 'policy']) {
+for (const field of ['head', 'base', 'body', 'review', 'check', 'config', 'thread', 'policy']) {
   test(`readback detects concurrent ${field} change`, async () => {
     const f = fixture(); approve(f); const m = mock(f); let reads = 0;
     const get = m.github.rest.pulls.get;
@@ -124,7 +129,8 @@ for (const field of ['head', 'base', 'body', 'review', 'permission', 'thread', '
         if (field === 'base') f.snapshot.pr.base.sha = 'e'.repeat(40);
         if (field === 'body') f.snapshot.pr.body = 'changed';
         if (field === 'review') f.snapshot.reviews[0].state = 'DISMISSED';
-        if (field === 'permission') f.snapshot.permissions.reviewer = 'read';
+        if (field === 'check') f.snapshot.checkRuns[0].conclusion = 'neutral';
+        if (field === 'config') f.snapshot.coderabbitConfig += '\nchanged';
         if (field === 'thread') f.snapshot.threads.push({ id: 'new', isResolved: false });
         if (field === 'policy') m.github.rest.repos.getBranch = async () => ({ data: { commit: { sha: 'e'.repeat(40) } } });
       }
@@ -150,15 +156,15 @@ test('trusted workflow never checks out PR code or consumes relay artifacts', ()
   assert.ok(relay.includes('permissions: {}')); assert.doesNotMatch(relay.replace(/^\s*#.*$/gm, ''), /uses:|checkout|artifact/);
 });
 
-test('shadow issue updates cannot turn a stable review into a race error', () => {
+test('unrelated bot comments cannot change the evidence snapshot', () => {
   const f = fixture(); const before = snapshotVersion(f.snapshot);
-  f.snapshot.issueComments.push({ id: 90, user: { login: 'quantaiservice[bot]', type: 'Bot' }, body: 'failure' });
+  f.snapshot.issueComments.push({ id: 90, user: { login: 'unrelated[bot]', type: 'Bot' }, body: 'failure' });
   assert.equal(snapshotVersion(f.snapshot), before);
 });
 
 for (const field of ['edit', 'delete', 'withdraw', 'permission']) {
   test(`R2 readback detects owner comment ${field}`, async () => {
-    const f = fixture('src/ai_service/auth.py'); aiApproval(f); const approval = ownerApproval(f);
+    const f = fixture('src/ai_service/auth.py'); approve(f); const approval = ownerApproval(f);
     const m = mock(f); let reads = 0; const get = m.github.rest.pulls.get;
     m.github.rest.pulls.get = async () => {
       if (++reads === 3) {
@@ -174,12 +180,48 @@ for (const field of ['edit', 'delete', 'withdraw', 'permission']) {
   });
 }
 test('collector verifies allowlisted comment publisher identity and permission', async () => {
-  const f = fixture('src/ai_service/auth.py'); aiApproval(f); ownerApproval(f); const m = mock(f);
+  const f = fixture('src/ai_service/auth.py'); approve(f); ownerApproval(f); const m = mock(f);
   const snapshot = await collect(m.github, m.context, 42, BASE, f.policy);
-  assert.equal(snapshot.permissions.owner, 'admin'); assert.equal(snapshot.permissions.author, 'write');
+  assert.equal(snapshot.permissions.owner, 'admin'); assert.equal(snapshot.permissions.author, undefined);
 });
 test('snapshot binds malformed allowlisted comments while ignoring unrelated comments', () => {
   const f = fixture(); const before = snapshotVersion(f.snapshot, f.policy);
   f.snapshot.issueComments.push({ id: 22, user: { id: 4, login: 'owner', type: 'User' }, body: 'Withdrawn' });
   assert.notEqual(snapshotVersion(f.snapshot, f.policy), before);
+});
+
+test('CodeRabbit check events target associated PRs and ignore other Apps', async () => {
+  const m = mock(); m.context.eventName = 'check_run';
+  m.context.payload = { check_run: { app: { id: 347564, slug: 'coderabbitai' }, head_sha: HEAD, pull_requests: [{ number: 42 }] } };
+  assert.deepEqual(await selectTargets(m.github, m.context, 'main'), [42]);
+  m.context.payload.check_run.app.id = 1;
+  assert.deepEqual(await selectTargets(m.github, m.context, 'main'), []);
+});
+test('collector reads only trusted Actions decision watermarks on the current head', async () => {
+  const f = fixture(); approve(f);
+  f.snapshot.statuses = [
+    { context: 'risk-gate', description: 'revoked; owner=21', creator: { id: 41898282, login: 'github-actions[bot]' } },
+    { context: 'risk-gate', description: 'forged; owner=999', creator: { id: 1, login: 'author' } },
+  ];
+  const m = mock(f); const s = await collect(m.github, m.context, 42, BASE, f.policy);
+  assert.equal(s.ownerWatermark, 21);
+  assert.ok(m.calls.filter(c => ['checkRuns', 'statuses'].includes(c.method)).every(c => c.params.ref === HEAD));
+});
+test('R2 publication persists revoke watermark and does not resurrect deleted decisions', async () => {
+  const f = fixture('pages/login/login.js'); approve(f); ownerApproval(f); const revoke = ownerApproval(f, 'revoke');
+  const first = mock(f); await run(first);
+  const last = first.statuses.findLast(s => s.context === 'risk-gate');
+  assert.equal(last.state, 'failure'); assert.ok(last.description.endsWith(`owner=${revoke.id}`));
+  f.snapshot.statuses = [{ ...last, creator: { id: 41898282, login: 'github-actions[bot]' } }];
+  f.snapshot.issueComments.pop(); const second = mock(f); await run(second);
+  assert.equal(second.statuses.at(-1).state, 'failure');
+  assert.match(second.statuses.at(-1).description, /owner_decision_invalid/);
+});
+test('unrelated CI changes do not invalidate a stable review during readback', async () => {
+  const f = fixture(); approve(f); const m = mock(f); let reads = 0; const get = m.github.rest.pulls.get;
+  m.github.rest.pulls.get = async () => {
+    if (++reads === 3) f.snapshot.checkRuns.push({ id: 999, name: 'Other CI', app: { id: 15368 } });
+    return get();
+  };
+  await run(m); assert.equal(m.statuses.at(-1).state, 'success');
 });

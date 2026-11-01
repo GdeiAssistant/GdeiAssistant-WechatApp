@@ -1,248 +1,134 @@
-# Pull request evidence contract
+# PR 风险与审查契约
 
-This pilot implements `pr-governance/v1`. It proposes changes to the two pilot
-repositories only. Existing required CI, strict base updates and conversation
-resolution remain separate merge requirements. A successful `risk-gate` means
-the review contract passed; it does not mean CI, deployment or business
-execution succeeded.
+本仓库是 GdeiAssistant 组织的单仓库试点，策略版本为 `pr-governance/v2`。
+沿用必需 CI、严格分支更新和审查会话解决要求。`risk-gate` 只说明本契约的
+评估结果，不代表 CI、合并、部署或真实业务成功。
 
-The workflow never merges, labels, calls a model, reads service secrets or
-changes protection.
+## 风险等级
 
-## Risk and reviewer routes
+| 等级 | 范围 | 正常通过条件 |
+| --- | --- | --- |
+| R0 | 明确白名单内的纯文字修改，完整文本 diff，无配置或可执行内容 | 确定性分类为 `review_not_required`，必需 CI 通过 |
+| R1 | 普通应用逻辑、一般测试和非敏感配置 | CodeRabbit 已完成当前 SHA 审查，覆盖证据完整，无未处理阻断意见；必需 CI 通过 |
+| R2 | 登录、权限、校园凭证、隐私、部署、依赖执行钩子、workflow 和治理规则 | R1 条件，加 Pigbibi 对当前提交及证据的明确批准 |
 
-| Tier | Scope | Primary | Fallback | Required evidence |
-| --- | --- | --- | --- | --- |
-| R0 | Modified plain prose in the explicit allowlist, with a complete text patch | Deterministic prose rules | Independent maintainer after escalation to R1 | `review_not_required`, matched paths, policy and diff digests; existing required CI |
-| R1 | Ordinary application behavior and content not proven to be R0 | SHA-bound AI review recorded by an allowlisted actor | AI-assisted independent maintainer/admin review | Complete current-head AI evidence; existing required CI |
-| R2 | Trading, orders, risk, authentication, permissions, credentials, privacy/data access, IAM, deployment, dependency hooks, workflows and review policy | SHA-bound AI review | Same AI evidence requirements | R1 evidence plus an allowlisted structured Grok approval comment bound to that evidence |
+旧路径和新路径都参与分类，取最高等级。受保护路径优先于文档、测试、示例
+和 fixture。`AGENTS.md`、`.coderabbit.yaml`、CODEOWNERS、全部 `.github/`
+均属 R2；仓库特有路径见 `policy.json`。未知文件状态、缺失或截断 patch、
+二进制内容和 API 列表不完整时停止评估，不能用 override 绕过输入缺失。
 
-The primary route is a completed AI review recorded in an authenticated PR
-comment. The publisher may share the PR author's account; the record must state
-whether the AI review was independent or a self-review. It is not an independent
-human approval.
+## CodeRabbit 完成证据
 
-Native AI-assisted reviews remain an alternative: their reviewer
-must be independent of the PR author and linked commit authors/committers, with
-current write/maintain/admin access (admin for fallback). No route overrides an
-active changes-requested review or unresolved thread.
+只使用 GitHub 返回的 CodeRabbit 原始记录，不接受作者填写的“AI 已批准”
+或模型运行证明。策略固定已安装 App 与 bot 的数字 ID、slug 和登录名。
+现有安装即可工作，不需要新增 App、Secret 或付费方案。
 
-Both old and new paths are classified; the maximum tier wins. Protected paths
-are checked before documentation, tests, examples and fixtures. In particular,
-`src/ai_service/auth.py`, every `AGENTS.md`, `.coderabbit.yaml`, CODEOWNERS
-and all of `.github/` are R2. Repository-specific paths live in `policy.json`.
+统一检查同时要求：
 
-Executable or ambiguous prose is escalated; unknown file states, missing or
-truncated patches, binary changes and incomplete API lists stop evaluation.
-There is no blanket low-risk exception for tests or dependency bots. Changes
-outside the allowlist are at least R1.
+- 当前完整 `head_sha` 上最新的 CodeRabbit check 已 `completed/success`，标题
+  为 `Finished`，结果明确为 `Review completed`；生成反馈和发布结果阶段均完成。
+- 同一运行 ID 的正式 CodeRabbit review 绑定当前 SHA，并在该 check 的运行
+  时间内提交。最新 review 不能被撤销，其他 SHA 的批准不能沿用。
+- 正式 review 的完整 diff 范围与当前 base/head 相符，列出的处理文件与 PR
+  全量文件一致，且没有明确的遗漏或大小限制。
+- PR 中 `.coderabbit.yaml` 与可信默认分支的版本相同，不存在 review 命令的
+  `--with-config` 覆盖。配置修改本身必须通过 R2，并明确接受本次覆盖例外。
+- 没有仍有效的维护者或 CodeRabbit `CHANGES_REQUESTED`，没有未解决的审查会话。
 
-A reviewer may request R2 treatment by changing the trusted path policy
-through an R2 PR; a model cannot downgrade risk.
+`APPROVED + commit_id` 不能替代完成证据。跳过、限流、neutral、取消、失败、
+排队、缺少正式 review 都是 `unavailable`。完成但缺少范围证明时是 `partial`。
+报告格式不被识别也保留为 `partial`，不能推测全量覆盖。
 
-CodeRabbit remains an optional second opinion; its free-form summary or label
-cannot pass the gate. An allowlisted publisher can record a completed Codex,
-CodeRabbit or Grok AI review with its model and execution reference.
-QuantAIService remains non-blocking shadow: its absence, failure and output never
-satisfy or veto the gate. The evaluator itself never calls a model.
+`reported_complete` 表示供应商记录报告的范围完整，不证明模型发现了所有问题。
+增量审查可能没有全量文件证据，此时可请求 `@coderabbitai full review`；若仍有
+限制，须由 Pigbibi 明确接受本次例外。
 
-## Trusted inputs and binding
+配置使用中文输出、启用自动审查和完成后批准，设置
+`reviews.auto_approvals.allow_author_approval: false`，禁止作者使用
+`@coderabbitai approve/resolve` 批准自己的 PR。其他人发出的命令同样不能绕过
+本 gate 的完成证据校验。该作者限制在首次迁移合并后才进入可信默认分支。
 
-The privileged workflow reads its evaluator and policy from the current
-default branch at one immutable commit. It never checks out PR code or
-consumes relay artifacts. A candidate policy cannot approve its own change.
+## Pigbibi 评论
 
-The policy digest is SHA-256 of canonical JSON containing the exact
-`gate.cjs`, `runner.cjs`, `policy.json` and `risk-gate.yml` source strings.
-The canonical encoder sorts object keys lexicographically, preserves array
-order and uses JSON encoding.
+只接受可信策略中的 Pigbibi 数字用户 ID、登录名、`User` 类型及当前
+write/maintain/admin 权限；身份不从评论正文读取。账号可以同时是 PR 作者。
+GitHub 无法区分本人和持有同一账号凭据的智能体，因此智能体不得代发批准、
+例外或撤销，不得把用户授权实现本 PR 当成批准首次迁移。
 
-Every receipt binds repository name and numeric ID, PR number, base SHA, head
-SHA, policy digest and canonical diff digest. The latter covers the complete
-sorted file list, old/new paths, status, file object SHA, additions, deletions
-and patch text.
+先读取可信 gate 的 Actions summary，再由 Pigbibi 发布一个新的顶层评论。
+完整 SHA 和摘要逐项复制，`reason` 写本次接受的范围及风险。每个字段独占一行，
+不得重复字段；不是 JSON，也不需要占位评论或签名密钥。
 
-The collector reads every REST page, checks file and commit counts and reads
-every GraphQL thread page. PRs with 3,000 files or 250 commits are refused
-because the corresponding APIs can cap results.
-
-The collector re-reads the entire evidence snapshot and default-branch commit
-before publication. Changes during evaluation produce an error, never success.
-
-Labels alone have no approval authority. Actor numeric ID and login must match
-the trusted `ai_review_actors` or `owner_actors` allowlist; current write, maintain
-or admin permission is checked through GitHub. Identity is never taken from the
-JSON body.
-
-All comments by allowlisted actors are included in publication race
-detection, including malformed edits.
-
-Option A trusts the allowlisted account to attest the referenced AI execution and
-Grok decision. GitHub authentication does not distinguish a person from an agent
-using that account, and a reference string is not proof that a model ran. The
-publisher must verify the real result before posting it.
-
-No signing key, secret
-or cryptographic owner identity is required. Allowlist changes are R2 changes.
-
-## Technical review receipt
-
-For the primary route, post a placeholder PR Conversation comment, obtain its
-GitHub ID, then edit it to the complete `ai-review/v1` JSON object (optionally in
-one JSON fence).
-
-Copy the binding and discussion fields from the trusted gate
-summary and include `comment_id` matching that comment. Use the fields below,
-with `schema_version: ai-review/v1`; the native-only `reviewer`, `route` and
-`independent` fields are not needed.
-
-`ai_review.mode` records the actual review
-method. Include the exact model and a traceable run/session/report reference.
-A newer failed, incomplete or malformed record blocks older evidence.
-
-Alternatively submit this `pr-review/v1` JSON object as a native APPROVED review
-at the current head SHA through an independent maintainer/admin account. This
-route also requires AI provenance; a human-only review does not satisfy it.
-
-```json
-{
-  "schema_version": "pr-review/v1",
-  "ai_review": {"provider": "codex", "model": "<actual model>", "run_ref": "<execution reference>", "mode": "independent"},
-  "repository": "example/project",
-  "repository_id": 100,
-  "pr_number": 42,
-  "base_sha": "<40-character base SHA>",
-  "head_sha": "<40-character head SHA>",
-  "diff_sha256": "<trusted diff digest>",
-  "policy_sha256": "<trusted policy digest>",
-  "discussion_sha256": "<trusted discussion digest>",
-  "reviewer": "independent-maintainer",
-  "route": "primary",
-  "independent": true,
-  "risk_tier": "R1",
-  "execution_status": "completed",
-  "verdict": "pass",
-  "coverage": {"complete": true, "reviewed_files": 3},
-  "blocking_findings": [],
-  "dispositions": [],
-  "limitations": []
-}
+```text
+/governance approve
+head: <40 位当前 head SHA>
+base: <40 位当前 base SHA>
+policy: <64 位 policy_sha256>
+evidence: <64 位 evidence_sha256>
+reason: <批准这次改动的具体理由>
 ```
 
-The fallback uses `route: fallback`, `reviewer: independent-admin` and a
-non-empty `fallback_reason`. An incomplete review or a non-empty limitations
-list cannot pass. The latest submitted review per identity controls
-eligibility; COMMENTED, CHANGES_REQUESTED or DISMISSED invalidates that
-identity's old approval. All unresolved threads block R1/R2.
+正常 `approve` 仅满足 R2 的账号批准，不豁免 AI 完成条件。例外使用独立指令：
 
-A thread's resolved flag is insufficient: the independent reviewer must also
-account for each inline comment and each changes-requested review in
-`dispositions`.
-
-Each disposition contains `source_id` (`comment:<REST-id>` or
-`review:<REST-id>`), `severity` (P0–P3), `outcome` (`fixed`, `not_applicable`,
-or `accepted`), a concrete `reason` and an `evidence` reference. A fixed
-finding also names `fixed_in`, which must be the current head.
-
-P0/P1 cannot be accepted; they require a verified fix or the independent
-reviewer's explanation of why they do not apply. P2/P3 acceptance is explicit
-and is included in the owner decision for R2. The publisher attests the actual
-review result; the gate cannot establish semantic correctness from JSON.
-
-CI references in the review must identify the actual commit/run; existing
-native required checks independently enforce CI.
-
-The discussion digest includes native non-receipt reviews, inline comments,
-thread states and CodeRabbit second-opinion comments. Structured native review/owner
-receipts are excluded to avoid circular hashes; changes-requested reviews are
-always included. The owner evidence digest additionally binds the selected
-technical review's exact GitHub record.
-
-Late findings, edits, dismissal, new pushes, base changes and policy changes
-require fresh evidence.
-
-## Owner approval
-
-R2 uses option A: a SHA-bound AI review plus a structured Grok approval record
-posted by an actor in `owner_actors`. The `owner-approved` label is a visible
-marker only; it cannot satisfy the gate. This replaces the former empty
-`owner_keys`/Ed25519 requirement.
-
-After reading the completed AI review and actual Grok decision for the current
-head, an authorized publisher creates a placeholder PR Conversation comment,
-obtains its ID, then edits that comment to this complete object:
-
-```json
-{
-  "schema_version": "owner-approval/v1",
-  "repository": "example/project",
-  "repository_id": 100,
-  "pr_number": 42,
-  "base_sha": "<base SHA>",
-  "head_sha": "<current head SHA>",
-  "diff_sha256": "<diff digest>",
-  "policy_sha256": "<policy digest>",
-  "evidence_sha256": "<digest of the selected AI review and discussion>",
-  "comment_id": 900,
-  "approval_source": "grok",
-  "approval_ref": "<actual Grok decision reference>",
-  "decision": "approve",
-  "reason": "<scope and remaining risk accepted>",
-  "issued_at": 2000000000,
-  "expires_at": 2000003600
-}
+```text
+/governance override
+head: <40 位当前 head SHA>
+base: <40 位当前 base SHA>
+policy: <64 位 policy_sha256>
+evidence: <64 位 evidence_sha256>
+scope: ai-review-unavailable
+reason: <接受本次 AI 不可用的具体原因>
 ```
 
-The maximum lifetime is 24 hours. Any new head, base, policy, diff or selected
-AI evidence makes the approval stale. Copying an old body into a new comment
-fails its comment-ID binding. To withdraw approval, edit `decision` to `revoke`
-or post a newer owner comment; newer comments take precedence by creation ID,
-not edit time. Malformed newer comments block older approval.
+可用 scope 为 `ai-review-unavailable`、`ai-review-partial`、`review-findings`。
+必须与 gate 的 `required_override_scopes` 完全一致，多项用逗号分隔。
+若包含 `review-findings`，还必须添加 `findings: <ID1>,<ID2>`，精确列出
+`blocking_findings` 中全部 review/thread ID。批准记录保留具体意见及例外范围，
+结果明确为 `approved_with_override`，不会改写 AI 的 unavailable/partial 状态。
+此例外不豁免必需 CI、分支保护或原生会话解决要求，不授权部署和权限修改。
 
-Comments carrying
-the other valid receipt schema are excluded when selecting each role's latest
-record, so the same account can publish both records. Deleting a record removes
-that evidence; use an explicit revocation to keep a durable withdrawal instead
-of deleting it and exposing an older record.
+撤销时发布相同绑定字段的 `/governance revoke` 新评论。最新决定按 GitHub
+评论 ID 排序，编辑旧批准不能覆盖新撤销。批准有效期为创建后 24 小时，
+编辑过的批准、错误格式、旧 SHA、旧 base、旧策略或旧证据都不能放行。
+重新批准应发布新评论；普通讨论不会撤销决定，新的不合法治理指令会阻止旧批准。
 
-Approval grants only the reviewed PR decision, never deployment, IAM or trading
-permission. A coding agent must not invent a Grok result or claim its own review
-was independent; publishing records and adding labels requires the user's scope.
+删除会触发重新评估。gate 在现有 `risk-gate` 状态中保留已观察到的最新决定编号，
+删除已观察到的撤销不会恢复旧批准。若评论创建并删除都发生在 gate 观察前，
+GitHub 当前评论列表不能恢复其内容；需要保留撤销评论，不能以删除代替撤销。
 
-## Events, failure and operational limits
+## 可信执行与记录
 
-PR events and review/comment events wake a trusted evaluator. The unprivileged
-review relay is only a signal; its conclusion and artifacts are ignored.
-Normal events target one PR or associated PRs. Missing fork associations use
-one bounded serial sweep.
+有写状态权限的 workflow 从当前默认分支的固定 commit 读取 evaluator、policy、
+reviewer 配置和 workflow，计算策略摘要；不 checkout 或执行 PR 代码，不读取
+relay artifact。候选策略不能批准自身。首次迁移按当前生效规则由用户批准，
+本试点不自动合并、不加批准标签、不修改分支保护。
 
-Default-branch pushes and a 15-minute reconciliation sweep refresh base
-changes, thread state, expiry and events GitHub suppresses. Sweeps refuse more
-than 100 open PRs without truncating; explicit PR dispatch remains available.
-There is no 600-second wait, model request job or per-event all-PR runner
-matrix.
+生成的记录包含仓库、PR、完整 head/base、策略版本和摘要、diff 摘要、风险等级、
+CodeRabbit check/review/run ID、执行与覆盖状态、未处理意见及批准评论 ID。
+证据摘要绑定原始 review/check、讨论、线程和配置；新推送、base/策略变化、
+审查结论变化、评论编辑、撤销或新意见都会重新评估。
 
-The existing `risk-gate` and `pr-template` status names are preserved. A draft PR
-still runs the base branch's existing gate until this proposal is merged under
-explicit user authorization; this proposal cannot self-activate. Required CI and protection
-are not changed. API errors and incomplete evidence fail the evaluator closed.
+所有 REST 列表和 GraphQL 线程分页完整读取，达到 API 文件或 commit 上限时拒绝。
+发布状态前完整重读一次并确认默认分支未变；并发变化或 API 错误发布 error。
+PR、评论、CodeRabbit check 和 review relay 事件触发评估；默认分支 push 和
+15 分钟定时检查补充处理漏发事件、过期和撤销。超过 100 个 PR 的全量检查停止，
+可用默认分支的 `workflow_dispatch` 指定 PR。
 
-GitHub commit statuses are asynchronous and have no automatic expiry. A
-dismissal, base update, runner outage or suppressed/delayed event can leave a
-previously published status visible until re-evaluation; the sweep reduces but
-cannot remove that window. Native strict-base and conversation rules remain
-important.
+GitHub 状态是异步的，无自动过期；事件延迟或 Actions 故障可能暂时保留旧状态。
+本方案不宣称同步撤销。原有严格 base 更新、必需 CI 和会话规则继续适用。
 
-This pilot does not claim synchronous revocation or production acceptance.
-Before any later enforcement rollout, verify actual event delivery, AI review
-completion and Grok approval comment delivery on the current commit.
-
-Run the dependency-free offline suite with:
+## 验证
 
 ```sh
 node --test .github/governance/test-*.cjs
 ```
 
-The API semantics follow [GitHub reviews](https://docs.github.com/en/rest/pulls/reviews)
-, [issue comments](https://docs.github.com/en/rest/issues/comments)
-and [workflow events](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows).
+离线测试覆盖旧 SHA、伪造身份、跳过/限流、完成记录缺失、部分覆盖、approve、
+override、revoke、评论编辑/删除及发布前并发变化。合成账号评论仅存在于测试，
+不作为真实用户批准。首次合并前应分别报告本地测试、当前 SHA 的实际 CodeRabbit
+结果和当前生效 gate 的状态；候选测试通过不表示迁移已启用。
+
+参考：[CodeRabbit 状态语义](https://docs.coderabbit.ai/pr-reviews/status-check)、
+[自动批准及作者命令](https://docs.coderabbit.ai/pr-reviews/automatic-approvals)、
+[GitHub review API](https://docs.github.com/en/rest/pulls/reviews)、
+[GitHub check API](https://docs.github.com/en/rest/checks/runs)。

@@ -56,15 +56,6 @@ function classify(files, expected, policy) {
   return { tier, rules };
 }
 
-function receipt(body, schema) {
-  // A whole review/comment body must be a JSON object, optionally in one JSON fence.
-  try {
-    const text = (body || '').trim().replace(/^```json\s*\n([\s\S]*?)\n```$/, '$1');
-    const value = JSON.parse(text);
-    return value?.schema_version === schema ? value : null;
-  } catch { return null; }
-}
-
 function binding(snapshot, policySha) {
   const pr = snapshot.pr;
   assert(sha(pr.head.sha) && sha(pr.base.sha) && sha(snapshot.policyCommit), 'Unknown commit');
@@ -75,19 +66,6 @@ function binding(snapshot, policySha) {
       status: f.status, sha: f.sha, additions: f.additions, deletions: f.deletions, patch: f.patch || '' }))
       .sort((a, b) => a.filename < b.filename ? -1 : a.filename > b.filename ? 1 : 0)),
   };
-}
-
-function discussion(snapshot) {
-  // Review receipts are excluded to avoid a circular digest. Their exact bodies
-  // are separately bound into the owner approval. QAS shadow output is advisory.
-  const reviews = snapshot.reviews.filter(r => r.state === 'CHANGES_REQUESTED'
-    || (!receipt(r.body, 'pr-review/v1') && !receipt(r.body, 'owner-approval/v1')));
-  const secondOpinions = snapshot.issueComments.filter(c => c.user?.type === 'Bot' && c.user?.login === 'coderabbitai[bot]');
-  return { reviews, comments: snapshot.reviewComments, threads: snapshot.threads, secondOpinions };
-}
-
-function sameBinding(value, expected) {
-  return Object.entries(expected).every(([key, v]) => value[key] === v);
 }
 
 function latestReviews(reviews) {
@@ -103,128 +81,134 @@ function latestReviews(reviews) {
   return [...result.values()];
 }
 
-function independent(review, snapshot) {
-  const ids = new Set([snapshot.pr.user.id, ...snapshot.commits.flatMap(c => [c.author?.id, c.committer?.id]).filter(Boolean)]);
-  return review.user.type === 'User' && !ids.has(review.user.id);
-}
-
-function validDispositions(value, snapshot) {
-  if (!Array.isArray(value.dispositions) || !Array.isArray(value.blocking_findings) || value.blocking_findings.length) return false;
-  const sources = new Set(snapshot.reviewComments.map(c => `comment:${c.id}`));
-  for (const r of snapshot.reviews) if (r.state === 'CHANGES_REQUESTED') sources.add(`review:${r.id}`);
-  const covered = new Set();
-  for (const d of value.dispositions) {
-    if (!sources.has(d.source_id) || covered.has(d.source_id) || !['P0', 'P1', 'P2', 'P3'].includes(d.severity)
-      || !['fixed', 'not_applicable', 'accepted'].includes(d.outcome) || typeof d.reason !== 'string' || d.reason.trim().length < 8
-      || typeof d.evidence !== 'string' || d.evidence.trim().length < 8) return false;
-    if (['P0', 'P1'].includes(d.severity) && d.outcome === 'accepted') return false;
-    if (d.outcome === 'fixed' && d.fixed_in !== snapshot.pr.head.sha) return false;
-    covered.add(d.source_id);
-  }
-  return [...sources].every(id => covered.has(id));
-}
-
 function allowlisted(comment, actors) {
   return comment.user?.type === 'User' && actors.some(actor => actor.user_id === comment.user.id
     && actor.login.toLowerCase() === comment.user.login?.toLowerCase());
 }
 
 function evidenceComments(snapshot, actors) {
-  // Include all allowlisted comments in race detection, including malformed edits.
   return snapshot.issueComments.filter(c => allowlisted(c, actors));
 }
 
-function latestReceipt(snapshot, actors, schema) {
-  const otherSchema = schema === 'ai-review/v1' ? 'owner-approval/v1' : 'ai-review/v1';
-  const candidates = evidenceComments(snapshot, actors).filter(c => !receipt(c.body, otherSchema));
+function command(body) {
+  const lines = (body || '').trim().split(/\r?\n/);
+  const match = /^\/governance (approve|override|revoke)$/.exec(lines.shift());
+  if (!match) return null;
+  const result = { decision: match[1] };
+  for (const line of lines) {
+    const field = /^(head|base|policy|evidence|scope|findings|reason): (\S.*)$/.exec(line);
+    if (!field || Object.hasOwn(result, field[1])) return null;
+    result[field[1]] = field[2].trim();
+  }
+  return result;
+}
+
+function ownerDecision(snapshot, policy, expected, evidenceSha, now) {
+  const candidates = evidenceComments(snapshot, policy.owner_actors)
+    .filter(c => /^\s*\/governance\b/.test(c.body || ''));
   for (const c of candidates) assert(Number.isSafeInteger(c.id) && c.id > 0
     && Number.isFinite(Date.parse(c.created_at)) && Number.isFinite(Date.parse(c.updated_at)), 'Unknown comment metadata');
-  // Creation order is authoritative. Editing an older approval cannot undo a later revocation.
-  return candidates.sort((a, b) => b.id - a.id)[0];
+  const c = candidates.sort((a, b) => b.id - a.id)[0];
+  // A previously observed decision cannot disappear and reveal an older approval.
+  const watermark = Math.max(snapshot.ownerWatermark || 0, c?.id || 0);
+  if (!c || c.id < watermark) return { valid: false, watermark };
+  const v = command(c.body);
+  const created = Date.parse(c.created_at) / 1000;
+  const valid = !!v && ['write', 'maintain', 'admin'].includes(snapshot.permissions[c.user.login])
+    && c.created_at === c.updated_at && created <= now && now < created + policy.owner_approval_max_hours * 3600
+    && v.head === expected.head_sha && v.base === expected.base_sha
+    && v.policy === expected.policy_sha256 && v.evidence === evidenceSha
+    && typeof v.reason === 'string' && v.reason.trim().length >= 8;
+  return { valid, watermark, comment_id: c.id, ...v };
 }
 
-function validAI(value) {
-  const ai = value.ai_review;
-  return ai && ['codex', 'coderabbit', 'grok'].includes(ai.provider)
-    && typeof ai.model === 'string' && ai.model.trim().length > 0
-    && typeof ai.run_ref === 'string' && ai.run_ref.trim().length >= 8
-    && ['independent', 'self-review'].includes(ai.mode);
-}
-
-function ownerApproved(snapshot, policy, expected, evidenceSha, now) {
-  const c = latestReceipt(snapshot, policy.owner_actors, 'owner-approval/v1');
-  if (!c) return false;
-  const v = receipt(c.body, 'owner-approval/v1');
-  return !!v && ['write', 'maintain', 'admin'].includes(snapshot.permissions[c.user.login])
-    && v.comment_id === c.id && sameBinding(v, expected) && v.evidence_sha256 === evidenceSha
-    && v.decision === 'approve' && v.approval_source === 'grok'
-    && typeof v.approval_ref === 'string' && v.approval_ref.trim().length >= 8
-    && typeof v.reason === 'string' && v.reason.trim().length >= 8
-    && Number.isSafeInteger(v.issued_at) && Number.isSafeInteger(v.expires_at)
-    && v.issued_at <= now && v.expires_at > now && v.expires_at > v.issued_at
-    && v.expires_at - v.issued_at <= policy.owner_approval_max_hours * 3600;
+function codeRabbit(snapshot, policy) {
+  const identity = policy.coderabbit;
+  const isBot = r => r.user?.type === 'Bot' && r.user.id === identity.user_id && r.user.login === identity.login;
+  const checks = snapshot.checkRuns.filter(c => c.name === 'CodeRabbit' && c.head_sha === snapshot.pr.head.sha
+    && c.app?.id === identity.app_id && c.app.slug === identity.app_slug);
+  for (const c of checks) assert(Number.isSafeInteger(c.id) && Number.isFinite(Date.parse(c.started_at)), 'Unknown check metadata');
+  const check = checks.sort((a, b) => Date.parse(b.started_at) - Date.parse(a.started_at) || b.id - a.id)[0];
+  const result = { provider: 'coderabbit', check_id: check?.id || null, review_id: null,
+    execution_status: 'unavailable', coverage: 'unknown', limitations: [] };
+  if (!check) return { ...result, limitations: ['current_head_check_missing'] };
+  if (check.status !== 'completed' || check.conclusion !== 'success'
+    || check.output?.title !== 'Finished'
+    || !/^Result: Success - Review completed\s*$/m.test(check.output?.summary || '')
+    || !Number.isFinite(Date.parse(check.completed_at))) {
+    return { ...result, limitations: ['review_not_completed'] };
+  }
+  const runId = /Run ID:\s*`([a-f0-9-]+)`/.exec(check.output.summary)?.[1];
+  const reports = snapshot.reviews.filter(r => isBot(r) && r.commit_id === snapshot.pr.head.sha
+    && ['APPROVED', 'COMMENTED', 'CHANGES_REQUESTED'].includes(r.state)
+    && Date.parse(r.submitted_at) >= Date.parse(check.started_at)
+    && Date.parse(r.submitted_at) <= Date.parse(check.completed_at)
+    && runId && r.body?.includes(runId));
+  const report = reports.sort((a, b) => b.id - a.id)[0];
+  const latest = latestReviews(snapshot.reviews.filter(isBot))[0];
+  if (!report || !latest || latest.commit_id !== snapshot.pr.head.sha || latest.state === 'DISMISSED') {
+    return { ...result, limitations: ['current_head_completion_review_missing'] };
+  }
+  const limitations = [];
+  // Native provider metadata is used, never a receipt supplied by the PR author.
+  const scope = /Files selected for processing:\s*(\d+)<\/summary>([\s\S]*?)<\/details>/.exec(report.body);
+  const paths = scope ? [...scope[2].matchAll(/^\* `([^`]+)`\s*$/gm)].map(m => m[1]).sort() : [];
+  const expectedPaths = snapshot.files.map(f => f.filename).sort();
+  if (!scope || Number(scope[1]) !== paths.length || canonical(paths) !== canonical(expectedPaths)) limitations.push('file_coverage_partial');
+  if (!report.body.includes(`between ${snapshot.pr.base.sha} and ${snapshot.pr.head.sha}`)) limitations.push('full_diff_range_unproven');
+  // Explicit stage completion prevents a successful wrapper from standing in for analysis.
+  for (const stage of ['Generate review feedback', 'Publish review results']) {
+    if (!check.output.summary.includes(`| ${stage} | Completed |`)) limitations.push('review_stages_unproven');
+  }
+  if (/files? (?:not reviewed|skipped|excluded)|(?:review|coverage) (?:incomplete|partial)|oversized|超出.{0,8}限制|未审查的文件/i.test(report.body)) limitations.push('provider_coverage_limitation');
+  if (snapshot.coderabbitConfig !== snapshot.trustedCoderabbitConfig || !snapshot.coderabbitConfig) limitations.push('candidate_config_changed');
+  if (snapshot.issueComments.some(c => /^\s*@coderabbitai\s+(?:full\s+)?review\b[^\n]*--with-config/m.test(c.body || ''))) limitations.push('command_config_override');
+  return { ...result, review_id: report.id, decision_review_id: latest.id, run_id: runId,
+    execution_status: 'completed', coverage: limitations.length ? 'partial' : 'reported_complete', limitations };
 }
 
 function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 1000)) {
-  assert(policy.version === 'pr-governance/v1' && policy.repository === snapshot.repository, 'Policy repository mismatch');
-  assert(policy.providers.codex === 'recorded-review' && policy.providers.coderabbit === 'second-opinion'
-    && policy.providers.quantaiservice === 'shadow', 'Unsupported provider policy');
+  assert(policy.version === 'pr-governance/v2' && policy.repository === snapshot.repository, 'Policy repository mismatch');
+  assert(policy.providers.coderabbit === 'sha-bound-review', 'Unsupported provider policy');
   assert(snapshot.pr.state === 'open' && snapshot.complete === true, 'Incomplete snapshot');
   assert(snapshot.commits.length === snapshot.pr.commits && snapshot.commits.length < 250, 'Incomplete commit list');
+  assert(Array.isArray(snapshot.checkRuns), 'Incomplete checks');
   const risk = classify(snapshot.files, snapshot.pr.changed_files, policy);
   const expected = binding(snapshot, policySha);
-  const discussionSha = digest(discussion(snapshot));
-  const result = { ...risk, binding: expected, discussion_sha256: discussionSha, allowed: false,
+  const result = { ...risk, binding: expected, policy_version: policy.version, allowed: false,
     reason: 'current_commit_review_required', providers: policy.providers };
-  if (risk.tier === 'R0') return { ...result, allowed: true, reason: 'review_not_required', reviewer: policy.reviewers.R0.primary };
+  if (risk.tier === 'R0') return { ...result, allowed: true, reason: 'review_not_required' };
+  const ai = codeRabbit(snapshot, policy);
   const latest = latestReviews(snapshot.reviews);
-  const authorized = r => ['write', 'maintain', 'admin'].includes(snapshot.permissions[r.user.login]);
-  if (latest.some(r => authorized(r) && r.state === 'CHANGES_REQUESTED')) return { ...result, reason: 'changes_requested' };
-  if (snapshot.threads.some(t => !t.isResolved)) return { ...result, reason: 'unresolved_review_thread' };
-  // Option A: the allowlisted publisher attests a completed AI review. Account
-  // identity authenticates the record; it does not prove a separate human/model.
-  const comment = latestReceipt(snapshot, policy.ai_review_actors, 'ai-review/v1');
-  if (comment) {
-    const value = receipt(comment.body, 'ai-review/v1');
-    if (value && authorized(comment) && value.comment_id === comment.id && sameBinding(value, expected)
-      && value.discussion_sha256 === discussionSha && validAI(value)
-      && value.execution_status === 'completed' && value.verdict === 'pass'
-      && value.risk_tier === risk.tier && value.coverage?.complete === true
-      && value.coverage.reviewed_files === snapshot.files.length
-      && Array.isArray(value.limitations) && value.limitations.length === 0
-      && validDispositions(value, snapshot)) {
-      const evidenceSha = digest({ binding: expected, discussion_sha256: discussionSha, review: comment });
-      const approved = risk.tier !== 'R2' || ownerApproved(snapshot, policy, expected, evidenceSha, now);
-      return { ...result, evidence_sha256: evidenceSha, review_comment_id: comment.id,
-        reviewer: value.ai_review.provider, route: 'recorded-ai', allowed: approved,
-        reason: approved ? 'current_commit_reviewed' : 'owner_approval_required' };
-    }
-    // A newer incomplete/failed AI record must not fall through to older evidence.
-    return result;
+  const blockers = latest.filter(r => r.state === 'CHANGES_REQUESTED'
+    && (r.user.id === policy.coderabbit.user_id || ['write', 'maintain', 'admin'].includes(snapshot.permissions[r.user.login])))
+    .map(r => `review:${r.id}`);
+  blockers.push(...snapshot.threads.filter(t => !t.isResolved).map(t => `thread:${t.id}`));
+  const scopes = [];
+  if (ai.execution_status !== 'completed') scopes.push('ai-review-unavailable');
+  else if (ai.coverage !== 'reported_complete') scopes.push('ai-review-partial');
+  if (blockers.length) scopes.push('review-findings');
+  const providerComments = snapshot.issueComments.filter(c => c.user?.id === policy.coderabbit.user_id);
+  const evidenceSha = digest({ binding: expected, ai, blockers, reviews: snapshot.reviews,
+    checks: snapshot.checkRuns.filter(c => c.app?.id === policy.coderabbit.app_id),
+    reviewComments: snapshot.reviewComments, threads: snapshot.threads, providerComments,
+    config: snapshot.coderabbitConfig, trustedConfig: snapshot.trustedCoderabbitConfig });
+  const decision = ownerDecision(snapshot, policy, expected, evidenceSha, now);
+  Object.assign(result, { ai, blocking_findings: blockers, required_override_scopes: scopes,
+    evidence_sha256: evidenceSha, owner_comment_id: decision.comment_id || null, owner_watermark: decision.watermark });
+  if (decision.decision === 'revoke' || (decision.watermark && !decision.valid)) {
+    return { ...result, reason: decision.decision === 'revoke' ? 'owner_revoked' : 'owner_decision_invalid' };
   }
-  for (const route of ['primary', 'fallback']) {
-    for (const review of latest) {
-      const value = receipt(review.body, 'pr-review/v1');
-      if (!value || !validAI(value) || !authorized(review) || !independent(review, snapshot) || review.state !== 'APPROVED'
-        || review.commit_id !== expected.head_sha || !sameBinding(value, expected)
-        || value.discussion_sha256 !== discussionSha || value.route !== route
-        || value.reviewer !== policy.reviewers[risk.tier][route]
-        || value.execution_status !== 'completed' || value.verdict !== 'pass'
-        || value.risk_tier !== risk.tier || value.independent !== true
-        || !value.coverage || value.coverage.complete !== true
-        || value.coverage.reviewed_files !== snapshot.files.length
-        || !Array.isArray(value.limitations) || value.limitations.length
-        || !validDispositions(value, snapshot)) continue;
-      if (route === 'fallback' && (snapshot.permissions[review.user.login] !== 'admin'
-        || typeof value.fallback_reason !== 'string' || value.fallback_reason.trim().length < 8)) continue;
-      const evidenceSha = digest({ binding: expected, discussion_sha256: discussionSha, review });
-      const approved = risk.tier !== 'R2' || ownerApproved(snapshot, policy, expected, evidenceSha, now);
-      return { ...result, evidence_sha256: evidenceSha, review_id: review.id,
-        reviewer: value.reviewer, route, allowed: approved,
-        reason: approved ? 'current_commit_reviewed' : 'owner_approval_required' };
-    }
+  if (scopes.length) {
+    const requested = (decision.scope || '').split(',').map(s => s.trim()).sort();
+    const findings = (decision.findings || '').split(',').map(s => s.trim()).filter(Boolean).sort();
+    const overridden = decision.valid && decision.decision === 'override'
+      && canonical(requested) === canonical([...scopes].sort())
+      && canonical(findings) === canonical([...blockers].sort());
+    return { ...result, allowed: overridden, reason: overridden ? 'approved_with_override' : scopes[0] };
   }
-  return result;
+  const approved = risk.tier !== 'R2' || (decision.valid && decision.decision === 'approve' && !decision.scope && !decision.findings);
+  return { ...result, allowed: approved, reason: approved ? 'current_commit_reviewed' : 'owner_approval_required' };
 }
 
 function completeTemplate(body) {
@@ -238,4 +222,4 @@ function completeTemplate(body) {
     && present(/how verified|verif|validat|test(?:ing| plan)?|验证|测试/i);
 }
 
-module.exports = { canonical, digest, classify, pathTier, receipt, binding, discussion, evaluate, completeTemplate, evidenceComments };
+module.exports = { canonical, digest, classify, pathTier, binding, evaluate, completeTemplate, evidenceComments, command };
