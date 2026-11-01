@@ -68,10 +68,13 @@ because the corresponding APIs can cap results.
 
 The collector re-reads the entire evidence snapshot and default-branch commit
 before publication. Changes during evaluation produce an error, never success.
+
 Labels alone have no approval authority. Actor numeric ID and login must match
 the trusted `ai_review_actors` or `owner_actors` allowlist; current write, maintain
 or admin permission is checked through GitHub. Identity is never taken from the
-JSON body. All comments by allowlisted actors are included in publication race
+JSON body.
+
+All comments by allowlisted actors are included in publication race
 detection, including malformed edits.
 
 Option A trusts the allowlisted account to attest the referenced AI execution and
@@ -91,7 +94,9 @@ one JSON fence).
 Copy the binding and discussion fields from the trusted gate
 summary and include `comment_id` matching that comment. Use the fields below,
 with `schema_version: ai-review/v1`; the native-only `reviewer`, `route` and
-`independent` fields are not needed. `ai_review.mode` records the actual review
+`independent` fields are not needed.
+
+`ai_review.mode` records the actual review
 method. Include the exact model and a traceable run/session/report reference.
 A newer failed, incomplete or malformed record blocks older evidence.
 
