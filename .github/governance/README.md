@@ -46,7 +46,8 @@
 增量审查可能没有全量文件证据，此时可请求 `@coderabbitai full review`；若仍有
 限制，须由 Pigbibi 明确接受本次例外。
 
-配置使用中文输出、启用自动审查和完成后批准，设置
+配置使用中文输出、启用自动审查和完成后批准；auto_pause_after_reviewed_commits 为 0，
+避免达到默认提交数后自动暂停，供应商额度限制仍可能阻止审查。设置
 `reviews.auto_approvals.allow_author_approval: false`，禁止作者使用
 `@coderabbitai approve/resolve` 批准自己的 PR。其他人发出的命令同样不能绕过
 本 gate 的完成证据校验。该作者限制在首次迁移合并后才进入可信默认分支。
@@ -112,7 +113,12 @@ CodeRabbit check/review/run ID、执行与覆盖状态、未处理意见及例�
 审查结论变化、评论编辑、撤销或新意见都会重新评估。
 
 所有 REST 列表和 GraphQL 线程分页完整读取，达到 API 文件或 commit 上限时拒绝。
-发布状态前完整重读一次并确认默认分支未变；并发变化或 API 错误发布 error。
+发布状态前完整重读一次并确认默认分支未变；并发变化或 API 错误尝试发布 error。
+复用读取的状态历史，仅当状态或 description（含撤销水位）变化时写入；不在每次
+评估前往返写 pending。新 SHA 在首次结果前没有成功状态，现有 SHA 仍有下述异步窗口。
+只对最新可信 Actions 状态去重，不信任其他发布者的同名结果。GitHub 每 SHA/context
+最多 1000 条状态；已有 999 条时使用最后一个位置写 error，要求新 head。若外部写入
+已耗尽全部位置，Actions 明确失败，但无法覆盖旧状态，不声称撤销已发布。
 PR、评论、CodeRabbit check 和 review relay 事件触发评估；默认分支 push 和
 30 分钟定时检查补充处理漏发事件、过期和撤销。串行组只保留一个等待任务，
 新事件可能替换较旧的等待任务；定时检查补充处理。无关评论和其他 App 的

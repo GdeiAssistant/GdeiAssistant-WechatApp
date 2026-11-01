@@ -79,7 +79,7 @@ async function collect(github, context, number, policyCommit, policy) {
   const checkRuns = allChecks.filter(c => c.app?.id === policy?.coderabbit.app_id);
   const statuses = await github.paginate(github.rest.repos.listCommitStatusesForRef,
     { ...repo, ref: pr.head.sha, per_page: 100 });
-  const ownerWatermark = Math.max(0, ...statuses.filter(s => s.context === 'risk-gate'
+  const ownerWatermark = Math.max(0, ...statuses.filter(s => s.context?.toLowerCase() === 'risk-gate'
     && s.creator?.id === 41898282 && s.creator.login === 'github-actions[bot]')
     .map(s => Number(/; owner=(\d+)$/.exec(s.description || '')?.[1] || 0)));
   const configAt = async ref => {
@@ -100,13 +100,15 @@ async function collect(github, context, number, policyCommit, policy) {
     permissions[user.login] = data.permission;
   }
   return { repository: `${repo.owner}/${repo.repo}`, policyCommit, pr, files, reviews,
-    reviewComments, issueComments, commits, threads, permissions, checkRuns, ownerWatermark,
+    reviewComments, issueComments, commits, threads, permissions, checkRuns, ownerWatermark, statuses,
     coderabbitConfig, trustedCoderabbitConfig, complete: true };
 }
 
 function snapshotVersion(snapshot, policy) {
   // Compare security-relevant fields, not changing mergeability/cache fields.
   const { pr, issueComments, reviewComments, reviews, threads, checkRuns, ...rest } = snapshot;
+  // Publication history is not review evidence; ownerWatermark remains bound.
+  delete rest.statuses;
   const secondOpinions = issueComments.filter(c => c.user?.type === 'Bot' && c.user?.login === 'coderabbitai[bot]').map(gate.stableComment);
   const approvals = gate.evidenceComments(snapshot, (policy?.owner_actors || [])).map(gate.stableComment);
   return gate.digest({ ...rest, reviewComments: reviewComments.map(gate.stableComment),
@@ -121,24 +123,39 @@ async function run({ github, context, core, policy, policySha, policyCommit, def
   const repo = context.repo;
   const target = `${context.serverUrl}/${repo.owner}/${repo.repo}/actions/runs/${context.runId}`;
   for (const number of numbers) {
-    let head, watermark = 0;
-    const status = (name, state, description) => github.rest.repos.createCommitStatus({
-      ...repo, sha: head, context: name, state, description: `${description.slice(0, 100)}; owner=${watermark}`, target_url: target,
-    });
+    let head, statusHistory, watermark = 0;
+    const status = async (name, state, description) => {
+      const history = (statusHistory || []).filter(s => s.context?.toLowerCase() === name);
+      // Reserve the last of GitHub's 1,000 slots for a blocking state.
+      if (history.length >= 999) {
+        state = 'error'; description = 'Commit status limit reached; new head required';
+        core.setFailed(`PR #${number}: ${name} status limit reached; new head required`);
+      }
+      description = `${description.slice(0, 100)}; owner=${watermark}`;
+      // REST returns newest first. Never trust a different publisher's status.
+      const latest = history[0];
+      if (latest?.creator?.id === 41898282 && latest.creator.login === 'github-actions[bot]'
+        && latest.state === state && latest.description === description) return;
+      if (history.length >= 1000) return; // Already exhausted: report failure, never claim publication.
+      const { data } = await github.rest.repos.createCommitStatus({
+        ...repo, sha: head, context: name, state, description, target_url: target,
+      });
+      statusHistory?.unshift(data);
+    };
     try {
       const { data: initial } = await github.rest.pulls.get({ ...repo, pull_number: number });
       if (initial.state !== 'open') continue;
       head = initial.head.sha;
-      await status('risk-gate', 'pending', 'Reading current commit review evidence');
-      await status('pr-template', 'pending', 'Checking PR description');
       if (initial.base.ref !== defaultBranch) throw new Error('Only the default branch is configured');
       const before = await collect(github, context, number, policyCommit, policy);
       if (before.pr.head.sha !== head) throw new Error('Head changed during collection');
+      statusHistory = before.statuses;
       const result = gate.evaluate(before, policy, policySha);
       watermark = result.owner_watermark || before.ownerWatermark || 0;
       const templateOK = (policy.dependabot_template_exemption && before.pr.user.login === 'dependabot[bot]')
         || gate.completeTemplate(before.pr.body);
       const after = await collect(github, context, number, policyCommit, policy);
+      if (after.pr.head.sha === head) statusHistory = after.statuses;
       const { data: currentBase } = await github.rest.repos.getBranch({ ...repo, branch: defaultBranch });
       if (snapshotVersion(before, policy) !== snapshotVersion(after, policy) || currentBase.commit.sha !== policyCommit
         || after.pr.base.sha !== policyCommit) throw new Error('Evidence or trusted base changed during evaluation');
@@ -154,6 +171,12 @@ async function run({ github, context, core, policy, policySha, policyCommit, def
       if (!result.allowed || !templateOK) core.setFailed(`PR #${number}: governance evidence missing or invalid`);
     } catch (error) {
       if (head) {
+        if (!statusHistory) {
+          try {
+            statusHistory = await github.paginate(github.rest.repos.listCommitStatusesForRef,
+              { ...repo, ref: head, per_page: 100 });
+          } catch { /* Still attempt a blocking error if only the read API failed. */ }
+        }
         await Promise.allSettled([
           status('risk-gate', 'error', 'Evidence unavailable or changed; rerun required'),
           status('pr-template', 'error', 'Evaluation failed; rerun required'),

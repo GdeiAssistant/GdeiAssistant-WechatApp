@@ -24,7 +24,12 @@ function mock(f = fixture()) {
           content: Buffer.from(ref === BASE ? f.snapshot.trustedCoderabbitConfig : f.snapshot.coderabbitConfig).toString('base64') } }),
         getBranch: async () => ({ data: { commit: { sha: BASE } } }),
         getCollaboratorPermissionLevel: async ({ username }) => ({ data: { permission: f.snapshot.permissions[username], user: { id: [...f.snapshot.reviews, ...f.snapshot.issueComments].find(r => r.user.login === username).user.id } } }),
-        createCommitStatus: async s => { statuses.push(s); return {}; },
+        createCommitStatus: async s => {
+          statuses.push(s);
+          const data = { ...s, creator: { id: 41898282, login: 'github-actions[bot]' } };
+          (f.snapshot.statuses ||= []).unshift(data);
+          return { data };
+        },
       },
     },
     paginate: async (method, params) => {
@@ -149,7 +154,7 @@ test('native API errors never publish success', async () => {
 for (const path of ['src/view.js', 'pages/login/login.js']) test(`App-reviewed ${path} publishes success without account comments after readback`, async () => {
   const f = fixture(path); approve(f); f.snapshot.pr.body = '## AI assistance\nCodex used.\n## What changed\nReview evidence.\n## How verified\nOffline tests passed.';
   const m = mock(f); await run(m);
-  assert.deepEqual(m.statuses.map(s => [s.context, s.state]), [['risk-gate', 'pending'], ['pr-template', 'pending'], ['pr-template', 'success'], ['risk-gate', 'success']]);
+  assert.deepEqual(m.statuses.map(s => [s.context, s.state]), [['pr-template', 'success'], ['risk-gate', 'success']]);
   assert.ok(m.statuses.every(s => s.sha === HEAD)); assert.equal(m.calls.filter(c => c.method === 'files').length, 2);
   assert.equal(m.failures.length, 0);
 });
@@ -296,4 +301,61 @@ test('native summary edits during readback prevent publication', async () => {
   await run(m);
   assert.ok(m.statuses.some(s => s.context === 'risk-gate' && s.state === 'error'));
   assert.ok(m.statuses.every(s => s.state !== 'success'));
+});
+
+
+test('unchanged sweeps do not append statuses or churn pending states', async () => {
+  const f = fixture(); approve(f);
+  f.snapshot.pr.body = '## AI assistance\nCodex used.\n## What changed\nReview evidence.\n## How verified\nOffline tests passed.';
+  const first = mock(f); await run(first);
+  assert.equal(first.statuses.length, 2);
+  for (let i = 0; i < 3; i++) {
+    const next = mock(f); next.context.runId += i + 1; await run(next);
+    assert.equal(next.statuses.length, 0); assert.equal(next.failures.length, 0);
+  }
+});
+test('a new revoke and its watermark publish even after unchanged sweeps', async () => {
+  const f = fixture('pages/login/login.js'); approve(f); await run(mock(f));
+  const revoke = ownerApproval(f, 'revoke'); const m = mock(f); await run(m);
+  const status = m.statuses.find(s => s.context === 'risk-gate');
+  assert.equal(status.state, 'failure'); assert.match(status.description, /owner_revoked/);
+  assert.ok(status.description.endsWith(`owner=${revoke.id}`));
+});
+test('same-state descriptions still update when review evidence changes', async () => {
+  const f = fixture(); const first = mock(f); await run(first);
+  approve(f); f.snapshot.threads.push({ id: 'new', isResolved: false });
+  const next = mock(f); await run(next);
+  assert.equal(next.statuses.length, 1);
+  assert.match(next.statuses[0].description, /review-findings/);
+});
+test('matching statuses from another publisher are replaced, not trusted', async () => {
+  const f = fixture(); approve(f); await run(mock(f));
+  for (const status of f.snapshot.statuses) status.creator = { id: 1, login: 'author' };
+  const m = mock(f); await run(m);
+  assert.equal(m.statuses.length, 2);
+});
+for (const count of [998, 999, 1000]) test(`status history at ${count} respects the API limit`, async () => {
+  const f = fixture(); approve(f);
+  f.snapshot.statuses = Array.from({ length: count }, () => ({ context: 'RISK-GATE', state: 'success',
+    description: 'Old success', creator: { id: 41898282, login: 'github-actions[bot]' } }));
+  const m = mock(f); await run(m);
+  const writes = m.statuses.filter(s => s.context === 'risk-gate');
+  if (count === 998) {
+    assert.equal(writes[0].state, 'success');
+    const next = mock(f); await run(next);
+    assert.equal(next.statuses.find(s => s.context === 'risk-gate').state, 'error');
+  } else {
+    assert.ok(m.failures.some(message => /status limit/.test(message)));
+    assert.equal(writes.length, count === 999 ? 1 : 0);
+    if (writes.length) assert.equal(writes[0].state, 'error');
+  }
+});
+test('an exhausted blocking status stays blocking without more writes', async () => {
+  const f = fixture(); approve(f);
+  f.snapshot.statuses = Array.from({ length: 999 }, () => ({ context: 'risk-gate', state: 'success',
+    description: 'Old success', creator: { id: 41898282, login: 'github-actions[bot]' } }));
+  await run(mock(f)); const next = mock(f); await run(next);
+  assert.equal(next.statuses.length, 0);
+  assert.equal(f.snapshot.statuses.find(s => s.context === 'risk-gate').state, 'error');
+  assert.ok(next.failures.some(message => /status limit/.test(message)));
 });

@@ -12,6 +12,7 @@ reviews:
   auto_review:
     enabled: true
     drafts: false
+    auto_pause_after_reviewed_commits: 0
   path_instructions:
     - path: '**/*'
       instructions: >-
