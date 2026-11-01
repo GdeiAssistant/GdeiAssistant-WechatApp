@@ -74,8 +74,43 @@ test('commit association avoids all-open PR scan', async () => {
   assert.deepEqual(await selectTargets(m.github, m.context, 'main'), [3]);
 });
 test('oversized sweep errors without truncation', async () => {
-  const m = mock(); m.context.eventName = 'schedule'; m.github.paginate = async () => Array.from({ length: 101 }, (_, i) => ({ number: i + 1 }));
+  const m = mock(); m.context.eventName = 'schedule'; m.github.paginate = async () => Array.from({ length: 11 }, (_, i) => ({ number: i + 1 }));
   await assert.rejects(selectTargets(m.github, m.context, 'main'), /exceeds/);
+});
+test('bounded sweep includes every PR at capacity and targeted events bypass its cap', async () => {
+  const m = mock(); m.context.eventName = 'schedule';
+  m.github.paginate = async () => Array.from({ length: 10 }, (_, i) => ({ number: i + 1 }));
+  assert.deepEqual(await selectTargets(m.github, m.context, 'main'), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  m.github.paginate = async () => { throw new Error('Targeted evaluation must not sweep'); };
+  m.context.eventName = 'workflow_dispatch'; m.context.payload = { inputs: { pr_number: '11' } };
+  assert.deepEqual(await selectTargets(m.github, m.context, 'main'), [11]);
+  m.context.eventName = 'pull_request_target'; m.context.payload = { pull_request: { number: 11 } };
+  assert.deepEqual(await selectTargets(m.github, m.context, 'main'), [11]);
+});
+
+test('untrusted workflow events cannot replace a trusted pending run', () => {
+  const source = fs.readFileSync('.github/workflows/risk-gate.yml', 'utf8');
+  const expression = /^concurrency:\n[\s\S]*?\$\{\{([\s\S]*?)\}\}/m.exec(source)?.[1];
+  assert.ok(expression, 'Isolation must apply at workflow scope');
+  // This expression uses the boolean/format subset shared with JavaScript.
+  const group = new Function('github', 'format', `return (${expression});`);
+  const format = (pattern, id) => pattern.replace('{0}', id);
+  const trusted = [
+    { event_name: 'schedule' }, { event_name: 'push' },
+    { event_name: 'pull_request_target' }, { event_name: 'workflow_run' },
+    ...[20649888, 136622811].map(id => ({ event_name: 'issue_comment', event: { issue: { pull_request: {} }, comment: { user: { id } } } })),
+    { event_name: 'check_run', event: { check_run: { app: { id: 347564 } } } },
+  ];
+  for (const event of trusted) assert.equal(group({ event: {}, ...event, run_id: 1 }, format), 'pr-governance');
+  const untrusted = [
+    { event_name: 'issue_comment', event: { issue: { pull_request: {} }, comment: { user: { id: 9 } } } },
+    { event_name: 'issue_comment', event: { issue: {}, comment: { user: { id: 20649888 } } } },
+    { event_name: 'check_run', event: { check_run: { app: { id: 9 } } } },
+  ];
+  for (const event of untrusted) {
+    assert.notEqual(group({ ...event, run_id: 1 }, format), 'pr-governance');
+    assert.notEqual(group({ ...event, run_id: 1 }, format), group({ ...event, run_id: 2 }, format));
+  }
 });
 test('unknown relay SHA cannot select an unrelated fallback target', async () => {
   const m = mock(); m.context.eventName = 'workflow_run'; m.context.payload = { workflow_run: { head_sha: '' } };

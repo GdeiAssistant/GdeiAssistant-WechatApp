@@ -13,7 +13,7 @@ on:
   push:
     branches: [master]
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '*/30 * * * *'
   workflow_dispatch:
     inputs:
       pr_number:
@@ -23,17 +23,24 @@ on:
 
 permissions: {}
 
+# Isolate untrusted events before workflow concurrency can replace a pending run.
+concurrency:
+  group: >-
+    ${{ ((github.event_name == 'issue_comment' &&
+         (!github.event.issue.pull_request ||
+          (github.event.comment.user.id != 20649888 && github.event.comment.user.id != 136622811))) ||
+         (github.event_name == 'check_run' && github.event.check_run.app.id != 347564)) &&
+        format('pr-governance-ignored-{0}', github.run_id) || 'pr-governance' }}
+  cancel-in-progress: false
+
 jobs:
   evaluate:
-    # Reject unrelated comment/check events before they enter job concurrency.
+    # Unrelated events also skip execution; their concurrency groups are isolated.
     if: >-
       (github.event_name != 'issue_comment' ||
        (github.event.issue.pull_request &&
         (github.event.comment.user.id == 20649888 || github.event.comment.user.id == 136622811))) &&
       (github.event_name != 'check_run' || github.event.check_run.app.id == 347564)
-    concurrency:
-      group: pr-governance
-      cancel-in-progress: false
     name: Evaluate PR governance
     runs-on: ubuntu-latest
     timeout-minutes: 10

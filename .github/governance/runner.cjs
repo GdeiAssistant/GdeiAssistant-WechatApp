@@ -35,7 +35,10 @@ async function selectTargets(github, context, defaultBranch) {
   }
   if (!['workflow_run', 'push', 'schedule'].includes(context.eventName)) throw new Error('Unsupported event');
   const prs = await github.paginate(github.rest.pulls.list, { ...repo, state: 'open', base: defaultBranch, per_page: 100 });
-  if (prs.length > 100) throw new Error('Sweep exceeds 100 PRs; use targeted dispatch');
+  // Two 10-PR sweeps/hour leave room in the standard 1,000 REST requests/hour
+  // budget for pagination, permissions and targeted events (about 26 reads/writes
+  // per PR before those extras). Refuse overflow rather than silently omit PRs.
+  if (prs.length > 10) throw new Error('Sweep exceeds 10 PRs; use targeted dispatch');
   return prs.map(pr => pr.number);
 }
 
@@ -103,11 +106,12 @@ async function collect(github, context, number, policyCommit, policy) {
 
 function snapshotVersion(snapshot, policy) {
   // Compare security-relevant fields, not changing mergeability/cache fields.
-  const { pr, issueComments, reviewComments, reviews, ...rest } = snapshot;
+  const { pr, issueComments, reviewComments, reviews, threads, checkRuns, ...rest } = snapshot;
   const secondOpinions = issueComments.filter(c => c.user?.type === 'Bot' && c.user?.login === 'coderabbitai[bot]').map(gate.stableComment);
   const approvals = gate.evidenceComments(snapshot, (policy?.owner_actors || [])).map(gate.stableComment);
   return gate.digest({ ...rest, reviewComments: reviewComments.map(gate.stableComment),
-    reviews: reviews.map(r => ({ ...gate.stableComment(r), state: r.state, submitted_at: r.submitted_at })), secondOpinions, approvals, pr: { state: pr.state, number: pr.number, body: pr.body,
+    reviews: reviews.map(gate.stableReview), threads: threads.map(gate.stableThread),
+    checkRuns: checkRuns.map(gate.stableCheck), secondOpinions, approvals, pr: { state: pr.state, number: pr.number, body: pr.body,
     head: pr.head.sha, base: pr.base.sha, baseRef: pr.base.ref, baseRepo: pr.base.repo.id,
     author: pr.user.id, changed_files: pr.changed_files, commits: pr.commits } });
 }

@@ -71,12 +71,23 @@ function binding(snapshot, policySha) {
 function stableComment(comment) {
   // Reactions and profile decoration are not approval or review evidence.
   const { id, body, created_at, updated_at, path, line, original_line, side,
-    start_line, start_side, commit_id, original_commit_id, in_reply_to_id,
+    start_line, start_side, original_start_line, original_start_side, position,
+    original_position, subject_type, commit_id, original_commit_id, in_reply_to_id,
     pull_request_review_id } = comment;
   return { id, body, created_at, updated_at, path, line, original_line, side,
-    start_line, start_side, commit_id, original_commit_id, in_reply_to_id,
+    start_line, start_side, original_start_line, original_start_side, position,
+    original_position, subject_type, commit_id, original_commit_id, in_reply_to_id,
     pull_request_review_id,
     user: { id: comment.user?.id, login: comment.user?.login, type: comment.user?.type } };
+}
+
+const stableReview = r => ({ ...stableComment(r), state: r.state, submitted_at: r.submitted_at });
+const stableThread = t => ({ id: t.id, isResolved: t.isResolved, isOutdated: t.isOutdated });
+function stableCheck(c) {
+  return { id: c.id, name: c.name, head_sha: c.head_sha, status: c.status,
+    conclusion: c.conclusion, started_at: c.started_at, completed_at: c.completed_at,
+    app: { id: c.app?.id, slug: c.app?.slug },
+    output: { title: c.output?.title, summary: c.output?.summary, text: c.output?.text } };
 }
 
 function latestReviews(reviews) {
@@ -201,9 +212,9 @@ function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 100
   else if (ai.coverage !== 'reported_complete') scopes.push('ai-review-partial');
   if (blockers.length) scopes.push('review-findings');
   const providerComments = snapshot.issueComments.filter(c => c.user?.id === policy.coderabbit.user_id);
-  const evidenceSha = digest({ binding: expected, ai, blockers, reviews: snapshot.reviews.map(r => ({ ...stableComment(r), state: r.state, submitted_at: r.submitted_at })),
-    checks: snapshot.checkRuns.filter(c => c.app?.id === policy.coderabbit.app_id),
-    reviewComments: snapshot.reviewComments.map(stableComment), threads: snapshot.threads, providerComments: providerComments.map(stableComment),
+  const evidenceSha = digest({ binding: expected, ai, blockers, reviews: snapshot.reviews.map(stableReview),
+    checks: snapshot.checkRuns.filter(c => c.app?.id === policy.coderabbit.app_id).map(stableCheck),
+    reviewComments: snapshot.reviewComments.map(stableComment), threads: snapshot.threads.map(stableThread), providerComments: providerComments.map(stableComment),
     config: snapshot.coderabbitConfig, trustedConfig: snapshot.trustedCoderabbitConfig });
   const decision = ownerDecision(snapshot, policy, expected, evidenceSha, now);
   Object.assign(result, { ai, blocking_findings: blockers, required_override_scopes: scopes,
@@ -240,4 +251,4 @@ function completeTemplate(body) {
     && present(/how verified|verif|validat|test(?:ing| plan)?|验证|测试/i);
 }
 
-module.exports = { stableComment, canonical, digest, classify, pathTier, binding, evaluate, completeTemplate, evidenceComments, command };
+module.exports = { stableComment, stableReview, stableThread, stableCheck, canonical, digest, classify, pathTier, binding, evaluate, completeTemplate, evidenceComments, command };

@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const gate = require('./gate.cjs');
 const actualPolicy = require('./policy.json');
-const { fixture, approve, ownerApproval, evaluate, HEAD, BASE, POLICY, NOW, at } = require('./fixtures.cjs');
+const { fixture, approve, ownerApproval, evaluate, HEAD, BASE, POLICY, at } = require('./fixtures.cjs');
 
 test('R0 prose passes with an explicit no-review decision and matched rule', () => {
   const f = fixture('README.md');
