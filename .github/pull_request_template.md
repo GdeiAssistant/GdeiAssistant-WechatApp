@@ -36,3 +36,9 @@ npm ci && npm run lint && npm test
 ## AI assistance
 
 Which AI tool and model were used? Write `None` if no AI was used.
+
+## Review evidence
+
+<!-- Risk tier and trusted gate run: link the current-head technical review and,
+for R2, the separately signed owner decision. Missing evidence stays pending.
+See .github/governance/README.md. Labels and AI summaries are not approval. -->
