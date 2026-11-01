@@ -125,7 +125,7 @@ function validDispositions(value, snapshot) {
 }
 
 function allowlisted(comment, actors) {
-  return comment.user?.type === 'User' && actors.some(actor => actor.user_id === comment.user.id
+  return comment.user?.type === 'User' && actors.some(actor => actor.enabled === true && actor.user_id === comment.user.id
     && actor.login.toLowerCase() === comment.user.login?.toLowerCase());
 }
 
@@ -135,17 +135,17 @@ function evidenceComments(snapshot, actors) {
 }
 
 function latestReceipt(snapshot, actors, schema) {
-  const otherSchema = schema === 'ai-review/v1' ? 'owner-approval/v1' : 'ai-review/v1';
-  const candidates = evidenceComments(snapshot, actors).filter(c => !receipt(c.body, otherSchema));
+  const otherSchemas = ['ai-review/v1', 'owner-approval/v1', 'owner-override/v1'].filter(s => s !== schema);
+  const candidates = evidenceComments(snapshot, actors).filter(c => !otherSchemas.some(s => receipt(c.body, s)));
   for (const c of candidates) assert(Number.isSafeInteger(c.id) && c.id > 0
     && Number.isFinite(Date.parse(c.created_at)) && Number.isFinite(Date.parse(c.updated_at)), 'Unknown comment metadata');
   // Creation order is authoritative. Editing an older approval cannot undo a later revocation.
   return candidates.sort((a, b) => b.id - a.id)[0];
 }
 
-function validAI(value) {
+function validAI(value, policy) {
   const ai = value.ai_review;
-  return ai && ['codex', 'coderabbit', 'grok'].includes(ai.provider)
+  return ai && ai.provider === 'dot' && policy.providers.dot === 'recorded-review'
     && typeof ai.model === 'string' && ai.model.trim().length > 0
     && typeof ai.run_ref === 'string' && ai.run_ref.trim().length >= 8
     && ['independent', 'self-review'].includes(ai.mode);
@@ -157,7 +157,7 @@ function ownerApproved(snapshot, policy, expected, evidenceSha, now) {
   const v = receipt(c.body, 'owner-approval/v1');
   return !!v && ['write', 'maintain', 'admin'].includes(snapshot.permissions[c.user.login])
     && v.comment_id === c.id && sameBinding(v, expected) && v.evidence_sha256 === evidenceSha
-    && v.decision === 'approve' && v.approval_source === 'grok'
+    && v.decision === 'approve' && v.approval_source === 'dot' && policy.providers.dot === 'recorded-review'
     && typeof v.approval_ref === 'string' && v.approval_ref.trim().length >= 8
     && typeof v.reason === 'string' && v.reason.trim().length >= 8
     && Number.isSafeInteger(v.issued_at) && Number.isSafeInteger(v.expires_at)
@@ -165,9 +165,22 @@ function ownerApproved(snapshot, policy, expected, evidenceSha, now) {
     && v.expires_at - v.issued_at <= policy.owner_approval_max_hours * 3600;
 }
 
+function ownerOverride(snapshot, policy) {
+  const actor = policy.owner_override_actor;
+  if (!actor || actor.enabled !== true) return null;
+  const comment = latestReceipt(snapshot, [actor], 'owner-override/v1');
+  if (!comment) return null;
+  const value = receipt(comment.body, 'owner-override/v1');
+  if (!value || !['write', 'maintain', 'admin'].includes(snapshot.permissions[comment.user.login])
+    || value.repository !== snapshot.repository || value.pr_number !== snapshot.pr.number
+    || value.head_sha !== snapshot.pr.head.sha || value.decision !== 'approve'
+    || typeof value.reason !== 'string' || value.reason.trim().length < 8) return null;
+  return comment;
+}
+
 function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 1000)) {
   assert(policy.version === 'pr-governance/v1' && policy.repository === snapshot.repository, 'Policy repository mismatch');
-  assert(policy.providers.codex === 'recorded-review' && policy.providers.coderabbit === 'second-opinion'
+  assert(policy.providers.dot === 'recorded-review' && policy.providers.codex === 'observe' && policy.providers.coderabbit === 'second-opinion'
     && policy.providers.quantaiservice === 'shadow', 'Unsupported provider policy');
   assert(snapshot.pr.state === 'open' && snapshot.complete === true, 'Incomplete snapshot');
   assert(snapshot.commits.length === snapshot.pr.commits && snapshot.commits.length < 250, 'Incomplete commit list');
@@ -181,13 +194,17 @@ function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 100
   const authorized = r => ['write', 'maintain', 'admin'].includes(snapshot.permissions[r.user.login]);
   if (latest.some(r => authorized(r) && r.state === 'CHANGES_REQUESTED')) return { ...result, reason: 'changes_requested' };
   if (snapshot.threads.some(t => !t.isResolved)) return { ...result, reason: 'unresolved_review_thread' };
+  const override = risk.tier === 'R2' ? ownerOverride(snapshot, policy) : null;
+  if (override) return { ...result, allowed: true, reason: 'owner_override', route: 'owner-override',
+    reviewer: override.user.login, override_comment_id: override.id,
+    evidence_sha256: digest({ binding: expected, discussion_sha256: discussionSha, override }) };
   // Option A: the allowlisted publisher attests a completed AI review. Account
   // identity authenticates the record; it does not prove a separate human/model.
   const comment = latestReceipt(snapshot, policy.ai_review_actors, 'ai-review/v1');
   if (comment) {
     const value = receipt(comment.body, 'ai-review/v1');
     if (value && authorized(comment) && value.comment_id === comment.id && sameBinding(value, expected)
-      && value.discussion_sha256 === discussionSha && validAI(value)
+      && value.discussion_sha256 === discussionSha && validAI(value, policy)
       && value.execution_status === 'completed' && value.verdict === 'pass'
       && value.risk_tier === risk.tier && value.coverage?.complete === true
       && value.coverage.reviewed_files === snapshot.files.length
@@ -205,7 +222,7 @@ function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 100
   for (const route of ['primary', 'fallback']) {
     for (const review of latest) {
       const value = receipt(review.body, 'pr-review/v1');
-      if (!value || !validAI(value) || !authorized(review) || !independent(review, snapshot) || review.state !== 'APPROVED'
+      if (!value || !validAI(value, policy) || !authorized(review) || !independent(review, snapshot) || review.state !== 'APPROVED'
         || review.commit_id !== expected.head_sha || !sameBinding(value, expected)
         || value.discussion_sha256 !== discussionSha || value.route !== route
         || value.reviewer !== policy.reviewers[risk.tier][route]

@@ -33,22 +33,30 @@
     }
   },
   "providers": {
-    "codex": "recorded-review",
+    "codex": "observe",
     "coderabbit": "second-opinion",
-    "quantaiservice": "shadow"
+    "quantaiservice": "shadow",
+    "dot": "recorded-review"
   },
   "owner_approval_max_hours": 24,
   "dependabot_template_exemption": false,
   "owner_actors": [
     {
       "user_id": 20649888,
-      "login": "Pigbibi"
+      "login": "Pigbibi",
+      "enabled": true
     }
   ],
   "ai_review_actors": [
     {
       "user_id": 20649888,
-      "login": "Pigbibi"
+      "login": "Pigbibi",
+      "enabled": true
     }
-  ]
+  ],
+  "owner_override_actor": {
+    "user_id": 20649888,
+    "login": "Pigbibi",
+    "enabled": true
+  }
 }

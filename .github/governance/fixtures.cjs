@@ -7,8 +7,8 @@ const NOW = 2000000000;
 
 function fixture(path = 'src/view.js') {
   const policy = structuredClone(actualPolicy);
-  policy.owner_actors = [{ user_id: 4, login: 'owner' }];
-  policy.ai_review_actors = [{ user_id: 1, login: 'author' }];
+  policy.owner_actors = [{ user_id: 4, login: 'owner', enabled: true }];
+  policy.ai_review_actors = [{ user_id: 1, login: 'author', enabled: true }];
   const snapshot = {
     repository: policy.repository, policyCommit: BASE, complete: true,
     pr: { state: 'open', number: 42, user: { id: 1, login: 'author' }, body: '', changed_files: 1, commits: 1,
@@ -23,7 +23,7 @@ function fixture(path = 'src/view.js') {
 function approve(f, route = 'primary') {
   const result = gate.evaluate(f.snapshot, f.policy, POLICY, NOW);
   const value = {
-    schema_version: 'pr-review/v1', ai_review: { provider: 'codex', model: 'test-model', run_ref: 'synthetic-run', mode: 'independent' }, ...result.binding, discussion_sha256: result.discussion_sha256,
+    schema_version: 'pr-review/v1', ai_review: { provider: 'dot', model: 'test-model', run_ref: 'synthetic-run', mode: 'independent' }, ...result.binding, discussion_sha256: result.discussion_sha256,
     route, reviewer: f.policy.reviewers[result.tier][route], independent: true,
     risk_tier: result.tier, execution_status: 'completed', verdict: 'pass',
     coverage: { complete: true, reviewed_files: f.snapshot.files.length },
@@ -44,7 +44,7 @@ const evaluate = f => gate.evaluate(f.snapshot, f.policy, POLICY, NOW);
 function ownerApproval(f) {
   const result = evaluate(f);
   const payload = { schema_version: 'owner-approval/v1', ...result.binding, evidence_sha256: result.evidence_sha256,
-    comment_id: 20, decision: 'approve', approval_source: 'grok', approval_ref: 'synthetic-grok-record',
+    comment_id: 20, decision: 'approve', approval_source: 'dot', approval_ref: 'synthetic-dot-record',
     reason: 'Synthetic owner accepts this reviewed scope', issued_at: NOW - 60, expires_at: NOW + 3600 };
   const comment = { id: 20, user: { id: 4, login: 'owner', type: 'User' },
     created_at: '2033-05-18T03:34:00Z', updated_at: '2033-05-18T03:34:00Z', body: JSON.stringify(payload) };

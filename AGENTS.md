@@ -83,7 +83,7 @@ npm run smoke
 - Commit 和 PR 标题遵循 Conventional Commits，类型使用英文 `feat`、`fix`、`docs`、`refactor`、`test`、`chore`、`perf`、`ci`，标题不超过 72 字符。Commit 说明可使用中文或英文；英文允许句首大写，commitlint 使用内置默认忽略规则，不按 `Merge ` 前缀跳过检查。
 - PR 标题、模板和说明按组织标准使用中文，写清问题、变更、实际验证和风险。AI 编写的 PR 说明使用的工具及可获得的模型信息。标签沿用现有标识符（如 `risk:high`），审批与风险说明使用中文。
 - 文档、测试和普通检查使用 `risk:low`；受保护路径使用 `risk:high` 和 `needs-owner-approval`。分类标签只描述风险，是否需要批准由基于路径的 `risk-gate` 判断。
-- AI 开发使用必需的自动检查、模板校验及绑定当前 SHA 的 AI 审查，不额外要求人工或 CODEOWNER approving review。R2 还需白名单账号发布的结构化 Grok 批准评论，绑定当前 SHA 及 AI 评审证据。`owner-approved` 仅作展示，标签本身不能放行；发布批准记录及添加标签须在用户明确授权范围内，不能编造批准或把自审声称为独立评审。
+- AI 开发使用必需的自动检查、模板校验及绑定当前 SHA 的 AI 审查，不额外要求人工或 CODEOWNER approving review。R2 还需白名单账号发布的结构化批准评论，发布者必须真实存在且已启用，绑定当前 SHA 及 AI 评审证据。`owner-approved` 仅作展示，标签本身不能放行；发布批准记录及添加标签须在用户明确授权范围内，不能编造批准或把自审声称为独立评审。
 - 保留必需检查与分支保护，通过正常检查后才能合并。PR 分支使用 `<type>/<topic>`，不直接推默认分支，不 force-push 已审查的分支。提交、推送、合并与生产动作须有授权，同范围已有授权继续有效。
 
 ## AI 维护与交付
@@ -98,5 +98,8 @@ npm run smoke
 ## 评审规则
 
 风险分级及主审、备用评审按 [PR 证据合同](.github/governance/README.md)执行。
-R1 要求绑定当前 SHA 的 AI 评审；R2 还需白名单账号发布的结构化 Grok 批准评论。
+R1 要求绑定当前 SHA 的 dot AI 评审；R2 还需白名单账号发布的结构化批准评论，发布者必须真实存在且已启用。
 标签本身不能放行，不得编造模型结果或将自审声称为独立评审。
+
+R2 也接受所有者本人发布的当前提交 `owner-override/v1` 评论，按证据合同验证并记录。
+代理不得代发人工覆盖评论；AI 路径只接受 dot 的真实评审来源。

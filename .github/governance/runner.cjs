@@ -64,7 +64,7 @@ async function collect(github, context, number, policyCommit, policy) {
   const commits = await github.paginate(github.rest.pulls.listCommits, params);
   const threads = await readThreads(github, repo, number);
   const permissions = {};
-  const actors = [...(policy?.owner_actors || []), ...(policy?.ai_review_actors || [])];
+  const actors = [...(policy?.owner_actors || []), ...(policy?.ai_review_actors || []), ...(policy?.owner_override_actor ? [policy.owner_override_actor] : [])];
   const records = [...reviews, ...gate.evidenceComments({ issueComments }, actors)];
   for (const user of new Map(records.filter(r => r.user?.type === 'User').map(r => [r.user.login, r.user])).values()) {
     const { data } = await github.rest.repos.getCollaboratorPermissionLevel({ ...repo, username: user.login });
@@ -79,7 +79,7 @@ function snapshotVersion(snapshot, policy) {
   // Compare security-relevant fields, not changing mergeability/cache fields.
   const { pr, issueComments, ...rest } = snapshot;
   const secondOpinions = issueComments.filter(c => c.user?.type === 'Bot' && c.user?.login === 'coderabbitai[bot]');
-  const approvals = gate.evidenceComments(snapshot, [...(policy?.owner_actors || []), ...(policy?.ai_review_actors || [])]);
+  const approvals = gate.evidenceComments(snapshot, [...(policy?.owner_actors || []), ...(policy?.ai_review_actors || []), ...(policy?.owner_override_actor ? [policy.owner_override_actor] : [])]);
   return gate.digest({ ...rest, secondOpinions, approvals, pr: { state: pr.state, number: pr.number, body: pr.body,
     head: pr.head.sha, base: pr.base.sha, baseRef: pr.base.ref, baseRepo: pr.base.repo.id,
     author: pr.user.id, changed_files: pr.changed_files, commits: pr.commits } });

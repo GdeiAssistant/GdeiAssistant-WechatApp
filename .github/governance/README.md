@@ -14,8 +14,8 @@ changes protection.
 | Tier | Scope | Primary | Fallback | Required evidence |
 | --- | --- | --- | --- | --- |
 | R0 | Modified plain prose in the explicit allowlist, with a complete text patch | Deterministic prose rules | Independent maintainer after escalation to R1 | `review_not_required`, matched paths, policy and diff digests; existing required CI |
-| R1 | Ordinary application behavior and content not proven to be R0 | SHA-bound AI review recorded by an allowlisted actor | AI-assisted independent maintainer/admin review | Complete current-head AI evidence; existing required CI |
-| R2 | Trading, orders, risk, authentication, permissions, credentials, privacy/data access, IAM, deployment, dependency hooks, workflows and review policy | SHA-bound AI review | Same AI evidence requirements | R1 evidence plus an allowlisted structured Grok approval comment bound to that evidence |
+| R1 | Ordinary application behavior and content not proven to be R0 | SHA-bound dot AI review recorded by an allowlisted actor | AI-assisted independent maintainer/admin review | Complete current-head AI evidence; existing required CI |
+| R2 | Trading, orders, risk, authentication, permissions, credentials, privacy/data access, IAM, deployment, dependency hooks, workflows and review policy | SHA-bound dot AI review | Same AI evidence requirements | R1 evidence plus an allowlisted structured approval comment from an enabled actor bound to that evidence, or an explicit owner override |
 
 The primary route is a completed AI review recorded in an authenticated PR
 comment. The publisher may share the PR author's account; the record must state
@@ -41,10 +41,13 @@ A reviewer may request R2 treatment by changing the trusted path policy
 through an R2 PR; a model cannot downgrade risk.
 
 CodeRabbit remains an optional second opinion; its free-form summary or label
-cannot pass the gate. An allowlisted publisher can record a completed Codex,
-CodeRabbit or Grok AI review with its model and execution reference.
-QuantAIService remains non-blocking shadow: its absence, failure and output never
-satisfy or veto the gate. The evaluator itself never calls a model.
+cannot pass the gate. Only completed dot reviews qualify, with the actual model
+and execution reference. Codex remains observation-only; claude, duet, grokbot
+and unconfigured providers cannot supply qualifying evidence.
+
+QuantAIService
+shadow output is advisory unless explicitly recorded as the verified dot review.
+The evaluator itself never calls a model or enables a service.
 
 ## Trusted inputs and binding
 
@@ -71,16 +74,24 @@ before publication. Changes during evaluation produce an error, never success.
 
 Labels alone have no approval authority. Actor numeric ID and login must match
 the trusted `ai_review_actors` or `owner_actors` allowlist; current write, maintain
-or admin permission is checked through GitHub. Identity is never taken from the
+or admin permission is checked through GitHub. Each allowlist entry must also
+have `enabled: true`; absent or disabled entries are rejected. Only verified
+existing accounts may be enrolled. Identity is never taken from the
 JSON body.
 
 All comments by allowlisted actors are included in publication race
 detection, including malformed edits.
 
-Option A trusts the allowlisted account to attest the referenced AI execution and
-Grok decision. GitHub authentication does not distinguish a person from an agent
+Option A trusts the enabled allowlisted account to attest the actual dot execution
+and the separate approval decision. GitHub authentication does not distinguish a person from an agent
 using that account, and a reference string is not proof that a model ran. The
-publisher must verify the real result before posting it.
+publisher must verify the real result and current service enablement before
+posting it.
+
+A record made by another model "on behalf of" dot does not qualify.
+Local configuration, a successful test, and a claimed provider name cannot
+establish a completed dot run. If runtime verification is unavailable, report
+that gap and do not invent a review or enroll a replacement actor.
 
 No signing key, secret
 or cryptographic owner identity is required. Allowlist changes are R2 changes.
@@ -107,7 +118,7 @@ route also requires AI provenance; a human-only review does not satisfy it.
 ```json
 {
   "schema_version": "pr-review/v1",
-  "ai_review": {"provider": "codex", "model": "<actual model>", "run_ref": "<execution reference>", "mode": "independent"},
+  "ai_review": {"provider": "dot", "model": "<actual model>", "run_ref": "<execution reference>", "mode": "independent"},
   "repository": "example/project",
   "repository_id": 100,
   "pr_number": 42,
@@ -163,12 +174,12 @@ require fresh evidence.
 
 ## Owner approval
 
-R2 uses option A: a SHA-bound AI review plus a structured Grok approval record
+R2 uses option A: a SHA-bound dot AI review plus a structured approval record
 posted by an actor in `owner_actors`. The `owner-approved` label is a visible
 marker only; it cannot satisfy the gate. This replaces the former empty
 `owner_keys`/Ed25519 requirement.
 
-After reading the completed AI review and actual Grok decision for the current
+After reading the completed AI review and actual approval decision for the current
 head, an authorized publisher creates a placeholder PR Conversation comment,
 obtains its ID, then edits that comment to this complete object:
 
@@ -184,8 +195,8 @@ obtains its ID, then edits that comment to this complete object:
   "policy_sha256": "<policy digest>",
   "evidence_sha256": "<digest of the selected AI review and discussion>",
   "comment_id": 900,
-  "approval_source": "grok",
-  "approval_ref": "<actual Grok decision reference>",
+  "approval_source": "dot",
+  "approval_ref": "<actual approval decision reference>",
   "decision": "approve",
   "reason": "<scope and remaining risk accepted>",
   "issued_at": 2000000000,
@@ -206,8 +217,45 @@ that evidence; use an explicit revocation to keep a durable withdrawal instead
 of deleting it and exposing an older record.
 
 Approval grants only the reviewed PR decision, never deployment, IAM or trading
-permission. A coding agent must not invent a Grok result or claim its own review
+permission. A coding agent must not invent a dot result or claim its own review
 was independent; publishing records and adding labels requires the user's scope.
+
+## Explicit owner override
+
+The owner may personally post this complete JSON object in the PR Conversation:
+
+```json
+{
+  "schema_version": "owner-override/v1",
+  "repository": "example/project",
+  "pr_number": 42,
+  "head_sha": "<current full 40-character head SHA>",
+  "decision": "approve",
+  "reason": "<why the owner accepts this exact change>"
+}
+```
+
+Only the enabled `owner_override_actor` identity in the trusted policy can use
+this route. Its numeric GitHub ID, login and current repository permission are
+checked against GitHub metadata. This R2 route needs no AI review or separate
+approval receipt. The result records `route: owner-override`, the comment ID,
+reviewer and evidence digest.
+
+A new push makes the override stale; copying it
+to a different repository or PR fails. A newer override with `decision: revoke`
+or a malformed newer owner comment withdraws the prior override. Editing an
+older comment cannot override a newer revocation. Other structured review and
+approval receipts are evaluated independently.
+
+This is the user's own decision. A coding agent must not publish an override
+on the user's behalf or relabel its own self-review as the human override.
+GitHub cannot distinguish a person from automation using the same account;
+this operational limit is explicit and no signing key is introduced.
+
+Existing
+required CI, changes-requested reviews and unresolved threads still apply.
+An override authorizes this PR decision only, not deployment, IAM, secrets or
+trading changes.
 
 ## Events, failure and operational limits
 
@@ -235,7 +283,7 @@ important.
 
 This pilot does not claim synchronous revocation or production acceptance.
 Before any later enforcement rollout, verify actual event delivery, AI review
-completion and Grok approval comment delivery on the current commit.
+completion and enabled-actor approval comment delivery on the current commit.
 
 Run the dependency-free offline suite with:
 
