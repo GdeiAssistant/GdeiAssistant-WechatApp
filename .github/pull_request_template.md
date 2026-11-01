@@ -1,4 +1,4 @@
-## 这个 PR 做了什么
+## 改动内容
 
 <!-- 一句话说清改了什么 -->
 
@@ -12,7 +12,7 @@
 npm ci && npm run lint && npm test
 ```
 
-跑不了的项请说明原因，不要勾上了事。
+<!-- 记录实际执行的命令和结果；未执行的检查请说明原因。 -->
 
 ## 检查清单
 
@@ -33,12 +33,16 @@ npm ci && npm run lint && npm test
 
 <!-- Closes #123 -->
 
-## AI assistance
+## AI 辅助
 
-Which AI tool and model were used? Write `None` if no AI was used.
+<!-- 请填写使用的 AI 工具和模型；未使用 AI 时写「未使用」。 -->
 
-## Review evidence
+## 风险
 
-<!-- Risk tier and trusted gate run: link the current-head technical review and,
-for R2, the separately signed owner decision. Missing evidence stays pending.
-See .github/governance/README.md. Labels and AI summaries are not approval. -->
+<!-- 说明风险等级、受影响的文件，以及兼容性或运行方面的影响。 -->
+
+## 评审证据
+
+<!-- 按 .github/governance/README.md 填写风险等级和可信门槛运行链接，
+提供绑定当前提交的技术评审；R2 还需独立签名的所有者决定。
+缺失证据保持待处理，标签和 AI 摘要不构成批准。 -->
