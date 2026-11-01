@@ -162,15 +162,16 @@ function codeRabbit(snapshot, policy) {
     || !Number.isFinite(Date.parse(check.completed_at))) {
     return { ...result, limitations: ['review_not_completed'] };
   }
-  const runId = /Run ID:\s*`([a-f0-9-]+)`/.exec(check.output.summary)?.[1];
+  const nativeRunId = body => /Run ID(?:\*\*)?:\s*`([a-f0-9-]+)`/.exec(body || '')?.[1];
+  const runId = nativeRunId(check.output.summary);
   const reports = snapshot.reviews.filter(r => isBot(r) && r.commit_id === snapshot.pr.head.sha
     && ['APPROVED', 'COMMENTED', 'CHANGES_REQUESTED'].includes(r.state)
     && Date.parse(r.submitted_at) >= Date.parse(check.started_at)
     && Date.parse(r.submitted_at) <= Date.parse(check.completed_at)
-    && runId && r.body?.includes(runId));
+    && runId && nativeRunId(r.body));
   let report = reports.sort((a, b) => b.id - a.id)[0];
   const latest = latestReviews(snapshot.reviews.filter(isBot))[0];
-  let reportCommentId = null, reportRunId = runId;
+  let reportCommentId = null, reportRunId = nativeRunId(report?.body);
   // A zero-finding review has an empty APPROVED review and a native summary
   // comment. Its report run ID can differ from the check's execution run ID.
   // Bind both records through bot identity, current SHA, check time and full scope.
@@ -185,7 +186,7 @@ function codeRabbit(snapshot, policy) {
       .sort((a, b) => Date.parse(b.updated_at) - Date.parse(a.updated_at) || b.id - a.id);
     for (const comment of summaries) {
       const body = /<!-- recent_review_start -->([\s\S]*?)<!-- recent_review_end -->/.exec(comment.body || '')?.[1];
-      const summaryRunId = /Run ID(?:\*\*)?:\s*`([a-f0-9-]+)`/.exec(body || '')?.[1];
+      const summaryRunId = nativeRunId(body);
       if (!body || !summaryRunId || !/^No actionable comments were generated in the recent review\.$/m.test(body)) continue;
       report = { id: latest.id, body };
       reportCommentId = comment.id;

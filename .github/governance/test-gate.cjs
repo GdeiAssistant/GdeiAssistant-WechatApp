@@ -99,7 +99,7 @@ for (const [name, mutate] of [
   ['cancelled', f => { f.snapshot.checkRuns[0].conclusion = 'cancelled'; }],
   ['pending', f => { f.snapshot.checkRuns[0].status = 'in_progress'; }],
   ['review publication missing', f => { f.snapshot.reviews = []; }],
-  ['different run ID', f => { f.snapshot.reviews[0].body = f.snapshot.reviews[0].body.replace('11111111', '99999999'); }],
+  ['missing native report run ID', f => { f.snapshot.reviews[0].body = f.snapshot.reviews[0].body.replace('Run ID', 'Unknown'); }],
   ['approve command without completed review', f => { f.snapshot.reviews[0].state = 'APPROVED'; f.snapshot.reviews[0].body = 'Approved on request'; }],
   ['review before check started', f => { f.snapshot.reviews[0].submitted_at = at(-200); }],
   ['review after check completed', f => { f.snapshot.reviews[0].submitted_at = at(-10); }],
@@ -292,4 +292,13 @@ for (const [name, mutate] of [
 ]) test(`zero-finding fallback rejects ${name}`, () => {
   const f = fixture('pages/login/login.js'); const c = approveWithoutFindings(f); mutate(f, c);
   assert.equal(evaluate(f).allowed, false);
+});
+
+
+test('formal review report and check may have distinct native run IDs', () => {
+  const f = fixture('pages/login/login.js'); const report = approve(f);
+  report.body = report.body.replace('11111111', '99999999');
+  const r = evaluate(f);
+  assert.equal(r.allowed, true); assert.equal(r.ai.coverage, 'reported_complete');
+  assert.notEqual(r.ai.report_run_id, r.ai.run_id); assert.equal(r.ai.report_comment_id, null);
 });
