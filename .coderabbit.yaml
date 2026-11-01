@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://www.coderabbit.ai/integrations/schema.v2.json
+language: zh-CN
+reviews:
+  profile: assertive
+  review_progress: true
+  commit_status: true
+  fail_commit_status: true
+  auto_approvals:
+    enabled: true
+    allow_author_approval: false
+  auto_apply_labels: false
+  auto_review:
+    enabled: true
+    drafts: false
+    auto_pause_after_reviewed_commits: 0
+  path_instructions:
+    - path: '**/*'
+      instructions: >-
+        遵守 AGENTS.md 和 .github/engineering.md。独立审查正确性、安全和数据完整性，
+        用中文说明发现。按 .github/governance/README.md 保留真实审查范围和限制。
+        不代替 Pigbibi 批准或发布治理指令，不添加 owner-approved，不声称部署或权限授权。
+    - path: '.github/**'
+      instructions: >-
+        检查默认分支可信执行、完整 SHA 绑定、API 分页、审查完成与覆盖证据、
+        评论身份及撤销。跳过、限流、作者触发批准不能当作审查完成。保留必需 CI。

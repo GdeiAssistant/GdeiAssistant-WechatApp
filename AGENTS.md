@@ -83,7 +83,7 @@ npm run smoke
 - Commit 和 PR 标题遵循 Conventional Commits，类型使用英文 `feat`、`fix`、`docs`、`refactor`、`test`、`chore`、`perf`、`ci`，标题不超过 72 字符。Commit 说明可使用中文或英文；英文允许句首大写，commitlint 使用内置默认忽略规则，不按 `Merge ` 前缀跳过检查。
 - PR 标题、模板和说明按组织标准使用中文，写清问题、变更、实际验证和风险。AI 编写的 PR 说明使用的工具及可获得的模型信息。标签沿用现有标识符（如 `risk:high`），审批与风险说明使用中文。
 - 文档、测试和普通检查使用 `risk:low`；受保护路径使用 `risk:high` 和 `needs-owner-approval`。分类标签只描述风险，是否需要批准由基于路径的 `risk-gate` 判断。
-- AI 开发使用必需的自动检查、模板校验及可用的独立 AI 审查，不额外要求人工或 CODEOWNER approving review。高风险路径按现行 `risk-gate` 要求取得 `owner-approved`；只有所有者或经所有者明确授权的审查者可以添加该标签；现行 gate 只接受所有者账号的标签添加事件，其他审查者的标签不会通过检查。编码智能体绝不能给自己的 PR 添加该标签。
+- AI 开发使用必需 CI、模板校验和当前 SHA 的 CodeRabbit 完成证据，不额外要求人工或 CODEOWNER approving review。常规 R2 由 reviewer App 的 SHA 绑定完成证据满足，本仓以 CodeRabbit 为主，无需人工或 Grok 账号 approve 评论；Pigbibi 仅负责例外 override/revoke。编码智能体不得代发本人决定或添加 owner-approved。首次迁移仍按默认分支当前生效规则等待用户批准；迁移后 owner-approved 仅作展示，不能单独放行。
 - 保留必需检查与分支保护，通过正常检查后才能合并。PR 分支使用 `<type>/<topic>`，不直接推默认分支，不 force-push 已审查的分支。提交、推送、合并与生产动作须有授权，同范围已有授权继续有效。
 
 ## AI 维护与交付
@@ -94,3 +94,9 @@ npm run smoke
 - 交付前确认规则文件和目标文件被 Git 跟踪，核对实际提交、远端分支及 PR 合并状态；本地存在不等于已提交，PR 已创建不等于已合并。
 - 已授权同步时重新获取远端，分别核对本机默认分支和当前工作分支；保留 dirty 改动与独有提交，不用 reset / force push 追平。只能把实际核实的步骤报为完成。
 - 规则或 CI 修改也必须满足本仓现有约束；不得自行降低分支保护、扩大自动合并白名单或从外部 PR 调用有凭据的代理。
+
+## 评审规则
+
+风险分级、CodeRabbit 审查与账号决定按 [PR 风险与审查契约](.github/governance/README.md)执行。
+R1 和常规 R2 均要求 CodeRabbit 实际完成当前 SHA 的审查、完整覆盖且无阻断意见；不要求人工或 Grok 账号 approve 评论。
+跳过、限流、作者批准命令及标签不能代替完成证据。例外仅由 Pigbibi 本人用 override 明确记录，并可 revoke 撤销；智能体不得代发本人决定。
