@@ -4,7 +4,7 @@
 
 ## 范围
 
-本仓实现原生微信小程序客户端对共享契约 `GdeiAssistant/docs/SOCIAL_MESSAGING_DESIGN.zh-CN.md` 的接入：
+本仓实现原生微信小程序客户端对共享契约 `GdeiAssistant/docs/social-messaging-design.zh-CN.md` 的接入：
 
 - REST：`/api/social/*`（关注/粉丝/好友、拉黑、四档私信、会话、文字/图片消息、未读）
 - 图片私信：`POST .../messages/image` multipart（`image` + `clientMessageId`）；`GET .../messages/{id}/image` 仅同域 Bearer 下载；`imageMessagingEnabled` 服务端默认 false，mock 演示开启
