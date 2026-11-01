@@ -17,15 +17,8 @@
 
 # Dependency-only files do not automatically request a human review.
 # CODEOWNERS is path-based: these exceptions also apply to human PRs.
+# Only plain build/test CI workflows without secrets or write permissions are listed. Deploy, release,
+# governance and policy workflows keep their @Pigbibi owner and never auto-merge.
 /package.json
 /package-lock.json
-/.github/workflows/codeql.yml
-/.github/workflows/dependabot-auto-merge.yml
-/.github/workflows/dependabot-policy.yml
-/.github/workflows/engineering-governance.yml
-/.github/workflows/pr-governance-tests.yml
-/.github/workflows/pr-review-signal.yml
-/.github/workflows/repository-hygiene.yml
-/.github/workflows/risk-gate.yml
 /.github/workflows/wechat-ci.yml
-/.github/workflows/wechat-deploy.yml
