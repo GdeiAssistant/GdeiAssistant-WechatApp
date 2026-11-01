@@ -23,14 +23,17 @@ on:
 
 permissions: {}
 
-# Serial publication prevents an older event overwriting a newer decision.
-concurrency:
-  group: pr-governance
-  cancel-in-progress: false
-
 jobs:
   evaluate:
-    if: github.event_name != 'issue_comment' || github.event.issue.pull_request
+    # Reject unrelated comment/check events before they enter job concurrency.
+    if: >-
+      (github.event_name != 'issue_comment' ||
+       (github.event.issue.pull_request &&
+        (github.event.comment.user.id == 20649888 || github.event.comment.user.id == 136622811))) &&
+      (github.event_name != 'check_run' || github.event.check_run.app.id == 347564)
+    concurrency:
+      group: pr-governance
+      cancel-in-progress: false
     name: Evaluate PR governance
     runs-on: ubuntu-latest
     timeout-minutes: 10

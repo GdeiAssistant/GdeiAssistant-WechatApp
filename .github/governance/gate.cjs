@@ -188,13 +188,14 @@ function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 100
   const expected = binding(snapshot, policySha);
   const result = { ...risk, binding: expected, policy_version: policy.version, allowed: false,
     reason: 'current_commit_review_required', providers: policy.providers };
-  if (risk.tier === 'R0') return { ...result, allowed: true, reason: 'review_not_required' };
-  const ai = codeRabbit(snapshot, policy);
   const latest = latestReviews(snapshot.reviews);
   const blockers = latest.filter(r => r.state === 'CHANGES_REQUESTED'
     && (r.user.id === policy.coderabbit.user_id || ['write', 'maintain', 'admin'].includes(snapshot.permissions[r.user.login])))
     .map(r => `review:${r.id}`);
   blockers.push(...snapshot.threads.filter(t => !t.isResolved).map(t => `thread:${t.id}`));
+  if (risk.tier === 'R0') return { ...result, allowed: !blockers.length, blocking_findings: blockers,
+    reason: blockers.length ? 'review_findings_blocking' : 'review_not_required' };
+  const ai = codeRabbit(snapshot, policy);
   const scopes = [];
   if (ai.execution_status !== 'completed') scopes.push('ai-review-unavailable');
   else if (ai.coverage !== 'reported_complete') scopes.push('ai-review-partial');

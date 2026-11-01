@@ -195,3 +195,12 @@ test('PR template needs three distinct sections and an explicit AI heading', () 
   assert.equal(gate.completeTemplate('## Main work\nCompleted the task.\n## Changes\nUpdated the gate.\n## Tests\nAll tests passed.'), false);
   assert.equal(gate.completeTemplate('## AI assistance\nCodex used.\n## Changes\nUpdated the gate.\n## Tests\nAll tests passed.'), true);
 });
+
+test('R0 exemption cannot hide active review blockers', () => {
+  const f = fixture('README.md');
+  f.snapshot.reviews.push({ id: 1, user: { id: 2, login: 'reviewer', type: 'User' },
+    state: 'CHANGES_REQUESTED', commit_id: HEAD, submitted_at: at(-10) });
+  assert.equal(evaluate(f).allowed, false);
+  f.snapshot.reviews = []; f.snapshot.threads.push({ id: 'thread', isResolved: false });
+  assert.equal(evaluate(f).allowed, false);
+});
