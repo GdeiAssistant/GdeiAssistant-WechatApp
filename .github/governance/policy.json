@@ -1,0 +1,43 @@
+{
+  "version": "pr-governance/v1",
+  "repository": "GdeiAssistant/GdeiAssistant-WechatApp",
+  "r0_paths": [
+    "README.md",
+    "docs/prose/"
+  ],
+  "r2_paths": [
+    "app.js",
+    "config/",
+    "services/",
+    "constants/storage.js",
+    "utils/util.js",
+    "utils/mask.js",
+    "pages/login/",
+    "pages/profile/",
+    "pages/messages/",
+    "pages/privacy/",
+    "scripts/"
+  ],
+  "reviewers": {
+    "R0": {
+      "primary": "deterministic-prose",
+      "fallback": "independent-maintainer"
+    },
+    "R1": {
+      "primary": "independent-maintainer",
+      "fallback": "independent-admin"
+    },
+    "R2": {
+      "primary": "independent-maintainer",
+      "fallback": "independent-admin"
+    }
+  },
+  "providers": {
+    "codex": "observe",
+    "coderabbit": "second-opinion",
+    "quantaiservice": "shadow"
+  },
+  "owner_keys": [],
+  "owner_approval_max_hours": 24,
+  "dependabot_template_exemption": false
+}

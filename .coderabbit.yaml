@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://www.coderabbit.ai/integrations/schema.v2.json
+language: en-US
+reviews:
+  profile: assertive
+  request_changes_workflow: false
+  auto_approvals:
+    enabled: false
+  auto_apply_labels: false
+  auto_review:
+    enabled: true
+    drafts: false
+  path_instructions:
+    - path: '**/*'
+      instructions: >-
+        Follow AGENTS.md and .github/engineering.md. Provide an independent second
+        opinion on correctness, security and data integrity. Findings are input
+        to the evidence contract in .github/governance/README.md. Never apply
+        owner-approved or claim owner, deployment, IAM or trading authorization.
+    - path: '.github/**'
+      instructions: >-
+        Check trusted-base execution, commit-bound evidence, complete pagination,
+        review revocation and owner signature isolation. Model output, labels and
+        relay artifacts cannot authorize the PR. Preserve required checks.
