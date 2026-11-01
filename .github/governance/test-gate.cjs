@@ -105,54 +105,72 @@ for (const [name, mutate] of [
   ['review after check completed', f => { f.snapshot.reviews[0].submitted_at = at(-10); }],
   ['latest rerun skipped', f => { f.snapshot.checkRuns.push({ ...f.snapshot.checkRuns[0], id: 101, started_at: at(-10), conclusion: 'skipped' }); }],
 ]) test(`${name} does not count as a completed review`, () => {
-  const f = fixture(); approve(f); mutate(f);
-  const r = evaluate(f); assert.equal(r.allowed, false); assert.equal(r.ai.execution_status, 'unavailable');
+  for (const path of ['src/view.js', 'pages/login/login.js']) {
+    const f = fixture(path); approve(f); mutate(f);
+    const r = evaluate(f); assert.equal(r.allowed, false); assert.equal(r.ai.execution_status, 'unavailable');
+  }
 });
 for (const [name, mutate] of [
   ['unproven full range', f => { f.snapshot.pr.base.sha = 'e'.repeat(40); }],
   ['missing coverage', f => { f.snapshot.reviews[0].body = f.snapshot.reviews[0].body.replace('Files selected for processing', 'Unknown format'); }],
-  ['wrong coverage path', f => { f.snapshot.reviews[0].body = f.snapshot.reviews[0].body.replace('src/view.js', 'src/other.js'); }],
+  ['wrong coverage path', f => { f.snapshot.reviews[0].body = f.snapshot.reviews[0].body.replace(f.snapshot.files[0].filename, 'src/other.js'); }],
   ['explicit partial', f => { f.snapshot.reviews[0].body += '\nFiles not reviewed: oversized'; }],
   ['no analysis stage', f => { f.snapshot.checkRuns[0].output.summary = f.snapshot.checkRuns[0].output.summary.replace('Generate review feedback', 'Other stage'); }],
   ['candidate config relaxed', f => { f.snapshot.coderabbitConfig += '\n# changed'; }],
   ['command config override', f => { f.snapshot.issueComments.push({ body: '@coderabbitai full review --with-config path_filters=[]' }); }],
 ]) test(`${name} needs an explicit partial override`, () => {
-  const f = fixture(); approve(f); mutate(f);
-  assert.equal(evaluate(f).ai.coverage, 'partial'); assert.equal(evaluate(f).allowed, false);
-  ownerApproval(f, 'override'); assert.equal(evaluate(f).reason, 'approved_with_override');
+  for (const path of ['src/view.js', 'pages/login/login.js']) {
+    const f = fixture(path); approve(f); mutate(f);
+    assert.equal(evaluate(f).ai.coverage, 'partial'); assert.equal(evaluate(f).allowed, false);
+    ownerApproval(f, 'override'); assert.equal(evaluate(f).reason, 'approved_with_override');
+  }
 });
-test('R2 requires account approve bound to the completed review', () => {
+test('R2 uses complete App evidence without any account approval comment', () => {
   const f = fixture('pages/login/login.js'); approve(f);
-  assert.equal(evaluate(f).reason, 'owner_approval_required'); ownerApproval(f);
+  const r = evaluate(f);
+  assert.equal(r.allowed, true); assert.equal(r.reason, 'current_commit_reviewed');
+  assert.equal(r.owner_comment_id, null); assert.equal(r.decision_actor_id, null);
+  assert.equal(f.snapshot.issueComments.length, 0);
+  f.policy.owner_actors = [];
   assert.equal(evaluate(f).allowed, true);
 });
-test('routine approver cannot issue an owner override', () => {
-  const f = fixture('pages/login/login.js');
-  const c = ownerApproval(f, 'override');
-  c.user = { id: 4, login: 'owner', type: 'User' };
+test('human or Grok approve comments cannot satisfy R2 or release revocation', () => {
+  for (const login of ['owner', 'grok', 'author']) {
+    const f = fixture('pages/login/login.js');
+    const c = ownerApproval(f, 'approve'); c.user.login = login;
+    assert.equal(evaluate(f).allowed, false);
+  }
+  const f = fixture('pages/login/login.js'); approve(f); ownerApproval(f, 'revoke');
+  ownerApproval(f, 'approve');
   assert.equal(evaluate(f).allowed, false);
-  assert.equal(evaluate(f).reason, 'owner_decision_invalid');
+  assert.equal(gate.command('/governance approve'), null);
 });
-test('exception owner cannot substitute for routine R2 approval', () => {
-  const f = fixture('pages/login/login.js'); approve(f);
-  const c = ownerApproval(f);
-  c.user = { id: 5, login: 'exception-owner', type: 'User' };
-  assert.equal(evaluate(f).allowed, false);
-});
-for (const decisions of [undefined, [], ['override', 'revoke']]) {
-  test(`missing or unauthorized routine decision rejects approve: ${JSON.stringify(decisions)}`, () => {
-    const f = fixture('pages/login/login.js'); approve(f); ownerApproval(f);
+for (const decisions of [undefined, [], ['approve', 'revoke']]) {
+  test(`missing or unauthorized exception decision rejects override: ${JSON.stringify(decisions)}`, () => {
+    const f = fixture('pages/login/login.js'); ownerApproval(f);
     f.policy.owner_actors[0].decisions = decisions;
     assert.equal(evaluate(f).allowed, false);
   });
 }
-test('exception owner may revoke a routine decision and is recorded by identity', () => {
-  const f = fixture('pages/login/login.js'); approve(f); ownerApproval(f);
-  const c = ownerApproval(f, 'revoke');
-  c.user = { id: 5, login: 'exception-owner', type: 'User' };
+test('exception owner may revoke App-based R2 and is recorded by identity', () => {
+  const f = fixture('pages/login/login.js'); approve(f);
+  assert.equal(evaluate(f).allowed, true);
+  ownerApproval(f, 'revoke');
   const r = evaluate(f);
   assert.equal(r.allowed, false); assert.equal(r.reason, 'owner_revoked');
-  assert.equal(r.decision_actor_id, 5); assert.equal(r.decision_actor_login, 'exception-owner');
+  assert.equal(r.decision_actor_id, 4); assert.equal(r.decision_actor_login, 'owner');
+});
+test('only a fresh bound override can release an observed owner hold', () => {
+  const f = fixture('pages/login/login.js'); approve(f); ownerApproval(f, 'revoke');
+  f.snapshot.ownerWatermark = evaluate(f).owner_watermark;
+  ownerApproval(f, 'override');
+  assert.equal(evaluate(f).allowed, true);
+  assert.equal(evaluate(f).reason, 'approved_with_override');
+});
+test('an override cannot name unrelated scopes after review conditions are met', () => {
+  const f = fixture('pages/login/login.js'); approve(f);
+  const c = ownerApproval(f, 'override'); c.body += '\nscope: ai-review-unavailable';
+  assert.equal(evaluate(f).allowed, false);
 });
 for (const [name, mutate] of [
   ['wrong login', (f, c) => { c.user.login = 'impostor'; }],
@@ -171,14 +189,16 @@ for (const [name, mutate] of [
   ['expired approval', (f, c) => { c.created_at = c.updated_at = at(-86401); }],
   ['future approval', (f, c) => { c.created_at = c.updated_at = at(60); }],
   ['copied to another PR', f => { f.snapshot.pr.number++; }],
-]) test(`${name} invalidates approval`, () => {
-  const f = fixture('pages/login/login.js'); approve(f); const c = ownerApproval(f); mutate(f, c);
+]) test(`${name} invalidates an exception override`, () => {
+  const f = fixture('pages/login/login.js'); approve(f);
+  f.snapshot.checkRuns[0].conclusion = 'neutral';
+  const c = ownerApproval(f); assert.equal(evaluate(f).allowed, true); mutate(f, c);
   assert.equal(evaluate(f).allowed, false);
 });
 test('ordinary approval cannot override skip or rate limit', () => {
   for (const conclusion of ['skipped', 'neutral']) {
     const f = fixture('pages/login/login.js'); approve(f); f.snapshot.checkRuns[0].conclusion = conclusion;
-    ownerApproval(f); assert.equal(evaluate(f).allowed, false);
+    ownerApproval(f, 'approve'); assert.equal(evaluate(f).allowed, false);
   }
 });
 test('unavailability override stays distinct from completed AI review', () => {
@@ -188,6 +208,7 @@ test('unavailability override stays distinct from completed AI review', () => {
 test('findings override names every blocker and every missing-review scope', () => {
   const f = fixture('pages/login/login.js'); approve(f); f.snapshot.reviews[0].state = 'CHANGES_REQUESTED';
   f.snapshot.threads.push({ id: 'thread1', isResolved: false });
+  assert.equal(evaluate(f).allowed, false);
   const c = ownerApproval(f, 'override'); assert.equal(evaluate(f).allowed, true);
   c.body = c.body.replace(',thread:thread1', ''); assert.equal(evaluate(f).allowed, false);
 });
@@ -207,7 +228,7 @@ test('malformed latest command blocks old approval, ordinary conversation does n
   f.snapshot.issueComments[1].body = '/governance broken'; assert.equal(evaluate(f).allowed, false);
 });
 test('owner may be PR author but author-provided AI records cannot pass', () => {
-  const f = fixture('pages/login/login.js'); f.snapshot.pr.user.id = 4; approve(f); ownerApproval(f);
+  const f = fixture('pages/login/login.js'); f.snapshot.pr.user.id = 4; approve(f);
   assert.equal(evaluate(f).allowed, true);
   f.snapshot.reviews = []; assert.equal(evaluate(f).allowed, false);
 });

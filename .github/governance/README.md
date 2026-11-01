@@ -10,7 +10,7 @@
 | --- | --- | --- |
 | R0 | 明确白名单内的纯文字修改，完整文本 diff，无配置或可执行内容 | 确定性分类为 `review_not_required`，必需 CI 通过 |
 | R1 | 普通应用逻辑、一般测试和非敏感配置 | CodeRabbit 已完成当前 SHA 审查，覆盖证据完整，无未处理阻断意见；必需 CI 通过 |
-| R2 | 登录、权限、校园凭证、隐私、部署、依赖执行钩子、workflow 和治理规则 | R1 条件，加 allowlist 中 Grok 执行账号对当前提交及证据的明确批准 |
+| R2 | 登录、权限、校园凭证、隐私、部署、依赖执行钩子、workflow 和治理规则 | 由 reviewer App 的当前 SHA 完成证据满足常规批准；本仓以 CodeRabbit 为主，完整覆盖、无阻断意见且必需 CI 通过 |
 
 旧路径和新路径都参与分类，取最高等级。受保护路径优先于文档、测试、示例
 和 fixture。`AGENTS.md`、`.coderabbit.yaml`、CODEOWNERS、全部 `.github/`
@@ -48,39 +48,24 @@
 `@coderabbitai approve/resolve` 批准自己的 PR。其他人发出的命令同样不能绕过
 本 gate 的完成证据校验。该作者限制在首次迁移合并后才进入可信默认分支。
 
-## 常规批准与本人例外
+## 常规审查与本人例外
 
-常规 R2 由已授权的 Grok 执行账号发布 `approve`；Pigbibi 本人只在接受明确例外时
-发布 `override`，不承担例行 R2 签字。两者均可发布 `revoke` 撤销放行。
-编码智能体不得冒充 Grok 的独立决定，也不得代 Pigbibi 发布本人 override 或撤销。
+R1 和常规 R2 均由 reviewer App 的 SHA 绑定原始审查证据满足审查要求。
+本仓当前支持的 reviewer App 是 CodeRabbit，使用上述相同的身份、完成状态、
+全量范围和阻断意见校验；风险分类继续区分 R1/R2。无需人工或 Grok 账号的
+`approve` 评论，也不接受这些评论代替 App 审查。`/governance approve` 已移除。
 
-`policy.json` 的 `owner_actors` 是决定发布者 allowlist。每项必须明确列出
-`decisions`：Grok 账号为 `["approve", "revoke"]`，Pigbibi 为
-`["override", "revoke"]`。缺失或未获授权的指令不能放行。
-核验数字用户 ID、登录名、`enabled: true`、`User` 类型及当前
-write/maintain/admin 权限；身份不从评论正文读取，App ID 不能代替用户 ID。
-账号可以同时是 PR 作者，但常规批准始终依赖独立 CodeRabbit 审查。
+Grok 使用 Pigbibi 的 GitHub 账号，没有独立 Grok login；GitHub 不能区分
+同一账号下由本人或智能体发起的操作，因此不将该账号评论视为独立审查证据。
+Pigbibi 仅负责例外 `override` 和撤销 `revoke`。编码智能体不得代发这两类决定。
 
-登记 Grok 账号前须核实实际 login、数字 ID 和现有仓库权限，并同步
-`risk-gate.yml` 的评论事件身份筛选；未登记时常规 R2 保持待批准，不能默认
-借用 Pigbibi、填入虚构账号或放宽身份检查。GitHub 无法区分本人和持有同一账号
-凭据的智能体，因此不能将共享凭据操作宣称为已验证的本人操作。
+`policy.json` 的 `owner_actors` 只配置例外决定发布者，`decisions` 为
+`["override", "revoke"]`。核验数字用户 ID、登录名、`enabled: true`、`User`
+类型及当前 write/maintain/admin 权限；身份不从评论正文读取。
 
-批准者先读取可信 gate 的 Actions summary，再发布一个新的顶层评论。
+Pigbibi 接受例外时先读取可信 gate 的 Actions summary，再发布新的顶层评论。
 完整 SHA 和摘要逐项复制，`reason` 写本次接受的范围及风险。每个字段独占一行，
 不得重复字段；不是 JSON，也不需要占位评论或签名密钥。
-
-```text
-/governance approve
-head: <40 位当前 head SHA>
-base: <40 位当前 base SHA>
-policy: <64 位 policy_sha256>
-evidence: <64 位 evidence_sha256>
-reason: <批准这次改动的具体理由>
-```
-
-正常 `approve` 由 allowlisted Grok 账号发布，仅满足 R2 的账号批准，不豁免 AI 完成条件。
-Pigbibi 本人接受例外时使用独立指令：
 
 ```text
 /governance override
@@ -102,7 +87,9 @@ reason: <接受本次 AI 不可用的具体原因>
 撤销时发布相同绑定字段的 `/governance revoke` 新评论。最新决定按 GitHub
 评论 ID 排序，编辑旧批准不能覆盖新撤销。批准有效期为创建后 24 小时，
 编辑过的批准、错误格式、旧 SHA、旧 base、旧策略或旧证据都不能放行。
-重新批准应发布新评论；普通讨论不会撤销决定，新的不合法治理指令会阻止旧批准。
+重新接受例外应发布新 override 评论；普通讨论不会撤销决定，新的不合法治理指令会阻止放行。
+已观察到的 revoke 不会因 App 审查完成而自动解除；须由本人发布绑定当前证据的新 override。
+若审查条件已全部满足，解除撤销时省略 scope 和 findings，结果仍记为 approved_with_override。
 
 删除会触发重新评估。gate 在现有 `risk-gate` 状态中保留已观察到的最新决定编号，
 删除已观察到的撤销不会恢复旧批准。若评论创建并删除都发生在 gate 观察前，
@@ -116,7 +103,8 @@ relay artifact。候选策略不能批准自身。首次迁移按当前生效规
 本试点不自动合并、不加批准标签、不修改分支保护。
 
 生成的记录包含仓库、PR、完整 head/base、策略版本和摘要、diff 摘要、风险等级、
-CodeRabbit check/review/run ID、执行与覆盖状态、未处理意见及批准评论 ID。
+CodeRabbit check/review/run ID、执行与覆盖状态、未处理意见及例外评论 ID。
+常规 R2 的 owner_comment_id 和 decision_actor_id 为 null，不伪造账号决定。
 证据摘要绑定原始 review/check、讨论、线程和配置；新推送、base/策略变化、
 审查结论变化、评论编辑、撤销或新意见都会重新评估。
 
@@ -143,7 +131,7 @@ GitHub 状态是异步的，无自动过期；事件延迟或 Actions 故障可�
 node --test .github/governance/test-*.cjs
 ```
 
-离线测试覆盖旧 SHA、伪造身份、跳过/限流、完成记录缺失、部分覆盖、approve、
+离线测试覆盖旧 SHA、伪造身份、跳过/限流、完成记录缺失、部分覆盖、无账号评论的 R2、拒绝 approve、
 override、revoke、评论编辑/删除及发布前并发变化。合成账号评论仅存在于测试，
 不作为真实用户批准。首次合并前应分别报告本地测试、当前 SHA 的实际 CodeRabbit
 结果和当前生效 gate 的状态；候选测试通过不表示迁移已启用。

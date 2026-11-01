@@ -7,7 +7,7 @@ const { snapshotVersion } = require('./runner.cjs');
 
 for (const enabled of [false, undefined, 'true']) {
   test(`owner must be explicitly enabled (${String(enabled)})`, () => {
-    const f = fixture('pages/login/login.js'); approve(f); ownerApproval(f);
+    const f = fixture('pages/login/login.js'); ownerApproval(f);
     f.policy.owner_actors[0].enabled = enabled;
     assert.equal(evaluate(f).allowed, false);
   });
@@ -17,7 +17,7 @@ for (const provider of ['dot', 'codex', 'claude', 'duet', 'grok', 'coderabbit'])
     const f = fixture('pages/login/login.js');
     f.snapshot.issueComments.push({ id: 10, user: { id: 4, login: 'owner', type: 'User' },
       body: JSON.stringify({ schema_version: 'ai-review/v1', ai_review: { provider }, verdict: 'pass' }) });
-    ownerApproval(f); assert.equal(evaluate(f).allowed, false);
+    assert.equal(evaluate(f).allowed, false);
   });
 }
 test('minimal legacy override cannot bypass explicit scope and evidence binding', () => {

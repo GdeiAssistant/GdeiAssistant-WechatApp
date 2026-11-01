@@ -40,6 +40,6 @@ npm ci && npm run lint && npm test
 ## 风险
 
 <!-- 填写 R0/R1/R2、受影响文件及兼容性或运行影响。
-附可信 gate 的当前 SHA 审查记录链接；R2 附 allowlisted Grok 账号的 approve 评论链接；本人例外附 Pigbibi 的 override 链接。
+附可信 gate 和 reviewer App 的当前 SHA 审查记录链接；常规 R2 无需人工或 Grok approve 评论；本人例外附 Pigbibi 的 override 链接。
 缺失证据写明待完成，不把 AI 自述或 owner-approved 标签作为批准。
 契约见 .github/governance/README.md。 -->

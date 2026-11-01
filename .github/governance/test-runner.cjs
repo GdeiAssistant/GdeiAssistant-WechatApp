@@ -146,8 +146,8 @@ test('native API errors never publish success', async () => {
   await run(m); assert.ok(m.statuses.some(s => s.context === 'risk-gate' && s.state === 'error'));
   assert.ok(m.statuses.every(s => s.state !== 'success')); assert.equal(m.failures.length, 1);
 });
-test('valid R1 publishes preserved contexts on actual head after a full readback', async () => {
-  const f = fixture(); approve(f); f.snapshot.pr.body = '## AI assistance\nCodex used.\n## What changed\nReview evidence.\n## How verified\nOffline tests passed.';
+for (const path of ['src/view.js', 'pages/login/login.js']) test(`App-reviewed ${path} publishes success without account comments after readback`, async () => {
+  const f = fixture(path); approve(f); f.snapshot.pr.body = '## AI assistance\nCodex used.\n## What changed\nReview evidence.\n## How verified\nOffline tests passed.';
   const m = mock(f); await run(m);
   assert.deepEqual(m.statuses.map(s => [s.context, s.state]), [['risk-gate', 'pending'], ['pr-template', 'pending'], ['pr-template', 'success'], ['risk-gate', 'success']]);
   assert.ok(m.statuses.every(s => s.sha === HEAD)); assert.equal(m.calls.filter(c => c.method === 'files').length, 2);

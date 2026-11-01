@@ -114,7 +114,7 @@ function evidenceComments(snapshot, actors) {
 
 function command(body) {
   const lines = (body || '').trim().split(/\r?\n/);
-  const match = /^\/governance (approve|override|revoke)$/.exec(lines.shift());
+  const match = /^\/governance (override|revoke)$/.exec(lines.shift());
   if (!match) return null;
   const result = { decision: match[1] };
   for (const line of lines) {
@@ -225,16 +225,17 @@ function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 100
   if (decision.decision === 'revoke' || (decision.watermark && !decision.valid)) {
     return { ...result, reason: decision.decision === 'revoke' ? 'owner_revoked' : 'owner_decision_invalid' };
   }
-  if (scopes.length) {
-    const requested = (decision.scope || '').split(',').map(s => s.trim()).sort();
+  if (scopes.length || decision.decision === 'override') {
+    const requested = (decision.scope || '').split(',').map(s => s.trim()).filter(Boolean).sort();
     const findings = (decision.findings || '').split(',').map(s => s.trim()).filter(Boolean).sort();
     const overridden = decision.valid && decision.decision === 'override'
       && canonical(requested) === canonical([...scopes].sort())
       && canonical(findings) === canonical([...blockers].sort());
-    return { ...result, allowed: overridden, reason: overridden ? 'approved_with_override' : scopes[0] };
+    return { ...result, allowed: overridden, reason: overridden ? 'approved_with_override' : (scopes[0] || 'owner_decision_invalid') };
   }
-  const approved = risk.tier !== 'R2' || (decision.valid && decision.decision === 'approve' && !decision.scope && !decision.findings);
-  return { ...result, allowed: approved, reason: approved ? 'current_commit_reviewed' : 'owner_approval_required' };
+  // R1 and routine R2 use the trusted reviewer's SHA-bound completion evidence.
+  // Account comments are reserved for exceptions and revocation, never routine approval.
+  return { ...result, allowed: true, reason: 'current_commit_reviewed' };
 }
 
 function completeTemplate(body) {
