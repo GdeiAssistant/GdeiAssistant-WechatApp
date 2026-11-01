@@ -10,7 +10,7 @@ const at = offset => new Date((NOW + offset) * 1000).toISOString();
 
 function fixture(path = 'src/view.js') {
   const policy = structuredClone(actualPolicy);
-  policy.owner_actors = [{ user_id: 4, login: 'owner' }];
+  policy.owner_actors = [{ user_id: 4, login: 'owner', enabled: true }];
   const config = fs.readFileSync('.coderabbit.yaml', 'utf8');
   const snapshot = {
     repository: policy.repository, policyCommit: BASE, complete: true,

@@ -188,3 +188,10 @@ test('labels and arbitrary self-attestations cannot replace native evidence', ()
   f.snapshot.issueComments.push({ body: '{"schema_version":"ai-review/v1","verdict":"pass"}', user: { id: 1 } });
   assert.equal(evaluate(f).allowed, false);
 });
+
+test('PR template needs three distinct sections and an explicit AI heading', () => {
+  assert.equal(gate.completeTemplate('## Main changes and tests\nEverything is complete.'), false);
+  assert.equal(gate.completeTemplate('## AI changes and tests\nEverything is complete.'), false);
+  assert.equal(gate.completeTemplate('## Main work\nCompleted the task.\n## Changes\nUpdated the gate.\n## Tests\nAll tests passed.'), false);
+  assert.equal(gate.completeTemplate('## AI assistance\nCodex used.\n## Changes\nUpdated the gate.\n## Tests\nAll tests passed.'), true);
+});

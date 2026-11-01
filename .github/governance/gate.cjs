@@ -68,6 +68,17 @@ function binding(snapshot, policySha) {
   };
 }
 
+function stableComment(comment) {
+  // Reactions and profile decoration are not approval or review evidence.
+  const { id, body, created_at, updated_at, path, line, original_line, side,
+    start_line, start_side, commit_id, original_commit_id, in_reply_to_id,
+    pull_request_review_id } = comment;
+  return { id, body, created_at, updated_at, path, line, original_line, side,
+    start_line, start_side, commit_id, original_commit_id, in_reply_to_id,
+    pull_request_review_id,
+    user: { id: comment.user?.id, login: comment.user?.login, type: comment.user?.type } };
+}
+
 function latestReviews(reviews) {
   const result = new Map();
   for (const r of reviews) {
@@ -82,7 +93,7 @@ function latestReviews(reviews) {
 }
 
 function allowlisted(comment, actors) {
-  return comment.user?.type === 'User' && actors.some(actor => actor.user_id === comment.user.id
+  return comment.user?.type === 'User' && actors.some(actor => actor.enabled === true && actor.user_id === comment.user.id
     && actor.login.toLowerCase() === comment.user.login?.toLowerCase());
 }
 
@@ -189,9 +200,9 @@ function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 100
   else if (ai.coverage !== 'reported_complete') scopes.push('ai-review-partial');
   if (blockers.length) scopes.push('review-findings');
   const providerComments = snapshot.issueComments.filter(c => c.user?.id === policy.coderabbit.user_id);
-  const evidenceSha = digest({ binding: expected, ai, blockers, reviews: snapshot.reviews,
+  const evidenceSha = digest({ binding: expected, ai, blockers, reviews: snapshot.reviews.map(r => ({ ...stableComment(r), state: r.state, submitted_at: r.submitted_at })),
     checks: snapshot.checkRuns.filter(c => c.app?.id === policy.coderabbit.app_id),
-    reviewComments: snapshot.reviewComments, threads: snapshot.threads, providerComments,
+    reviewComments: snapshot.reviewComments.map(stableComment), threads: snapshot.threads, providerComments: providerComments.map(stableComment),
     config: snapshot.coderabbitConfig, trustedConfig: snapshot.trustedCoderabbitConfig });
   const decision = ownerDecision(snapshot, policy, expected, evidenceSha, now);
   Object.assign(result, { ai, blocking_findings: blockers, required_override_scopes: scopes,
@@ -215,11 +226,17 @@ function completeTemplate(body) {
   // Whitespace prevents joining delimiters; an unterminated comment hides the rest.
   const text = (body || '').replace(/<!--[\s\S]*?(?:-->|$)/g, ' ');
   const sections = [...text.matchAll(/^#{1,6}\s+(.+)\r?\n([\s\S]*?)(?=^#{1,6}\s|$(?![\s\S]))/gm)];
-  const present = pattern => sections.some(([, heading, content]) => pattern.test(heading)
-    && content.replace(/```[\s\S]*?```/g, '').replace(/[-*]\s*\[[ x]\]/g, '').trim().length > 3
-    && !/^\s*(?:TODO|TBD|N\/A|Describe the change.*|Which AI tool.*|List the checks.*)\s*$/i.test(content));
-  return present(/AI|模型|人工智能/i) && present(/what changed|summary|problem|changes|变更|改动|做了什么/i)
+  const used = new Set();
+  const present = pattern => {
+    const index = sections.findIndex(([, heading, content], i) => !used.has(i) && pattern.test(heading)
+      && content.replace(/```[\s\S]*?```/g, '').replace(/[-*]\s*\[[ x]\]/g, '').trim().length > 3
+      && !/^\s*(?:TODO|TBD|N\/A|Describe the change.*|Which AI tool.*|List the checks.*)\s*$/i.test(content));
+    if (index < 0) return false;
+    used.add(index);
+    return true;
+  };
+  return present(/\bAI\b|模型|人工智能/i) && present(/what changed|summary|problem|changes|变更|改动|做了什么/i)
     && present(/how verified|verif|validat|test(?:ing| plan)?|验证|测试/i);
 }
 
-module.exports = { canonical, digest, classify, pathTier, binding, evaluate, completeTemplate, evidenceComments, command };
+module.exports = { stableComment, canonical, digest, classify, pathTier, binding, evaluate, completeTemplate, evidenceComments, command };

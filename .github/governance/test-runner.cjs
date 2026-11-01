@@ -225,3 +225,22 @@ test('unrelated CI changes do not invalidate a stable review during readback', a
   };
   await run(m); assert.equal(m.statuses.at(-1).state, 'success');
 });
+
+test('review comment reactions do not affect snapshot but review content still does', () => {
+  const f = fixture(); f.snapshot.reviewComments.push({ id: 8, user: { id: 2, login: 'reviewer', type: 'User' }, body: 'Finding' });
+  const before = snapshotVersion(f.snapshot, f.policy);
+  f.snapshot.reviewComments[0].reactions = { '+1': 1 };
+  assert.equal(snapshotVersion(f.snapshot, f.policy), before);
+  f.snapshot.reviewComments[0].body = 'Changed finding';
+  assert.notEqual(snapshotVersion(f.snapshot, f.policy), before);
+});
+test('failed error status publication does not abort later PRs in a sweep', async () => {
+  const m = mock(); m.context.eventName = 'schedule'; const paginate = m.github.paginate;
+  m.github.paginate = async (method, params) => method === 'pulls' ? [{ number: 42 }, { number: 43 }] : paginate(method, params);
+  const evaluated = new Set(); const get = m.github.rest.pulls.get;
+  m.github.rest.pulls.get = async params => { evaluated.add(params.pull_number); return get(); };
+  m.github.rest.repos.createCommitStatus = async s => { m.statuses.push(s); throw new Error('status unavailable'); };
+  await run(m);
+  assert.deepEqual([...evaluated], [42, 43]); assert.equal(m.failures.length, 2);
+  assert.equal(m.statuses.filter(s => s.state === 'error').length, 4);
+});

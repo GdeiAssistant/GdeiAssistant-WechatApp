@@ -37,7 +37,8 @@
   "owner_actors": [
     {
       "user_id": 20649888,
-      "login": "Pigbibi"
+      "login": "Pigbibi",
+      "enabled": true
     }
   ],
   "coderabbit": {

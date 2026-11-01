@@ -50,7 +50,7 @@
 
 ## Pigbibi 评论
 
-只接受可信策略中的 Pigbibi 数字用户 ID、登录名、`User` 类型及当前
+只接受可信策略中 `enabled: true` 的 Pigbibi 数字用户 ID、登录名、`User` 类型及当前
 write/maintain/admin 权限；身份不从评论正文读取。账号可以同时是 PR 作者。
 GitHub 无法区分本人和持有同一账号凭据的智能体，因此智能体不得代发批准、
 例外或撤销，不得把用户授权实现本 PR 当成批准首次迁移。
@@ -111,7 +111,8 @@ CodeRabbit check/review/run ID、执行与覆盖状态、未处理意见及批�
 所有 REST 列表和 GraphQL 线程分页完整读取，达到 API 文件或 commit 上限时拒绝。
 发布状态前完整重读一次并确认默认分支未变；并发变化或 API 错误发布 error。
 PR、评论、CodeRabbit check 和 review relay 事件触发评估；默认分支 push 和
-15 分钟定时检查补充处理漏发事件、过期和撤销。超过 100 个 PR 的全量检查停止，
+15 分钟定时检查补充处理漏发事件、过期和撤销。串行组只保留一个等待任务，
+新事件可能替换较旧的等待任务；定时检查补充处理。超过 100 个 PR 的全量检查停止，
 可用默认分支的 `workflow_dispatch` 指定 PR。
 
 GitHub 状态是异步的，无自动过期；事件延迟或 Actions 故障可能暂时保留旧状态。
