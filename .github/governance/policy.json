@@ -38,7 +38,8 @@
     {
       "user_id": 20649888,
       "login": "Pigbibi",
-      "enabled": true
+      "enabled": true,
+      "decisions": ["override", "revoke"]
     }
   ],
   "coderabbit": {

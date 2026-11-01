@@ -135,13 +135,15 @@ function ownerDecision(snapshot, policy, expected, evidenceSha, now) {
   const watermark = Math.max(snapshot.ownerWatermark || 0, c?.id || 0);
   if (!c || c.id < watermark) return { valid: false, watermark };
   const v = command(c.body);
+  const actor = policy.owner_actors.find(actor => allowlisted(c, [actor]));
   const created = Date.parse(c.created_at) / 1000;
-  const valid = !!v && ['write', 'maintain', 'admin'].includes(snapshot.permissions[c.user.login])
+  const valid = !!v && Array.isArray(actor?.decisions) && actor.decisions.includes(v.decision)
+    && ['write', 'maintain', 'admin'].includes(snapshot.permissions[c.user.login])
     && c.created_at === c.updated_at && created <= now && now < created + policy.owner_approval_max_hours * 3600
     && v.head === expected.head_sha && v.base === expected.base_sha
     && v.policy === expected.policy_sha256 && v.evidence === evidenceSha
     && typeof v.reason === 'string' && v.reason.trim().length >= 8;
-  return { valid, watermark, comment_id: c.id, ...v };
+  return { valid, watermark, comment_id: c.id, actor_id: c.user.id, actor_login: c.user.login, ...v };
 }
 
 function codeRabbit(snapshot, policy) {
@@ -218,7 +220,8 @@ function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 100
     config: snapshot.coderabbitConfig, trustedConfig: snapshot.trustedCoderabbitConfig });
   const decision = ownerDecision(snapshot, policy, expected, evidenceSha, now);
   Object.assign(result, { ai, blocking_findings: blockers, required_override_scopes: scopes,
-    evidence_sha256: evidenceSha, owner_comment_id: decision.comment_id || null, owner_watermark: decision.watermark });
+    evidence_sha256: evidenceSha, owner_comment_id: decision.comment_id || null, owner_watermark: decision.watermark,
+    decision_actor_id: decision.actor_id || null, decision_actor_login: decision.actor_login || null });
   if (decision.decision === 'revoke' || (decision.watermark && !decision.valid)) {
     return { ...result, reason: decision.decision === 'revoke' ? 'owner_revoked' : 'owner_decision_invalid' };
   }

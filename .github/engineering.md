@@ -49,7 +49,7 @@
 ## PR 评审证据
 
 按[风险与审查契约](governance/README.md)处理 R0/R1/R2。本仓是单仓库试点。
-R1 要求 CodeRabbit 实际完成当前 SHA 的审查，R2 还需 Pigbibi 对同一 SHA
+R1 要求 CodeRabbit 实际完成当前 SHA 的审查，R2 还需 allowlist 中已授权的 Grok 账号对同一 SHA
 及证据发布 approve 评论。跳过、限流和单独的 APPROVED 都不能替代完成证据。
-例外必须用 override 明确说明范围，保留实际审查限制；撤销用 revoke。
-智能体不得代发批准或例外。首次迁移仍按当前生效规则等待用户批准，不自动合并。
+例外仅由 Pigbibi 本人用 override 明确说明范围，保留实际审查限制；两者可用 revoke 撤销。
+编码智能体不得冒充 Grok 的决定或代发本人例外。首次迁移仍按当前生效规则等待用户批准，不自动合并。

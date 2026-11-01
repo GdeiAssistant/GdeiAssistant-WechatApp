@@ -10,7 +10,10 @@ const at = offset => new Date((NOW + offset) * 1000).toISOString();
 
 function fixture(path = 'src/view.js') {
   const policy = structuredClone(actualPolicy);
-  policy.owner_actors = [{ user_id: 4, login: 'owner', enabled: true }];
+  policy.owner_actors = [
+    { user_id: 4, login: 'owner', enabled: true, decisions: ['approve', 'revoke'] },
+    { user_id: 5, login: 'exception-owner', enabled: true, decisions: ['override', 'revoke'] },
+  ];
   const config = fs.readFileSync('.coderabbit.yaml', 'utf8');
   const snapshot = {
     repository: policy.repository, policyCommit: BASE, complete: true,
@@ -20,7 +23,7 @@ function fixture(path = 'src/view.js') {
     commits: [{ author: { id: 1 }, committer: { id: 1 } }],
     reviews: [], reviewComments: [], issueComments: [], threads: [], checkRuns: [], ownerWatermark: 0,
     coderabbitConfig: config, trustedCoderabbitConfig: config,
-    permissions: { reviewer: 'write', owner: 'admin', author: 'write' },
+    permissions: { reviewer: 'write', owner: 'admin', 'exception-owner': 'admin', author: 'write' },
   };
   return { snapshot, policy };
 }
@@ -48,7 +51,9 @@ function ownerApproval(f, decision = 'approve') {
     fields.push(`scope: ${result.required_override_scopes.join(',')}`);
     if (result.blocking_findings.length) fields.push(`findings: ${result.blocking_findings.join(',')}`);
   }
-  const comment = { id: 20 + f.snapshot.issueComments.length, user: { id: 4, login: 'owner', type: 'User' },
+  const user = decision === 'override'
+    ? { id: 5, login: 'exception-owner', type: 'User' } : { id: 4, login: 'owner', type: 'User' };
+  const comment = { id: 20 + f.snapshot.issueComments.length, user,
     body: fields.join('\n'), created_at: at(-30), updated_at: at(-30) };
   f.snapshot.issueComments.push(comment);
   return comment;

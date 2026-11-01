@@ -10,7 +10,7 @@
 | --- | --- | --- |
 | R0 | 明确白名单内的纯文字修改，完整文本 diff，无配置或可执行内容 | 确定性分类为 `review_not_required`，必需 CI 通过 |
 | R1 | 普通应用逻辑、一般测试和非敏感配置 | CodeRabbit 已完成当前 SHA 审查，覆盖证据完整，无未处理阻断意见；必需 CI 通过 |
-| R2 | 登录、权限、校园凭证、隐私、部署、依赖执行钩子、workflow 和治理规则 | R1 条件，加 Pigbibi 对当前提交及证据的明确批准 |
+| R2 | 登录、权限、校园凭证、隐私、部署、依赖执行钩子、workflow 和治理规则 | R1 条件，加 allowlist 中 Grok 执行账号对当前提交及证据的明确批准 |
 
 旧路径和新路径都参与分类，取最高等级。受保护路径优先于文档、测试、示例
 和 fixture。`AGENTS.md`、`.coderabbit.yaml`、CODEOWNERS、全部 `.github/`
@@ -48,14 +48,25 @@
 `@coderabbitai approve/resolve` 批准自己的 PR。其他人发出的命令同样不能绕过
 本 gate 的完成证据校验。该作者限制在首次迁移合并后才进入可信默认分支。
 
-## Pigbibi 评论
+## 常规批准与本人例外
 
-只接受可信策略中 `enabled: true` 的 Pigbibi 数字用户 ID、登录名、`User` 类型及当前
-write/maintain/admin 权限；身份不从评论正文读取。账号可以同时是 PR 作者。
-GitHub 无法区分本人和持有同一账号凭据的智能体，因此智能体不得代发批准、
-例外或撤销，不得把用户授权实现本 PR 当成批准首次迁移。
+常规 R2 由已授权的 Grok 执行账号发布 `approve`；Pigbibi 本人只在接受明确例外时
+发布 `override`，不承担例行 R2 签字。两者均可发布 `revoke` 撤销放行。
+编码智能体不得冒充 Grok 的独立决定，也不得代 Pigbibi 发布本人 override 或撤销。
 
-先读取可信 gate 的 Actions summary，再由 Pigbibi 发布一个新的顶层评论。
+`policy.json` 的 `owner_actors` 是决定发布者 allowlist。每项必须明确列出
+`decisions`：Grok 账号为 `["approve", "revoke"]`，Pigbibi 为
+`["override", "revoke"]`。缺失或未获授权的指令不能放行。
+核验数字用户 ID、登录名、`enabled: true`、`User` 类型及当前
+write/maintain/admin 权限；身份不从评论正文读取，App ID 不能代替用户 ID。
+账号可以同时是 PR 作者，但常规批准始终依赖独立 CodeRabbit 审查。
+
+登记 Grok 账号前须核实实际 login、数字 ID 和现有仓库权限，并同步
+`risk-gate.yml` 的评论事件身份筛选；未登记时常规 R2 保持待批准，不能默认
+借用 Pigbibi、填入虚构账号或放宽身份检查。GitHub 无法区分本人和持有同一账号
+凭据的智能体，因此不能将共享凭据操作宣称为已验证的本人操作。
+
+批准者先读取可信 gate 的 Actions summary，再发布一个新的顶层评论。
 完整 SHA 和摘要逐项复制，`reason` 写本次接受的范围及风险。每个字段独占一行，
 不得重复字段；不是 JSON，也不需要占位评论或签名密钥。
 
@@ -68,7 +79,8 @@ evidence: <64 位 evidence_sha256>
 reason: <批准这次改动的具体理由>
 ```
 
-正常 `approve` 仅满足 R2 的账号批准，不豁免 AI 完成条件。例外使用独立指令：
+正常 `approve` 由 allowlisted Grok 账号发布，仅满足 R2 的账号批准，不豁免 AI 完成条件。
+Pigbibi 本人接受例外时使用独立指令：
 
 ```text
 /governance override

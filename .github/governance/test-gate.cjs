@@ -126,6 +126,34 @@ test('R2 requires account approve bound to the completed review', () => {
   assert.equal(evaluate(f).reason, 'owner_approval_required'); ownerApproval(f);
   assert.equal(evaluate(f).allowed, true);
 });
+test('routine approver cannot issue an owner override', () => {
+  const f = fixture('pages/login/login.js');
+  const c = ownerApproval(f, 'override');
+  c.user = { id: 4, login: 'owner', type: 'User' };
+  assert.equal(evaluate(f).allowed, false);
+  assert.equal(evaluate(f).reason, 'owner_decision_invalid');
+});
+test('exception owner cannot substitute for routine R2 approval', () => {
+  const f = fixture('pages/login/login.js'); approve(f);
+  const c = ownerApproval(f);
+  c.user = { id: 5, login: 'exception-owner', type: 'User' };
+  assert.equal(evaluate(f).allowed, false);
+});
+for (const decisions of [undefined, [], ['override', 'revoke']]) {
+  test(`missing or unauthorized routine decision rejects approve: ${JSON.stringify(decisions)}`, () => {
+    const f = fixture('pages/login/login.js'); approve(f); ownerApproval(f);
+    f.policy.owner_actors[0].decisions = decisions;
+    assert.equal(evaluate(f).allowed, false);
+  });
+}
+test('exception owner may revoke a routine decision and is recorded by identity', () => {
+  const f = fixture('pages/login/login.js'); approve(f); ownerApproval(f);
+  const c = ownerApproval(f, 'revoke');
+  c.user = { id: 5, login: 'exception-owner', type: 'User' };
+  const r = evaluate(f);
+  assert.equal(r.allowed, false); assert.equal(r.reason, 'owner_revoked');
+  assert.equal(r.decision_actor_id, 5); assert.equal(r.decision_actor_login, 'exception-owner');
+});
 for (const [name, mutate] of [
   ['wrong login', (f, c) => { c.user.login = 'impostor'; }],
   ['wrong numeric ID', (f, c) => { c.user.id = 99; }],
