@@ -53,7 +53,7 @@ async function readThreads(github, repo, number) {
   return threads;
 }
 
-async function collect(github, context, number, policyCommit) {
+async function collect(github, context, number, policyCommit, policy) {
   const repo = context.repo;
   const { data: pr } = await github.rest.pulls.get({ ...repo, pull_number: number });
   const params = { ...repo, pull_number: number, per_page: 100 };
@@ -64,7 +64,9 @@ async function collect(github, context, number, policyCommit) {
   const commits = await github.paginate(github.rest.pulls.listCommits, params);
   const threads = await readThreads(github, repo, number);
   const permissions = {};
-  for (const user of new Map(reviews.filter(r => r.user?.type === 'User').map(r => [r.user.login, r.user])).values()) {
+  const actors = [...(policy?.owner_actors || []), ...(policy?.ai_review_actors || [])];
+  const records = [...reviews, ...gate.evidenceComments({ issueComments }, actors)];
+  for (const user of new Map(records.filter(r => r.user?.type === 'User').map(r => [r.user.login, r.user])).values()) {
     const { data } = await github.rest.repos.getCollaboratorPermissionLevel({ ...repo, username: user.login });
     if (!data.permission || data.user?.id !== user.id) throw new Error('Unknown reviewer permission');
     permissions[user.login] = data.permission;
@@ -73,11 +75,12 @@ async function collect(github, context, number, policyCommit) {
     reviewComments, issueComments, commits, threads, permissions, complete: true };
 }
 
-function snapshotVersion(snapshot) {
+function snapshotVersion(snapshot, policy) {
   // Compare security-relevant fields, not changing mergeability/cache fields.
   const { pr, issueComments, ...rest } = snapshot;
   const secondOpinions = issueComments.filter(c => c.user?.type === 'Bot' && c.user?.login === 'coderabbitai[bot]');
-  return gate.digest({ ...rest, secondOpinions, pr: { state: pr.state, number: pr.number, body: pr.body,
+  const approvals = gate.evidenceComments(snapshot, [...(policy?.owner_actors || []), ...(policy?.ai_review_actors || [])]);
+  return gate.digest({ ...rest, secondOpinions, approvals, pr: { state: pr.state, number: pr.number, body: pr.body,
     head: pr.head.sha, base: pr.base.sha, baseRef: pr.base.ref, baseRepo: pr.base.repo.id,
     author: pr.user.id, changed_files: pr.changed_files, commits: pr.commits } });
 }
@@ -98,14 +101,14 @@ async function run({ github, context, core, policy, policySha, policyCommit, def
       await status('risk-gate', 'pending', 'Reading current commit review evidence');
       await status('pr-template', 'pending', 'Checking PR description');
       if (initial.base.ref !== defaultBranch) throw new Error('Only the default branch is configured');
-      const before = await collect(github, context, number, policyCommit);
+      const before = await collect(github, context, number, policyCommit, policy);
       if (before.pr.head.sha !== head) throw new Error('Head changed during collection');
       const result = gate.evaluate(before, policy, policySha);
       const templateOK = (policy.dependabot_template_exemption && before.pr.user.login === 'dependabot[bot]')
         || gate.completeTemplate(before.pr.body);
-      const after = await collect(github, context, number, policyCommit);
+      const after = await collect(github, context, number, policyCommit, policy);
       const { data: currentBase } = await github.rest.repos.getBranch({ ...repo, branch: defaultBranch });
-      if (snapshotVersion(before) !== snapshotVersion(after) || currentBase.commit.sha !== policyCommit
+      if (snapshotVersion(before, policy) !== snapshotVersion(after, policy) || currentBase.commit.sha !== policyCommit
         || after.pr.base.sha !== policyCommit) throw new Error('Evidence or trusted base changed during evaluation');
       // Expiration may cross during the readback. Never publish an expired decision.
       const final = gate.evaluate(after, policy, policySha);

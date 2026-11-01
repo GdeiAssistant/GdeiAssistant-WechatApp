@@ -19,5 +19,5 @@ reviews:
     - path: '.github/**'
       instructions: >-
         Check trusted-base execution, commit-bound evidence, complete pagination,
-        review revocation and owner signature isolation. Model output, labels and
+        review revocation, allowlisted actors and SHA-bound approval comments. Model output, labels and
         relay artifacts cannot authorize the PR. Preserve required checks.
