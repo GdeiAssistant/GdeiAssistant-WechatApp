@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
-const { fixture, approve, HEAD, BASE, POLICY } = require('./fixtures.cjs');
+const { fixture, approve, aiApproval, ownerApproval, HEAD, BASE, POLICY } = require('./fixtures.cjs');
 const { selectTargets, readThreads, collect, snapshotVersion, run } = require('./runner.cjs');
 
 function mock(f = fixture()) {
@@ -19,7 +19,7 @@ function mock(f = fixture()) {
       repos: {
         listPullRequestsAssociatedWithCommit: 'associated',
         getBranch: async () => ({ data: { commit: { sha: BASE } } }),
-        getCollaboratorPermissionLevel: async ({ username }) => ({ data: { permission: f.snapshot.permissions[username], user: { id: f.snapshot.reviews.find(r => r.user.login === username).user.id } } }),
+        getCollaboratorPermissionLevel: async ({ username }) => ({ data: { permission: f.snapshot.permissions[username], user: { id: [...f.snapshot.reviews, ...f.snapshot.issueComments].find(r => r.user.login === username).user.id } } }),
         createCommitStatus: async s => { statuses.push(s); return {}; },
       },
     },
@@ -154,4 +154,32 @@ test('shadow issue updates cannot turn a stable review into a race error', () =>
   const f = fixture(); const before = snapshotVersion(f.snapshot);
   f.snapshot.issueComments.push({ id: 90, user: { login: 'quantaiservice[bot]', type: 'Bot' }, body: 'failure' });
   assert.equal(snapshotVersion(f.snapshot), before);
+});
+
+for (const field of ['edit', 'delete', 'withdraw', 'permission']) {
+  test(`R2 readback detects owner comment ${field}`, async () => {
+    const f = fixture('src/ai_service/auth.py'); aiApproval(f); const approval = ownerApproval(f);
+    const m = mock(f); let reads = 0; const get = m.github.rest.pulls.get;
+    m.github.rest.pulls.get = async () => {
+      if (++reads === 3) {
+        if (field === 'edit') approval.body = '{}';
+        if (field === 'delete') f.snapshot.issueComments.pop();
+        if (field === 'withdraw') f.snapshot.issueComments.push({ ...approval, id: 21, body: 'Withdrawn' });
+        if (field === 'permission') f.snapshot.permissions.owner = 'read';
+      }
+      return get();
+    };
+    await run(m); assert.ok(m.statuses.some(s => s.context === 'risk-gate' && s.state === 'error'));
+    assert.ok(m.statuses.every(s => s.state !== 'success'));
+  });
+}
+test('collector verifies allowlisted comment publisher identity and permission', async () => {
+  const f = fixture('src/ai_service/auth.py'); aiApproval(f); ownerApproval(f); const m = mock(f);
+  const snapshot = await collect(m.github, m.context, 42, BASE, f.policy);
+  assert.equal(snapshot.permissions.owner, 'admin'); assert.equal(snapshot.permissions.author, 'write');
+});
+test('snapshot binds malformed allowlisted comments while ignoring unrelated comments', () => {
+  const f = fixture(); const before = snapshotVersion(f.snapshot, f.policy);
+  f.snapshot.issueComments.push({ id: 22, user: { id: 4, login: 'owner', type: 'User' }, body: 'Withdrawn' });
+  assert.notEqual(snapshotVersion(f.snapshot, f.policy), before);
 });

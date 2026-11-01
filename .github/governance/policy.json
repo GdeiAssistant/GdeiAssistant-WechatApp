@@ -33,11 +33,22 @@
     }
   },
   "providers": {
-    "codex": "observe",
+    "codex": "recorded-review",
     "coderabbit": "second-opinion",
     "quantaiservice": "shadow"
   },
-  "owner_keys": [],
   "owner_approval_max_hours": 24,
-  "dependabot_template_exemption": false
+  "dependabot_template_exemption": false,
+  "owner_actors": [
+    {
+      "user_id": 20649888,
+      "login": "Pigbibi"
+    }
+  ],
+  "ai_review_actors": [
+    {
+      "user_id": 20649888,
+      "login": "Pigbibi"
+    }
+  ]
 }

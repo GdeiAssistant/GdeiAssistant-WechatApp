@@ -1,6 +1,6 @@
 'use strict';
 
-const { createHash, createPublicKey, verify } = require('node:crypto');
+const { createHash } = require('node:crypto');
 
 function canonical(value) {
   if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
@@ -124,34 +124,51 @@ function validDispositions(value, snapshot) {
   return [...sources].every(id => covered.has(id));
 }
 
+function allowlisted(comment, actors) {
+  return comment.user?.type === 'User' && actors.some(actor => actor.user_id === comment.user.id
+    && actor.login.toLowerCase() === comment.user.login?.toLowerCase());
+}
+
+function evidenceComments(snapshot, actors) {
+  // Include all allowlisted comments in race detection, including malformed edits.
+  return snapshot.issueComments.filter(c => allowlisted(c, actors));
+}
+
+function latestReceipt(snapshot, actors, schema) {
+  const otherSchema = schema === 'ai-review/v1' ? 'owner-approval/v1' : 'ai-review/v1';
+  const candidates = evidenceComments(snapshot, actors).filter(c => !receipt(c.body, otherSchema));
+  for (const c of candidates) assert(Number.isSafeInteger(c.id) && c.id > 0
+    && Number.isFinite(Date.parse(c.created_at)) && Number.isFinite(Date.parse(c.updated_at)), 'Unknown comment metadata');
+  // Creation order is authoritative. Editing an older approval cannot undo a later revocation.
+  return candidates.sort((a, b) => b.id - a.id)[0];
+}
+
+function validAI(value) {
+  const ai = value.ai_review;
+  return ai && ['codex', 'coderabbit', 'grok'].includes(ai.provider)
+    && typeof ai.model === 'string' && ai.model.trim().length > 0
+    && typeof ai.run_ref === 'string' && ai.run_ref.trim().length >= 8
+    && ['independent', 'self-review'].includes(ai.mode);
+}
+
 function ownerApproved(snapshot, policy, expected, evidenceSha, now) {
-  // No key is installed by this pilot. GitHub identity alone cannot establish
-  // human approval when a coding agent also holds the owner's GitHub token.
-  const candidates = latestReviews(snapshot.reviews).filter(r => policy.owner_keys.some(k => k.user_id === r.user.id));
-  const c = candidates.sort((a, b) => b.submitted_at.localeCompare(a.submitted_at) || b.id - a.id)[0];
+  const c = latestReceipt(snapshot, policy.owner_actors, 'owner-approval/v1');
   if (!c) return false;
   const v = receipt(c.body, 'owner-approval/v1');
-  if (!v) return false;
-  const key = policy.owner_keys.find(k => k.key_id === v.key_id && k.user_id === c.user.id);
-  const { signature, ...payload } = v;
-  if (!key || !['APPROVED', 'COMMENTED'].includes(c.state) || c.commit_id !== expected.head_sha
-    || v.review_id !== c.id || c.user.type !== 'User' || !sameBinding(v, expected) || v.evidence_sha256 !== evidenceSha
-    || v.decision !== 'approve' || typeof v.reason !== 'string' || v.reason.trim().length < 8
-    || !Number.isSafeInteger(v.issued_at) || !Number.isSafeInteger(v.expires_at)
-    || v.issued_at > now || v.expires_at <= now || v.expires_at <= v.issued_at
-    || v.expires_at - v.issued_at > policy.owner_approval_max_hours * 3600
-    || typeof signature !== 'string' || !/^[A-Za-z0-9+/]{86}==$/.test(signature)) return false;
-  try {
-    const publicKey = createPublicKey(key.public_key);
-    return publicKey.asymmetricKeyType === 'ed25519'
-      && verify(null, Buffer.from(canonical(payload)), publicKey, Buffer.from(signature, 'base64'));
-  } catch { return false; }
+  return !!v && ['write', 'maintain', 'admin'].includes(snapshot.permissions[c.user.login])
+    && v.comment_id === c.id && sameBinding(v, expected) && v.evidence_sha256 === evidenceSha
+    && v.decision === 'approve' && v.approval_source === 'grok'
+    && typeof v.approval_ref === 'string' && v.approval_ref.trim().length >= 8
+    && typeof v.reason === 'string' && v.reason.trim().length >= 8
+    && Number.isSafeInteger(v.issued_at) && Number.isSafeInteger(v.expires_at)
+    && v.issued_at <= now && v.expires_at > now && v.expires_at > v.issued_at
+    && v.expires_at - v.issued_at <= policy.owner_approval_max_hours * 3600;
 }
 
 function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 1000)) {
   assert(policy.version === 'pr-governance/v1' && policy.repository === snapshot.repository, 'Policy repository mismatch');
-  assert(policy.providers.codex === 'observe' && policy.providers.coderabbit === 'second-opinion'
-    && policy.providers.quantaiservice === 'shadow', 'Provider promotion requires a verified adapter');
+  assert(policy.providers.codex === 'recorded-review' && policy.providers.coderabbit === 'second-opinion'
+    && policy.providers.quantaiservice === 'shadow', 'Unsupported provider policy');
   assert(snapshot.pr.state === 'open' && snapshot.complete === true, 'Incomplete snapshot');
   assert(snapshot.commits.length === snapshot.pr.commits && snapshot.commits.length < 250, 'Incomplete commit list');
   const risk = classify(snapshot.files, snapshot.pr.changed_files, policy);
@@ -164,10 +181,31 @@ function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 100
   const authorized = r => ['write', 'maintain', 'admin'].includes(snapshot.permissions[r.user.login]);
   if (latest.some(r => authorized(r) && r.state === 'CHANGES_REQUESTED')) return { ...result, reason: 'changes_requested' };
   if (snapshot.threads.some(t => !t.isResolved)) return { ...result, reason: 'unresolved_review_thread' };
+  // Option A: the allowlisted publisher attests a completed AI review. Account
+  // identity authenticates the record; it does not prove a separate human/model.
+  const comment = latestReceipt(snapshot, policy.ai_review_actors, 'ai-review/v1');
+  if (comment) {
+    const value = receipt(comment.body, 'ai-review/v1');
+    if (value && authorized(comment) && value.comment_id === comment.id && sameBinding(value, expected)
+      && value.discussion_sha256 === discussionSha && validAI(value)
+      && value.execution_status === 'completed' && value.verdict === 'pass'
+      && value.risk_tier === risk.tier && value.coverage?.complete === true
+      && value.coverage.reviewed_files === snapshot.files.length
+      && Array.isArray(value.limitations) && value.limitations.length === 0
+      && validDispositions(value, snapshot)) {
+      const evidenceSha = digest({ binding: expected, discussion_sha256: discussionSha, review: comment });
+      const approved = risk.tier !== 'R2' || ownerApproved(snapshot, policy, expected, evidenceSha, now);
+      return { ...result, evidence_sha256: evidenceSha, review_comment_id: comment.id,
+        reviewer: value.ai_review.provider, route: 'recorded-ai', allowed: approved,
+        reason: approved ? 'current_commit_reviewed' : 'owner_approval_required' };
+    }
+    // A newer incomplete/failed AI record must not fall through to older evidence.
+    return result;
+  }
   for (const route of ['primary', 'fallback']) {
     for (const review of latest) {
       const value = receipt(review.body, 'pr-review/v1');
-      if (!value || !authorized(review) || !independent(review, snapshot) || review.state !== 'APPROVED'
+      if (!value || !validAI(value) || !authorized(review) || !independent(review, snapshot) || review.state !== 'APPROVED'
         || review.commit_id !== expected.head_sha || !sameBinding(value, expected)
         || value.discussion_sha256 !== discussionSha || value.route !== route
         || value.reviewer !== policy.reviewers[risk.tier][route]
@@ -183,7 +221,7 @@ function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 100
       const approved = risk.tier !== 'R2' || ownerApproved(snapshot, policy, expected, evidenceSha, now);
       return { ...result, evidence_sha256: evidenceSha, review_id: review.id,
         reviewer: value.reviewer, route, allowed: approved,
-        reason: approved ? 'current_commit_reviewed' : policy.owner_keys.length ? 'owner_approval_required' : 'owner_approval_channel_not_configured' };
+        reason: approved ? 'current_commit_reviewed' : 'owner_approval_required' };
     }
   }
   return result;
@@ -200,4 +238,4 @@ function completeTemplate(body) {
     && present(/how verified|verif|validat|test(?:ing| plan)?|验证|测试/i);
 }
 
-module.exports = { canonical, digest, classify, pathTier, receipt, binding, discussion, evaluate, completeTemplate };
+module.exports = { canonical, digest, classify, pathTier, receipt, binding, discussion, evaluate, completeTemplate, evidenceComments };

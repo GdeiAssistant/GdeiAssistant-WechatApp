@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const gate = require('./gate.cjs');
 const actualPolicy = require('./policy.json');
-const { fixture, approve, ownerApproval, editReceipt, evaluate, HEAD, POLICY, NOW } = require('./fixtures.cjs');
+const { fixture, approve, aiApproval, ownerApproval, editReceipt, evaluate, HEAD, POLICY, NOW } = require('./fixtures.cjs');
 
 test('R0 prose passes with an explicit no-review decision and matched rule', () => {
   const f = fixture('README.md');
@@ -135,7 +135,7 @@ test('QAS shadow failure or success does not affect a valid primary review', () 
   }
 });
 test('provider promotion is not a policy-only switch', () => {
-  const f = fixture(); f.policy.providers.codex = 'primary'; assert.throws(() => evaluate(f), /adapter/);
+  const f = fixture(); f.policy.providers.codex = 'primary'; assert.throws(() => evaluate(f), /provider policy/);
 });
 test('resolved flag alone cannot dispose of an inline finding', () => {
   const f = fixture(); f.snapshot.reviewComments.push({ id: 50, body: 'P1 finding' }); f.snapshot.threads.push({ id: 'thread', isResolved: true });
@@ -152,37 +152,93 @@ test('an admin fallback cannot override active changes requested', () => {
   assert.equal(evaluate(f).reason, 'changes_requested');
 });
 
-test('R2 requires an isolated owner channel even with a valid technical review', () => {
+test('R2 requires an owner comment even with a valid technical review', () => {
   const f = fixture('src/ai_service/auth.py'); approve(f);
-  assert.equal(evaluate(f).reason, 'owner_approval_channel_not_configured');
+  assert.equal(evaluate(f).reason, 'owner_approval_required');
 });
-test('R2 passes with a valid isolated owner signature over exact evidence', () => {
+test('R2 accepts an allowlisted Grok approval comment bound to exact AI evidence', () => {
+  const f = fixture('src/ai_service/auth.py'); aiApproval(f); ownerApproval(f);
+  assert.equal(evaluate(f).allowed, true); assert.equal(evaluate(f).route, 'recorded-ai');
+});
+test('R2 accepts AI-assisted independent native review plus owner comment', () => {
   const f = fixture('src/ai_service/auth.py'); approve(f); ownerApproval(f); assert.equal(evaluate(f).allowed, true);
 });
 for (const [name, mutate] of [
-  ['forged signature', (f, r) => editReceipt(r, v => { v.signature = 'A'.repeat(86) + '=='; })],
-  ['expired signature', (f, r) => editReceipt(r, v => { v.expires_at = NOW; })],
+  ['expired approval', (f, r) => editReceipt(r, v => { v.expires_at = NOW; })],
   ['wrong evidence', (f, r) => editReceipt(r, v => { v.evidence_sha256 = '0'.repeat(64); })],
-  ['wrong actor', (f, r) => { r.user.id = 5; }],
-  ['owner dismissal', (f, r) => { r.state = 'DISMISSED'; }],
-  ['revoked owner key', f => { f.policy.owner_keys = []; }],
+  ['wrong actor id', (f, r) => { r.user.id = 5; }],
+  ['wrong actor login', (f, r) => { r.user.login = 'impostor'; }],
+  ['bot impersonation', (f, r) => { r.user.type = 'Bot'; }],
+  ['actor removed', f => { f.policy.owner_actors = []; }],
+  ['actor permission removed', f => { f.snapshot.permissions.owner = 'read'; }],
+  ['new head', f => { f.snapshot.pr.head.sha = 'e'.repeat(40); }],
+  ['wrong approval head', (f, r) => editReceipt(r, v => { v.head_sha = 'e'.repeat(40); })],
+  ['wrong approval base', (f, r) => editReceipt(r, v => { v.base_sha = 'e'.repeat(40); })],
+  ['wrong approval repository', (f, r) => editReceipt(r, v => { v.repository = 'other/project'; })],
+  ['wrong approval PR', (f, r) => editReceipt(r, v => { v.pr_number = 43; })],
+  ['wrong approval policy', (f, r) => editReceipt(r, v => { v.policy_sha256 = '0'.repeat(64); })],
+  ['missing Grok record', (f, r) => editReceipt(r, v => { delete v.approval_ref; })],
+  ['wrong approval source', (f, r) => editReceipt(r, v => { v.approval_source = 'codex'; })],
+  ['future approval', (f, r) => editReceipt(r, v => { v.issued_at = NOW + 1; })],
+  ['excessive lifetime', (f, r) => editReceipt(r, v => { v.expires_at = NOW + 90000; })],
+  ['malformed approval', (f, r) => { r.body = 'not JSON'; }],
+  ['deleted approval', f => { f.snapshot.issueComments.pop(); }],
+  ['withdrawn approval', (f, r) => editReceipt(r, v => { v.decision = 'revoke'; })],
   ['technical receipt edited', f => editReceipt(f.snapshot.reviews[0], v => { v.note = 'Edited after owner decision'; })],
-  ['owner signature copied to another review', (f, r) => { f.snapshot.reviews.push({ ...r, id: 21 }); }],
+  ['approval copied to another comment', (f, r) => { f.snapshot.issueComments.push({ ...r, id: 21 }); }],
 ]) test(`${name} blocks R2`, () => {
   const f = fixture('src/ai_service/auth.py'); approve(f); const r = ownerApproval(f); mutate(f, r); assert.equal(evaluate(f).allowed, false);
 });
-test('time passing alone expires a cryptographically valid owner receipt', () => {
+test('time passing alone expires owner approval', () => {
   const f = fixture('src/ai_service/auth.py'); approve(f); ownerApproval(f);
   assert.equal(gate.evaluate(f.snapshot, f.policy, POLICY, NOW + 3601).allowed, false);
 });
-test('later owner review withdraws approval; replay cannot restore it', () => {
+test('later owner comment withdraws approval; copied body cannot restore it', () => {
   const f = fixture('src/ai_service/auth.py'); approve(f); const r = ownerApproval(f);
-  f.snapshot.reviews.push({ ...r, id: 21, body: 'Withdraw approval', submitted_at: '2033-05-18T03:35:00Z' });
+  f.snapshot.issueComments.push({ ...r, id: 21, body: 'Withdraw approval' });
   assert.equal(evaluate(f).allowed, false);
-  f.snapshot.reviews.push({ ...r, id: 22, submitted_at: '2033-05-18T03:36:00Z' }); assert.equal(evaluate(f).allowed, false);
+  f.snapshot.issueComments.push({ ...r, id: 22 }); assert.equal(evaluate(f).allowed, false);
 });
-test('owner evidence alone cannot replace technical review', () => {
-  const f = fixture('src/ai_service/auth.py'); approve(f); ownerApproval(f); f.snapshot.reviews.shift();
+test('editing an older owner comment cannot outrank a newer revocation', () => {
+  const f = fixture('src/ai_service/auth.py'); approve(f); const r = ownerApproval(f);
+  const revoked = { ...r, id: 21 }; editReceipt(revoked, v => { v.comment_id = 21; v.decision = 'revoke'; });
+  f.snapshot.issueComments.push(revoked); r.updated_at = '2033-05-18T04:00:00Z';
+  assert.equal(evaluate(f).allowed, false);
+  revoked.body = 'malformed edit'; assert.equal(evaluate(f).allowed, false);
+});
+test('owner evidence and labels cannot replace AI review', () => {
+  const f = fixture('src/ai_service/auth.py'); approve(f); ownerApproval(f); f.snapshot.reviews = [];
+  f.snapshot.pr.labels = [{ name: 'owner-approved' }]; assert.equal(evaluate(f).allowed, false);
+});
+test('labels cannot replace the structured owner comment', () => {
+  const f = fixture('src/ai_service/auth.py'); aiApproval(f); f.snapshot.pr.labels = [{ name: 'owner-approved' }];
+  assert.equal(evaluate(f).allowed, false);
+});
+test('native technical review without AI provenance cannot pass', () => {
+  const f = fixture(); editReceipt(approve(f), v => { delete v.ai_review; }); assert.equal(evaluate(f).allowed, false);
+});
+test('R1 accepts a SHA-bound AI review with honest self-review provenance', () => {
+  const f = fixture(); aiApproval(f); assert.equal(evaluate(f).allowed, true);
+});
+for (const [name, mutate] of [
+  ['unlisted publisher', (f, c) => { c.user.id = 99; }],
+  ['read-only publisher', f => { f.snapshot.permissions.author = 'read'; }],
+  ['missing AI execution', (f, c) => editReceipt(c, v => { delete v.ai_review; })],
+  ['missing run reference', (f, c) => editReceipt(c, v => { v.ai_review.run_ref = ''; })],
+  ['incomplete AI', (f, c) => editReceipt(c, v => { v.execution_status = 'incomplete'; })],
+  ['failed AI', (f, c) => editReceipt(c, v => { v.verdict = 'fail'; })],
+  ['stale AI head', (f, c) => editReceipt(c, v => { v.head_sha = 'e'.repeat(40); })],
+  ['stale discussion', (f, c) => editReceipt(c, v => { v.discussion_sha256 = '0'.repeat(64); })],
+  ['partial AI coverage', (f, c) => editReceipt(c, v => { v.coverage.reviewed_files = 0; })],
+  ['AI limitation', (f, c) => editReceipt(c, v => { v.limitations = ['Missing file']; })],
+  ['AI finding', (f, c) => editReceipt(c, v => { v.blocking_findings = ['P1']; })],
+  ['copied AI record', (f, c) => { f.snapshot.issueComments.push({ ...c, id: 16 }); }],
+  ['malformed newer record', (f, c) => { f.snapshot.issueComments.push({ ...c, id: 16, body: 'Review withdrawn' }); }],
+]) test(`${name} cannot satisfy AI review`, () => {
+  const f = fixture(); const c = aiApproval(f); mutate(f, c); assert.equal(evaluate(f).allowed, false);
+});
+test('a failed new AI comment cannot fall back to an older native approval', () => {
+  const f = fixture(); approve(f); const c = aiApproval(f); editReceipt(c, v => { v.verdict = 'fail'; });
   assert.equal(evaluate(f).allowed, false);
 });
 test('English and existing Gdei template headings are accepted', () => {
