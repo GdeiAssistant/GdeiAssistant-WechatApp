@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const gate = require('./gate.cjs');
 const actualPolicy = require('./policy.json');
-const { fixture, approve, ownerApproval, evaluate, HEAD, BASE, POLICY, at } = require('./fixtures.cjs');
+const { fixture, approve, approveWithoutFindings, ownerApproval, evaluate, HEAD, BASE, POLICY, at } = require('./fixtures.cjs');
 
 test('R0 prose passes with an explicit no-review decision and matched rule', () => {
   const f = fixture('README.md');
@@ -259,4 +259,37 @@ test('provider bold summary markup preserves file coverage evidence', () => {
   review.body = review.body.replace('Files selected for processing: 1</summary>', '<strong>Files selected for processing: 1</strong></summary>');
   assert.equal(evaluate(f).ai.coverage, 'reported_complete');
   assert.equal(evaluate(f).allowed, true);
+});
+
+
+test('zero-finding App summary plus empty current-SHA APPROVED review satisfies R2', () => {
+  const f = fixture('pages/login/login.js'); const comment = approveWithoutFindings(f);
+  const r = evaluate(f);
+  assert.equal(r.allowed, true); assert.equal(r.reason, 'current_commit_reviewed');
+  assert.equal(r.ai.review_id, 10); assert.equal(r.ai.report_comment_id, comment.id);
+  assert.notEqual(r.ai.report_run_id, r.ai.run_id);
+  assert.equal(r.owner_comment_id, null);
+});
+for (const [name, mutate] of [
+  ['wrong summary bot ID', (f, c) => { c.user.id = 9; }],
+  ['wrong summary login', (f, c) => { c.user.login = 'other[bot]'; }],
+  ['human summary', (f, c) => { c.user.type = 'User'; }],
+  ['stale summary timestamp', (f, c) => { c.updated_at = at(-200); }],
+  ['summary after check', (f, c) => { c.updated_at = at(-10); }],
+  ['missing check run', f => { f.snapshot.checkRuns[0].output.summary = f.snapshot.checkRuns[0].output.summary.replace('Run ID', 'Unknown'); }],
+  ['missing summary run', (f, c) => { c.body = c.body.replace('Run ID', 'Unknown'); }],
+  ['missing native section', (f, c) => { c.body = c.body.replace('recent_review_start', 'other'); }],
+  ['not a zero-finding report', (f, c) => { c.body = c.body.replace('No actionable comments', 'Actionable comments'); }],
+  ['stale summary head', (f, c) => { c.body = c.body.replaceAll(HEAD, 'e'.repeat(40)); }],
+  ['stale summary base', (f, c) => { c.body = c.body.replaceAll(BASE, 'e'.repeat(40)); }],
+  ['missing file scope', (f, c) => { c.body = c.body.replace('pages/login/login.js', 'other.js'); }],
+  ['missing approval', f => { f.snapshot.reviews = []; }],
+  ['stale approval', f => { f.snapshot.reviews[0].commit_id = BASE; }],
+  ['approval outside check', f => { f.snapshot.reviews[0].submitted_at = at(-200); }],
+  ['dismissed approval', f => { f.snapshot.reviews[0].state = 'DISMISSED'; }],
+  ['rate limited check', f => { f.snapshot.checkRuns[0].conclusion = 'neutral'; }],
+  ['newer unresolved finding', f => { f.snapshot.threads.push({ id: 'new', isResolved: false }); }],
+]) test(`zero-finding fallback rejects ${name}`, () => {
+  const f = fixture('pages/login/login.js'); const c = approveWithoutFindings(f); mutate(f, c);
+  assert.equal(evaluate(f).allowed, false);
 });

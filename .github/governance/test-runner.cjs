@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
-const { fixture, approve, ownerApproval, HEAD, BASE, POLICY } = require('./fixtures.cjs');
+const { fixture, approve, approveWithoutFindings, ownerApproval, HEAD, BASE, POLICY } = require('./fixtures.cjs');
 const { selectTargets, readThreads, collect, snapshotVersion, run } = require('./runner.cjs');
 
 function mock(f = fixture()) {
@@ -278,4 +278,22 @@ test('failed error status publication does not abort later PRs in a sweep', asyn
   await run(m);
   assert.deepEqual([...evaluated], [42, 43]); assert.equal(m.failures.length, 2);
   assert.equal(m.statuses.filter(s => s.state === 'error').length, 4);
+});
+
+
+test('native zero-finding summary publishes R2 after complete readback', async () => {
+  const f = fixture('pages/login/login.js'); approveWithoutFindings(f);
+  const m = mock(f); await run(m);
+  assert.equal(m.statuses.at(-1).state, 'success');
+});
+test('native summary edits during readback prevent publication', async () => {
+  const f = fixture('pages/login/login.js'); const c = approveWithoutFindings(f);
+  const m = mock(f); let reads = 0; const get = m.github.rest.pulls.get;
+  m.github.rest.pulls.get = async () => {
+    if (++reads === 3) c.body += '\nNew report content';
+    return get();
+  };
+  await run(m);
+  assert.ok(m.statuses.some(s => s.context === 'risk-gate' && s.state === 'error'));
+  assert.ok(m.statuses.every(s => s.state !== 'success'));
 });

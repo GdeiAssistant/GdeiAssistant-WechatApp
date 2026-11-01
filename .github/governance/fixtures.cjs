@@ -41,6 +41,15 @@ function approve(f) {
       + '| Generate review feedback | Completed | 1s |\n| Publish review results | Completed | 1s |' } });
   return review;
 }
+function approveWithoutFindings(f) {
+  const review = approve(f);
+  const comment = { id: 50, user: { ...review.user }, created_at: at(-500), updated_at: at(-100),
+    body: '<!-- recent_review_start -->\nNo actionable comments were generated in the recent review.\n'
+      + review.body.replace(RUN, '66666666-2222-3333-4444-555555555555') + '\n<!-- recent_review_end -->' };
+  review.state = 'APPROVED'; review.body = '';
+  f.snapshot.issueComments.push(comment);
+  return comment;
+}
 const evaluate = f => gate.evaluate(f.snapshot, f.policy, POLICY, NOW);
 function ownerApproval(f, decision = 'override') {
   const result = evaluate(f);
@@ -56,4 +65,4 @@ function ownerApproval(f, decision = 'override') {
   f.snapshot.issueComments.push(comment);
   return comment;
 }
-module.exports = { fixture, approve, ownerApproval, evaluate, HEAD, BASE, POLICY, NOW, at };
+module.exports = { fixture, approve, approveWithoutFindings, ownerApproval, evaluate, HEAD, BASE, POLICY, NOW, at };

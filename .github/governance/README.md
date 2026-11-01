@@ -27,9 +27,12 @@
 
 - 当前完整 `head_sha` 上最新的 CodeRabbit check 已 `completed/success`，标题
   为 `Finished`，结果明确为 `Review completed`；生成反馈和发布结果阶段均完成。
-- 同一运行 ID 的正式 CodeRabbit review 绑定当前 SHA，并在该 check 的运行
-  时间内提交。最新 review 不能被撤销，其他 SHA 的批准不能沿用。
-- 正式 review 的完整 diff 范围与当前 base/head 相符，列出的处理文件与 PR
+- 正式 CodeRabbit review 绑定当前 SHA，并在该 check 的运行时间内提交。
+  常规报告的运行 ID 须与 check 一致。零意见时允许正文为空的 APPROVED review，
+  同时要求同一 bot 在该 check 时间内更新原生 recent_review 评论段，明确报告
+  无 actionable comments，并提供下述完整范围。该格式的报告运行 ID 与 check
+  运行 ID 分别记录，不假定二者相同。最新 review 不能被撤销，其他 SHA 的批准不能沿用。
+- 原生报告（review 正文或上述零意见评论段）的完整 diff 范围与当前 base/head 相符，列出的处理文件与 PR
   全量文件一致，且没有明确的遗漏或大小限制。
 - PR 中 `.coderabbit.yaml` 与可信默认分支的版本相同，不存在 review 命令的
   `--with-config` 覆盖。配置修改本身必须通过 R2，并明确接受本次覆盖例外。

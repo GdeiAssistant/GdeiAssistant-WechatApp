@@ -168,8 +168,31 @@ function codeRabbit(snapshot, policy) {
     && Date.parse(r.submitted_at) >= Date.parse(check.started_at)
     && Date.parse(r.submitted_at) <= Date.parse(check.completed_at)
     && runId && r.body?.includes(runId));
-  const report = reports.sort((a, b) => b.id - a.id)[0];
+  let report = reports.sort((a, b) => b.id - a.id)[0];
   const latest = latestReviews(snapshot.reviews.filter(isBot))[0];
+  let reportCommentId = null, reportRunId = runId;
+  // A zero-finding review has an empty APPROVED review and a native summary
+  // comment. Its report run ID can differ from the check's execution run ID.
+  // Bind both records through bot identity, current SHA, check time and full scope.
+  if (!report && runId && latest?.state === 'APPROVED' && !latest.body?.trim()
+    && latest.commit_id === snapshot.pr.head.sha
+    && Date.parse(latest.submitted_at) >= Date.parse(check.started_at)
+    && Date.parse(latest.submitted_at) <= Date.parse(check.completed_at)) {
+    const summaries = snapshot.issueComments.filter(c => isBot(c)
+      && Number.isSafeInteger(c.id) && c.id > 0
+      && Date.parse(c.updated_at) >= Date.parse(check.started_at)
+      && Date.parse(c.updated_at) <= Date.parse(check.completed_at))
+      .sort((a, b) => Date.parse(b.updated_at) - Date.parse(a.updated_at) || b.id - a.id);
+    for (const comment of summaries) {
+      const body = /<!-- recent_review_start -->([\s\S]*?)<!-- recent_review_end -->/.exec(comment.body || '')?.[1];
+      const summaryRunId = /Run ID(?:\*\*)?:\s*`([a-f0-9-]+)`/.exec(body || '')?.[1];
+      if (!body || !summaryRunId || !/^No actionable comments were generated in the recent review\.$/m.test(body)) continue;
+      report = { id: latest.id, body };
+      reportCommentId = comment.id;
+      reportRunId = summaryRunId;
+      break;
+    }
+  }
   if (!report || !latest || latest.commit_id !== snapshot.pr.head.sha || latest.state === 'DISMISSED') {
     return { ...result, limitations: ['current_head_completion_review_missing'] };
   }
@@ -188,6 +211,7 @@ function codeRabbit(snapshot, policy) {
   if (snapshot.coderabbitConfig !== snapshot.trustedCoderabbitConfig || !snapshot.coderabbitConfig) limitations.push('candidate_config_changed');
   if (snapshot.issueComments.some(c => /^\s*@coderabbitai\s+(?:full\s+)?review\b[^\n]*--with-config/m.test(c.body || ''))) limitations.push('command_config_override');
   return { ...result, review_id: report.id, decision_review_id: latest.id, run_id: runId,
+    report_comment_id: reportCommentId, report_run_id: reportRunId,
     execution_status: 'completed', coverage: limitations.length ? 'partial' : 'reported_complete', limitations };
 }
 
