@@ -5,3 +5,12 @@
 **/auth/** @Pigbibi
 **/security/** @Pigbibi
 **/deploy* @Pigbibi
+
+# Risk-sensitive changes require the repository owner.
+/.github/CODEOWNERS @Pigbibi
+/.github/workflows/ @Pigbibi
+/image/mono/secret.png @Pigbibi
+/image/secret.png @Pigbibi
+/mock/campus-credential-handlers.js @Pigbibi
+/scripts/deploy-wechat.js @Pigbibi
+/services/community/module-handlers/secret.js @Pigbibi

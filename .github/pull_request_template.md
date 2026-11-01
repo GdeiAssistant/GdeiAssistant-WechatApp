@@ -32,3 +32,7 @@ npm ci && npm run lint && npm test
 ## 关联 Issue
 
 <!-- Closes #123 -->
+
+## AI assistance
+
+Which AI tool and model were used? Write `None` if no AI was used.
