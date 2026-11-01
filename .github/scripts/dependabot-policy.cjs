@@ -52,11 +52,41 @@ function eligible({config, repo, pr, eventHead, dependencies, files, commits}) {
       : d.updateType === 'version-update:semver-minor' && BigInt(next[2]) > BigInt(previous[2]);
   });
 }
+const GITHUB_ACTIONS_APP_ID = 15368;
+const GITHUB_ACTIONS_BOT_ID = 41898282;
+const GITHUB_ACTIONS_BOT_LOGIN = 'github-actions[bot]';
+function actionsStatusAvatar(url) {
+  if (typeof url !== 'string') return false;
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'https:' && parsed.port === '' && parsed.username === '' && parsed.password === ''
+      && parsed.hostname === 'avatars.githubusercontent.com' && parsed.pathname === `/in/${GITHUB_ACTIONS_APP_ID}`;
+  } catch { return false; }
+}
+// Check runs expose GitHub Actions as app 15368. Commit statuses from that app use the same id in
+// avatar_url (/in/15368); the list API also sets creator to github-actions[bot]. Any present signal must match.
+function trustedActionsPublisher(record) {
+  if (!record || typeof record !== 'object') return false;
+  if (record.app && record.app.id !== GITHUB_ACTIONS_APP_ID) return false;
+  if (record.creator && (record.creator.id !== GITHUB_ACTIONS_BOT_ID || record.creator.login !== GITHUB_ACTIONS_BOT_LOGIN)) return false;
+  if (typeof record.avatar_url === 'string' && !actionsStatusAvatar(record.avatar_url)) return false;
+  return record.app?.id === GITHUB_ACTIONS_APP_ID || actionsStatusAvatar(record.avatar_url)
+    || (record.creator?.id === GITHUB_ACTIONS_BOT_ID && record.creator.login === GITHUB_ACTIONS_BOT_LOGIN);
+}
+function governanceStatusesReady(status, sha) {
+  if (!/^[a-f0-9]{40}$/.test(sha || '') || !status || status.sha !== sha || !Array.isArray(status.statuses)) return false;
+  if (status.statuses.length === 0 || status.state !== 'success') return false;
+  if (status.statuses.some(item => !item || item.state !== 'success' || (item.sha != null && item.sha !== sha))) return false;
+  return ['risk-gate', 'pr-template'].every(context => {
+    const matching = status.statuses.filter(item => item.context === context);
+    return matching.length > 0 && matching.every(trustedActionsPublisher);
+  });
+}
 function checksReady(checks, names, sha) {
   if (!names.includes('Repository hygiene') || !names.includes('Safe dependency update')) return false;
   if (checks.some(c => c.status !== 'completed' || !['success', 'skipped', 'neutral'].includes(c.conclusion))) return false;
   return names.every(name => {
-    const matching = checks.filter(c => c.name === name && c.app?.id === 15368 && c.head_sha === sha);
+    const matching = checks.filter(c => c.name === name && c.app?.id === GITHUB_ACTIONS_APP_ID && c.head_sha === sha);
     // A commit may have both push and PR runs. Every current matching record must pass.
     return matching.length > 0 && matching.every(c => c.status === 'completed' && c.conclusion === 'success');
   });
@@ -107,6 +137,7 @@ function main(mode) {
   const number = numbers[0];
   const pr = readPullRequest(`repos/${repo}/pulls/${number}`);
   const commits = pages(`repos/${repo}/pulls/${number}/commits?per_page=100`);
+  // Bind the workflow_run to this head. Passing pr.head.sha would let a stale run approve a newer commit.
   if (!trustedPR(config, repo, pr, run.head_sha, commits) || pr.mergeable !== true || !['clean', 'blocked'].includes(pr.mergeable_state)) return;
   const files = pages(`repos/${repo}/pulls/${number}/files?per_page=100`);
   if (files.length !== pr.changed_files || !dependencyFilesAllowed(config, repo, files)) return;
@@ -117,8 +148,9 @@ function main(mode) {
   const checkPages = JSON.parse(gh(['api', '--paginate', '--slurp', `repos/${repo}/commits/${pr.head.sha}/check-runs?filter=latest&per_page=100`]));
   if (!checksReady(checkPages.flatMap(p => p.check_runs || []), config.required_checks, pr.head.sha)) return;
   const status = api(`repos/${repo}/commits/${pr.head.sha}/status`);
-  // Legacy status contexts are never silently ignored, including pending/error results.
-  if (!Array.isArray(status.statuses) || status.statuses.length && status.state !== 'success') return;
+  // Require Actions-published risk-gate and pr-template success on this head. Empty, pending,
+  // failing, wrong-head, or untrusted statuses never approve. Other contexts must be success too.
+  if (!governanceStatusesReady(status, pr.head.sha)) return;
   if (branch() !== base) return;
   // Bind approval to the verified head; GitHub still enforces every branch rule.
   gh(['api', `repos/${repo}/pulls/${number}/reviews`, '--method', 'POST',
@@ -128,7 +160,7 @@ function main(mode) {
   gh(mergeArguments(repo, number, pr.head.sha));
   console.log(`Merged verified Dependabot PR #${number} at ${pr.head.sha}.`);
 }
-module.exports = {eligible, trustedPR, inScope, dependencyFilesAllowed, actionVersionOnly, checksReady, mergeArguments, readPullRequest};
+module.exports = {eligible, trustedPR, inScope, dependencyFilesAllowed, actionVersionOnly, checksReady, governanceStatusesReady, mergeArguments, readPullRequest};
 if (require.main === module) {
   try {main(process.argv[2]);} catch (error) {
     // One redacted line so a failed run is diagnosable without leaking a token.

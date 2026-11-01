@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const {eligible, checksReady, mergeArguments, actionVersionOnly} = require('./dependabot-policy.cjs');
+const {eligible, checksReady, mergeArguments, actionVersionOnly, governanceStatusesReady} = require('./dependabot-policy.cjs');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -69,6 +69,31 @@ for (const [label, record] of [
   assert.equal(checksReady([...required.map(check), record], required, sha), false);
 });
 test('incomplete required check policy is rejected', () => assert.equal(checksReady([check('CI')], ['CI'], sha), false));
+function governanceStatus(head) {
+  // Combined status payloads identify GitHub Actions as app 15368 via avatar_url and omit creator.
+  return {sha: head, state: 'success', statuses: ['risk-gate', 'pr-template'].map(context => ({
+    context, state: 'success', avatar_url: 'https://avatars.githubusercontent.com/in/15368?v=4'}))};
+}
+test('success governance statuses on the current head allow approval', () => {
+  assert.equal(governanceStatusesReady(governanceStatus(sha), sha), true);
+});
+test('github-actions bot statuses on the current head allow approval', () => {
+  const status = governanceStatus(sha);
+  for (const item of status.statuses) item.creator = {id: 41898282, login: 'github-actions[bot]'};
+  assert.equal(governanceStatusesReady(status, sha), true);
+});
+for (const [name, mutate] of [
+  ['missing', s => {s.statuses = [];}],
+  ['missing risk-gate', s => {s.statuses = s.statuses.filter(item => item.context !== 'risk-gate');}],
+  ['failing', s => {s.state = 'success'; s.statuses[0].state = 'failure';}],
+  ['pending', s => {s.state = 'success'; s.statuses[0].state = 'pending';}],
+  ['wrong-head', s => {s.sha = 'b'.repeat(40);}],
+  ['status attached to another head', s => {s.statuses[0].sha = 'b'.repeat(40);}],
+  ['untrusted-publisher', s => {s.statuses.forEach(item => {item.avatar_url = 'https://avatars.githubusercontent.com/u/1?v=4';});}],
+  ['untrusted-publisher creator', s => {s.statuses[0].creator = {id: 1, login: 'someone'};}],
+]) test(name + ' governance status blocks approval', () => {
+  const status = governanceStatus(sha); mutate(status); assert.equal(governanceStatusesReady(status, sha), false);
+});
 test('merge matches the head, uses squash and no admin bypass', () => {
   const args = mergeArguments('GdeiAssistant/Example', 1, sha);
   assert.equal(args[args.indexOf('--match-head-commit') + 1], sha);
@@ -87,12 +112,14 @@ function exerciseMerge(mutate = () => {}) {
     f.pr.mergeable = true;
     f.pr.mergeable_state = 'clean';
     const state = {pr: f.pr, files: f.files, commits: f.commits, base, compare: 'ahead',
-      checks: required.map(check), legacy: {statuses: [], state: 'pending'}};
+      checks: required.map(check)};
     mutate(state);
+    if (!Object.hasOwn(state, 'legacy')) state.legacy = governanceStatus(state.pr.head.sha);
+    if (!Object.hasOwn(state, 'runHead')) state.runHead = f.eventHead;
     fs.copyFileSync(path.join(__dirname, 'dependabot-policy.cjs'), path.join(temp, 'policy.cjs'));
     fs.writeFileSync(path.join(temp, 'dependabot-policy.json'), JSON.stringify(f.config));
     fs.writeFileSync(path.join(temp, 'event.json'), JSON.stringify({workflow_run: {
-      event: state.event || 'pull_request', conclusion: 'success', repository: {full_name: f.repo}, head_sha: f.eventHead,
+      event: state.event || 'pull_request', conclusion: 'success', repository: {full_name: f.repo}, head_sha: state.runHead,
       pull_requests: [{number: 1}],
     }}));
     fs.writeFileSync(path.join(temp, 'state.json'), JSON.stringify(state));
@@ -124,11 +151,14 @@ process.stdout.write(JSON.stringify(result));
         GITHUB_EVENT_PATH: path.join(temp, 'event.json'), GITHUB_REPOSITORY: f.repo, DEPENDABOT_MERGEABLE_RETRY_MS: '0'}, encoding: 'utf8',
     });
     assert.equal(result.status, 0, result.stderr);
-    if (fs.existsSync(path.join(temp, 'merged.json'))) {
-      const approval = JSON.parse(fs.readFileSync(path.join(temp, 'approved.json')));
-      assert.ok(approval.includes('commit_id=' + f.eventHead));
+    const mergedPath = path.join(temp, 'merged.json'), approvedPath = path.join(temp, 'approved.json');
+    if (fs.existsSync(mergedPath)) {
+      const approval = JSON.parse(fs.readFileSync(approvedPath));
+      assert.ok(approval.includes('commit_id=' + state.pr.head.sha));
+      return JSON.parse(fs.readFileSync(mergedPath));
     }
-    return fs.existsSync(path.join(temp, 'merged.json')) ? JSON.parse(fs.readFileSync(path.join(temp, 'merged.json'))) : null;
+    assert.equal(fs.existsSync(approvedPath), false);
+    return null;
   } finally {fs.rmSync(temp, {recursive: true, force: true});}
 }
 test('merge CLI accepts successful push and PR duplicates without ignoring either', () => {
@@ -149,7 +179,16 @@ for (const [name, mutate] of [
   ['pending CI', s => {s.checks[0].status = 'in_progress';}],
   ['missing CI', s => {s.checks.pop();}],
   ['skipped required CI', s => {s.checks[0].conclusion = 'skipped';}],
-  ['failed legacy status', s => {s.legacy = {statuses: [{}], state: 'failure'};}],
+  ['failed legacy status', s => {s.legacy = {sha: s.pr.head.sha, statuses: [{}], state: 'failure'};}],
+  ['missing governance statuses', s => {s.legacy = {sha: s.pr.head.sha, state: 'success', statuses: []};}],
+  ['failing governance status', s => {const status = governanceStatus(s.pr.head.sha); status.statuses[0].state = 'failure'; s.legacy = status;}],
+  ['pending governance status', s => {const status = governanceStatus(s.pr.head.sha); status.statuses[0].state = 'pending'; s.legacy = status;}],
+  ['wrong-head governance status', s => {s.legacy = governanceStatus('b'.repeat(40));}],
+  ['untrusted-publisher governance status', s => {
+    const status = governanceStatus(s.pr.head.sha);
+    status.statuses.forEach(item => {item.avatar_url = 'https://avatars.githubusercontent.com/u/1?v=4';});
+    s.legacy = status;
+  }],
   ['base changed during reads', s => {s.advanceBase = true;}],
 ]) test('merge CLI performs no write with ' + name, () => assert.equal(exerciseMerge(mutate), null));
 
@@ -189,6 +228,9 @@ test('trusted governance completion can trigger the same exact-head merge', () =
 });
 test('unrelated workflow event cannot trigger merge', () => {
   assert.equal(exerciseMerge(s => {s.event = 'push';}), null);
+});
+test('stale workflow run head cannot approve a newer head', () => {
+  assert.equal(exerciseMerge(s => {s.runHead = 'b'.repeat(40);}), null);
 });
 
 test('merge retries a null mergeable value with bounded backoff, then merges the exact head', () => {
