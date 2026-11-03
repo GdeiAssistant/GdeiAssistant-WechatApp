@@ -35,6 +35,99 @@ class SecretScanTests(unittest.TestCase):
         (self.source / filename).write_text(text)
         return SCANNER.scan(BINARY, 'dir', self.source, self.output)
 
+    def suppression_repository(self):
+        subprocess.run(['git', 'init', '--quiet', str(self.source)], check=True,
+                       capture_output=True)
+        self.git('config', 'user.name', 'Synthetic Test')
+        self.git('config', 'user.email', 'fixture@example.invalid')
+        (self.source / 'clean.txt').write_text('clean fixture\n')
+        self.git('add', '.')
+        self.git('commit', '--quiet', '-m', 'test: clean fixture')
+        return self.git('rev-parse', 'HEAD')
+
+    def git(self, *arguments):
+        return subprocess.run(['git', '-C', str(self.source), *arguments], check=True,
+                              capture_output=True, text=True).stdout.strip()
+
+    def suppressed_payload(self, suppression, mode):
+        self.source = self.root / ('payload-' + mode)
+        self.source.mkdir()
+        base = self.suppression_repository()
+        payload = self.source / 'credentials.properties'
+        payload.write_text('password=' + fake_value() + '\n')
+        if suppression == 'comment':
+            payload.write_text(payload.read_text().rstrip() + ' # gitleaks:allow\n')
+        self.git('add', '.')
+        self.git('commit', '--quiet', '-m', 'test: synthetic credential')
+        if suppression == 'ignore':
+            findings = SCANNER.scan(BINARY, mode, self.source, self.output)
+            self.assertTrue(findings)
+            (self.source / '.gitleaksignore').write_text(
+                '\n'.join(row['Fingerprint'] for row in findings) + '\n')
+            self.git('add', '.gitleaksignore')
+            self.git('commit', '--quiet', '-m', 'test: source suppression')
+        return base
+
+    def test_helper_ignores_allow_comments(self):
+        for mode in ('dir', 'git'):
+            with self.subTest(mode=mode):
+                self.suppressed_payload('comment', mode)
+                self.assertTrue(SCANNER.scan(BINARY, mode, self.source, self.output))
+
+    def test_helper_rejects_source_ignore(self):
+        for mode in ('dir', 'git'):
+            with self.subTest(mode=mode):
+                self.suppressed_payload('ignore', mode)
+                with self.assertRaises(RuntimeError):
+                    SCANNER.scan(BINARY, mode, self.source, self.output)
+                (self.source / '.gitleaksignore').unlink()
+
+    def test_ignore_rejection_is_redacted_at_artifact_sink(self):
+        value = fake_value()
+        nested = self.source / 'nested'
+        nested.mkdir()
+        (nested / '.gitleaksignore').write_text(value)
+        output = io.StringIO()
+        with patch('sys.argv', ['secret_scan.py', 'artifacts', '--gitleaks', BINARY]), \
+                patch.dict(os.environ, {'ARTIFACT_PATHS': str(self.source)}), \
+                contextlib.redirect_stdout(output):
+            self.assertEqual(SCANNER.main(), 2)
+        self.assertNotIn(value, output.getvalue())
+        self.assertNotIn(str(self.source), output.getvalue())
+
+    def run_added_commit_workflow(self, base):
+        workflow = (SCANNER.ROOT / '.github/workflows/engineering-governance.yml').read_text()
+        step = workflow.split('      - name: Scan added commits with redacted findings\n', 1)[1]
+        body = step.split('        run: |\n', 1)[1].split('\n  commitlint:', 1)[0]
+        script = '\n'.join(line[10:] for line in body.splitlines())
+        runner = self.root / 'runner'
+        binary_dir = runner / 'gitleaks-bin'
+        binary_dir.mkdir(parents=True, exist_ok=True)
+        binary_link = binary_dir / 'gitleaks'
+        if not binary_link.exists():
+            binary_link.symlink_to(Path(shutil.which(BINARY)).resolve())
+        shutil.copyfile(SCANNER.ROOT / '.gitleaks.toml', self.source / '.gitleaks.toml')
+        result = subprocess.run(['bash', '-c', script], cwd=self.source, capture_output=True,
+                                env={**os.environ, 'PR_BASE': base,
+                                     'PR_HEAD': self.git('rev-parse', 'HEAD'),
+                                     'RUNNER_TEMP': str(runner)}, check=False)
+        return result.returncode
+
+    def test_added_commit_workflow_blocks_allow_comment(self):
+        base = self.suppressed_payload('comment', 'git')
+        self.assertEqual(self.run_added_commit_workflow(base), 1)
+
+    def test_added_commit_workflow_blocks_source_ignore(self):
+        base = self.suppressed_payload('ignore', 'git')
+        self.assertEqual(self.run_added_commit_workflow(base), 1)
+
+    def test_added_commit_workflow_clean_control(self):
+        base = self.suppression_repository()
+        (self.source / 'clean.txt').write_text('another clean fixture\n')
+        self.git('add', '.')
+        self.git('commit', '--quiet', '-m', 'test: clean addition')
+        self.assertEqual(self.run_added_commit_workflow(base), 0)
+
     def test_mongodb_protocols_are_detected_without_keywords(self):
         for protocol in ('mongodb', 'mongodb+srv'):
             with self.subTest(protocol=protocol):

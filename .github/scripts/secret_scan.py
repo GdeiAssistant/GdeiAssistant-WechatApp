@@ -45,9 +45,32 @@ def load_baseline(path):
     return baseline
 
 
+def reject_source_ignores(target):
+    # Gitleaks also discovers ignore files in the scan source, independently of
+    # --gitleaks-ignore-path. Never let unreviewed source fingerprints hide findings.
+    target = Path(target)
+    if any(os.path.lexists(path / '.gitleaksignore') for path in (ROOT, Path.cwd())):
+        raise RuntimeError('Source ignore files are not permitted')
+    if target.name == '.gitleaksignore':
+        raise RuntimeError('Source ignore files are not permitted')
+
+    if target.is_file():
+        if os.path.lexists(target.parent / '.gitleaksignore'):
+            raise RuntimeError('Source ignore files are not permitted')
+        return
+
+    def fail_walk(error):
+        raise error
+
+    for _, directories, files in os.walk(target, onerror=fail_walk):
+        if '.gitleaksignore' in directories or '.gitleaksignore' in files:
+            raise RuntimeError('Source ignore files are not permitted')
+
+
 def scan(binary, mode, target, report, baseline=None):
+    reject_source_ignores(target)
     command = [binary, mode, str(target), '--config', str(ROOT / '.gitleaks.toml'),
-               '--redact', '--no-banner', '--report-format', 'json', '--report-path', str(report)]
+               '--ignore-gitleaks-allow', '--redact', '--no-banner', '--report-format', 'json', '--report-path', str(report)]
     if mode == 'git':
         command.append('--log-opts=--all')
     if baseline is not None:

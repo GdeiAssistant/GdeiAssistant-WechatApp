@@ -72,3 +72,5 @@ Gitleaks 的原生 baseline 无法按次数限制同一身份的发现。`secret
 配置赋值规则检查至少 8 个字符的非占位凭据，不依赖熵值；不足 8 个字符仍可能漏检，不能据扫描通过判断凭据安全。公开的 AccessKey ID 不属于自定义 Secret 赋值规则。JUnit XML 同时检查普通行首和紧接 CDATA 标记的首行，上传门禁使用同一规则。
 
 测试合成值的路径与值条件放在规则级 allowlist，覆盖自定义规则和 `generic-api-key`；测试文件中的其他值仍会被扫描。
+
+扫描新增提交、历史和上传路径时，`gitleaks:allow` 注释不产生豁免；扫描源中的 `.gitleaksignore` 会使检查失败。历史豁免仅使用已有的、经审核的 `.gitleaks-baseline.json` 身份与次数机制。

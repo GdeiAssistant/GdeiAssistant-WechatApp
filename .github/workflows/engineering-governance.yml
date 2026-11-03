@@ -39,7 +39,12 @@ jobs:
             echo "No base commit is available for this event" >&2
             exit 1
           fi
-          "$RUNNER_TEMP/gitleaks-bin/gitleaks" git . --config .gitleaks.toml --redact --no-banner --log-opts="$base..$head"
+          ignore_path="$(find . -name .gitleaksignore -print -quit)"
+          if [[ -n "$ignore_path" ]]; then
+            echo "Source ignore files are not permitted" >&2
+            exit 1
+          fi
+          "$RUNNER_TEMP/gitleaks-bin/gitleaks" git . --config .gitleaks.toml --ignore-gitleaks-allow --redact --no-banner --log-opts="$base..$head"
 
   commitlint:
     name: Commit message convention
