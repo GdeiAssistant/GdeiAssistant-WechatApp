@@ -9,8 +9,8 @@
 | 等级 | 范围 | 正常通过条件 |
 | --- | --- | --- |
 | R0 | 明确白名单内的纯文字修改，完整文本 diff，无配置或可执行内容 | 确定性分类为 `review_not_required`，必需 CI 通过 |
-| R1 | 普通应用逻辑、一般测试和非敏感配置 | CodeRabbit 已完成当前 SHA 审查，覆盖证据完整，无未处理阻断意见；必需 CI 通过 |
-| R2 | 登录、权限、校园凭证、隐私、部署、依赖执行钩子、workflow 和治理规则 | 由 reviewer App 的当前 SHA 完成证据满足常规批准；本仓以 CodeRabbit 为主，完整覆盖、无阻断意见且必需 CI 通过 |
+| R1 | 普通应用逻辑、一般测试和非敏感配置 | Codex 已发布当前 SHA 的 `completed` 标记，无未处理阻断意见；必需 CI 通过 |
+| R2 | 登录、权限、校园凭证、隐私、部署、依赖执行钩子、workflow 和治理规则 | 由 reviewer App 的当前 SHA 完成证据满足常规批准；本仓使用 Codex，标记指向当前 head、状态为 completed、无阻断意见且必需 CI 通过 |
 
 旧路径和新路径都参与分类，取最高等级。受保护路径优先于文档、测试、示例
 和 fixture。`AGENTS.md`、`.coderabbit.yaml`、CODEOWNERS、全部 `.github/`
@@ -54,9 +54,17 @@
 ## 常规审查与本人例外
 
 R1 和常规 R2 均由 reviewer App 的 SHA 绑定原始审查证据满足审查要求。
-本仓当前支持的 reviewer App 是 CodeRabbit，使用上述相同的身份、完成状态、
-全量范围和阻断意见校验；风险分类继续区分 R1/R2。无需人工或 Grok 账号的
-`approve` 评论，也不接受这些评论代替 App 审查。`/governance approve` 已移除。
+本仓当前使用的 reviewer App 是 Codex（`chatgpt-codex-connector[bot]`，app id
+1144995），读取它在 PR 评论里发布的 `<!-- codex-review-state:v1 {...} -->`
+标记：标记里的 `commit_sha` 必须等于当前 head，`status` 必须是 `completed`。
+标记是机器可读的，因此不再解析审查正文，也不再比对仓库内的 provider 配置。
+
+CodeRabbit 读取器保留在代码里但不再选用；它的证据来自 check run、review 正文
+和 run ID，比标记脆弱得多，而且该 App 已卸载——继续要求它会让本仓每个 PR 都
+落到 `ai-review-unavailable`，只能靠 owner override 通过，等于把例外变成常规。
+
+风险分类继续区分 R1/R2。无需人工或 Grok 账号的 `approve` 评论，也不接受这些
+评论代替 App 审查。`/governance approve` 已移除。
 
 Grok 使用 Pigbibi 的 GitHub 账号，没有独立 Grok login；GitHub 不能区分
 同一账号下由本人或智能体发起的操作，因此不将该账号评论视为独立审查证据。

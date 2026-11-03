@@ -10,6 +10,15 @@ const at = offset => new Date((NOW + offset) * 1000).toISOString();
 
 function fixture(path = 'src/view.js') {
   const policy = structuredClone(actualPolicy);
+  // These fixtures build CodeRabbit evidence — a check run, a review carrying
+  // the provider's run ID, and a scope table. Pin the provider so the suite
+  // tests that reader, rather than whatever the deployed policy happens to
+  // select today. The Codex reader has its own fixture in test-codex.cjs.
+  policy.reviewers = {
+    ...policy.reviewers,
+    R1: { primary: 'coderabbit' },
+    R2: { primary: 'coderabbit' },
+  };
   policy.owner_actors = [
     { user_id: 4, login: 'owner', enabled: true, decisions: ['override', 'revoke'] },
   ];
@@ -65,4 +74,25 @@ function ownerApproval(f, decision = 'override') {
   f.snapshot.issueComments.push(comment);
   return comment;
 }
-module.exports = { fixture, approve, approveWithoutFindings, ownerApproval, evaluate, HEAD, BASE, POLICY, NOW, at };
+// A snapshot that asks the gate to read Codex evidence instead of CodeRabbit's.
+// Only the provider selection differs; everything else about the PR is the same,
+// because the question being tested is which evidence the gate accepts.
+function codexFixture(path = 'pages/home/home.js') {
+  const f = fixture(path);
+  f.policy.reviewers = { ...f.policy.reviewers, R1: { primary: 'codex' }, R2: { primary: 'codex' } };
+  return f;
+}
+
+function codexState(f, review, { updated = 1 } = {}) {
+  const state = { code_review: { commit_sha: HEAD, has_any_findings: false,
+    has_unresolved_findings: false, status: 'completed', ...review }, security_review: {} };
+  f.snapshot.issueComments.push({
+    id: 900 + f.snapshot.issueComments.length,
+    user: { id: f.policy.codex.user_id, login: f.policy.codex.login, type: 'Bot' },
+    updated_at: at(updated),
+    body: `<!-- codex-review-state:v1 ${JSON.stringify(state)} -->\n\n## Codex Review Summary\n`,
+  });
+  return f;
+}
+
+module.exports = { fixture, codexFixture, codexState, approve, approveWithoutFindings, ownerApproval, evaluate, HEAD, BASE, POLICY, NOW, at };

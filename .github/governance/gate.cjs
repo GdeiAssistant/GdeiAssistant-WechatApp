@@ -216,9 +216,48 @@ function codeRabbit(snapshot, policy) {
     execution_status: 'completed', coverage: limitations.length ? 'partial' : 'reported_complete', limitations };
 }
 
+// Codex publishes one machine-readable marker per review, so there is no prose
+// to parse: the marker already carries the commit it reviewed, whether the
+// review finished, and whether anything is still unresolved. That is the whole
+// contract, and reading more than it would mean trusting text a PR author can
+// edit.
+function codex(snapshot, policy) {
+  const identity = policy.codex;
+  const isBot = c => c.user?.type === 'Bot' && c.user.id === identity.user_id
+    && c.user.login === identity.login;
+  const result = { provider: 'codex', comment_id: null, execution_status: 'unavailable',
+    coverage: 'unknown', limitations: [] };
+  const MARKER = /<!-- codex-review-state:v1 (\{[\s\S]*?\}) -->/;
+  const candidates = snapshot.issueComments.filter(isBot)
+    .map(c => {
+      const raw = MARKER.exec(c.body || '')?.[1];
+      if (!raw) return null;
+      try { return { c, state: JSON.parse(raw) }; } catch { return null; }
+    })
+    .filter(Boolean)
+    .sort((a, b) => Date.parse(b.c.updated_at) - Date.parse(a.c.updated_at) || b.c.id - a.c.id);
+  if (!candidates.length) return { ...result, limitations: ['current_head_state_missing'] };
+  const { c, state } = candidates[0];
+  const review = state.code_review || {};
+  const bound = { ...result, comment_id: c.id };
+  if (review.commit_sha !== snapshot.pr.head.sha) {
+    return { ...bound, limitations: ['state_not_current_head'] };
+  }
+  if (review.status !== 'completed') {
+    return { ...bound, limitations: ['review_not_completed'] };
+  }
+  // A completed review that still has unresolved findings is still a completed
+  // review. The findings reach the gate as unresolved threads, which are
+  // blockers — not as a coverage limitation, which would ask for an override.
+  return { ...bound, execution_status: 'completed', coverage: 'reported_complete', limitations: [] };
+}
+
+
 function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 1000)) {
   assert(policy.version === 'pr-governance/v2' && policy.repository === snapshot.repository, 'Policy repository mismatch');
-  assert(policy.providers.coderabbit === 'sha-bound-review', 'Unsupported provider policy');
+  for (const [name, kind] of Object.entries(policy.providers)) {
+    assert(kind === 'sha-bound-review', `Unsupported provider policy: ${name}`);
+  }
   assert(snapshot.pr.state === 'open' && snapshot.complete === true, 'Incomplete snapshot');
   assert(snapshot.commits.length === snapshot.pr.commits && snapshot.commits.length < 250, 'Incomplete commit list');
   assert(Array.isArray(snapshot.checkRuns), 'Incomplete checks');
@@ -227,22 +266,30 @@ function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 100
   const result = { ...risk, binding: expected, policy_version: policy.version, allowed: false,
     reason: 'current_commit_review_required', providers: policy.providers };
   const latest = latestReviews(snapshot.reviews);
+  // Either reviewer App may raise a blocking review; which one is configured is
+  // the policy's business, not the blocker's.
+  const reviewerIds = new Set([policy.coderabbit.user_id, policy.codex?.user_id].filter(Boolean));
   const blockers = latest.filter(r => r.state === 'CHANGES_REQUESTED'
-    && (r.user.id === policy.coderabbit.user_id || ['write', 'maintain', 'admin'].includes(snapshot.permissions[r.user.login])))
+    && (reviewerIds.has(r.user.id) || ['write', 'maintain', 'admin'].includes(snapshot.permissions[r.user.login])))
     .map(r => `review:${r.id}`);
   blockers.push(...snapshot.threads.filter(t => !t.isResolved).map(t => `thread:${t.id}`));
   if (risk.tier === 'R0') return { ...result, allowed: !blockers.length, blocking_findings: blockers,
     reason: blockers.length ? 'review_findings_blocking' : 'review_not_required' };
-  const ai = codeRabbit(snapshot, policy);
+  const provider = policy.reviewers?.[risk.tier]?.primary || 'coderabbit';
+  const identity = provider === 'codex' ? policy.codex : policy.coderabbit;
+  const ai = provider === 'codex' ? codex(snapshot, policy) : codeRabbit(snapshot, policy);
   const scopes = [];
   if (ai.execution_status !== 'completed') scopes.push('ai-review-unavailable');
   else if (ai.coverage !== 'reported_complete') scopes.push('ai-review-partial');
   if (blockers.length) scopes.push('review-findings');
-  const providerComments = snapshot.issueComments.filter(c => c.user?.id === policy.coderabbit.user_id);
+  const providerComments = snapshot.issueComments.filter(c => c.user?.id === identity.user_id);
   const evidenceSha = digest({ binding: expected, ai, blockers, reviews: snapshot.reviews.map(stableReview),
-    checks: snapshot.checkRuns.filter(c => c.app?.id === policy.coderabbit.app_id).map(stableCheck),
+    checks: snapshot.checkRuns.filter(c => c.app?.id === identity.app_id).map(stableCheck),
     reviewComments: snapshot.reviewComments.map(stableComment), threads: snapshot.threads.map(stableThread), providerComments: providerComments.map(stableComment),
-    config: snapshot.coderabbitConfig, trustedConfig: snapshot.trustedCoderabbitConfig });
+    // Codex keeps its configuration in the central policy repository, so there
+    // is no in-repo config to compare against a trusted copy.
+    config: provider === 'codex' ? null : snapshot.coderabbitConfig,
+    trustedConfig: provider === 'codex' ? null : snapshot.trustedCoderabbitConfig });
   const decision = ownerDecision(snapshot, policy, expected, evidenceSha, now);
   Object.assign(result, { ai, blocking_findings: blockers, required_override_scopes: scopes,
     evidence_sha256: evidenceSha, owner_comment_id: decision.comment_id || null, owner_watermark: decision.watermark,
