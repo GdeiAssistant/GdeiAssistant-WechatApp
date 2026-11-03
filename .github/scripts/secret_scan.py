@@ -67,7 +67,32 @@ def reject_source_ignores(target):
             raise RuntimeError('Source ignore files are not permitted')
 
 
+def verify_history(target):
+    # Gitleaks can report success after its internal Git reader fails. Read the
+    # complete patch history first, suppressing every source-controlled diagnostic.
+    try:
+        root = subprocess.run(['git', '-C', str(target), 'rev-parse', '--show-toplevel'],
+                              capture_output=True, text=True, check=False)
+        if root.returncode or Path(root.stdout.strip()).resolve() != Path(target).resolve():
+            raise RuntimeError('Git history is unreadable; scan blocked')
+    except (OSError, ValueError):
+        raise RuntimeError('Git history is unreadable; scan blocked') from None
+    commands = [('rev-parse', '--verify', 'HEAD^{commit}'),
+                ('log', '--all', '--full-history', '-p', '--')]
+    for arguments in commands:
+        try:
+            result = subprocess.run(['git', '-C', str(target), *arguments],
+                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                                    check=False)
+        except OSError:
+            raise RuntimeError('Git history is unreadable; scan blocked') from None
+        if result.returncode:
+            raise RuntimeError('Git history is unreadable; scan blocked')
+
+
 def scan(binary, mode, target, report, baseline=None):
+    if mode == 'git':
+        verify_history(target)
     reject_source_ignores(target)
     command = [binary, mode, str(target), '--config', str(ROOT / '.gitleaks.toml'),
                '--ignore-gitleaks-allow', '--redact', '--no-banner', '--report-format', 'json', '--report-path', str(report)]

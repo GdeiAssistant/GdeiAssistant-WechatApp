@@ -74,3 +74,5 @@ Gitleaks 的原生 baseline 无法按次数限制同一身份的发现。`secret
 测试合成值的路径与值条件放在规则级 allowlist，覆盖自定义规则和 `generic-api-key`；测试文件中的其他值仍会被扫描。
 
 扫描新增提交、历史和上传路径时，`gitleaks:allow` 注释不产生豁免；扫描源中的 `.gitleaksignore` 会使检查失败。历史豁免仅使用已有的、经审核的 `.gitleaks-baseline.json` 身份与次数机制。
+
+新增提交扫描先校验 base/head 提交对象，并完整读取目标范围；历史扫描先校验 Git 仓库、HEAD 并读取全部引用的历史补丁。Git 读取失败返回固定脱敏错误和非零状态，不能视为零发现。有效的空提交范围仍可通过。

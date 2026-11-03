@@ -95,7 +95,7 @@ class SecretScanTests(unittest.TestCase):
         self.assertNotIn(value, output.getvalue())
         self.assertNotIn(str(self.source), output.getvalue())
 
-    def run_added_commit_workflow(self, base):
+    def run_added_commit_workflow(self, base, head=None):
         workflow = (SCANNER.ROOT / '.github/workflows/engineering-governance.yml').read_text()
         step = workflow.split('      - name: Scan added commits with redacted findings\n', 1)[1]
         body = step.split('        run: |\n', 1)[1].split('\n  commitlint:', 1)[0]
@@ -109,7 +109,7 @@ class SecretScanTests(unittest.TestCase):
         shutil.copyfile(SCANNER.ROOT / '.gitleaks.toml', self.source / '.gitleaks.toml')
         result = subprocess.run(['bash', '-c', script], cwd=self.source, capture_output=True,
                                 env={**os.environ, 'PR_BASE': base,
-                                     'PR_HEAD': self.git('rev-parse', 'HEAD'),
+                                     'PR_HEAD': head or self.git('rev-parse', 'HEAD'),
                                      'RUNNER_TEMP': str(runner)}, check=False)
         return result.returncode
 
@@ -127,6 +127,83 @@ class SecretScanTests(unittest.TestCase):
         self.git('add', '.')
         self.git('commit', '--quiet', '-m', 'test: clean addition')
         self.assertEqual(self.run_added_commit_workflow(base), 0)
+
+    def test_added_commit_invalid_range_fails(self):
+        base = self.suppressed_payload('comment', 'git')
+        self.assertEqual(self.run_added_commit_workflow(base), 1)
+        self.assertNotEqual(self.run_added_commit_workflow('f' * 40), 0)
+
+    def test_added_commit_empty_range_passes(self):
+        base = self.suppression_repository()
+        self.assertEqual(self.run_added_commit_workflow(base), 0)
+
+    def test_added_commit_invalid_head_fails(self):
+        base = self.suppression_repository()
+        self.assertNotEqual(self.run_added_commit_workflow(base, 'f' * 40), 0)
+
+    def test_missing_blob_blocks_history_and_range(self):
+        base = self.suppressed_payload('comment', 'git')
+        # Both tips resolve, but reading the complete patch must fail.
+        blob = self.git('rev-parse', 'HEAD:credentials.properties')
+        (self.source / '.git' / 'objects' / blob[:2] / blob[2:]).unlink()
+        with self.assertRaises(RuntimeError):
+            SCANNER.scan(BINARY, 'git', self.source, self.output)
+        self.assertNotEqual(self.run_added_commit_workflow(base), 0)
+
+    def test_helper_history_git_failure_blocks(self):
+        (self.source / 'credentials.properties').write_text('password=' + fake_value())
+        with self.assertRaises(RuntimeError):
+            SCANNER.scan(BINARY, 'git', self.source, self.output)
+
+    def test_history_cli_git_failure_blocks(self):
+        value = fake_value()
+        (self.source / 'credentials.properties').write_text('password=' + value)
+        shutil.copyfile(SCANNER.ROOT / '.gitleaks.toml', self.source / '.gitleaks.toml')
+        baseline = self.root / 'baseline.json'
+        baseline.write_text('[]')
+        output = io.StringIO()
+        with patch.object(SCANNER, 'ROOT', self.source), \
+                patch('sys.argv', ['scan', 'history', '--gitleaks', BINARY,
+                                   '--baseline', str(baseline), '--summary',
+                                   str(self.root / 'summary.json')]), \
+                contextlib.redirect_stdout(output):
+            self.assertNotEqual(SCANNER.main(), 0)
+        self.assertNotIn(value, output.getvalue())
+        self.assertNotIn(str(self.source), output.getvalue())
+
+    def test_history_cannot_inherit_parent_repository(self):
+        self.suppression_repository()
+        nested = self.source / 'nested'
+        nested.mkdir()
+        with self.assertRaises(RuntimeError):
+            SCANNER.scan(BINARY, 'git', nested, self.output)
+
+    def test_missing_history_source_blocks(self):
+        with self.assertRaises(RuntimeError):
+            SCANNER.scan(BINARY, 'git', self.source / 'absent', self.output)
+
+    def test_history_without_head_blocks(self):
+        subprocess.run(['git', 'init', '--quiet', str(self.source)], check=True,
+                       capture_output=True)
+        with self.assertRaises(RuntimeError):
+            SCANNER.scan(BINARY, 'git', self.source, self.output)
+
+    def test_helper_history_enumeration_failure_blocks(self):
+        self.suppression_repository()
+        result = subprocess.run
+
+        def fail_history(command, **kwargs):
+            if command[0] == 'git' and 'log' in command:
+                return subprocess.CompletedProcess(command, 128)
+            return result(command, **kwargs)
+
+        with patch.object(SCANNER.subprocess, 'run', side_effect=fail_history), \
+                self.assertRaises(RuntimeError):
+            SCANNER.scan(BINARY, 'git', self.source, self.output)
+
+    def test_history_clean_control(self):
+        self.suppression_repository()
+        self.assertEqual(SCANNER.scan(BINARY, 'git', self.source, self.output), [])
 
     def test_mongodb_protocols_are_detected_without_keywords(self):
         for protocol in ('mongodb', 'mongodb+srv'):
