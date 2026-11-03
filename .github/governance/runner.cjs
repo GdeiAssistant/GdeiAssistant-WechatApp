@@ -2,6 +2,13 @@
 
 const gate = require('./gate.cjs');
 
+// Reviewer Apps whose check runs may re-trigger an evaluation. Fixed here rather
+// than read from policy.json because the workflow's own event filter cannot read
+// the policy, and the two lists have to agree: if a provider is configured but
+// its events are dropped, its completion never re-evaluates the gate and a PR
+// can sit on a stale result until the next scheduled sweep.
+const REVIEWER_APPS = new Set([347564, 1144995]);
+
 async function selectTargets(github, context, defaultBranch) {
   const repo = context.repo;
   const event = context.payload;
@@ -15,7 +22,7 @@ async function selectTargets(github, context, defaultBranch) {
   }
   if (context.eventName === 'check_run') {
     const check = event.check_run;
-    if (check.app?.id !== 347564 || check.app.slug !== 'coderabbitai') return [];
+    if (!REVIEWER_APPS.has(check.app?.id)) return [];
     if (check.pull_requests?.length) return [...new Set(check.pull_requests.map(pr => pr.number))];
     const prs = await github.paginate(github.rest.repos.listPullRequestsAssociatedWithCommit,
       { ...repo, commit_sha: check.head_sha, per_page: 100 });
@@ -76,7 +83,7 @@ async function collect(github, context, number, policyCommit, policy) {
   const threads = await readThreads(github, repo, number);
   const allChecks = await github.paginate(github.rest.checks.listForRef,
     { ...repo, ref: pr.head.sha, filter: 'all', per_page: 100 });
-  const checkRuns = allChecks.filter(c => c.app?.id === policy?.coderabbit.app_id);
+  const checkRuns = allChecks.filter(c => REVIEWER_APPS.has(c.app?.id));
   const statuses = await github.paginate(github.rest.repos.listCommitStatusesForRef,
     { ...repo, ref: pr.head.sha, per_page: 100 });
   const ownerWatermark = Math.max(0, ...statuses.filter(s => s.context?.toLowerCase() === 'risk-gate'
@@ -91,6 +98,11 @@ async function collect(github, context, number, policyCommit, policy) {
   };
   const coderabbitConfig = await configAt(pr.head.sha);
   const trustedCoderabbitConfig = await configAt(policyCommit);
+  // When the base tip landed. A reviewer that published its marker before this
+  // reviewed a different comparison, and the reader has no other way to tell.
+  const { data: baseCommit } = await github.rest.repos.getCommit({ ...repo, ref: pr.base.sha });
+  const baseCommitAt = Math.floor(Date.parse(baseCommit.commit?.committer?.date) / 1000);
+  if (!Number.isFinite(baseCommitAt)) throw new Error('Unknown base commit time');
   const permissions = {};
   const actors = (policy?.owner_actors || []);
   const records = [...reviews, ...gate.evidenceComments({ issueComments }, actors)];
@@ -101,7 +113,7 @@ async function collect(github, context, number, policyCommit, policy) {
   }
   return { repository: `${repo.owner}/${repo.repo}`, policyCommit, pr, files, reviews,
     reviewComments, issueComments, commits, threads, permissions, checkRuns, ownerWatermark, statuses,
-    coderabbitConfig, trustedCoderabbitConfig, complete: true };
+    coderabbitConfig, trustedCoderabbitConfig, baseCommitAt, complete: true };
 }
 
 function snapshotVersion(snapshot, policy) {
