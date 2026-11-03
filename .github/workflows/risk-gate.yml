@@ -24,12 +24,20 @@ on:
 permissions: {}
 
 # Isolate untrusted events before workflow concurrency can replace a pending run.
+# Publisher allowlist, kept in step with policy.json: the configured reviewer
+# Apps and the review relay. A provider that publishes its verdict but whose
+# event is filtered out here never re-evaluates the gate, so its completion
+# leaves a stale result in place until the next scheduled sweep.
 concurrency:
   group: >-
     ${{ ((github.event_name == 'issue_comment' &&
          (!github.event.issue.pull_request ||
-          (github.event.comment.user.id != 20649888 && github.event.comment.user.id != 136622811))) ||
-         (github.event_name == 'check_run' && github.event.check_run.app.id != 347564)) &&
+          (github.event.comment.user.id != 20649888 &&
+           github.event.comment.user.id != 136622811 &&
+           github.event.comment.user.id != 199175422))) ||
+         (github.event_name == 'check_run' &&
+          github.event.check_run.app.id != 347564 &&
+          github.event.check_run.app.id != 1144995)) &&
         format('pr-governance-ignored-{0}', github.run_id) || 'pr-governance' }}
   cancel-in-progress: false
 
@@ -39,8 +47,12 @@ jobs:
     if: >-
       (github.event_name != 'issue_comment' ||
        (github.event.issue.pull_request &&
-        (github.event.comment.user.id == 20649888 || github.event.comment.user.id == 136622811))) &&
-      (github.event_name != 'check_run' || github.event.check_run.app.id == 347564)
+        (github.event.comment.user.id == 20649888 ||
+         github.event.comment.user.id == 136622811 ||
+         github.event.comment.user.id == 199175422))) &&
+      (github.event_name != 'check_run' ||
+       (github.event.check_run.app.id == 347564 ||
+        github.event.check_run.app.id == 1144995))
     name: Evaluate PR governance
     runs-on: ubuntu-latest
     timeout-minutes: 10

@@ -23,14 +23,15 @@
       "primary": "deterministic-prose"
     },
     "R1": {
-      "primary": "coderabbit"
+      "primary": "codex"
     },
     "R2": {
-      "primary": "coderabbit"
+      "primary": "codex"
     }
   },
   "providers": {
-    "coderabbit": "sha-bound-review"
+    "coderabbit": "sha-bound-review",
+    "codex": "sha-bound-review"
   },
   "owner_approval_max_hours": 24,
   "dependabot_template_exemption": false,
@@ -39,7 +40,10 @@
       "user_id": 20649888,
       "login": "Pigbibi",
       "enabled": true,
-      "decisions": ["override", "revoke"]
+      "decisions": [
+        "override",
+        "revoke"
+      ]
     }
   ],
   "coderabbit": {
@@ -47,5 +51,11 @@
     "app_slug": "coderabbitai",
     "user_id": 136622811,
     "login": "coderabbitai[bot]"
+  },
+  "codex": {
+    "app_id": 1144995,
+    "app_slug": "chatgpt-codex-connector",
+    "user_id": 199175422,
+    "login": "chatgpt-codex-connector[bot]"
   }
 }

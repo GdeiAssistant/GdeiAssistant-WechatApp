@@ -23,6 +23,9 @@ function mock(f = fixture()) {
         getContent: async ({ ref }) => ({ data: { type: 'file', encoding: 'base64',
           content: Buffer.from(ref === BASE ? f.snapshot.trustedCoderabbitConfig : f.snapshot.coderabbitConfig).toString('base64') } }),
         getBranch: async () => ({ data: { commit: { sha: BASE } } }),
+        getCommit: async () => ({ data: { commit: { committer: {
+          date: new Date((f.snapshot.baseCommitAt ?? Math.floor(Date.now() / 1000) - 3600) * 1000).toISOString(),
+        } } } }),
         getCollaboratorPermissionLevel: async ({ username }) => ({ data: { permission: f.snapshot.permissions[username], user: { id: [...f.snapshot.reviews, ...f.snapshot.issueComments].find(r => r.user.login === username).user.id } } }),
         createCommitStatus: async s => {
           statuses.push(s);
@@ -103,8 +106,9 @@ test('untrusted workflow events cannot replace a trusted pending run', () => {
   const trusted = [
     { event_name: 'schedule' }, { event_name: 'push' },
     { event_name: 'pull_request_target' }, { event_name: 'workflow_run' },
-    ...[20649888, 136622811].map(id => ({ event_name: 'issue_comment', event: { issue: { pull_request: {} }, comment: { user: { id } } } })),
+    ...[20649888, 136622811, 199175422].map(id => ({ event_name: 'issue_comment', event: { issue: { pull_request: {} }, comment: { user: { id } } } })),
     { event_name: 'check_run', event: { check_run: { app: { id: 347564 } } } },
+    { event_name: 'check_run', event: { check_run: { app: { id: 1144995 } } } },
   ];
   for (const event of trusted) assert.equal(group({ event: {}, ...event, run_id: 1 }, format), 'pr-governance');
   const untrusted = [

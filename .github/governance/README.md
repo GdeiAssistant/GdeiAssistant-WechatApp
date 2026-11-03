@@ -9,8 +9,8 @@
 | 等级 | 范围 | 正常通过条件 |
 | --- | --- | --- |
 | R0 | 明确白名单内的纯文字修改，完整文本 diff，无配置或可执行内容 | 确定性分类为 `review_not_required`，必需 CI 通过 |
-| R1 | 普通应用逻辑、一般测试和非敏感配置 | CodeRabbit 已完成当前 SHA 审查，覆盖证据完整，无未处理阻断意见；必需 CI 通过 |
-| R2 | 登录、权限、校园凭证、隐私、部署、依赖执行钩子、workflow 和治理规则 | 由 reviewer App 的当前 SHA 完成证据满足常规批准；本仓以 CodeRabbit 为主，完整覆盖、无阻断意见且必需 CI 通过 |
+| R1 | 普通应用逻辑、一般测试和非敏感配置 | Codex 已发布当前 SHA 的 `completed` 标记，无未处理阻断意见；必需 CI 通过 |
+| R2 | 登录、权限、校园凭证、隐私、部署、依赖执行钩子、workflow 和治理规则 | 由 reviewer App 的当前 SHA 完成证据满足常规批准；本仓使用 Codex，标记指向当前 head、状态为 completed、无阻断意见且必需 CI 通过 |
 
 旧路径和新路径都参与分类，取最高等级。受保护路径优先于文档、测试、示例
 和 fixture。`AGENTS.md`、`.coderabbit.yaml`、CODEOWNERS、全部 `.github/`
@@ -54,9 +54,35 @@
 ## 常规审查与本人例外
 
 R1 和常规 R2 均由 reviewer App 的 SHA 绑定原始审查证据满足审查要求。
-本仓当前支持的 reviewer App 是 CodeRabbit，使用上述相同的身份、完成状态、
-全量范围和阻断意见校验；风险分类继续区分 R1/R2。无需人工或 Grok 账号的
-`approve` 评论，也不接受这些评论代替 App 审查。`/governance approve` 已移除。
+本仓当前使用的 reviewer App 是 Codex（`chatgpt-codex-connector[bot]`，app id
+1144995），读取它在 PR 评论里发布的 `<!-- codex-review-state:v1 {...} -->`
+标记：标记里的 `commit_sha` 必须等于当前 head，`status` 必须是 `completed`。
+标记是机器可读的，因此不再解析审查正文，也不再比对仓库内的 provider 配置。
+
+标记只写 head，不写它比较过的 base，所以范围要另行还原。审查覆盖的是一次
+比较而不是一个提交：如果 base 分支在标记发布之后才前进，审查者看到的 diff
+和实际会合并的 diff 就不是同一份，而同一个 head SHA 会一直批准新的 base 内容。
+因此 gate 额外要求标记不早于当前 base tip 的提交时间，否则报
+`base_advanced_since_review`。CodeRabbit 在正文里写明 `between <base> and
+<head>`，可以直接核对；Codex 没有，只能靠先后顺序。
+
+未处理意见同理不能只看会话状态。会话的 resolve 状态由 GitHub 记录，标记里的
+`has_unresolved_findings` 由 provider 记录，两者可能不一致；只有显式 `false`
+才算干净。`true` 时除会话阻塞外还额外产出 `codex-marker:unresolved-findings`
+这一条阻断项，owner 例外必须原样复述它，不能靠“没有未解决会话”默认放行。
+字段缺失既不当作 `false` 也不当作 `true`，报 `review_findings_unknown`。
+
+`risk-gate.yml` 的发布者白名单必须与 `policy.json` 选中的 provider 同步：
+评论事件只接受 CodeRabbit、review relay 和 Codex（用户 ID 199175422）三家，
+check run 事件只接受 app 347564 与 1144995。漏掉一家不会让错误证据通过，
+但会让它的完成事件不触发重新评估，PR 会停在旧结论上直到下一次定时扫描。
+
+CodeRabbit 读取器保留在代码里但不再选用；它的证据来自 check run、review 正文
+和 run ID，比标记脆弱得多，而且该 App 已卸载——继续要求它会让本仓每个 PR 都
+落到 `ai-review-unavailable`，只能靠 owner override 通过，等于把例外变成常规。
+
+风险分类继续区分 R1/R2。无需人工或 Grok 账号的 `approve` 评论，也不接受这些
+评论代替 App 审查。`/governance approve` 已移除。
 
 Grok 使用 Pigbibi 的 GitHub 账号，没有独立 Grok login；GitHub 不能区分
 同一账号下由本人或智能体发起的操作，因此不将该账号评论视为独立审查证据。
