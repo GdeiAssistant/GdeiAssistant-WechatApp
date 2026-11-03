@@ -59,6 +59,24 @@ R1 和常规 R2 均由 reviewer App 的 SHA 绑定原始审查证据满足审查
 标记：标记里的 `commit_sha` 必须等于当前 head，`status` 必须是 `completed`。
 标记是机器可读的，因此不再解析审查正文，也不再比对仓库内的 provider 配置。
 
+标记只写 head，不写它比较过的 base，所以范围要另行还原。审查覆盖的是一次
+比较而不是一个提交：如果 base 分支在标记发布之后才前进，审查者看到的 diff
+和实际会合并的 diff 就不是同一份，而同一个 head SHA 会一直批准新的 base 内容。
+因此 gate 额外要求标记不早于当前 base tip 的提交时间，否则报
+`base_advanced_since_review`。CodeRabbit 在正文里写明 `between <base> and
+<head>`，可以直接核对；Codex 没有，只能靠先后顺序。
+
+未处理意见同理不能只看会话状态。会话的 resolve 状态由 GitHub 记录，标记里的
+`has_unresolved_findings` 由 provider 记录，两者可能不一致；只有显式 `false`
+才算干净。`true` 时除会话阻塞外还额外产出 `codex-marker:unresolved-findings`
+这一条阻断项，owner 例外必须原样复述它，不能靠“没有未解决会话”默认放行。
+字段缺失既不当作 `false` 也不当作 `true`，报 `review_findings_unknown`。
+
+`risk-gate.yml` 的发布者白名单必须与 `policy.json` 选中的 provider 同步：
+评论事件只接受 CodeRabbit、review relay 和 Codex（用户 ID 199175422）三家，
+check run 事件只接受 app 347564 与 1144995。漏掉一家不会让错误证据通过，
+但会让它的完成事件不触发重新评估，PR 会停在旧结论上直到下一次定时扫描。
+
 CodeRabbit 读取器保留在代码里但不再选用；它的证据来自 check run、review 正文
 和 run ID，比标记脆弱得多，而且该 App 已卸载——继续要求它会让本仓每个 PR 都
 落到 `ai-review-unavailable`，只能靠 owner override 通过，等于把例外变成常规。

@@ -246,10 +246,29 @@ function codex(snapshot, policy) {
   if (review.status !== 'completed') {
     return { ...bound, limitations: ['review_not_completed'] };
   }
+  // The marker names the head it reviewed and nothing else, so the reviewed
+  // range has to be reconstructed. A review covers a comparison, not a commit:
+  // if the base branch advanced after the marker was published, the reviewer
+  // saw a different diff than the one that would merge, and the same head SHA
+  // would otherwise keep approving new base content forever. CodeRabbit stated
+  // its range in prose and could be checked directly; Codex does not, so the
+  // available proof is ordering — the review must not predate the base tip.
+  const published = Date.parse(c.updated_at);
+  if (!Number.isFinite(published)) return { ...bound, limitations: ['state_time_unknown'] };
+  if (!Number.isFinite(snapshot.baseCommitAt)) return { ...bound, limitations: ['base_time_unknown'] };
+  if (snapshot.baseCommitAt * 1000 > published) {
+    return { ...bound, limitations: ['base_advanced_since_review'] };
+  }
   // A completed review that still has unresolved findings is still a completed
-  // review. The findings reach the gate as unresolved threads, which are
-  // blockers — not as a coverage limitation, which would ask for an override.
-  return { ...bound, execution_status: 'completed', coverage: 'reported_complete', limitations: [] };
+  // review, so it is not a coverage gap. But the flag cannot be dropped either:
+  // the thread list is collected independently, and a marker finding whose
+  // thread is not visible as unresolved would otherwise read as a clean pass.
+  // Only an explicit `false` is clean; a missing flag is not evidence of one.
+  if (review.has_unresolved_findings !== false && review.has_unresolved_findings !== true) {
+    return { ...bound, limitations: ['review_findings_unknown'] };
+  }
+  return { ...bound, execution_status: 'completed', coverage: 'reported_complete',
+    unresolved_findings: review.has_unresolved_findings === true, limitations: [] };
 }
 
 
@@ -278,6 +297,11 @@ function evaluate(snapshot, policy, policySha, now = Math.floor(Date.now() / 100
   const provider = policy.reviewers?.[risk.tier]?.primary || 'coderabbit';
   const identity = provider === 'codex' ? policy.codex : policy.coderabbit;
   const ai = provider === 'codex' ? codex(snapshot, policy) : codeRabbit(snapshot, policy);
+  // The provider's own unresolved-findings flag blocks on its own. Thread state
+  // is read from GitHub, not from the provider, so the two can disagree; when
+  // they do, the stricter of the two wins and the marker is named explicitly so
+  // an override has to acknowledge it rather than silently drop it.
+  if (ai.unresolved_findings) blockers.push('codex-marker:unresolved-findings');
   const scopes = [];
   if (ai.execution_status !== 'completed') scopes.push('ai-review-unavailable');
   else if (ai.coverage !== 'reported_complete') scopes.push('ai-review-partial');

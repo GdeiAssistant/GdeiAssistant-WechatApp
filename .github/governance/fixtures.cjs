@@ -27,6 +27,10 @@ function fixture(path = 'src/view.js') {
     repository: policy.repository, policyCommit: BASE, complete: true,
     pr: { state: 'open', number: 42, user: { id: 1, login: 'author' }, body: '', changed_files: 1, commits: 1,
       head: { sha: HEAD }, base: { sha: BASE, ref: 'main', repo: { id: 100 } } },
+    // The base tip the review has to postdate. Set before every marker in these
+    // fixtures, so a fixture only fails the ordering check when a test moves the
+    // marker behind it on purpose.
+    baseCommitAt: NOW - 3600,
     files: [{ filename: path, status: 'modified', sha: 'd'.repeat(40), additions: 1, deletions: 1, patch: '@@ -1 +1 @@\n-before\n+after' }],
     commits: [{ author: { id: 1 }, committer: { id: 1 } }],
     reviews: [], reviewComments: [], issueComments: [], threads: [], checkRuns: [], ownerWatermark: 0,
