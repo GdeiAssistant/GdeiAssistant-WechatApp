@@ -15,7 +15,7 @@ function handleNews(path, utils) {
 }
 
 function handleNewsDetail(path, utils) {
-  var matched = /^\/api\/information\/news\/id\/(.+)$/.exec(path)
+  var matched = /^\/api\/information\/news\/(.+)$/.exec(path)
   if (!matched) {
     return utils.rejectWithMessage(data.localizedMockText('未匹配到新闻详情接口', '未匹配到新聞詳情接口', 'News detail endpoint did not match', 'ニュース詳細APIに一致しませんでした', '뉴스 상세 엔드포인트가 일치하지 않습니다', utils.currentLocale && utils.currentLocale()))
   }

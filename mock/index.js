@@ -368,7 +368,7 @@ function handleRequest(options) {
     return infoHandlers.handleNews(path, utils)
   }
 
-  if (/^\/api\/information\/news\/id\/.+$/.test(path) && method === 'GET') {
+  if (/^\/api\/information\/news\/.+$/.test(path) && method === 'GET') {
     return infoHandlers.handleNewsDetail(path, utils)
   }
 
@@ -390,7 +390,7 @@ function handleRequest(options) {
     return messageHandlers.handleAnnouncementList(token, path, utils)
   }
 
-  if (/^\/api\/information\/announcement\/id\/.+$/.test(path) && method === 'GET') {
+  if (/^\/api\/information\/announcement\/.+$/.test(path) && method === 'GET') {
     return messageHandlers.handleAnnouncementDetail(token, path, utils)
   }
 
@@ -402,7 +402,7 @@ function handleRequest(options) {
     return messageHandlers.handleUnreadCount(token, utils)
   }
 
-  if (/^\/api\/information\/message\/id\/.+\/read$/.test(path) && method === 'POST') {
+  if (/^\/api\/information\/message\/.+\/read$/.test(path) && method === 'POST') {
     return messageHandlers.handleMessageRead(token, path, utils)
   }
 

@@ -19,7 +19,7 @@ function handleAnnouncementDetail(token, path, utils) {
     return authError
   }
 
-  var matched = /^\/api\/information\/announcement\/id\/(.+)$/.exec(path)
+  var matched = /^\/api\/information\/announcement\/(.+)$/.exec(path)
   var targetId = matched ? matched[1] : ''
   var detail = data.getAnnouncementList(utils.currentLocale && utils.currentLocale()).filter(function(item) {
     return item.id === targetId
@@ -74,7 +74,7 @@ function handleMessageRead(token, path, utils) {
     return authError
   }
 
-  var messageId = /^\/api\/information\/message\/id\/(.+)\/read$/.exec(path)
+  var messageId = /^\/api\/information\/message\/(.+)\/read$/.exec(path)
   if (!messageId) {
     return utils.rejectWithMessage(data.localizedMockText('消息不存在', '消息不存在', 'Message not found', 'メッセージが見つかりません', '메시지를 찾을 수 없습니다', utils.currentLocale && utils.currentLocale()))
   }

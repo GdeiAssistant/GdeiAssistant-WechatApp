@@ -202,7 +202,7 @@ test('mock smoke covers academic, campus, info and message flows', async functio
 
   const announcementDetail = await request(
     router,
-    `/api/information/announcement/id/${announcements.data[0].id}`,
+    `/api/information/announcement/${announcements.data[0].id}`,
     { token }
   )
   assert.ok(announcementDetail.data.title)
@@ -210,7 +210,7 @@ test('mock smoke covers academic, campus, info and message flows', async functio
   const news = await request(router, '/api/information/news/type/1/start/0/size/10')
   assert.ok(Array.isArray(news.data) && news.data.length > 0)
 
-  const newsDetail = await request(router, `/api/information/news/id/${news.data[0].id}`)
+  const newsDetail = await request(router, `/api/information/news/${news.data[0].id}`)
   assert.ok(newsDetail.data.title)
 
   const interactions = await request(
@@ -225,7 +225,7 @@ test('mock smoke covers academic, campus, info and message flows', async functio
 
   const readOne = await request(
     router,
-    `/api/information/message/id/${interactions.data[0].id}/read`,
+    `/api/information/message/${interactions.data[0].id}/read`,
     {
       method: 'POST',
       token
@@ -248,7 +248,7 @@ test('mock smoke covers community feature flows', async function () {
   assert.ok(Array.isArray(marketplace.data) && marketplace.data.length > 0)
   const marketplaceDetail = await request(
     router,
-    `/api/marketplace/item/id/${marketplace.data[0].id}`,
+    `/api/marketplace/item/${marketplace.data[0].id}`,
     {
       token
     }
@@ -259,18 +259,16 @@ test('mock smoke covers community feature flows', async function () {
 
   const lostFound = await request(router, '/api/lostandfound/lostitem/start/0', { token })
   assert.ok(Array.isArray(lostFound.data) && lostFound.data.length > 0)
-  const lostFoundDetail = await request(
-    router,
-    `/api/lostandfound/item/id/${lostFound.data[0].id}`,
-    { token }
-  )
+  const lostFoundDetail = await request(router, `/api/lostandfound/item/${lostFound.data[0].id}`, {
+    token
+  })
   assert.equal(lostFoundDetail.data.item.id, lostFound.data[0].id)
 
   const secret = await request(router, '/api/secret/info/start/0/size/10', { token })
   assert.ok(Array.isArray(secret.data) && secret.data.length > 0)
-  const secretDetail = await request(router, `/api/secret/id/${secret.data[0].id}`, { token })
+  const secretDetail = await request(router, `/api/secret/${secret.data[0].id}`, { token })
   assert.equal(secretDetail.data.id, secret.data[0].id)
-  const secretComments = await request(router, `/api/secret/id/${secret.data[0].id}/comments`, {
+  const secretComments = await request(router, `/api/secret/${secret.data[0].id}/comments`, {
     token
   })
   assert.ok(Array.isArray(secretComments.data))
@@ -280,7 +278,7 @@ test('mock smoke covers community feature flows', async function () {
 
   const dating = await request(router, '/api/dating/profile/area/0/start/0', { token })
   assert.ok(Array.isArray(dating.data) && dating.data.length > 0)
-  const datingDetail = await request(router, `/api/dating/profile/id/${dating.data[0].profileId}`, {
+  const datingDetail = await request(router, `/api/dating/profile/${dating.data[0].profileId}`, {
     token
   })
   assert.equal(datingDetail.data.profile.profileId, dating.data[0].profileId)
@@ -289,25 +287,23 @@ test('mock smoke covers community feature flows', async function () {
 
   const express = await request(router, '/api/express/start/0/size/10', { token })
   assert.ok(Array.isArray(express.data) && express.data.length > 0)
-  const expressDetail = await request(router, `/api/express/id/${express.data[0].id}`, { token })
+  const expressDetail = await request(router, `/api/express/${express.data[0].id}`, { token })
   assert.equal(expressDetail.data.id, express.data[0].id)
-  const expressComments = await request(router, `/api/express/id/${express.data[0].id}/comment`, {
+  const expressComments = await request(router, `/api/express/${express.data[0].id}/comment`, {
     token
   })
   assert.ok(Array.isArray(expressComments.data))
 
   const topic = await request(router, '/api/topic/start/0/size/10', { token })
   assert.ok(Array.isArray(topic.data) && topic.data.length > 0)
-  const topicDetail = await request(router, `/api/topic/id/${topic.data[0].id}`, { token })
+  const topicDetail = await request(router, `/api/topic/${topic.data[0].id}`, { token })
   assert.equal(topicDetail.data.id, topic.data[0].id)
 
   const delivery = await request(router, '/api/delivery/order/start/0/size/10', { token })
   assert.ok(Array.isArray(delivery.data) && delivery.data.length > 0)
-  const deliveryDetail = await request(
-    router,
-    `/api/delivery/order/id/${delivery.data[0].orderId}`,
-    { token }
-  )
+  const deliveryDetail = await request(router, `/api/delivery/order/${delivery.data[0].orderId}`, {
+    token
+  })
   assert.equal(deliveryDetail.data.order.orderId, delivery.data[0].orderId)
   const deliveryMine = await request(router, '/api/delivery/mine', { token })
   assert.ok(Object.prototype.hasOwnProperty.call(deliveryMine.data, 'published'))
@@ -323,13 +319,13 @@ test('mock smoke covers community feature flows', async function () {
 
   const photographs = await request(router, '/api/photograph/type/0/start/0/size/10', { token })
   assert.ok(Array.isArray(photographs.data) && photographs.data.length > 0)
-  const photographDetail = await request(router, `/api/photograph/id/${photographs.data[0].id}`, {
+  const photographDetail = await request(router, `/api/photograph/${photographs.data[0].id}`, {
     token
   })
   assert.equal(photographDetail.data.id, photographs.data[0].id)
   const photographComments = await request(
     router,
-    `/api/photograph/id/${photographs.data[0].id}/comment`,
+    `/api/photograph/${photographs.data[0].id}/comment`,
     { token }
   )
   assert.ok(Array.isArray(photographComments.data))

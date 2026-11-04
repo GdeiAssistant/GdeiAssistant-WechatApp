@@ -79,7 +79,7 @@ test('secret public responses hide owner/likedUsers while internal state keeps t
 
   const detail = await mock.handleRequest({
     method: 'GET',
-    path: '/api/secret/id/301',
+    path: '/api/secret/301',
     sessionToken: token
   })
   assert.equal(detail.success, true)
@@ -88,7 +88,7 @@ test('secret public responses hide owner/likedUsers while internal state keeps t
 
   const comments = await mock.handleRequest({
     method: 'GET',
-    path: '/api/secret/id/301/comments',
+    path: '/api/secret/301/comments',
     sessionToken: token
   })
   assert.equal(comments.success, true)
@@ -113,7 +113,7 @@ test('express public responses null username, hide realname/owner, keep nickname
 
   const detail = await mock.handleRequest({
     method: 'GET',
-    path: '/api/express/id/401',
+    path: '/api/express/401',
     sessionToken: token
   })
   assert.equal(detail.success, true)
@@ -126,7 +126,7 @@ test('express public responses null username, hide realname/owner, keep nickname
 
   const comments = await mock.handleRequest({
     method: 'GET',
-    path: '/api/express/id/401/comment',
+    path: '/api/express/401/comment',
     sessionToken: token
   })
   assert.equal(comments.success, true)
@@ -148,7 +148,7 @@ test('express public responses null username, hide realname/owner, keep nickname
 
   const guess = await mock.handleRequest({
     method: 'POST',
-    path: '/api/express/id/401/guess',
+    path: '/api/express/401/guess',
     sessionToken: token,
     data: { name: '林知远' }
   })
