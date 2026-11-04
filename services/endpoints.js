@@ -55,7 +55,7 @@ module.exports = {
       return `/api/information/news/type/${type}/start/${start}/size/${size}`
     },
     newsDetail: function (id) {
-      return `/api/information/news/id/${id}`
+      return `/api/information/news/${id}`
     }
   },
   messages: {
@@ -63,14 +63,14 @@ module.exports = {
       return `/api/information/announcement/start/${start}/size/${size}`
     },
     announcementDetail: function (id) {
-      return `/api/information/announcement/id/${id}`
+      return `/api/information/announcement/${id}`
     },
     interactionList: function (start, size) {
       return `/api/information/message/interaction/start/${start}/size/${size}`
     },
     unreadCount: '/api/information/message/unread',
     markRead: function (id) {
-      return `/api/information/message/id/${id}/read`
+      return `/api/information/message/${id}/read`
     },
     markAllRead: '/api/information/message/readall'
   },
@@ -134,15 +134,15 @@ module.exports = {
         return `/api/marketplace/item/type/${type}/start/${start}`
       },
       detail: function (id) {
-        return `/api/marketplace/item/id/${id}`
+        return `/api/marketplace/item/${id}`
       },
       update: function (id) {
-        return `/api/marketplace/item/id/${id}`
+        return `/api/marketplace/item/${id}`
       },
       publish: '/api/marketplace/item',
       profile: '/api/marketplace/profile',
       state: function (id) {
-        return `/api/marketplace/item/state/id/${id}`
+        return `/api/marketplace/item/state/${id}`
       }
     },
     lostAndFound: {
@@ -156,15 +156,15 @@ module.exports = {
         return `/api/lostandfound/lostitem/type/${type}/start/${start}`
       },
       detail: function (id) {
-        return `/api/lostandfound/item/id/${id}`
+        return `/api/lostandfound/item/${id}`
       },
       update: function (id) {
-        return `/api/lostandfound/item/id/${id}`
+        return `/api/lostandfound/item/${id}`
       },
       publish: '/api/lostandfound/item',
       profile: '/api/lostandfound/profile',
       didFound: function (id) {
-        return `/api/lostandfound/item/id/${id}/didfound`
+        return `/api/lostandfound/item/${id}/didfound`
       }
     },
     secret: {
@@ -172,16 +172,16 @@ module.exports = {
         return `/api/secret/info/start/${start}/size/${size}`
       },
       detail: function (id) {
-        return `/api/secret/id/${id}`
+        return `/api/secret/${id}`
       },
       comments: function (id) {
-        return `/api/secret/id/${id}/comments`
+        return `/api/secret/${id}/comments`
       },
       comment: function (id) {
-        return `/api/secret/id/${id}/comment`
+        return `/api/secret/${id}/comment`
       },
       like: function (id) {
-        return `/api/secret/id/${id}/like`
+        return `/api/secret/${id}/like`
       },
       publish: '/api/secret/info',
       profile: '/api/secret/profile',
@@ -197,19 +197,19 @@ module.exports = {
         return `/api/express/keyword/${keyword}/start/${start}/size/${size}`
       },
       detail: function (id) {
-        return `/api/express/id/${id}`
+        return `/api/express/${id}`
       },
       comments: function (id) {
-        return `/api/express/id/${id}/comment`
+        return `/api/express/${id}/comment`
       },
       comment: function (id) {
-        return `/api/express/id/${id}/comment`
+        return `/api/express/${id}/comment`
       },
       like: function (id) {
-        return `/api/express/id/${id}/like`
+        return `/api/express/${id}/like`
       },
       guess: function (id) {
-        return `/api/express/id/${id}/guess`
+        return `/api/express/${id}/guess`
       },
       publish: '/api/express',
       profile: function (start, size) {
@@ -224,10 +224,10 @@ module.exports = {
         return `/api/topic/keyword/${keyword}/start/${start}/size/${size}`
       },
       detail: function (id) {
-        return `/api/topic/id/${id}`
+        return `/api/topic/${id}`
       },
       like: function (id) {
-        return `/api/topic/id/${id}/like`
+        return `/api/topic/${id}/like`
       },
       publish: '/api/topic',
       profile: function (start, size) {
@@ -239,13 +239,13 @@ module.exports = {
         return `/api/delivery/order/start/${start}/size/${size}`
       },
       detail: function (id) {
-        return `/api/delivery/order/id/${id}`
+        return `/api/delivery/order/${id}`
       },
       publish: '/api/delivery/order',
       mine: '/api/delivery/mine',
       accept: '/api/delivery/acceptorder',
       finish: function (id) {
-        return `/api/delivery/trade/id/${id}/finishtrade`
+        return `/api/delivery/trade/${id}/finishtrade`
       }
     },
     dating: {
@@ -253,20 +253,20 @@ module.exports = {
         return `/api/dating/profile/area/${area}/start/${start}`
       },
       detail: function (id) {
-        return `/api/dating/profile/id/${id}`
+        return `/api/dating/profile/${id}`
       },
       publish: '/api/dating/profile',
       mine: '/api/dating/profile/my',
       pick: '/api/dating/pick',
       pickDetail: function (id) {
-        return `/api/dating/pick/id/${id}`
+        return `/api/dating/pick/${id}`
       },
       picks: {
         sent: '/api/dating/pick/my/sent',
         received: '/api/dating/pick/my/received'
       },
       profileState: function (id) {
-        return `/api/dating/profile/id/${id}/state`
+        return `/api/dating/profile/${id}/state`
       }
     },
     photograph: {
@@ -274,16 +274,16 @@ module.exports = {
         return `/api/photograph/type/${type}/start/${start}/size/${size}`
       },
       detail: function (id) {
-        return `/api/photograph/id/${id}`
+        return `/api/photograph/${id}`
       },
       comments: function (id) {
-        return `/api/photograph/id/${id}/comment`
+        return `/api/photograph/${id}/comment`
       },
       comment: function (id) {
-        return `/api/photograph/id/${id}/comment`
+        return `/api/photograph/${id}/comment`
       },
       like: function (id) {
-        return `/api/photograph/id/${id}/like`
+        return `/api/photograph/${id}/like`
       },
       publish: '/api/photograph',
       profile: function (start, size) {

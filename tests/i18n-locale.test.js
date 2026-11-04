@@ -581,7 +581,7 @@ test('communityMessage system errors use distinct HK/TW through real mock path',
     await assert.rejects(
       mock.handleRequest({
         method: 'POST',
-        path: '/api/secret/id/301/comment',
+        path: '/api/secret/301/comment',
         sessionToken: token,
         header: { 'Accept-Language': locale },
         data: { comment: '   ' }
@@ -622,8 +622,8 @@ test('community posts and anonymous comments survive every locale switch', async
     return item.content === content
   })
   assert.ok(post)
-  await request('POST', '/api/topic/id/' + post.id + '/like')
-  await request('POST', '/api/secret/id/301/comment', { comment })
+  await request('POST', '/api/topic/' + post.id + '/like')
+  await request('POST', '/api/secret/301/comment', { comment })
 
   for (const locale of LOCALES) {
     i18n.setLocale(locale)
@@ -636,7 +636,7 @@ test('community posts and anonymous comments survive every locale switch', async
     assert.equal(preserved.content, content)
     assert.equal(preserved.likeCount, 1)
     assert.equal(preserved.liked, true)
-    const comments = await request('GET', '/api/secret/id/301/comments')
+    const comments = await request('GET', '/api/secret/301/comments')
     const ownComment = comments.data.find(function (item) {
       return item.comment === comment
     })

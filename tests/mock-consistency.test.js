@@ -212,10 +212,10 @@ test('endpoints.js returns correct URL patterns for key routes', function () {
     endpoints.info.news(1, 0, 10),
     /^\/api\/information\/news\/type\/1\/start\/0\/size\/10$/
   )
-  assert.match(endpoints.info.newsDetail('abc'), /^\/api\/information\/news\/id\/abc$/)
+  assert.match(endpoints.info.newsDetail('abc'), /^\/api\/information\/news\/abc$/)
 
   assert.match(endpoints.community.secondhand.list(0), /^\/api\/marketplace\/item\/start\/0$/)
-  assert.match(endpoints.community.secondhand.detail(42), /^\/api\/marketplace\/item\/id\/42$/)
+  assert.match(endpoints.community.secondhand.detail(42), /^\/api\/marketplace\/item\/42$/)
   assert.match(
     endpoints.community.lostAndFound.lost(0),
     /^\/api\/lostandfound\/lostitem\/start\/0$/
