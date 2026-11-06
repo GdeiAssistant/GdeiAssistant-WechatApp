@@ -27,7 +27,6 @@ function findLabel(options, value, fallback) {
 }
 
 module.exports = {
-  // --- Feed ---
   getFeed: function (options) {
     var config = options || {}
     var start = Number(config.start || 0)
@@ -40,7 +39,6 @@ module.exports = {
     })
   },
 
-  // --- Detail ---
   getDetail: function (id) {
     return request({
       url: endpoints.community.dating.detail(id),
@@ -49,7 +47,6 @@ module.exports = {
     })
   },
 
-  // --- Center ---
   getCenter: function (options) {
     return Promise.all([
       request({
@@ -83,7 +80,6 @@ module.exports = {
       })
   },
 
-  // --- Publish ---
   publish: function (payload) {
     return request(
       Object.assign(
@@ -99,12 +95,10 @@ module.exports = {
     )
   },
 
-  // --- List page: tabs ---
   buildListTabs: function () {
     return getDatingAreaOptions()
   },
 
-  // --- List page: normalize ---
   normalizeItem: function (item) {
     var rawItem = item || {}
     return {
@@ -123,14 +117,12 @@ module.exports = {
     }
   },
 
-  // --- List page: build feed options ---
   buildFeedOptions: function (baseOptions, activeTab) {
     var options = Object.assign({}, baseOptions)
     options.area = activeTab ? Number(activeTab.value) : 0
     return options
   },
 
-  // --- Center page: tabs ---
   buildCenterTabs: function () {
     return [
       { key: 'received', label: i18n.t('community.center.tabReceivedPick') },
@@ -139,7 +131,6 @@ module.exports = {
     ]
   },
 
-  // --- Center page: normalize ---
   normalizeCenterData: function (payload, normalizeStandardItem) {
     return {
       received: (payload.received || []).map(function (item) {
@@ -188,12 +179,10 @@ module.exports = {
     }
   },
 
-  // --- Center page: show summary profile ---
   showSummaryProfile: false,
 
   searchable: false,
 
-  // --- Publish: validate form ---
   validateForm: function (data) {
     var form = data.form || {}
 
@@ -286,7 +275,6 @@ module.exports = {
     return ''
   },
 
-  // --- Publish: build payload ---
   buildPublishPayload: function (data, _uploadFiles, uploadSingleFile) {
     var form = data.form || {}
     var images = data.images || []
@@ -312,7 +300,6 @@ module.exports = {
     )
   },
 
-  // --- Detail: build detail view ---
   buildDetailView: function () {
     return {
       title: i18n.t('community.detail.detail'),
@@ -320,17 +307,14 @@ module.exports = {
     }
   },
 
-  // --- Comments ---
   getComments: function () {
     return Promise.resolve({ success: true, data: [] })
   },
 
-  // --- Submit comment ---
   submitComment: function () {
     return Promise.reject(new Error(i18n.t('community.common.commentUnsupported')))
   },
 
-  // --- Toggle like ---
   toggleLike: function () {
     return Promise.reject(new Error(i18n.t('community.common.likeUnsupported')))
   }

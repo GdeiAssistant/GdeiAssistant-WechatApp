@@ -470,8 +470,6 @@ test('dating normalizeCenterData produces received, sent, and posts lists', func
   assert.equal(result.posts[0].actions.length, 1, 'post should have hide action')
 })
 
-// --- New handler interface: validateForm, buildPublishPayload, buildDetailView, getComments, submitComment, toggleLike ---
-
 var ALL_MODULE_IDS = [
   'marketplace',
   'lostandfound',

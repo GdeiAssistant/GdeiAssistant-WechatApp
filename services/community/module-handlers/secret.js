@@ -21,7 +21,6 @@ function formatSecretPublishText(publishTime, timer) {
 }
 
 module.exports = {
-  // --- Feed ---
   getFeed: function (options) {
     var config = options || {}
     var start = Number(config.start || 0)
@@ -34,7 +33,6 @@ module.exports = {
     })
   },
 
-  // --- Detail ---
   getDetail: function (id) {
     return request({
       url: endpoints.community.secret.detail(id),
@@ -43,7 +41,6 @@ module.exports = {
     })
   },
 
-  // --- Center ---
   getCenter: function (options) {
     var config = options || {}
     var start = Number(config.start || 0)
@@ -56,7 +53,6 @@ module.exports = {
     })
   },
 
-  // --- Publish ---
   publish: function (payload) {
     return request(
       Object.assign(
@@ -72,12 +68,10 @@ module.exports = {
     )
   },
 
-  // --- List page: tabs ---
   buildListTabs: function () {
     return []
   },
 
-  // --- List page: normalize ---
   normalizeItem: function (item) {
     var rawItem = item || {}
     return {
@@ -97,17 +91,14 @@ module.exports = {
     }
   },
 
-  // --- List page: build feed options ---
   buildFeedOptions: function (baseOptions) {
     return Object.assign({}, baseOptions)
   },
 
-  // --- Center page: tabs ---
   buildCenterTabs: function () {
     return []
   },
 
-  // --- Center page: normalize ---
   normalizeCenterData: function (payload, normalizeStandardItem) {
     return {
       default: (payload || []).map(function (item) {
@@ -125,22 +116,18 @@ module.exports = {
     }
   },
 
-  // --- Center page: show summary profile ---
   showSummaryProfile: false,
 
   searchable: false,
 
-  // --- Publish: validate form ---
   validateForm: function () {
     return i18n.t('community.publish.v.moduleNotSupported')
   },
 
-  // --- Publish: build payload ---
   buildPublishPayload: function () {
     return Promise.reject(new Error(i18n.t('community.publish.v.moduleNotSupported')))
   },
 
-  // --- Detail: build detail view ---
   buildDetailView: function () {
     return {
       title: i18n.t('community.detail.detail'),
@@ -148,7 +135,6 @@ module.exports = {
     }
   },
 
-  // --- Comments ---
   getComments: function (id) {
     return request({
       url: endpoints.community.secret.comments(id),
@@ -157,7 +143,6 @@ module.exports = {
     })
   },
 
-  // --- Submit comment ---
   submitComment: function (id, comment) {
     return requestForm({
       url: endpoints.community.secret.comment(id),
@@ -167,7 +152,6 @@ module.exports = {
     })
   },
 
-  // --- Toggle like ---
   toggleLike: function (id, value) {
     return requestForm({
       url: endpoints.community.secret.like(id),

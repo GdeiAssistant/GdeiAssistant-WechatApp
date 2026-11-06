@@ -24,7 +24,6 @@ function requestForm(options) {
 }
 
 module.exports = {
-  // --- Feed ---
   getFeed: function (options) {
     var config = options || {}
     var start = Number(config.start || 0)
@@ -37,7 +36,6 @@ module.exports = {
     })
   },
 
-  // --- Detail ---
   getDetail: function (id) {
     return request({
       url: endpoints.community.photograph.detail(id),
@@ -46,7 +44,6 @@ module.exports = {
     })
   },
 
-  // --- Center ---
   getCenter: function (options) {
     var config = options || {}
     var start = Number(config.start || 0)
@@ -59,7 +56,6 @@ module.exports = {
     })
   },
 
-  // --- Publish ---
   publish: function (payload) {
     return request(
       Object.assign(
@@ -75,12 +71,10 @@ module.exports = {
     )
   },
 
-  // --- List page: tabs ---
   buildListTabs: function () {
     return getPhotographTabOptions()
   },
 
-  // --- List page: normalize ---
   normalizeItem: function (item) {
     var rawItem = item || {}
     return {
@@ -99,19 +93,16 @@ module.exports = {
     }
   },
 
-  // --- List page: build feed options ---
   buildFeedOptions: function (baseOptions, activeTab) {
     var options = Object.assign({}, baseOptions)
     options.type = activeTab ? Number(activeTab.feedValue) : 1
     return options
   },
 
-  // --- Center page: tabs ---
   buildCenterTabs: function () {
     return []
   },
 
-  // --- Center page: normalize ---
   normalizeCenterData: function (payload, normalizeStandardItem) {
     return {
       default: (payload || []).map(function (item) {
@@ -129,7 +120,6 @@ module.exports = {
     }
   },
 
-  // --- Center page: show summary profile ---
   showSummaryProfile: false,
 
   searchable: false,
@@ -138,7 +128,6 @@ module.exports = {
   // so communityDetail can skip the separate getComments() call.
   commentsInDetail: true,
 
-  // --- Publish: validate form ---
   validateForm: function (data) {
     var form = data.form || {}
     var images = data.images || []
@@ -179,7 +168,6 @@ module.exports = {
     return ''
   },
 
-  // --- Publish: build payload ---
   buildPublishPayload: function (data, uploadFiles) {
     var form = data.form || {}
     var images = data.images || []
@@ -196,7 +184,6 @@ module.exports = {
     })
   },
 
-  // --- Detail: build detail view ---
   buildDetailView: function (payload) {
     var item = payload || {}
     return {
@@ -212,7 +199,6 @@ module.exports = {
     }
   },
 
-  // --- Comments ---
   getComments: function (id) {
     return request({
       url: endpoints.community.photograph.comments(id),
@@ -221,7 +207,6 @@ module.exports = {
     })
   },
 
-  // --- Submit comment ---
   submitComment: function (id, comment) {
     return requestForm({
       url: endpoints.community.photograph.comment(id),
@@ -231,7 +216,6 @@ module.exports = {
     })
   },
 
-  // --- Toggle like ---
   toggleLike: function (id) {
     return request({
       url: endpoints.community.photograph.like(id),

@@ -11,9 +11,7 @@ var socialHandlers = require('./social-handlers.js')
 var socialData = require('./social-data.js')
 var i18n = require('../utils/i18n.js')
 
-// ---------------------------------------------------------------------------
 // Shared utilities — passed to handler modules via the `utils` object
-// ---------------------------------------------------------------------------
 
 function cloneValue(value) {
   return JSON.parse(JSON.stringify(value))
@@ -139,9 +137,7 @@ var utils = {
   ensureAuthorized: ensureAuthorized
 }
 
-// ---------------------------------------------------------------------------
 // URL parsing
-// ---------------------------------------------------------------------------
 
 function parseQueryString(queryString) {
   if (!queryString) {
@@ -179,9 +175,7 @@ function parseRequestParts(rawUrl, requestData) {
   }
 }
 
-// ---------------------------------------------------------------------------
 // Request router
-// ---------------------------------------------------------------------------
 
 function handleRequest(options) {
   var requestOptions = options || {}
@@ -197,7 +191,6 @@ function handleRequest(options) {
     return i18n.normalizeLocale(requestOptions.header && requestOptions.header['Accept-Language'])
   }
 
-  // --- Auth ---
   if (path === '/api/auth/login' && method === 'POST') {
     return authHandlers.handleLogin(payload, utils)
   }
@@ -220,7 +213,6 @@ function handleRequest(options) {
     return authHandlers.handlePresignedUrl(query, utils)
   }
 
-  // --- Campus credential ---
   if (path === '/api/campus-credential/status' && method === 'GET') {
     return campusCredentialHandlers.handleCampusCredentialStatus(token, utils)
   }
@@ -241,7 +233,6 @@ function handleRequest(options) {
     return campusCredentialHandlers.handleCampusCredentialQuickAuth(token, payload, utils)
   }
 
-  // --- Profile ---
   if (path === '/api/profile/avatar' && method === 'GET') {
     return profileHandlers.handleAvatar(token, utils)
   }
@@ -298,7 +289,6 @@ function handleRequest(options) {
     return profileHandlers.handleLocationUpdate(token, payload, 'hometown', utils)
   }
 
-  // --- Campus / Academic ---
   if (path === '/api/grade' && method === 'GET') {
     return campusHandlers.handleGrade(token, query, utils)
   }
@@ -359,7 +349,6 @@ function handleRequest(options) {
     return campusHandlers.handleSpareRoom(token, utils)
   }
 
-  // --- Info / Data ---
   if (path === '/api/graduate-exam/query' && method === 'POST') {
     return infoHandlers.handleGraduateExam(payload, utils)
   }
@@ -385,7 +374,6 @@ function handleRequest(options) {
     return infoHandlers.handleModuleStateDetail(utils)
   }
 
-  // --- Messages ---
   if (/^\/api\/information\/announcement\/start\/\d+\/size\/\d+$/.test(path) && method === 'GET') {
     return messageHandlers.handleAnnouncementList(token, path, utils)
   }
@@ -410,7 +398,6 @@ function handleRequest(options) {
     return messageHandlers.handleMessageReadAll(token, utils)
   }
 
-  // --- Social ---
   if (path.indexOf('/api/social/') === 0) {
     var socialResponse = socialHandlers.handleRequest(path, method, query, payload, token, utils)
     if (socialResponse) {
@@ -418,7 +405,6 @@ function handleRequest(options) {
     }
   }
 
-  // --- Community (delegated to community.js) ---
   var communityResponse = communityMock.handleRequest({
     path: path,
     method: method,
