@@ -1,0 +1,10 @@
+{
+  "repo": "GdeiAssistant/GdeiAssistant-WechatApp",
+  "branch": "master",
+  "files": ["package.json","package-lock.json"],
+  "directories": ["/"],
+  "required_checks": ["Unit Tests","Analyze (JavaScript)","Repository hygiene","Safe dependency update"],
+  "action_files": [
+    ".github/workflows/wechat-ci.yml"
+  ]
+}

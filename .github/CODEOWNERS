@@ -14,3 +14,11 @@
 /mock/campus-credential-handlers.js @Pigbibi
 /scripts/deploy-wechat.js @Pigbibi
 /services/community/module-handlers/secret.js @Pigbibi
+
+# Dependency-only files do not automatically request a human review.
+# CODEOWNERS is path-based: these exceptions also apply to human PRs.
+# Only plain build/test CI workflows without secrets or write permissions are listed. Deploy, release,
+# governance and policy workflows keep their @Pigbibi owner and never auto-merge.
+/package.json
+/package-lock.json
+/.github/workflows/wechat-ci.yml
