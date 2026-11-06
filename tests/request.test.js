@@ -73,8 +73,6 @@ function setup(wxRequestImpl) {
   return require(REQUEST_MODULE)
 }
 
-// ---- generateRequestId ----
-
 test('generateRequestId returns a non-empty UUID-shaped string', function () {
   const { generateRequestId } = setup()
   const id = generateRequestId()
@@ -90,8 +88,6 @@ test('generateRequestId returns unique values', function () {
   }
   assert.equal(ids.size, 50, 'all 50 IDs should be unique')
 })
-
-// ---- X-Request-ID header ----
 
 test('request includes X-Request-ID header in outbound calls', async function () {
   let capturedHeader = null
@@ -119,8 +115,6 @@ test('request preserves caller-supplied requestId', async function () {
 
   assert.equal(capturedHeader['X-Request-ID'], 'custom-rid-001')
 })
-
-// ---- Auth header injection ----
 
 test('request injects Authorization header when authRequired', async function () {
   let capturedHeader = null
@@ -164,8 +158,6 @@ test('request propagates an existing Authorization header when auth is optional'
 
   assert.equal(capturedHeader.Authorization, 'Bearer optional-jwt-token')
 })
-
-// ---- 401 handling ----
 
 function setupAuth401(options) {
   const config = options || {}
@@ -405,8 +397,6 @@ test('mock optional-auth 401 clears the matching session sent with the request',
   assert.equal(env.relaunchCount, 1)
 })
 
-// ---- Payload normalization ----
-
 test('request normalizes successful response through normalizePayload', async function () {
   const { request } = setup(function (opts) {
     opts.success({ statusCode: 200, data: { code: 200, msg: 'ok', data: { id: 1 } } })
@@ -417,8 +407,6 @@ test('request normalizes successful response through normalizePayload', async fu
   assert.equal(result.success, true)
   assert.deepEqual(result.data, { id: 1 })
 })
-
-// ---- Default headers ----
 
 test('request includes Accept-Language and X-Device-ID headers', async function () {
   let capturedHeader = null

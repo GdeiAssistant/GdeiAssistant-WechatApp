@@ -59,8 +59,6 @@ function setup(wxOverrides) {
   return { auth: require(AUTH_MODULE), storage }
 }
 
-// ---- getSessionToken / setSessionToken ----
-
 test('getSessionToken returns empty string when no token stored', function () {
   const { auth } = setup()
   assert.equal(auth.getSessionToken(), '')
@@ -71,8 +69,6 @@ test('setSessionToken persists and getSessionToken retrieves', function () {
   auth.setSessionToken('jwt-abc-123')
   assert.equal(auth.getSessionToken(), 'jwt-abc-123')
 })
-
-// ---- clearSession ----
 
 test('clearSession removes all session-related storage keys', function () {
   const { auth, storage } = setup()
@@ -89,8 +85,6 @@ test('clearSession removes all session-related storage keys', function () {
   assert.equal(global.wx.getStorageSync('accessToken'), '')
   assert.equal(global.wx.getStorageSync('refreshToken'), '')
 })
-
-// ---- ensureSessionToken ----
 
 test('ensureSessionToken resolves with token when present', async function () {
   const { auth } = setup()
@@ -126,8 +120,6 @@ test('ensureSessionToken rejects without modal when non-interactive', async func
   })
   assert.ok(!modalShown, 'should not show modal in non-interactive mode')
 })
-
-// ---- validateSessionToken ----
 
 test('validateSessionToken resolves false when no token stored', async function () {
   const { auth } = setup()
@@ -196,8 +188,6 @@ test('validateSessionToken resolves false on network failure', async function ()
   assert.equal(result, false)
 })
 
-// ---- validateSessionToken uses correct endpoint ----
-
 test('validateSessionToken calls /api/auth/validate with Bearer header', async function () {
   let capturedOpts = null
 
@@ -233,8 +223,6 @@ test('validateSessionToken calls /api/auth/validate with Bearer header', async f
   assert.equal(capturedOpts.method, 'GET')
 })
 
-// ---- validateSessionToken cleanup boundary ----
-
 test('validateSessionToken does NOT clear session on 401 — cleanup is caller responsibility', async function () {
   let removeKeys = []
 
@@ -263,8 +251,6 @@ test('validateSessionToken does NOT clear session on 401 — cleanup is caller r
     "validateSessionToken should not call clearSession — that is the caller's job"
   )
 })
-
-// ---- request correlation ----
 
 test('validateSessionToken includes X-Request-ID header', async function () {
   let capturedOpts = null
@@ -322,8 +308,6 @@ test('logout includes X-Request-ID header', async function () {
     /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
   )
 })
-
-// ---- logout ----
 
 test('logout resolves immediately when no token stored', async function () {
   const { auth } = setup()

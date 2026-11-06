@@ -6,8 +6,6 @@ const { stubModule, clearModule } = require('./helpers/module.js')
 
 const ROOT = path.resolve(__dirname, '..')
 
-// --- Stubs ---
-
 global.wx = {
   setNavigationBarTitle: function () {},
   showModal: function () {},

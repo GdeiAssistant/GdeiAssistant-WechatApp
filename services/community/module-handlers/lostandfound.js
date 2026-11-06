@@ -33,7 +33,6 @@ function findLabel(options, value, fallback) {
 }
 
 module.exports = {
-  // --- Feed ---
   getFeed: function (options) {
     var config = options || {}
     var start = Number(config.start || 0)
@@ -63,7 +62,6 @@ module.exports = {
     })
   },
 
-  // --- Detail ---
   getDetail: function (id) {
     return request({
       url: endpoints.community.lostAndFound.detail(id),
@@ -72,7 +70,6 @@ module.exports = {
     })
   },
 
-  // --- Center ---
   getCenter: async function () {
     const result = { success: true, data: {} }
     result.data.lost = []
@@ -98,7 +95,6 @@ module.exports = {
     return result
   },
 
-  // --- Publish ---
   publish: function (payload) {
     return request(
       Object.assign(
@@ -114,12 +110,10 @@ module.exports = {
     )
   },
 
-  // --- List page: tabs ---
   buildListTabs: function () {
     return getLostFoundModeDictionaryOptions()
   },
 
-  // --- List page: normalize ---
   normalizeItem: function (item) {
     var rawItem = item || {}
     return {
@@ -145,14 +139,12 @@ module.exports = {
     }
   },
 
-  // --- List page: build feed options ---
   buildFeedOptions: function (baseOptions, activeTab) {
     var options = Object.assign({}, baseOptions)
     options.mode = activeTab ? Number(activeTab.value) : 0
     return options
   },
 
-  // --- Center page: tabs ---
   buildCenterTabs: function () {
     return [
       { key: 'lost', label: i18n.t('community.center.tabLost') },
@@ -161,7 +153,6 @@ module.exports = {
     ]
   },
 
-  // --- Center page: normalize ---
   normalizeCenterData: function (payload, normalizeStandardItem) {
     return {
       lost: (payload.lost || []).map(function (item) {
@@ -213,12 +204,10 @@ module.exports = {
     }
   },
 
-  // --- Center page: show summary profile ---
   showSummaryProfile: true,
 
   searchable: true,
 
-  // --- Publish: validate form ---
   validateForm: function (data) {
     var form = data.form || {}
     var isEditMode = data.isEditMode
@@ -321,7 +310,6 @@ module.exports = {
     return ''
   },
 
-  // --- Publish: build payload ---
   buildPublishPayload: function (data, uploadFiles) {
     var form = data.form || {}
     var isEditMode = data.isEditMode
@@ -358,7 +346,6 @@ module.exports = {
     })
   },
 
-  // --- Detail: build detail view ---
   buildDetailView: function (payload) {
     var item = payload.item || {}
     var profile = payload.profile || {}
@@ -395,17 +382,14 @@ module.exports = {
     }
   },
 
-  // --- Comments ---
   getComments: function () {
     return Promise.resolve({ success: true, data: [] })
   },
 
-  // --- Submit comment ---
   submitComment: function () {
     return Promise.reject(new Error(i18n.t('community.common.commentUnsupported')))
   },
 
-  // --- Toggle like ---
   toggleLike: function () {
     return Promise.reject(new Error(i18n.t('community.common.likeUnsupported')))
   }

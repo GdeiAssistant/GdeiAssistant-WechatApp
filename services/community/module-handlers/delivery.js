@@ -33,7 +33,6 @@ function formatPrice(value) {
 }
 
 module.exports = {
-  // --- Feed ---
   getFeed: function (options) {
     var config = options || {}
     var start = Number(config.start || 0)
@@ -46,7 +45,6 @@ module.exports = {
     })
   },
 
-  // --- Detail ---
   getDetail: function (id) {
     return request({
       url: endpoints.community.delivery.detail(id),
@@ -55,7 +53,6 @@ module.exports = {
     })
   },
 
-  // --- Center ---
   getCenter: function (options) {
     return request({
       url: endpoints.community.delivery.mine,
@@ -64,7 +61,6 @@ module.exports = {
     })
   },
 
-  // --- Publish ---
   publish: function (payload) {
     return request(
       Object.assign(
@@ -80,12 +76,10 @@ module.exports = {
     )
   },
 
-  // --- List page: tabs ---
   buildListTabs: function () {
     return getDeliveryStatusOptions()
   },
 
-  // --- List page: normalize ---
   normalizeItem: function (item) {
     var rawItem = item || {}
     return {
@@ -104,12 +98,10 @@ module.exports = {
     }
   },
 
-  // --- List page: build feed options ---
   buildFeedOptions: function (baseOptions) {
     return Object.assign({}, baseOptions)
   },
 
-  // --- List page: filter feed results ---
   filterFeedResults: function (list, activeTab) {
     var statusValue = activeTab ? Number(activeTab.value) : -1
     if (statusValue >= 0) {
@@ -120,7 +112,6 @@ module.exports = {
     return list
   },
 
-  // --- Center page: tabs ---
   buildCenterTabs: function () {
     return [
       { key: 'published', label: i18n.t('community.center.tabMyPublished') },
@@ -128,7 +119,6 @@ module.exports = {
     ]
   },
 
-  // --- Center page: normalize ---
   normalizeCenterData: function (payload, normalizeStandardItem) {
     return {
       published: (payload.published || []).map(function (item) {
@@ -154,12 +144,10 @@ module.exports = {
     }
   },
 
-  // --- Center page: show summary profile ---
   showSummaryProfile: false,
 
   searchable: false,
 
-  // --- Publish: validate form ---
   validateForm: function (data) {
     var form = data.form || {}
 
@@ -233,7 +221,6 @@ module.exports = {
     return ''
   },
 
-  // --- Publish: build payload ---
   buildPublishPayload: function (data) {
     var form = data.form || {}
 
@@ -248,7 +235,6 @@ module.exports = {
     })
   },
 
-  // --- Detail: build detail view ---
   buildDetailView: function (payload) {
     var detailPayload = payload || {}
     var order = detailPayload.order || {}
@@ -313,17 +299,14 @@ module.exports = {
     }
   },
 
-  // --- Comments ---
   getComments: function () {
     return Promise.resolve({ success: true, data: [] })
   },
 
-  // --- Submit comment ---
   submitComment: function () {
     return Promise.reject(new Error(i18n.t('community.common.commentUnsupported')))
   },
 
-  // --- Toggle like ---
   toggleLike: function () {
     return Promise.reject(new Error(i18n.t('community.common.likeUnsupported')))
   }
