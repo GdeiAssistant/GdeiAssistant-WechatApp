@@ -74,6 +74,10 @@ module.exports = {
       "weekRange": "第{{min}}周至第{{max}}周"
     },
     "index": {
+      "todayTitle": "今日课程",
+      "todayHint": "接口仅提供节次，请查看课表",
+      "todayEmpty": "今日无课程",
+      "todayUnavailable": "今日课表暂不可用",
       "navTitle": "广东二师助手",
       "appName": "广东二师助手",
       "viewProfile": "查看个人资料",
@@ -1299,6 +1303,10 @@ module.exports = {
       "weekRange": "第{{min}}週至第{{max}}週"
     },
     "index": {
+      "todayTitle": "今日課程",
+      "todayHint": "介面僅提供節次，請查看課表",
+      "todayEmpty": "今日無課程",
+      "todayUnavailable": "今日課表暫不可用",
       "navTitle": "廣東二師助手",
       "appName": "廣東二師助手",
       "viewProfile": "查看個人資料",
@@ -2524,6 +2532,10 @@ module.exports = {
       "weekRange": "第{{min}}週至第{{max}}週"
     },
     "index": {
+      "todayTitle": "今日課程",
+      "todayHint": "介面僅提供節次，請查看課表",
+      "todayEmpty": "今日無課程",
+      "todayUnavailable": "今日課表暫不可用",
       "navTitle": "廣東二師助手",
       "appName": "廣東二師助手",
       "viewProfile": "查看個人資料",
@@ -3749,6 +3761,10 @@ module.exports = {
       "weekRange": "Week {{min}} to Week {{max}}"
     },
     "index": {
+      "todayTitle": "Today's classes",
+      "todayHint": "Only lesson periods are available; view the timetable",
+      "todayEmpty": "No classes today",
+      "todayUnavailable": "Today’s timetable is unavailable",
       "navTitle": "GdeiAssistant",
       "appName": "GdeiAssistant",
       "viewProfile": "View profile",
@@ -4974,6 +4990,10 @@ module.exports = {
       "weekRange": "第{{min}}週〜第{{max}}週"
     },
     "index": {
+      "todayTitle": "今日の授業",
+      "todayHint": "時限のみ取得できます。時間割をご確認ください",
+      "todayEmpty": "今日の授業はありません",
+      "todayUnavailable": "今日の時間割を取得できません",
       "navTitle": "GdeiAssistant",
       "appName": "GdeiAssistant",
       "viewProfile": "プロフィールを見る",
@@ -6199,6 +6219,10 @@ module.exports = {
       "weekRange": "{{min}}주~{{max}}주"
     },
     "index": {
+      "todayTitle": "오늘 수업",
+      "todayHint": "교시 정보만 제공됩니다. 시간표를 확인하세요",
+      "todayEmpty": "오늘 수업이 없습니다",
+      "todayUnavailable": "오늘 시간표를 불러올 수 없습니다",
       "navTitle": "GdeiAssistant",
       "appName": "GdeiAssistant",
       "viewProfile": "프로필 보기",

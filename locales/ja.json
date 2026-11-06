@@ -72,6 +72,10 @@
     "weekRange": "第{{min}}週〜第{{max}}週"
   },
   "index": {
+    "todayTitle": "今日の授業",
+    "todayHint": "時限のみ取得できます。時間割をご確認ください",
+    "todayEmpty": "今日の授業はありません",
+    "todayUnavailable": "今日の時間割を取得できません",
     "navTitle": "GdeiAssistant",
     "appName": "GdeiAssistant",
     "viewProfile": "プロフィールを見る",
