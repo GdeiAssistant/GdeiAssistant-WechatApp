@@ -63,7 +63,7 @@ R1 和常规 R2 均要求 reviewer App 的当前 SHA 完成证据，本仓以 Co
 
 生成方式：本地检出完整历史后运行 `python3 pr-governance/scripts/secret_scan.py history --root <本仓库检出> --create-baseline --baseline /tmp/baseline.json --summary /tmp/summary.json`，逐条审核后把文件内容 base64 写入该 Secret，不提交到仓库。历史凭据仍须由所有者轮换，基线不代表凭据安全。
 
-Gitleaks 的原生 baseline 无法按次数限制同一身份的发现。统一门禁的 `secret_scan.py` 直接对脱敏扫描按规则、路径、提交、行号和 fingerprint 计数，每条 baseline 记录只允许一个发现；同一身份超出记录次数也会失败。原始报告和临时文件不上传；上传摘要只含新发现总数和按规则计数，不含路径或提交号，保留三天。新增或修改 baseline 必须单独核对，不自动扩大历史豁免。
+Gitleaks 的原生 baseline 无法按次数限制同一身份的发现。统一门禁的 统一门禁的 `secret_scan.py` 直接对脱敏扫描按规则、路径、提交、行号和 fingerprint 计数，每条 baseline 记录只允许一个发现；同一身份超出记录次数也会失败。原始报告和临时文件不上传；上传摘要只含新发现总数和按规则计数，不含路径或提交号，保留三天。新增或修改 baseline 必须单独核对，不自动扩大历史豁免。
 
 每次上传报告、日志或混合产物前，先用同一配置扫描上传的精确路径；发现凭据或扫描错误则阻止该次上传。缺失路径沿用原上传步骤的缺失文件行为。只含 APK/AAB、已编译模拟器应用 ZIP、IPA/dSYM 的步骤不做无意义的二进制文本扫描；二进制安全仍须独立的制品分析。不要将明文日志或配置加入这些例外。
 
