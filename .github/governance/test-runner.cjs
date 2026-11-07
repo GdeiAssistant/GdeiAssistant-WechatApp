@@ -7,7 +7,7 @@ const { fixture, approve, approveWithoutFindings, ownerApproval, HEAD, BASE, POL
 const { selectTargets, readThreads, collect, snapshotVersion, run } = require('./runner.cjs');
 
 function mock(f = fixture()) {
-  const statuses = [], failures = [], calls = [];
+  const statuses = [], failures = [], warnings = [], calls = [];
   const context = { repo: { owner: f.policy.repository.split('/')[0], repo: f.policy.repository.split('/')[1] },
     eventName: 'pull_request_target', payload: { pull_request: { number: 42 } },
     ref: 'refs/heads/main', serverUrl: 'https://github.example', runId: 123 };
@@ -47,8 +47,8 @@ function mock(f = fixture()) {
     } } } }),
   };
   const summary = { addHeading: () => summary, addCodeBlock: () => summary, addRaw: () => summary, write: async () => {} };
-  const core = { setFailed: message => failures.push(message), summary };
-  return { github, context, core, statuses, failures, calls, policy: f.policy, policySha: POLICY, policyCommit: BASE, defaultBranch: 'main' };
+  const core = { setFailed: message => failures.push(message), warning: message => warnings.push(message), summary };
+  return { github, context, core, statuses, failures, warnings, calls, policy: f.policy, policySha: POLICY, policyCommit: BASE, defaultBranch: 'main' };
 }
 
 test('ordinary PR and comment events target only that PR', async () => {
@@ -184,14 +184,15 @@ for (const field of ['head', 'base', 'body', 'review', 'check', 'config', 'threa
     assert.ok(m.statuses.every(s => s.state !== 'success'));
   });
 }
-test('stale base publishes a base-outdated verdict instead of an error', async () => {
+test('stale base publishes a base-outdated verdict without failing the sweep', async () => {
   const f = fixture(); approve(f);
   f.snapshot.pr.body = '## AI assistance\nCodex used.\n## What changed\nBase drifted.\n## How verified\nOffline tests passed.';
   f.snapshot.pr.base.sha = 'e'.repeat(40);
   const m = mock(f); await run(m);
   assert.deepEqual(m.statuses.map(s => [s.context, s.state]), [['pr-template', 'success'], ['risk-gate', 'failure']]);
   assert.match(m.statuses.find(s => s.context === 'risk-gate').description, /base-outdated; owner=0$/);
-  assert.equal(m.failures.length, 1); assert.match(m.failures[0], /rebase/);
+  assert.equal(m.failures.length, 0);
+  assert.equal(m.warnings.length, 1); assert.match(m.warnings[0], /rebase/);
 });
 test('snapshot comparison ignores labels but binds the entire evidence content', () => {
   const f = fixture(); const version = snapshotVersion(f.snapshot);

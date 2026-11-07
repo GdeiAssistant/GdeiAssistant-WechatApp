@@ -176,7 +176,9 @@ async function run({ github, context, core, policy, policySha, policyCommit, def
           .addCodeBlock(JSON.stringify({ tier, allowed: false, reason: 'base-outdated',
             base_sha: before.pr.base.sha, policy_commit: policyCommit }, null, 2), 'json')
           .addRaw('\n分支基线落后于可信策略提交；rebase 到当前默认分支后重新评估。\n').write();
-        core.setFailed(`PR #${number}: base ${before.pr.base.sha.slice(0, 7)} is behind ${policyCommit.slice(0, 7)}; rebase to evaluate`);
+        // A stale base blocks that PR through its own status; it must not fail the
+        // whole sweep, or every push would go red while reviewed PRs wait to rebase.
+        core.warning(`PR #${number}: base ${before.pr.base.sha.slice(0, 7)} is behind ${policyCommit.slice(0, 7)}; rebase to evaluate`);
         continue;
       }
       const result = gate.evaluate(before, policy, policySha);

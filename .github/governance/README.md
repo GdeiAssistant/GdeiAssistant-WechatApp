@@ -141,7 +141,9 @@ CodeRabbit check/review/run ID、执行与覆盖状态、未处理意见及例�
 发布状态前完整重读一次并确认默认分支未变；并发变化或 API 错误尝试发布 error。
 分支基线落后于可信策略提交是稳定状态，不属于读取失败：此时发布
 `risk-gate=failure`、描述为 `base-outdated`，并照常判定模板，重跑只会重复同一结论，
-需 rebase 到当前默认分支后才会重新评估。
+需 rebase 到当前默认分支后才会重新评估。该状态仍阻止对应 PR 合并，但只记录为
+workflow warning，不会让整次扫描作业失败；否则每次 master 推送都会因等待 rebase 的
+PR 而变红。
 复用读取的状态历史，仅当状态或 description（含撤销水位）变化时写入；不在每次
 评估前往返写 pending。新 SHA 在首次结果前没有成功状态，现有 SHA 仍有下述异步窗口。
 只对最新可信 Actions 状态去重，不信任其他发布者的同名结果。GitHub 每 SHA/context
