@@ -184,6 +184,15 @@ for (const field of ['head', 'base', 'body', 'review', 'check', 'config', 'threa
     assert.ok(m.statuses.every(s => s.state !== 'success'));
   });
 }
+test('stale base publishes a base-outdated verdict instead of an error', async () => {
+  const f = fixture(); approve(f);
+  f.snapshot.pr.body = '## AI assistance\nCodex used.\n## What changed\nBase drifted.\n## How verified\nOffline tests passed.';
+  f.snapshot.pr.base.sha = 'e'.repeat(40);
+  const m = mock(f); await run(m);
+  assert.deepEqual(m.statuses.map(s => [s.context, s.state]), [['pr-template', 'success'], ['risk-gate', 'failure']]);
+  assert.match(m.statuses.find(s => s.context === 'risk-gate').description, /base-outdated; owner=0$/);
+  assert.equal(m.failures.length, 1); assert.match(m.failures[0], /rebase/);
+});
 test('snapshot comparison ignores labels but binds the entire evidence content', () => {
   const f = fixture(); const version = snapshotVersion(f.snapshot);
   f.snapshot.pr.labels = [{ name: 'owner-approved' }]; assert.equal(snapshotVersion(f.snapshot), version);

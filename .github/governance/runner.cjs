@@ -162,6 +162,23 @@ async function run({ github, context, core, policy, policySha, policyCommit, def
       const before = await collect(github, context, number, policyCommit, policy);
       if (before.pr.head.sha !== head) throw new Error('Head changed during collection');
       statusHistory = before.statuses;
+      if (before.pr.base.sha !== policyCommit) {
+        // A stale base is a stable state, not a failed read: evidence binds to the
+        // base the review was compared against, so report an explicit verdict
+        // instead of an opaque error until the branch is rebased.
+        watermark = before.ownerWatermark || 0;
+        const { tier } = gate.classify(before.files, before.pr.changed_files, policy);
+        const templateOK = (policy.dependabot_template_exemption && before.pr.user.login === 'dependabot[bot]')
+          || gate.completeTemplate(before.pr.body);
+        await status('pr-template', templateOK ? 'success' : 'failure', templateOK ? 'PR template complete' : 'Fill AI, changes and verification sections');
+        await status('risk-gate', 'failure', `${tier}: base-outdated`);
+        await core.summary.addHeading(`PR #${number}: ${tier}`)
+          .addCodeBlock(JSON.stringify({ tier, allowed: false, reason: 'base-outdated',
+            base_sha: before.pr.base.sha, policy_commit: policyCommit }, null, 2), 'json')
+          .addRaw('\n分支基线落后于可信策略提交；rebase 到当前默认分支后重新评估。\n').write();
+        core.setFailed(`PR #${number}: base ${before.pr.base.sha.slice(0, 7)} is behind ${policyCommit.slice(0, 7)}; rebase to evaluate`);
+        continue;
+      }
       const result = gate.evaluate(before, policy, policySha);
       watermark = result.owner_watermark || before.ownerWatermark || 0;
       const templateOK = (policy.dependabot_template_exemption && before.pr.user.login === 'dependabot[bot]')
