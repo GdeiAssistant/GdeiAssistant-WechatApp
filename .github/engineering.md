@@ -59,7 +59,9 @@ R1 和常规 R2 均要求 reviewer App 的当前 SHA 完成证据，本仓以 Co
 
 不得提交凭据；使用 GitHub Secrets 或环境变量注入。必需的 `Gitleaks` 检查保留原名，使用 `.gitleaks.toml` 扫描新增提交，补充 MongoDB 带密码 URI、Alibaba AccessKey Secret 和配置赋值规则。测试目录只豁免明确合成的值，不整体跳过测试代码。
 
-每周一 UTC 04:23 和手动触发的 `secret-scan-weekly.yml` 获取所有分支并扫描完整历史。`.gitleaks-baseline.json` 仅保存既有发现的规则、路径、提交、行号、fingerprint 和固定脱敏标记；它不豁免新提交。历史凭据仍须由所有者轮换，baseline 不代表凭据安全。
+每周一 UTC 04:23 和手动触发的 `secret-scan-weekly.yml` 获取所有分支并扫描完整历史。历史基线不入库：其中的提交、路径和行号能反查到真实对象，属于不进入公开材料的身份。真实基线由所有者保存为仓库 Secrets 中的 `SECRET_SCAN_BASELINE_B64`（JSON 数组的 base64），工作流在运行目录还原后通过 `--baseline` 传入；仓库内只文档化字段格式。基线仅保存既有发现的规则、路径、提交、行号、fingerprint 和固定脱敏标记，不豁免新提交。
+
+生成方式：本地检出完整历史后运行 `python3 .github/scripts/secret_scan.py history --create-baseline --baseline /tmp/baseline.json --summary /tmp/summary.json`，逐条审核后把文件内容 base64 写入该 Secret，不提交到仓库。历史凭据仍须由所有者轮换，基线不代表凭据安全。
 
 Gitleaks 的原生 baseline 无法按次数限制同一身份的发现。`secret_scan.py` 直接对脱敏扫描按规则、路径、提交、行号和 fingerprint 计数，每条 baseline 记录只允许一个发现；同一身份超出记录次数也会失败。原始报告和临时文件不上传；摘要仅含路径、规则和短提交号，保留三天。新增或修改 baseline 必须单独核对，不自动扩大历史豁免。
 
@@ -73,6 +75,6 @@ Gitleaks 的原生 baseline 无法按次数限制同一身份的发现。`secret
 
 测试合成值的路径与值条件放在规则级 allowlist，覆盖自定义规则和 `generic-api-key`；测试文件中的其他值仍会被扫描。
 
-扫描新增提交、历史和上传路径时，`gitleaks:allow` 注释不产生豁免；扫描源中的 `.gitleaksignore` 会使检查失败。历史豁免仅使用已有的、经审核的 `.gitleaks-baseline.json` 身份与次数机制。
+扫描新增提交、历史和上传路径时，`gitleaks:allow` 注释不产生豁免；扫描源中的 `.gitleaksignore` 会使检查失败。历史豁免仅使用已有的、经审核的受保护基线（`SECRET_SCAN_BASELINE_B64`）身份与次数机制。
 
 新增提交扫描先校验 base/head 提交对象，并完整读取目标范围；历史扫描先校验 Git 仓库、HEAD 并读取全部引用的历史补丁。Git 读取失败返回固定脱敏错误和非零状态，不能视为零发现。有效的空提交范围仍可通过。

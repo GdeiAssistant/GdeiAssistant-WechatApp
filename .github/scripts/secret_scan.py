@@ -157,7 +157,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('mode', choices=('history', 'artifacts'))
     parser.add_argument('--gitleaks', default='gitleaks')
-    parser.add_argument('--baseline', type=Path, default=ROOT / '.gitleaks-baseline.json')
+    parser.add_argument('--baseline', type=Path)
     parser.add_argument('--summary', type=Path)
     parser.add_argument('--create-baseline', action='store_true')
     arguments = parser.parse_args()
@@ -166,6 +166,8 @@ def main():
             return artifacts(arguments.gitleaks, os.environ['ARTIFACT_PATHS'])
         if arguments.summary is None:
             parser.error('history requires --summary')
+        if arguments.baseline is None:
+            parser.error('history requires --baseline')
         return history(arguments.gitleaks, arguments.baseline, arguments.summary, arguments.create_baseline)
     except (OSError, ValueError, KeyError, TypeError, RuntimeError):
         print('Secret scan failed safely; values and raw reports suppressed')
