@@ -86,7 +86,7 @@ CodeRabbit 读取器保留在代码里但不再选用；它的证据来自 check
 
 Grok 使用 Pigbibi 的 GitHub 账号，没有独立 Grok login；GitHub 不能区分
 同一账号下由本人或智能体发起的操作，因此不将该账号评论视为独立审查证据。
-Pigbibi 仅负责例外 `override` 和撤销 `revoke`。编码智能体不得代发这两类决定。
+Pigbibi 仅负责例外 `override` 和撤销 `revoke`。编码智能体不得自行决定例外；所有者可按 PR 明确授权一次性代办，代办者必须逐项复制可信 gate 摘要，且不得超出该 PR 与已列出的 scope。
 
 `policy.json` 的 `owner_actors` 只配置例外决定发布者，`decisions` 为
 `["override", "revoke"]`。核验数字用户 ID、登录名、`enabled: true`、`User`
