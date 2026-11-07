@@ -1,19 +1,21 @@
-name: PR risk gate
+# Shared governance action: GdeiAssistant/.github/pr-governance@b02a689c27b1821bd71bf7ae33c73ea5f31e4a4a.
+# Keep the job names; they are required status check contexts.
 
 on:
   pull_request_target:
-    types: [opened, reopened, synchronize, edited, ready_for_review]
+    types: [opened, reopened, synchronize, edited, labeled, unlabeled, ready_for_review, closed]
   issue_comment:
     types: [created, edited, deleted]
-  check_run:
-    types: [created, rerequested, completed]
-  workflow_run:
-    workflows: [PR review signal]
-    types: [completed]
+  pull_request_review:
+    types: [submitted, edited, dismissed]
+  pull_request_review_comment:
+    types: [created, edited, deleted]
   push:
-    branches: [master]
+    branches: [main, master]
+  # A merge made with GITHUB_TOKEN raises no push, and nothing raises an event
+  # for a resolved review thread, so a sweep closes both gaps.
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '17 */6 * * *'
   workflow_dispatch:
     inputs:
       pr_number:
@@ -21,39 +23,43 @@ on:
         required: true
         type: string
 
-permissions: {}
-
-# Isolate untrusted events before workflow concurrency can replace a pending run.
-# Publisher allowlist, kept in step with policy.json: the configured reviewer
-# Apps and the review relay. A provider that publishes its verdict but whose
-# event is filtered out here never re-evaluates the gate, so its completion
-# leaves a stale result in place until the next scheduled sweep.
-concurrency:
-  group: >-
-    ${{ ((github.event_name == 'issue_comment' &&
-         (!github.event.issue.pull_request ||
-          (github.event.comment.user.id != 20649888 &&
-           github.event.comment.user.id != 136622811 &&
-           github.event.comment.user.id != 199175422))) ||
-         (github.event_name == 'check_run' &&
-          github.event.check_run.app.id != 347564 &&
-          github.event.check_run.app.id != 1144995)) &&
-        format('pr-governance-ignored-{0}', github.run_id) || 'pr-governance' }}
-  cancel-in-progress: false
+# The gate reads metadata only. It never checks out or runs pull request code.
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+  statuses: write
+  actions: write
 
 jobs:
+  # The labeled payload is the only authenticated record of which head a
+  # clearing label was added to. Recording it in its own job keeps the evidence
+  # independent of an evaluation that a later event may supersede.
+  record_label:
+    name: Record the head a clearing label was added to
+    if: github.event_name == 'pull_request_target' && github.event.action == 'labeled'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: read
+      pull-requests: read
+      statuses: write
+    steps:
+      - name: Record label head
+        uses: GdeiAssistant/.github/pr-governance@b02a689c27b1821bd71bf7ae33c73ea5f31e4a4a
+        with:
+          mode: gate
+
   evaluate:
-    # Unrelated events also skip execution; their concurrency groups are isolated.
+    name: Evaluate PR governance
+    needs: record_label
+    # A skipped recorder is the normal case for every other event.
     if: >-
+      always() && needs.record_label.result != 'cancelled' &&
       (github.event_name != 'issue_comment' ||
        (github.event.issue.pull_request &&
-        (github.event.comment.user.id == 20649888 ||
-         github.event.comment.user.id == 136622811 ||
-         github.event.comment.user.id == 199175422))) &&
-      (github.event_name != 'check_run' ||
-       (github.event.check_run.app.id == 347564 ||
-        github.event.check_run.app.id == 1144995))
-    name: Evaluate PR governance
+        (github.event.comment.user.type == 'Bot' ||
+         contains(github.event.comment.body || '', 'codex-review'))))
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -61,41 +67,14 @@ jobs:
       pull-requests: read
       issues: read
       statuses: write
-      checks: read
+      actions: write
+    # Job-level, so an irrelevant comment skips the job without cancelling an
+    # evaluation already running. Label evidence no longer rides on this run.
+    concurrency:
+      group: pr-governance-${{ github.event.pull_request.number || github.event.issue.number || inputs.pr_number || github.run_id }}
+      cancel-in-progress: true
     steps:
-      - name: Evaluate with current default-branch policy only
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+      - name: Evaluate
+        uses: GdeiAssistant/.github/pr-governance@b02a689c27b1821bd71bf7ae33c73ea5f31e4a4a
         with:
-          script: |
-            const fs = require('node:fs');
-            const path = require('node:path');
-            const { data: repository } = await github.rest.repos.get(context.repo);
-            const defaultBranch = repository.default_branch;
-            const { data: branch } = await github.rest.repos.getBranch({ ...context.repo, branch: defaultBranch });
-            const policyCommit = branch.commit.sha;
-            const folder = fs.mkdtempSync(path.join(process.env.RUNNER_TEMP, 'pr-governance-'));
-            const sources = {};
-            // Never load code, policy, dependencies, caches or artifacts from the PR.
-            for (const name of ['gate.cjs', 'runner.cjs', 'policy.json']) {
-              const { data } = await github.rest.repos.getContent({
-                ...context.repo, path: `.github/governance/${name}`, ref: policyCommit,
-              });
-              if (data.type !== 'file' || data.encoding !== 'base64' || !data.content) throw new Error('Missing trusted policy file');
-              sources[name] = Buffer.from(data.content, 'base64').toString('utf8');
-              fs.writeFileSync(path.join(folder, name), sources[name]);
-            }
-            const { data: workflow } = await github.rest.repos.getContent({
-              ...context.repo, path: '.github/workflows/risk-gate.yml', ref: policyCommit,
-            });
-            if (workflow.type !== 'file' || workflow.encoding !== 'base64' || !workflow.content) throw new Error('Missing trusted workflow');
-            sources['risk-gate.yml'] = Buffer.from(workflow.content, 'base64').toString('utf8');
-            const { data: config } = await github.rest.repos.getContent({
-              ...context.repo, path: '.coderabbit.yaml', ref: policyCommit,
-            });
-            if (config.type !== 'file' || config.encoding !== 'base64' || !config.content) throw new Error('Missing trusted reviewer config');
-            sources['.coderabbit.yaml'] = Buffer.from(config.content, 'base64').toString('utf8');
-            const { digest } = require(path.join(folder, 'gate.cjs'));
-            await require(path.join(folder, 'runner.cjs')).run({
-              github, context, core, defaultBranch, policyCommit,
-              policy: JSON.parse(sources['policy.json']), policySha: digest(sources),
-            });
+          mode: gate
