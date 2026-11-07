@@ -7,10 +7,6 @@
     "user_id": 199175422,
     "login": "chatgpt-codex-connector[bot]"
   },
-  "owner": {
-    "user_id": 20649888,
-    "login": "Pigbibi"
-  },
   "r0_paths": [
     "README.md",
     "docs/prose/"

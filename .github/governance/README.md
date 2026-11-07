@@ -6,7 +6,8 @@
 
 `policy.json` 使用 `pr-governance/v3`：
 
-- `owner`：唯一可以添加或移除 `owner-approved` 的账号。其他有写权限的 agent 使用
+- 所有者身份来自组织变量 `RISK_GATE_OWNER_ID` 和 `RISK_GATE_OWNER`，不写入
+  `policy.json`。只有该账号可以添加或移除 `owner-approved`；其他有写权限的 agent 使用
   `agent-approved`。
 - `r0_paths`：可以降到 R0 的纯文档路径；含敏感词仍会升到 R2。
 - `r2_paths`：本仓库额外的高风险路径，叠加在内置规则之上。
