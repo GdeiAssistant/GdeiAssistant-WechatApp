@@ -97,6 +97,6 @@ npm run smoke
 
 ## 评审规则
 
-风险分级、CodeRabbit 审查与账号决定按 [PR 风险与审查契约](.github/governance/README.md)执行。
+风险分级、Codex 审查与账号决定按 [PR 风险与审查契约](.github/governance/README.md)执行。
 R1 和常规 R2 均要求 Codex 实际完成当前 SHA 的审查、完整覆盖且无阻断意见；不要求人工或 Grok 账号 approve 评论。
 跳过、限流、作者批准命令及标签不能代替完成证据。例外仅由 Pigbibi 本人用 override 明确记录，并可 revoke 撤销；经所有者逐次明确授权的代办可在该 PR 与 scope 内代为发布 override，智能体不得自行决定例外或代发 revoke。
