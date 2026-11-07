@@ -1,6 +1,12 @@
 {
-  "version": "pr-governance/v2",
-  "repository": "GdeiAssistant/GdeiAssistant-WechatApp",
+  "version": "pr-governance/v3",
+  "mode": "enforce",
+  "reviewer": {
+    "provider": "codex",
+    "app_id": 1144995,
+    "user_id": 199175422,
+    "login": "chatgpt-codex-connector[bot]"
+  },
   "r0_paths": [
     "README.md",
     "docs/prose/"
@@ -18,44 +24,6 @@
     "pages/privacy/",
     "scripts/"
   ],
-  "reviewers": {
-    "R0": {
-      "primary": "deterministic-prose"
-    },
-    "R1": {
-      "primary": "codex"
-    },
-    "R2": {
-      "primary": "codex"
-    }
-  },
-  "providers": {
-    "coderabbit": "sha-bound-review",
-    "codex": "sha-bound-review"
-  },
-  "owner_approval_max_hours": 24,
   "dependabot_template_exemption": false,
-  "owner_actors": [
-    {
-      "user_id": 20649888,
-      "login": "Pigbibi",
-      "enabled": true,
-      "decisions": [
-        "override",
-        "revoke"
-      ]
-    }
-  ],
-  "coderabbit": {
-    "app_id": 347564,
-    "app_slug": "coderabbitai",
-    "user_id": 136622811,
-    "login": "coderabbitai[bot]"
-  },
-  "codex": {
-    "app_id": 1144995,
-    "app_slug": "chatgpt-codex-connector",
-    "user_id": 199175422,
-    "login": "chatgpt-codex-connector[bot]"
-  }
+  "max_evidence_age_hours": 168
 }
