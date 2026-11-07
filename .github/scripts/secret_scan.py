@@ -110,10 +110,12 @@ def scan(binary, mode, target, report, baseline=None):
 
 
 def write_summary(path, findings):
+    # Only aggregate counts may leave the run: a path or commit prefix in the
+    # artifact is enough to recover the value from history.
     path.parent.mkdir(parents=True, exist_ok=True)
-    rows = [{'File': finding['File'], 'RuleID': finding['RuleID'],
-             'Commit': finding.get('Commit', '')[:12]} for finding in findings]
-    path.write_text(json.dumps(rows, indent=2) + '\n')
+    counts = Counter(finding['RuleID'] for finding in findings)
+    path.write_text(json.dumps({'new_findings': len(findings),
+                                'by_rule': dict(sorted(counts.items()))}, indent=2) + '\n')
 
 
 def history(binary, baseline_path, summary, create=False):

@@ -312,8 +312,7 @@ class SecretScanTests(unittest.TestCase):
             baseline.write_text(json.dumps([SCANNER.project(row) for row in findings]))
             self.assertEqual(SCANNER.history(BINARY, baseline, summary), 1)
             rows = json.loads(summary.read_text())
-            self.assertEqual(len(rows), 1)
-            self.assertEqual(rows[0]['RuleID'], 'mongodb-userinfo-password')
+            self.assertEqual(rows, {'new_findings': 1, 'by_rule': {'mongodb-userinfo-password': 1}})
 
     def test_fixture_directories_still_detect_unapproved_credentials(self):
         for directory in ('tests',):
@@ -431,8 +430,9 @@ class SecretScanTests(unittest.TestCase):
             git('checkout', '--quiet', '--detach', old_commit)
             self.assertEqual(SCANNER.history(BINARY, baseline, summary), 1)
         rows = json.loads(summary.read_text())
-        self.assertTrue(rows)
-        self.assertTrue(all(set(row) == {'File', 'RuleID', 'Commit'} for row in rows))
+        self.assertEqual(rows['new_findings'], 1)
+        self.assertEqual(set(rows), {'new_findings', 'by_rule'})
+        self.assertTrue(all(isinstance(count, int) for count in rows['by_rule'].values()))
 
 
 if __name__ == '__main__':
