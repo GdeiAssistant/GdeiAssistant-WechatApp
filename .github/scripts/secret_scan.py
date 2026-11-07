@@ -78,7 +78,7 @@ def verify_history(target):
     except (OSError, ValueError):
         raise RuntimeError('Git history is unreadable; scan blocked') from None
     commands = [('rev-parse', '--verify', 'HEAD^{commit}'),
-                ('log', '--all', '--full-history', '-p', '--')]
+                ('log', '--all', '--full-history', '--diff-merges=first-parent', '-p', '--')]
     for arguments in commands:
         try:
             result = subprocess.run(['git', '-C', str(target), *arguments],
@@ -97,7 +97,9 @@ def scan(binary, mode, target, report, baseline=None):
     command = [binary, mode, str(target), '--config', str(ROOT / '.gitleaks.toml'),
                '--ignore-gitleaks-allow', '--redact', '--no-banner', '--report-format', 'json', '--report-path', str(report)]
     if mode == 'git':
-        command.append('--log-opts=--all')
+        # Plain `git log -p` hides merge diffs, so a credential added only while
+        # resolving a conflict would never appear in the history scan.
+        command.append('--log-opts=--all --diff-merges=first-parent')
     if baseline is not None:
         command.extend(['--baseline-path', str(baseline)])
     result = subprocess.run(command, capture_output=True, check=False)

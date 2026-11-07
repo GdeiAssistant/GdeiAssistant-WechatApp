@@ -314,6 +314,37 @@ class SecretScanTests(unittest.TestCase):
             rows = json.loads(summary.read_text())
             self.assertEqual(rows, {'new_findings': 1, 'by_rule': {'mongodb-userinfo-password': 1}})
 
+    def test_history_scan_includes_merge_commit_diffs(self):
+        repository = self.root / 'repository'
+        subprocess.run(['git', 'init', '--quiet', '-b', 'main', str(repository)], check=True)
+        subprocess.run(['git', '-C', str(repository), 'config', 'user.name', 'Synthetic Test'], check=True)
+        subprocess.run(['git', '-C', str(repository), 'config', 'user.email', 'fixture@example.invalid'], check=True)
+        shutil.copyfile(SCANNER.ROOT / '.gitleaks.toml', repository / '.gitleaks.toml')
+        payload = repository / 'config.txt'
+
+        def git(*arguments):
+            return subprocess.run(['git', '-C', str(repository), *arguments], check=True,
+                                  capture_output=True, text=True).stdout.strip()
+
+        def commit(message, text):
+            payload.write_text(text)
+            git('add', 'config.txt')
+            git('commit', '--quiet', '-m', message)
+
+        commit('test: base', 'setting=base\n')
+        git('checkout', '--quiet', '-b', 'feature')
+        commit('test: feature', 'setting=feature\n')
+        git('checkout', '--quiet', 'main')
+        commit('test: main', 'setting=main\n')
+        subprocess.run(['git', '-C', str(repository), 'merge', '--no-ff', 'feature',
+                        '-m', 'test: conflicting feature'], capture_output=True, check=False)
+        # Resolving the conflict introduces a credential that exists only in the
+        # merge commit, not in either parent.
+        commit('test: merge resolution', 'setting=main\npassword=' + fake_value() + '\n')
+        with patch.object(SCANNER, 'ROOT', repository):
+            findings = SCANNER.scan(BINARY, 'git', repository, self.output)
+        self.assertIn('configuration-secret-value', {row['RuleID'] for row in findings})
+
     def test_fixture_directories_still_detect_unapproved_credentials(self):
         for directory in ('tests',):
             with self.subTest(directory=directory):
