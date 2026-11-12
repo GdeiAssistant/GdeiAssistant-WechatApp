@@ -1,4 +1,5 @@
 const endpoints = require('../../endpoints.js')
+const { trimValue, getMaxLengthMessage, findLabel, formatPrice } = require('../format.js')
 const { request } = require('../../request.js')
 const { maskAddress, maskPhone, maskPickupCode } = require('../../../utils/mask.js')
 const i18n = require('../../../utils/i18n.js')
@@ -11,26 +12,6 @@ var DELIVERY_PICKUP_LOCATION_MAX_LENGTH = 100
 var DELIVERY_ADDRESS_MAX_LENGTH = 50
 var DELIVERY_REMARKS_MAX_LENGTH = 100
 var CONTACT_PHONE_MAX_LENGTH = 11
-
-function trimValue(value) {
-  return String(value || '').trim()
-}
-
-function getMaxLengthMessage(value, maxLength, message) {
-  return trimValue(value).length > maxLength ? message : ''
-}
-
-function findLabel(options, value, fallback) {
-  var item = (options || []).filter(function (optionItem) {
-    return Number(optionItem.value) === Number(value)
-  })[0]
-  return item ? item.label : fallback || ''
-}
-
-function formatPrice(value) {
-  var price = Number(value || 0)
-  return price ? price.toFixed(2) : '0.00'
-}
 
 module.exports = {
   getFeed: function (options) {

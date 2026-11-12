@@ -1,4 +1,6 @@
 const endpoints = require('../../endpoints.js')
+const { trimValue, getMaxLengthMessage, findLabel, formatPrice } = require('../format.js')
+const { postForm } = require('../../request-form.js')
 const { request } = require('../../request.js')
 const { encodeForm } = require('../../../utils/form.js')
 const { maskAddress, maskContactId, maskPhone } = require('../../../utils/mask.js')
@@ -11,28 +13,6 @@ var SECONDHAND_LOCATION_MAX_LENGTH = 30
 var SECONDHAND_QQ_MAX_LENGTH = 20
 var SECONDHAND_PRICE_MAX = 9999.99
 var CONTACT_PHONE_MAX_LENGTH = 11
-
-function trimValue(value) {
-  return String(value || '').trim()
-}
-
-function getMaxLengthMessage(value, maxLength, message) {
-  return trimValue(value).length > maxLength ? message : ''
-}
-
-function findLabel(options, value, fallback) {
-  const item = (options || []).filter(function (optionItem) {
-    return (
-      Number(optionItem.value) === Number(value) || Number(optionItem.feedValue) === Number(value)
-    )
-  })[0]
-  return item ? item.label : fallback || ''
-}
-
-function formatPrice(value) {
-  const price = Number(value || 0)
-  return price ? price.toFixed(2) : '0.00'
-}
 
 function isValidSecondhandPrice(value) {
   var price = Number(value || 0)
@@ -100,18 +80,7 @@ module.exports = {
   },
 
   publish: function (payload) {
-    return request(
-      Object.assign(
-        {},
-        {
-          url: endpoints.community.secondhand.publish,
-          method: 'POST',
-          authRequired: true,
-          data: encodeForm(payload),
-          contentType: 'application/x-www-form-urlencoded'
-        }
-      )
-    )
+    return postForm(endpoints.community.secondhand.publish, payload)
   },
 
   buildListTabs: function () {

@@ -1,18 +1,12 @@
 const endpoints = require('../../endpoints.js')
+const { trimValue, getMaxLengthMessage } = require('../format.js')
+const { postForm } = require('../../request-form.js')
 const { request } = require('../../request.js')
 const { encodeForm } = require('../../../utils/form.js')
 const i18n = require('../../../utils/i18n.js')
 
 var TOPIC_KEYWORD_MAX_LENGTH = 15
 var TOPIC_CONTENT_MAX_LENGTH = 250
-
-function trimValue(value) {
-  return String(value || '').trim()
-}
-
-function getMaxLengthMessage(value, maxLength, message) {
-  return trimValue(value).length > maxLength ? message : ''
-}
 
 module.exports = {
   getFeed: function (options) {
@@ -51,18 +45,7 @@ module.exports = {
   },
 
   publish: function (payload) {
-    return request(
-      Object.assign(
-        {},
-        {
-          url: endpoints.community.topic.publish,
-          method: 'POST',
-          authRequired: true,
-          data: encodeForm(payload),
-          contentType: 'application/x-www-form-urlencoded'
-        }
-      )
-    )
+    return postForm(endpoints.community.topic.publish, payload)
   },
 
   buildListTabs: function () {

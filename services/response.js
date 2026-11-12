@@ -49,44 +49,25 @@ function normalizePayload(rawPayload) {
     return rawPayload
   }
 
-  if (typeof rawPayload.code !== 'undefined') {
-    const successCode = Number(rawPayload.code) === 200 || Number(rawPayload.code) === 0
-    const normalized = {
-      success: successCode,
-      message: pickMessage(rawPayload),
-      data: Object.prototype.hasOwnProperty.call(rawPayload, 'data') ? rawPayload.data : null,
-      raw: rawPayload
-    }
-    if (rawPayload.errorCode) {
-      normalized.errorCode = rawPayload.errorCode
-    }
-    return normalized
-  }
-
-  if (typeof rawPayload.status !== 'undefined') {
-    const successStatus = Number(rawPayload.status) === 200 || Number(rawPayload.status) === 0
-    const normalized = {
-      success: successStatus,
-      message: pickMessage(rawPayload),
-      data: Object.prototype.hasOwnProperty.call(rawPayload, 'data') ? rawPayload.data : null,
-      raw: rawPayload
-    }
-    if (rawPayload.errorCode) {
-      normalized.errorCode = rawPayload.errorCode
-    }
-    return normalized
-  }
-
-  const fallback = {
-    success: false,
+  const statusField =
+    typeof rawPayload.code !== 'undefined'
+      ? 'code'
+      : typeof rawPayload.status !== 'undefined'
+        ? 'status'
+        : ''
+  const success = statusField
+    ? Number(rawPayload[statusField]) === 200 || Number(rawPayload[statusField]) === 0
+    : false
+  const normalized = {
+    success: success,
     message: pickMessage(rawPayload),
-    data: null,
+    data: Object.prototype.hasOwnProperty.call(rawPayload, 'data') ? rawPayload.data : null,
     raw: rawPayload
   }
   if (rawPayload.errorCode) {
-    fallback.errorCode = rawPayload.errorCode
+    normalized.errorCode = rawPayload.errorCode
   }
-  return fallback
+  return normalized
 }
 
 module.exports = {

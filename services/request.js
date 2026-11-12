@@ -73,16 +73,19 @@ function request(options) {
         return !!(sessionToken && currentToken && sessionToken === currentToken)
       }
 
+      // Mock requests and wx.request both surface 401. Both must clear the same
+      // session and reject with the same error; one helper keeps them in sync.
+      const unauthorizedError = function () {
+        if (shouldClearSessionFor401()) {
+          auth.clearSession()
+          auth.reLaunchToLogin(i18n.t('auth.loginExpiredTitle'), i18n.t('auth.loginExpiredMessage'))
+        }
+        return new Error(i18n.t('auth.loginExpiredMessage'))
+      }
+
       const rejectPayload = function (error) {
         if (error && error.statusCode === 401) {
-          if (shouldClearSessionFor401()) {
-            auth.clearSession()
-            auth.reLaunchToLogin(
-              i18n.t('auth.loginExpiredTitle'),
-              i18n.t('auth.loginExpiredMessage')
-            )
-          }
-          reject(new Error(i18n.t('auth.loginExpiredMessage')))
+          reject(unauthorizedError())
           return
         }
 
@@ -142,14 +145,7 @@ function request(options) {
           if (res.statusCode >= 200 && res.statusCode < 300) {
             resolvePayload(res.statusCode === 204 ? { success: true, data: null } : res.data)
           } else if (res.statusCode === 401) {
-            if (shouldClearSessionFor401()) {
-              auth.clearSession()
-              auth.reLaunchToLogin(
-                i18n.t('auth.loginExpiredTitle'),
-                i18n.t('auth.loginExpiredMessage')
-              )
-            }
-            reject(new Error(i18n.t('auth.loginExpiredMessage')))
+            reject(unauthorizedError())
           } else {
             const nextError = new Error(pickMessage(res.data))
             nextError.statusCode = res.statusCode

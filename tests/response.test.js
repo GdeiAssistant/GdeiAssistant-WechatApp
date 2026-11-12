@@ -72,3 +72,14 @@ test('normalizePayload preserves zero and false data', function () {
   assert.equal(normalizePayload({ code: 200, data: 0 }).data, 0)
   assert.equal(normalizePayload({ status: 200, data: false }).data, false)
 })
+
+test('normalizePayload keeps errorCode for every status shape', function () {
+  assert.equal(normalizePayload({ code: 500, errorCode: 'E1' }).errorCode, 'E1')
+  assert.equal(normalizePayload({ status: 500, errorCode: 'E2' }).errorCode, 'E2')
+  assert.equal(normalizePayload({ message: 'busy', errorCode: 'E3' }).errorCode, 'E3')
+})
+
+test('code wins when a payload carries both code and status', function () {
+  assert.equal(normalizePayload({ code: 200, status: 500 }).success, true)
+  assert.equal(normalizePayload({ code: 500, status: 200 }).success, false)
+})

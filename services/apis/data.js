@@ -1,12 +1,12 @@
 const endpoints = require('../endpoints.js')
 const { request } = require('../request.js')
+const { requestForm } = require('../request-form.js')
 
 function queryElectricFees(payload) {
-  return request({
+  return requestForm({
     url: endpoints.data.electricFees,
     method: 'POST',
-    data: payload,
-    contentType: 'application/x-www-form-urlencoded'
+    data: payload
   })
 }
 

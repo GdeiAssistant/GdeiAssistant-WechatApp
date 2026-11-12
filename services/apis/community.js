@@ -1,16 +1,9 @@
 const endpoints = require('../endpoints.js')
 const { request } = require('../request.js')
+const { requestForm } = require('../request-form.js')
 const { encodeForm } = require('../../utils/form.js')
 const { getModuleHandler } = require('../community/registry.js')
 const i18n = require('../../utils/i18n.js')
-
-function requestForm(options) {
-  return request(
-    Object.assign({}, options, {
-      contentType: 'application/x-www-form-urlencoded'
-    })
-  )
-}
 
 function getFeed(moduleId, options) {
   var handler = getModuleHandler(moduleId)
