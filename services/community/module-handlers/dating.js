@@ -1,4 +1,6 @@
 const endpoints = require('../../endpoints.js')
+const { trimValue, getMaxLengthMessage, findLabel } = require('../format.js')
+const { postForm } = require('../../request-form.js')
 const { request } = require('../../request.js')
 const { encodeForm } = require('../../../utils/form.js')
 const i18n = require('../../../utils/i18n.js')
@@ -10,21 +12,6 @@ var DATING_HOMETOWN_MAX_LENGTH = 10
 var DATING_QQ_MAX_LENGTH = 15
 var DATING_WECHAT_MAX_LENGTH = 20
 var DATING_CONTENT_MAX_LENGTH = 100
-
-function trimValue(value) {
-  return String(value || '').trim()
-}
-
-function getMaxLengthMessage(value, maxLength, message) {
-  return trimValue(value).length > maxLength ? message : ''
-}
-
-function findLabel(options, value, fallback) {
-  var item = (options || []).filter(function (optionItem) {
-    return Number(optionItem.value) === Number(value)
-  })[0]
-  return item ? item.label : fallback || ''
-}
 
 module.exports = {
   getFeed: function (options) {
@@ -81,18 +68,7 @@ module.exports = {
   },
 
   publish: function (payload) {
-    return request(
-      Object.assign(
-        {},
-        {
-          url: endpoints.community.dating.publish,
-          method: 'POST',
-          authRequired: true,
-          data: encodeForm(payload),
-          contentType: 'application/x-www-form-urlencoded'
-        }
-      )
-    )
+    return postForm(endpoints.community.dating.publish, payload)
   },
 
   buildListTabs: function () {

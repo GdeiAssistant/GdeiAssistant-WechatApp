@@ -1,4 +1,5 @@
 const config = require('../config/index.js')
+const urlOrigin = require('./url-origin.js')
 const auth = require('./auth.js')
 const dataSource = require('./data-source.js')
 const { PLACEHOLDER_AVATAR } = require('../utils/social.js')
@@ -54,70 +55,6 @@ function isPlaceholderOrLocal(url) {
   return false
 }
 
-function parseOriginParts(absoluteUrl) {
-  const value = String(absoluteUrl || '').trim()
-  const match = value.match(/^(https?):\/\/([^/?#]+)(\/[^?#]*)?(\?[^#]*)?(#.*)?$/i)
-  if (!match) {
-    return null
-  }
-  const scheme = match[1].toLowerCase()
-  const authority = match[2]
-  if (authority.indexOf('@') !== -1) {
-    // Reject URLs with username/password userinfo.
-    return null
-  }
-  let host = authority
-  let port = ''
-  if (authority.charAt(0) === '[') {
-    const end = authority.indexOf(']')
-    if (end < 0) {
-      return null
-    }
-    host = authority.slice(0, end + 1)
-    const rest = authority.slice(end + 1)
-    if (rest) {
-      if (rest.charAt(0) !== ':') {
-        return null
-      }
-      port = rest.slice(1)
-    }
-  } else {
-    const colon = authority.lastIndexOf(':')
-    if (colon > -1) {
-      host = authority.slice(0, colon)
-      port = authority.slice(colon + 1)
-    }
-  }
-  if (!host || /[^A-Za-z0-9.\[\]:_-]/.test(host)) {
-    return null
-  }
-  if (port && !/^\d+$/.test(port)) {
-    return null
-  }
-  const effectivePort = port || (scheme === 'https' ? '443' : '80')
-  const path = match[3] || '/'
-  return {
-    scheme: scheme,
-    host: host.toLowerCase(),
-    effectivePort: effectivePort,
-    path: path
-  }
-}
-
-function resourceOrigin() {
-  return parseOriginParts(String(config.resourceDomain || '').replace(/\/?$/, '/'))
-}
-
-function sameOrigin(left, right) {
-  return (
-    !!left &&
-    !!right &&
-    left.scheme === right.scheme &&
-    left.host === right.host &&
-    left.effectivePort === right.effectivePort
-  )
-}
-
 function isAuthAvatarPath(pathname) {
   return AUTH_AVATAR_PATH.test(String(pathname || ''))
 }
@@ -131,32 +68,21 @@ function isAuthAvatarUrl(url) {
     const path = value.charAt(0) === '/' ? value.split('?')[0] : '/' + value.split('?')[0]
     return isAuthAvatarPath(path)
   }
-  const parsed = parseOriginParts(value)
+  const parsed = urlOrigin.parseOriginParts(value)
   return !!(parsed && isAuthAvatarPath(parsed.path))
 }
 
 function buildAbsoluteUrl(url) {
-  const value = String(url || '').trim()
-  if (!value) {
-    return ''
-  }
-  if (/^[a-z][a-z0-9+.-]*:/i.test(value)) {
-    if (!/^https?:\/\//i.test(value)) {
-      return ''
-    }
-    return value
-  }
-  const domain = String(config.resourceDomain || '').replace(/\/?$/, '/')
-  return domain + value.replace(/^\//, '')
+  return urlOrigin.buildAbsoluteUrl(url, config.resourceDomain)
 }
 
 function shouldAttachBearer(absoluteUrl) {
-  const target = parseOriginParts(absoluteUrl)
-  const origin = resourceOrigin()
+  const target = urlOrigin.parseOriginParts(absoluteUrl)
+  const origin = urlOrigin.resourceOrigin(config.resourceDomain)
   if (!target || !origin) {
     return false
   }
-  if (!sameOrigin(target, origin)) {
+  if (!urlOrigin.sameOrigin(target, origin)) {
     return false
   }
   return isAuthAvatarPath(target.path)
@@ -183,7 +109,7 @@ function resolve(avatarUrl) {
   }
 
   const absoluteUrl = buildAbsoluteUrl(raw)
-  const parsed = parseOriginParts(absoluteUrl)
+  const parsed = urlOrigin.parseOriginParts(absoluteUrl)
   if (!parsed) {
     return Promise.resolve(PLACEHOLDER_AVATAR)
   }
@@ -256,5 +182,5 @@ module.exports = {
   isAuthAvatarUrl: isAuthAvatarUrl,
   buildAbsoluteUrl: buildAbsoluteUrl,
   shouldAttachBearer: shouldAttachBearer,
-  parseOriginParts: parseOriginParts
+  parseOriginParts: urlOrigin.parseOriginParts
 }

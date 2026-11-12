@@ -1,4 +1,6 @@
 const endpoints = require('../../endpoints.js')
+const { trimValue, getMaxLengthMessage, findLabel } = require('../format.js')
+const { postForm } = require('../../request-form.js')
 const { request } = require('../../request.js')
 const { encodeForm } = require('../../../utils/form.js')
 const { maskAddress, maskContactId, maskPhone } = require('../../../utils/mask.js')
@@ -15,23 +17,6 @@ var LOST_FOUND_QQ_MAX_LENGTH = 20
 var LOST_FOUND_WECHAT_MAX_LENGTH = 20
 var CONTACT_PHONE_MAX_LENGTH = 11
 
-function trimValue(value) {
-  return String(value || '').trim()
-}
-
-function getMaxLengthMessage(value, maxLength, message) {
-  return trimValue(value).length > maxLength ? message : ''
-}
-
-function findLabel(options, value, fallback) {
-  const item = (options || []).filter(function (optionItem) {
-    return (
-      Number(optionItem.value) === Number(value) || Number(optionItem.feedValue) === Number(value)
-    )
-  })[0]
-  return item ? item.label : fallback || ''
-}
-
 module.exports = {
   getFeed: function (options) {
     var config = options || {}
@@ -39,18 +24,9 @@ module.exports = {
     var keyword = String(config.keyword || '').trim()
 
     if (keyword) {
-      return request(
-        Object.assign(
-          {},
-          {
-            url: endpoints.community.lostAndFound.search(config.mode || 0, start),
-            method: 'POST',
-            authRequired: true,
-            data: encodeForm({ keyword: keyword }),
-            contentType: 'application/x-www-form-urlencoded'
-          }
-        )
-      )
+      return postForm(endpoints.community.lostAndFound.search(config.mode || 0, start), {
+        keyword: keyword
+      })
     }
     return request({
       url:
@@ -96,18 +72,7 @@ module.exports = {
   },
 
   publish: function (payload) {
-    return request(
-      Object.assign(
-        {},
-        {
-          url: endpoints.community.lostAndFound.publish,
-          method: 'POST',
-          authRequired: true,
-          data: encodeForm(payload),
-          contentType: 'application/x-www-form-urlencoded'
-        }
-      )
-    )
+    return postForm(endpoints.community.lostAndFound.publish, payload)
   },
 
   buildListTabs: function () {

@@ -1,4 +1,6 @@
 const endpoints = require('../../endpoints.js')
+const { trimValue, getMaxLengthMessage } = require('../format.js')
+const { requestForm, postForm } = require('../../request-form.js')
 const { request } = require('../../request.js')
 const { encodeForm } = require('../../../utils/form.js')
 const i18n = require('../../../utils/i18n.js')
@@ -6,22 +8,6 @@ const { getPhotographTabOptions } = require('../../../constants/community.js')
 
 var PHOTOGRAPH_TITLE_MAX_LENGTH = 25
 var PHOTOGRAPH_CONTENT_MAX_LENGTH = 50
-
-function trimValue(value) {
-  return String(value || '').trim()
-}
-
-function getMaxLengthMessage(value, maxLength, message) {
-  return trimValue(value).length > maxLength ? message : ''
-}
-
-function requestForm(options) {
-  return request(
-    Object.assign({}, options, {
-      contentType: 'application/x-www-form-urlencoded'
-    })
-  )
-}
 
 module.exports = {
   getFeed: function (options) {
@@ -57,18 +43,7 @@ module.exports = {
   },
 
   publish: function (payload) {
-    return request(
-      Object.assign(
-        {},
-        {
-          url: endpoints.community.photograph.publish,
-          method: 'POST',
-          authRequired: true,
-          data: encodeForm(payload),
-          contentType: 'application/x-www-form-urlencoded'
-        }
-      )
-    )
+    return postForm(endpoints.community.photograph.publish, payload)
   },
 
   buildListTabs: function () {
