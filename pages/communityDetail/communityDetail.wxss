@@ -40,16 +40,20 @@
 .detail_card {
   margin: 24rpx var(--gutter) 0;
   padding: 28rpx 32rpx;
+  border: 1rpx solid var(--color-border);
   border-radius: var(--radius-card);
   background: var(--color-surface);
+  box-shadow: var(--shadow-card);
 }
 
 /* The post itself reads as an article on the canvas, not another card. */
 .detail_card_main {
   margin: 0;
   padding: 40rpx var(--gutter) 32rpx;
+  border: 0;
   border-radius: 0;
   background: transparent;
+  box-shadow: none;
   border-bottom: 1rpx solid var(--color-divider);
 }
 
@@ -72,6 +76,7 @@
 
 .detail_title {
   color: var(--color-text-primary);
+  font-family: var(--font-serif);
   font-size: var(--font-display);
   font-weight: 700;
   line-height: 1.3;
@@ -234,8 +239,10 @@
 /* Inputs nested in a section use a sunken field instead of a second surface. */
 .detail_card .weui-cells {
   margin: 16rpx 0 0;
+  border: 1rpx solid var(--color-divider);
   border-radius: var(--radius-control);
   background: var(--color-surface-sunken);
+  box-shadow: none;
 }
 
 .detail_card .weui-cell {

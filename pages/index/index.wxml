@@ -1,50 +1,148 @@
 <view class="container {{themeClass}}" style="{{fontStyle}}">
+  <official-account></official-account>
 
-<official-account></official-account>
-
-  <view class="home_band" wx:if="{{avatar}}">
-    <view class="userinfo_card">
-      <view class="home_band_top">
-        <image class="home_logo" src="/image/logo.png" mode="aspectFit"></image>
-        <view class="userinfo_notice" bindtap="openInbox">
-          <image class="userinfo_notice_icon" src="/image/mono/inbox.png" mode="aspectFit"></image>
-          <text class="userinfo_notice_badge" wx:if="{{inboxBadgeText}}">{{inboxBadgeText}}</text>
+  <!-- Capsule-safe editorial masthead directly on warm paper canvas -->
+  <view class="editorial_header">
+    <view class="editorial_brand_row">
+      <view class="editorial_profile_trigger" bindtap="openProfile">
+        <image class="editorial_avatar" src="{{avatar || '../../image/default.png'}}" mode="aspectFill"></image>
+        <view class="editorial_title_block">
+          <text class="editorial_app_name editorial-serif">{{t.appName}}</text>
+          <text class="editorial_tagline">{{nickname ? nickname + ' · ' : ''}}{{t.campusTagline}}</text>
         </view>
       </view>
-
-      <view class="userinfo">
-        <image class="userinfo-avatar" src="{{avatar}}" mode="aspectFill"></image>
-        <view class="userinfo_meta">
-          <text class="userinfo-nickname">{{nickname}}</text>
-        </view>
+      <view class="editorial_inbox_btn" bindtap="openInbox">
+        <image class="editorial_inbox_icon" src="/image/mono/inbox.png" mode="aspectFit"></image>
+        <text class="editorial_inbox_badge tabular-num" wx:if="{{inboxBadgeText}}">{{inboxBadgeText}}</text>
       </view>
+    </view>
 
-      <text class="userinfo-entry" bindtap="openProfile">{{t.viewProfile}}</text>
+    <!-- Notice ticker strip -->
+    <view class="notice_ticker" wx:if="{{latestNotice}}" bindtap="openAnnouncement">
+      <text class="notice_tag">{{t.noticeLabel}}</text>
+      <text class="notice_title">{{latestNotice.title}}</text>
+      <text class="notice_arrow">›</text>
     </view>
   </view>
 
+  <!-- Single tactile Campus Pass / Today Status focal card -->
+  <view class="pass_wrap">
+    <view class="pass_card">
+      <view class="pass_top">
+        <text class="pass_label">{{t.campusCardTitle}}</text>
+        <text class="pass_status {{cardStatusNormal ? '' : 'pass_status--alert'}}">{{cardStatusText || t.cardStatusNormal}}</text>
+      </view>
+
+      <view class="pass_main">
+        <view class="pass_balance_col" bindtap="openCard">
+          <text class="pass_balance_label">{{t.cardBalanceLabel}}</text>
+          <view class="pass_balance_row">
+            <text class="pass_currency">¥</text>
+            <text class="pass_balance tabular-num">{{cardBalance}}</text>
+          </view>
+        </view>
+        <view class="pass_cta" bindtap="openCard" hover-class="pass_cta_hover">{{t.cardDetailBtn}}</view>
+      </view>
+
+      <view class="pass_footer">
+        <view class="pass_footer_item" bindtap="openSchedule">
+          <text class="pass_footer_text tabular-num">{{weekBadgeText}}</text>
+        </view>
+        <view class="pass_footer_divider"></view>
+        <view class="pass_footer_item" bindtap="openSchedule">
+          <text class="pass_footer_text tabular-num">{{todayClassCountText}}</text>
+        </view>
+        <view class="pass_footer_divider"></view>
+        <view class="pass_footer_item" bindtap="openProfile">
+          <text class="pass_footer_text">{{t.viewProfile}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Today's Agenda on hairlined editorial rows -->
+  <view class="agenda_section">
+    <view class="editorial-section-header">
+      <view class="editorial-section-title-wrap">
+        <view class="editorial-section-bar"></view>
+        <text class="editorial-section-title">{{t.todayAgendaTitle}}</text>
+      </view>
+      <text class="editorial-section-action" bindtap="openSchedule">{{t.viewFullSchedule}} ›</text>
+    </view>
+
+    <view class="agenda_list" wx:if="{{todayAgenda.length}}">
+      <view class="agenda_row hairline-bottom" wx:for="{{todayAgenda}}" wx:key="scheduleName" bindtap="openSchedule">
+        <text class="agenda_lesson tabular-num">{{item.scheduleLesson}}</text>
+        <view class="agenda_meta">
+          <text class="agenda_name">{{item.scheduleName}}</text>
+          <text class="agenda_sub">{{item.scheduleLocation}}{{item.scheduleTeacher ? ' · ' + item.scheduleTeacher : ''}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="agenda_empty hairline-bottom" wx:else bindtap="openSchedule">
+      <text class="agenda_empty_text">{{t.noAgendaToday}}</text>
+    </view>
+  </view>
+
+  <!-- Anti-cardification borderless quick-access service grids -->
   <view class="page-body">
     <view class="page__bd" wx:if="{{homeSections.length}}">
       <block wx:for="{{homeSections}}" wx:key="id" wx:for-item="section">
-        <view class="section_title">{{section.title}}</view>
-        <view class="weui-grids">
-          <navigator wx:for="{{section.features}}" wx:key="id" wx:for-item="feature" open-type="navigate" url="{{feature.page}}" class="weui-grid" hover-class="weui-grid_active">
-            <image class="weui-grid__icon" src="{{feature.icon}}" />
-            <view class="weui-grid__label">{{feature.title}}</view>
+        <view class="editorial-section-header">
+          <view class="editorial-section-title-wrap">
+            <view class="editorial-section-bar"></view>
+            <text class="editorial-section-title">{{section.title}}</text>
+          </view>
+        </view>
+
+        <view class="editorial_grid">
+          <navigator
+            wx:for="{{section.features}}"
+            wx:key="id"
+            wx:for-item="feature"
+            open-type="navigate"
+            url="{{feature.page}}"
+            class="editorial_grid_item"
+            hover-class="editorial_grid_item_active"
+          >
+            <view class="editorial_grid_icon_wrap">
+              <image class="editorial_grid_icon" src="{{feature.icon}}" mode="aspectFit" />
+            </view>
+            <text class="editorial_grid_label">{{feature.title}}</text>
           </navigator>
         </view>
       </block>
 
-      <view class="section_title">{{t.settingsSection}}</view>
-      <view class="weui-grids">
+      <view class="editorial-section-header">
+        <view class="editorial-section-title-wrap">
+          <view class="editorial-section-bar"></view>
+          <text class="editorial-section-title">{{t.settingsSection}}</text>
+        </view>
+      </view>
+
+      <view class="editorial_action_list">
         <block wx:for="{{systemActions}}" wx:key="id" wx:for-item="actionItem">
-          <navigator wx:if="{{actionItem.page}}" open-type="navigate" url="{{actionItem.page}}" class="weui-grid" hover-class="weui-grid_active">
-            <image class="weui-grid__icon" src="{{actionItem.icon}}" />
-            <view class="weui-grid__label">{{actionItem.title}}</view>
+          <navigator
+            wx:if="{{actionItem.page}}"
+            open-type="navigate"
+            url="{{actionItem.page}}"
+            class="editorial_action_row hairline-bottom"
+            hover-class="editorial_action_row_active"
+          >
+            <image class="editorial_action_icon" src="{{actionItem.icon}}" mode="aspectFit" />
+            <text class="editorial_action_title">{{actionItem.title}}</text>
+            <text class="editorial_action_chevron">›</text>
           </navigator>
-          <view wx:else data-action="{{actionItem.action}}" bindtap="handleActionTap" class="weui-grid" hover-class="weui-grid_active">
-            <image class="weui-grid__icon" src="{{actionItem.icon}}" />
-            <view class="weui-grid__label">{{actionItem.title}}</view>
+          <view
+            wx:else
+            data-action="{{actionItem.action}}"
+            bindtap="handleActionTap"
+            class="editorial_action_row hairline-bottom"
+            hover-class="editorial_action_row_active"
+          >
+            <image class="editorial_action_icon" src="{{actionItem.icon}}" mode="aspectFit" />
+            <text class="editorial_action_title">{{actionItem.title}}</text>
+            <text class="editorial_action_chevron">›</text>
           </view>
         </block>
       </view>
@@ -52,8 +150,7 @@
   </view>
 
   <view class="copyright_info">
-    <text>{{t.copyright}}</text>
-    <text>{{t.rightsReserved}}</text>
+    <text>{{t.footerNote}}</text>
+    <text>{{t.copyright}} {{t.rightsReserved}}</text>
   </view>
-
 </view>

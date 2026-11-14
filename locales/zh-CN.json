@@ -71,7 +71,21 @@
     "settingsSection": "功能设置",
     "logoutTitle": "退出账号",
     "logoutContent": "你确定要退出当前账号吗？",
-    "unreadFailed": "获取未读消息失败"
+    "unreadFailed": "获取未读消息失败",
+    "campusTagline": "广东第二师范学院 · 校园服务通",
+    "campusCardTitle": "校园一卡通 · Campus Pass",
+    "cardBalanceLabel": "当前余额 (元)",
+    "cardStatusNormal": "卡状态正常",
+    "cardStatusAbnormal": "卡状态异常",
+    "cardDetailBtn": "校园卡详情",
+    "weekBadge": "第 {{week}} 周",
+    "todayAgendaTitle": "今日课表",
+    "todayClassCount": "{{count}} 节课程",
+    "noAgendaToday": "今日暂无排课，可前往自习或查看周课表",
+    "viewFullSchedule": "整周课表",
+    "noticeLabel": "公告",
+    "inboxLabel": "消息",
+    "footerNote": "广东第二师范学院 · 岭南书院校园助手"
   },
   "grade": {
     "navTitle": "成绩查询",
@@ -311,6 +325,13 @@
       "system": "跟随系统",
       "light": "浅色模式",
       "dark": "深色模式"
+    },
+    "accent": {
+      "label": "主题色",
+      "banyan": "榕荫翠",
+      "kapok": "木棉丹",
+      "haizhu": "海珠蓝",
+      "bauhinia": "紫荆紫"
     },
     "font": {
       "label": "字体大小",

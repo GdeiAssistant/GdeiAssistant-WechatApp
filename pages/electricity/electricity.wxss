@@ -1,1 +1,64 @@
 @import "../../common/lib/weui.wxss";
+
+.elec_hero {
+  margin: 24rpx var(--gutter) 0;
+  padding: 28rpx 32rpx;
+  border-radius: var(--radius-card);
+  background: var(--color-band);
+  color: var(--color-on-band);
+  box-shadow: var(--shadow-raised);
+}
+
+.theme-dark .elec_hero {
+  border: 1rpx solid var(--color-border);
+}
+
+.elec_hero_top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.elec_hero_room {
+  font-family: var(--font-serif);
+  font-size: var(--font-title);
+  font-weight: 700;
+  color: var(--color-on-band);
+}
+
+.elec_hero_year {
+  padding: 4rpx 14rpx;
+  border-radius: var(--radius-full);
+  background: var(--color-band-chip);
+  color: var(--color-on-band);
+  font-size: var(--font-caption);
+  font-weight: 600;
+}
+
+.elec_hero_metrics {
+  display: flex;
+  gap: 24rpx;
+  margin-top: 22rpx;
+  padding-top: 18rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.16);
+}
+
+.elec_metric {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.elec_metric_label {
+  color: var(--color-on-band-muted);
+  font-size: var(--font-caption);
+}
+
+.elec_metric_val {
+  margin-top: 6rpx;
+  color: var(--color-on-band);
+  font-size: 40rpx;
+  font-weight: 700;
+  line-height: 1.15;
+}

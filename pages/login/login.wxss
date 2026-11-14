@@ -28,6 +28,7 @@
 
 .userinfo-nickname {
   color: var(--color-on-band);
+  font-family: var(--font-serif);
   font-size: var(--font-display);
   font-weight: 700;
   line-height: 1.2;
@@ -85,8 +86,10 @@ form {
 .login_aux {
   margin: 48rpx var(--gutter) 0;
   padding: 8rpx 32rpx;
+  border: 1rpx solid var(--color-border);
   border-radius: var(--radius-card);
   background: var(--color-surface);
+  box-shadow: var(--shadow-card);
 }
 
 .mock_toolbar {

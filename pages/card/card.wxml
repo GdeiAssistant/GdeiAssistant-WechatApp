@@ -1,5 +1,19 @@
 <view block class="page__bd {{themeClass}}" style="{{fontStyle}}">
   <view class="container" wx:if="{{card}}">
+    <view class="card_hero">
+      <view class="card_hero_top">
+        <text class="card_hero_name">{{card.name}}</text>
+        <text class="card_hero_state">{{card.cardLostState}}</text>
+      </view>
+      <view class="card_hero_balance_row">
+        <text class="card_hero_label">{{t.balance}}</text>
+        <text class="card_hero_balance tabular-num">¥ {{card.cardBalance}}</text>
+      </view>
+      <view class="card_hero_meta tabular-num">
+        <text>{{t.cardNumber}}: {{card.cardNumber}}</text>
+      </view>
+    </view>
+
     <view class="module_shortcuts">
       <navigator url="/pages/bill/bill" class="shortcut_card" hover-class="shortcut_card_active">
         <view class="shortcut_title">{{t.transactionHistory}}</view>

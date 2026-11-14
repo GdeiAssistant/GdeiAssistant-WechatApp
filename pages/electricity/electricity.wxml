@@ -38,6 +38,23 @@
   </view>
 
   <view class="container" wx:if="{{result}}">
+    <view class="elec_hero">
+      <view class="elec_hero_top">
+        <text class="elec_hero_room">{{result.buildingNumber}}{{result.roomNumber}}</text>
+        <text class="elec_hero_year tabular-num">{{result.year}}</text>
+      </view>
+      <view class="elec_hero_metrics">
+        <view class="elec_metric">
+          <text class="elec_metric_label">{{t.totalBill}}</text>
+          <text class="elec_metric_val tabular-num">{{result.totalElectricBill}}</text>
+        </view>
+        <view class="elec_metric">
+          <text class="elec_metric_label">{{t.usedAmount}}</text>
+          <text class="elec_metric_val tabular-num">{{result.usedElectricAmount}}</text>
+        </view>
+      </view>
+    </view>
+
     <view class="weui-cells__title">{{t.resultTitle}}</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell">

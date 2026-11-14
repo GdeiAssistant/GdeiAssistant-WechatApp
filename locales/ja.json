@@ -79,7 +79,21 @@
     "settingsSection": "設定",
     "logoutTitle": "ログアウト",
     "logoutContent": "ログアウトしてもよろしいですか？",
-    "unreadFailed": "未読メッセージの取得に失敗しました"
+    "unreadFailed": "未読メッセージの取得に失敗しました",
+    "campusTagline": "広東第二師範学院 · キャンパスパス",
+    "campusCardTitle": "キャンパスカード · Campus Pass",
+    "cardBalanceLabel": "残高 (元)",
+    "cardStatusNormal": "利用可能",
+    "cardStatusAbnormal": "状態異常",
+    "cardDetailBtn": "カード詳細",
+    "weekBadge": "第 {{week}} 週",
+    "todayAgendaTitle": "今日の時間割",
+    "todayClassCount": "{{count}} コマ",
+    "noAgendaToday": "本日の予定はありません。週間時間割を確認できます。",
+    "viewFullSchedule": "週間時間割",
+    "noticeLabel": "お知らせ",
+    "inboxLabel": "通知",
+    "footerNote": "広東第二師範学院 · キャンパスアシスタント"
   },
   "grade": {
     "navTitle": "成績照会",
@@ -336,6 +350,13 @@
       "system": "システムに従う",
       "light": "ライトモード",
       "dark": "ダークモード"
+    },
+    "accent": {
+      "label": "テーマカラー",
+      "banyan": "ガジュマル翠",
+      "kapok": "キワタ朱",
+      "haizhu": "海珠ブルー",
+      "bauhinia": "ソシンカ紫"
     },
     "font": {
       "label": "フォントサイズ",

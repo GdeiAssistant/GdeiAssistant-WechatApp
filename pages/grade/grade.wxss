@@ -3,3 +3,9 @@
 .weui-navbar {
   position: relative;
 }
+
+.weui-cell__ft {
+  color: var(--color-primary-ink);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}

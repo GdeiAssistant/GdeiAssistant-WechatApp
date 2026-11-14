@@ -19,8 +19,67 @@
 .font-card {
   margin: 0 var(--gutter);
   border-radius: var(--radius-card);
+  border: 1rpx solid var(--color-border);
   background: var(--color-surface);
+  box-shadow: var(--shadow-card);
   overflow: hidden;
+}
+
+.accent-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16rpx;
+  margin: 0 var(--gutter);
+}
+
+.accent-item {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  min-height: 100rpx;
+  box-sizing: border-box;
+  padding: 20rpx 24rpx;
+  border-radius: var(--radius-card);
+  border: 2rpx solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.15s ease;
+}
+
+.accent-item--active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.accent-swatch-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 14rpx;
+  flex-shrink: 0;
+}
+
+.accent-swatch {
+  width: 28rpx;
+  height: 28rpx;
+  border-radius: 50%;
+}
+
+.accent-name {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-meta);
+  font-weight: 500;
+}
+
+.accent-check {
+  width: 34rpx;
+  height: 34rpx;
+  font-size: 20rpx;
+  flex-shrink: 0;
 }
 
 .option-item {

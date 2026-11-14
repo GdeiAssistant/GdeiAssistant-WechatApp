@@ -7,7 +7,11 @@ Component({
     selected: 0,
     list: [
       { pagePath: '/pages/index/index', icon: 'home', labelKey: 'home' },
-      { pagePath: '/pages/conversationList/conversationList', icon: 'messages', labelKey: 'messages' },
+      {
+        pagePath: '/pages/conversationList/conversationList',
+        icon: 'messages',
+        labelKey: 'messages'
+      },
       { pagePath: '/pages/profile/profile', icon: 'profile', labelKey: 'profile' }
     ],
     t: {
@@ -26,8 +30,13 @@ Component({
   methods: {
     // Called by tab pages on show so labels, theme and selection stay fresh.
     update: function (options) {
+      var isDark = themeUtil.getEffectiveTheme() === 'dark'
+      var themeClass =
+        typeof themeUtil.getThemeClass === 'function'
+          ? themeUtil.getThemeClass()
+          : (isDark ? 'theme-dark' : 'theme-light') + ' accent-banyan'
       var patch = {
-        themeClass: themeUtil.getEffectiveTheme() === 'dark' ? 'theme-dark' : '',
+        themeClass: themeClass,
         t: {
           home: i18n.t('tabBar.home'),
           messages: i18n.t('tabBar.messages'),

@@ -3,3 +3,15 @@
 .spare_preview {
   margin-top: 24rpx;
 }
+
+.spare_preview .weui-form-preview__value_in-hd {
+  font-family: var(--font-serif);
+  font-size: 38rpx;
+  color: var(--color-primary-ink);
+}
+
+.spare_preview .weui-form-preview__item + .weui-form-preview__item {
+  border-top: 1rpx solid var(--color-divider);
+  padding-top: 12rpx;
+  margin-top: 4rpx;
+}

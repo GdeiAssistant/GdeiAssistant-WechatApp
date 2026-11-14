@@ -15,9 +15,26 @@
     </view>
   </view>
 
+  <view class="section-title">{{t.accentLabel}}</view>
+  <view class="accent-grid">
+    <view
+      class="accent-item {{themeAccent === item.id ? 'accent-item--active' : ''}}"
+      wx:for="{{accents}}"
+      wx:key="id"
+      data-accent="{{item.id}}"
+      bindtap="onAccentSelect"
+    >
+      <view class="accent-swatch-wrap" style="background: {{isDarkTheme ? item.darkSoft : item.soft}};">
+        <view class="accent-swatch" style="background: {{isDarkTheme ? item.dark : item.light}};"></view>
+      </view>
+      <text class="accent-name">{{item.label}}</text>
+      <text class="check accent-check" wx:if="{{themeAccent === item.id}}">✓</text>
+    </view>
+  </view>
+
   <view class="section-title">{{t.fontLabel}}</view>
   <view class="font-card">
-    <slider min="0" max="3" step="1" value="{{fontScaleStep}}" activeColor="{{themeClass === 'theme-dark' ? '#34C79A' : '#0E8F6E'}}" block-size="24" bindchange="onFontChange" />
+    <slider min="0" max="3" step="1" value="{{fontScaleStep}}" activeColor="{{themeColor || '#0E7C61'}}" block-size="24" bindchange="onFontChange" />
     <view class="font-labels">
       <text>{{t.fontSmall}}</text>
       <text>{{t.fontStandard}}</text>
