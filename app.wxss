@@ -44,7 +44,7 @@ button::after {
 
 button[type="primary"] {
   background-color: var(--color-fill-primary);
-  color: var(--color-on-primary);
+  color: var(--color-on-fill-primary);
 }
 
 button[type="primary"]::after,
@@ -57,13 +57,13 @@ button[type="warn"]::after {
 }
 
 .button-hover[type="primary"] {
-  background-color: var(--color-primary-pressed);
-  color: var(--color-on-primary);
+  background-color: var(--color-fill-primary-pressed);
+  color: var(--color-on-fill-primary);
 }
 
 button[type="primary"][disabled] {
   background-color: var(--color-fill-primary);
-  color: var(--color-on-primary);
+  color: var(--color-on-fill-primary);
   opacity: 0.45;
 }
 

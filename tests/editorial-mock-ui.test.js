@@ -290,6 +290,7 @@ test('all 12 redesigned pages run end-to-end in Mock Mode with Scheme A tokens',
   await waitFor(function () {
     return Boolean(
       indexPage.data.cardBalance === '128.50' &&
+      indexPage.data.scheduleLoaded === true &&
       indexPage.data.latestNotice &&
       indexPage.data.latestNotice.title
     )
@@ -299,6 +300,7 @@ test('all 12 redesigned pages run end-to-end in Mock Mode with Scheme A tokens',
   assert.equal(indexPage.data.themeColor, '#FB923C')
   assert.equal(tabBar.data.themeClass, 'theme-dark accent-kapok')
   assert.equal(indexPage.data.currentWeek, 5)
+  assert.equal(indexPage.data.scheduleFailed, false)
   assert.ok(indexPage.data.homeSections.length > 0)
   assert.ok(indexPage.data.systemActions.length > 0)
 
@@ -315,6 +317,12 @@ test('all 12 redesigned pages run end-to-end in Mock Mode with Scheme A tokens',
       return n.url === '/pages/schedule/schedule'
     })
   )
+  assert.ok(
+    rt.navigations.some(function (n) {
+      return n.url.startsWith('/pages/newsDetail/newsDetail?mode=announcement&id=')
+    })
+  )
+  assert.equal(rt.storage.newsDetailItem.id, indexPage.data.latestNotice.id)
 
   // 3. Card page
   const cardPage = rt.mountPage('pages/card/card.js')
@@ -408,4 +416,41 @@ test('all 12 redesigned pages run end-to-end in Mock Mode with Scheme A tokens',
   assert.equal(profilePage.data.themeClass, 'theme-dark accent-kapok')
 
   await settleMockCycle(240)
+})
+
+test('index schedule failure does not masquerade as week 5 empty day', async function (t) {
+  const rt = createMockRuntime({
+    storage: {
+      locale: 'zh-CN',
+      sessionToken: 'mock-session-token'
+    }
+  })
+  t.after(rt.restore)
+
+  const dataSource = require(path.join(ROOT, 'services/data-source.js'))
+  const campusApi = require(path.join(ROOT, 'services/apis/campus.js'))
+  const i18n = require(path.join(ROOT, 'utils/i18n.js'))
+  dataSource.setDataSourceMode('mock')
+
+  const origGetSchedule = campusApi.getSchedule
+  campusApi.getSchedule = function () {
+    return Promise.reject(new Error('network timeout'))
+  }
+
+  try {
+    const indexPage = rt.mountPage('pages/index/index.js')
+    indexPage.onLoad()
+    indexPage.onShow()
+    await waitFor(function () {
+      return indexPage.data.scheduleFailed === true
+    })
+
+    assert.equal(indexPage.data.scheduleLoaded, false)
+    assert.equal(indexPage.data.currentWeek, 0)
+    assert.equal(indexPage.data.weekBadgeText, i18n.t('common.loadFailed'))
+    assert.equal(indexPage.data.todayClassCountText, i18n.t('common.loadFailed'))
+    await settleMockCycle(240)
+  } finally {
+    campusApi.getSchedule = origGetSchedule
+  }
 })

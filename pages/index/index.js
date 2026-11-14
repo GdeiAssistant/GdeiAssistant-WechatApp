@@ -1,4 +1,5 @@
 const { getSystemActions } = require('../../constants/features.js')
+const storageKeys = require('../../constants/storage.js')
 const auth = require('../../services/auth.js')
 const dataSource = require('../../services/data-source.js')
 const campusApi = require('../../services/apis/campus.js')
@@ -41,17 +42,26 @@ Page({
     cardBalance: '--',
     cardStatusText: '',
     cardStatusNormal: true,
-    currentWeek: 5,
+    currentWeek: 0,
     weekBadgeText: '',
     todayAgenda: [],
     todayClassCount: 0,
     todayClassCountText: '',
+    scheduleLoaded: false,
+    scheduleFailed: false,
     latestNotice: null
   },
 
   refreshI18n: function () {
-    var week = this.data.currentWeek || 5
-    var count = this.data.todayClassCount || 0
+    var scheduleStateText = this.data.scheduleFailed
+      ? i18n.t('common.loadFailed')
+      : i18n.t('common.loading')
+    var weekBadgeText = this.data.scheduleLoaded
+      ? i18n.tReplace('index.weekBadge', { week: this.data.currentWeek || 1 })
+      : scheduleStateText
+    var todayClassCountText = this.data.scheduleLoaded
+      ? i18n.tReplace('index.todayClassCount', { count: this.data.todayClassCount || 0 })
+      : scheduleStateText
     this.setData({
       t: {
         appName: i18n.t('index.appName'),
@@ -66,6 +76,8 @@ Page({
         cardDetailBtn: i18n.t('index.cardDetailBtn'),
         todayAgendaTitle: i18n.t('index.todayAgendaTitle'),
         noAgendaToday: i18n.t('index.noAgendaToday'),
+        scheduleLoadFailed: i18n.t('common.loadFailed'),
+        loadingText: i18n.t('common.loading'),
         viewFullSchedule: i18n.t('index.viewFullSchedule'),
         noticeLabel: i18n.t('index.noticeLabel'),
         inboxLabel: i18n.t('index.inboxLabel'),
@@ -73,8 +85,8 @@ Page({
         copyright: i18n.t('common.copyright'),
         rightsReserved: i18n.t('common.rightsReserved')
       },
-      weekBadgeText: i18n.tReplace('index.weekBadge', { week: week }),
-      todayClassCountText: i18n.tReplace('index.todayClassCount', { count: count }),
+      weekBadgeText: weekBadgeText,
+      todayClassCountText: todayClassCountText,
       systemActions: getSystemActions()
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
@@ -133,8 +145,15 @@ Page({
   openAnnouncement: function () {
     var notice = this.data.latestNotice
     if (notice && notice.id) {
+      wx.setStorageSync(storageKeys.newsDetailItem, {
+        id: notice.id,
+        title: notice.title || '',
+        publishDate: notice.publishDate || '',
+        content: notice.content || '',
+        navigationTitle: i18n.t('info.announcement')
+      })
       wx.navigateTo({
-        url: '/pages/announcement/announcement?id=' + encodeURIComponent(String(notice.id))
+        url: '/pages/newsDetail/newsDetail?mode=announcement&id=' + encodeURIComponent(String(notice.id))
       })
       return
     }
@@ -234,11 +253,14 @@ Page({
     }
 
     if (typeof campusApi.getSchedule === 'function') {
+      this.setData({
+        scheduleFailed: false
+      })
       campusApi
         .getSchedule()
         .then(function (res) {
           if (res && res.success && res.data) {
-            var week = Number(res.data.week || 5)
+            var week = Number(res.data.week || 1)
             var list = Array.isArray(res.data.scheduleList) ? res.data.scheduleList : []
             var todayCol = getTodayColumnIndex()
             var todayClasses = list.filter(function (item) {
@@ -251,11 +273,31 @@ Page({
               todayClassCount: todayClasses.length,
               todayClassCountText: i18n.tReplace('index.todayClassCount', {
                 count: todayClasses.length
-              })
+              }),
+              scheduleLoaded: true,
+              scheduleFailed: false
             })
+            return
           }
+          var failedText = i18n.t('common.loadFailed')
+          page.setData({
+            scheduleLoaded: false,
+            scheduleFailed: true,
+            todayAgenda: [],
+            weekBadgeText: failedText,
+            todayClassCountText: failedText
+          })
         })
-        .catch(function () {})
+        .catch(function () {
+          var failedText = i18n.t('common.loadFailed')
+          page.setData({
+            scheduleLoaded: false,
+            scheduleFailed: true,
+            todayAgenda: [],
+            weekBadgeText: failedText,
+            todayClassCountText: failedText
+          })
+        })
     }
 
     if (typeof messagesApi.getAnnouncementList === 'function') {

@@ -15,6 +15,8 @@ page,
   --color-primary-soft: #E4F3EE;
   --color-on-primary: #FFFFFF;
   --color-fill-primary: #0E7C61;
+  --color-fill-primary-pressed: #07503E;
+  --color-on-fill-primary: #FFFFFF;
 
   --color-band: #0E5E49;
   --color-on-band: #FFFFFF;
@@ -84,6 +86,8 @@ page,
   --color-primary-soft: #E4F3EE;
   --color-on-primary: #FFFFFF;
   --color-fill-primary: #0E7C61;
+  --color-fill-primary-pressed: #07503E;
+  --color-on-fill-primary: #FFFFFF;
   --color-band: #0E5E49;
   --color-on-band: #FFFFFF;
   --color-on-band-muted: #C9E7DD;
@@ -98,7 +102,9 @@ page,
   --color-primary-ink: #A84521;
   --color-primary-soft: #FBECE6;
   --color-on-primary: #FFFFFF;
-  --color-fill-primary: #C85A32;
+  --color-fill-primary: #B54B24;
+  --color-fill-primary-pressed: #8F3818;
+  --color-on-fill-primary: #FFFFFF;
   --color-band: #9C3E1C;
   --color-on-band: #FFFFFF;
   --color-on-band-muted: #F7D3C5;
@@ -114,6 +120,8 @@ page,
   --color-primary-soft: #E8EFFD;
   --color-on-primary: #FFFFFF;
   --color-fill-primary: #1D4ED8;
+  --color-fill-primary-pressed: #143699;
+  --color-on-fill-primary: #FFFFFF;
   --color-band: #1A3F9E;
   --color-on-band: #FFFFFF;
   --color-on-band-muted: #C8D9FB;
@@ -129,6 +137,8 @@ page,
   --color-primary-soft: #F1EAFF;
   --color-on-primary: #FFFFFF;
   --color-fill-primary: #6D28D9;
+  --color-fill-primary-pressed: #4A189B;
+  --color-on-fill-primary: #FFFFFF;
   --color-band: #521FA3;
   --color-on-band: #FFFFFF;
   --color-on-band-muted: #DCCDFB;
@@ -144,6 +154,8 @@ page,
   --color-primary-soft: #12332A;
   --color-on-primary: #07221B;
   --color-fill-primary: #147B65;
+  --color-fill-primary-pressed: #0E5E49;
+  --color-on-fill-primary: #FFFFFF;
 
   --color-band: #112A24;
   --color-on-band: #F1EFEA;
@@ -195,6 +207,8 @@ page,
   --color-primary-soft: #12332A;
   --color-on-primary: #07221B;
   --color-fill-primary: #147B65;
+  --color-fill-primary-pressed: #0E5E49;
+  --color-on-fill-primary: #FFFFFF;
   --color-band: #112A24;
   --color-on-band: #F1EFEA;
   --color-on-band-muted: #9DC8BA;
@@ -210,6 +224,8 @@ page,
   --color-primary-soft: #361F14;
   --color-on-primary: #261209;
   --color-fill-primary: #9C3E1C;
+  --color-fill-primary-pressed: #7C2F14;
+  --color-on-fill-primary: #FFFFFF;
   --color-band: #311C13;
   --color-on-band: #F1EFEA;
   --color-on-band-muted: #E3B398;
@@ -225,6 +241,8 @@ page,
   --color-primary-soft: #142642;
   --color-on-primary: #09172B;
   --color-fill-primary: #1D4ED8;
+  --color-fill-primary-pressed: #153AA6;
+  --color-on-fill-primary: #FFFFFF;
   --color-band: #14233C;
   --color-on-band: #F1EFEA;
   --color-on-band-muted: #A4C3EC;
@@ -240,6 +258,8 @@ page,
   --color-primary-soft: #24183D;
   --color-on-primary: #170D2B;
   --color-fill-primary: #5B20BA;
+  --color-fill-primary-pressed: #451691;
+  --color-on-fill-primary: #FFFFFF;
   --color-band: #221739;
   --color-on-band: #F1EFEA;
   --color-on-band-muted: #C5B3EF;

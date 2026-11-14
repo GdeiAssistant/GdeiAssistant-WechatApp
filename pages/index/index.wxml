@@ -79,8 +79,14 @@
         </view>
       </view>
     </view>
-    <view class="agenda_empty hairline-bottom" wx:else bindtap="openSchedule">
+    <view class="agenda_empty hairline-bottom" wx:elif="{{scheduleFailed}}" bindtap="openSchedule">
+      <text class="agenda_empty_text">{{t.scheduleLoadFailed}}</text>
+    </view>
+    <view class="agenda_empty hairline-bottom" wx:elif="{{scheduleLoaded}}" bindtap="openSchedule">
       <text class="agenda_empty_text">{{t.noAgendaToday}}</text>
+    </view>
+    <view class="agenda_empty hairline-bottom" wx:else bindtap="openSchedule">
+      <text class="agenda_empty_text">{{t.loadingText}}</text>
     </view>
   </view>
 

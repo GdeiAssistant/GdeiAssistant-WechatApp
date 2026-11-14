@@ -84,7 +84,7 @@
 
 .bubble_row.mine .bubble {
   background: var(--color-fill-primary);
-  color: var(--color-on-primary);
+  color: var(--color-on-fill-primary);
   border-bottom-left-radius: var(--radius-card);
   border-bottom-right-radius: 8rpx;
 }

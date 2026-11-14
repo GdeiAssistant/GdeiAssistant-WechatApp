@@ -114,7 +114,7 @@
 
 .tab_item_active {
   background: var(--color-fill-primary);
-  color: var(--color-on-primary);
+  color: var(--color-on-fill-primary);
 }
 
 /* States */
