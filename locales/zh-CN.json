@@ -64,6 +64,10 @@
     "weekRange": "第{{min}}周至第{{max}}周"
   },
   "index": {
+    "todayTitle": "今日课程",
+    "todayHint": "接口仅提供节次，请查看课表",
+    "todayEmpty": "今日无课程",
+    "todayUnavailable": "今日课表暂不可用",
     "navTitle": "广东二师助手",
     "appName": "广东二师助手",
     "viewProfile": "查看个人资料",
