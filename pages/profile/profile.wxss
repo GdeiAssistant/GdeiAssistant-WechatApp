@@ -8,8 +8,10 @@
 .loading_box {
   margin: 48rpx var(--gutter) 0;
   padding: 64rpx 32rpx;
+  border: 1rpx solid var(--color-border);
   border-radius: var(--radius-card);
   background: var(--color-surface);
+  box-shadow: var(--shadow-card);
   color: var(--color-text-tertiary);
   font-size: var(--font-meta);
   text-align: center;
@@ -77,6 +79,7 @@
 
 .profile_name {
   color: var(--color-on-band);
+  font-family: var(--font-serif);
   font-size: var(--font-display);
   font-weight: 700;
   line-height: 1.2;

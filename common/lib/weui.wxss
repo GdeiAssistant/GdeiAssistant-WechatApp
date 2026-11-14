@@ -1210,9 +1210,9 @@ icon {
 .weui-panel {
     margin: 0 var(--gutter);
     background-color: var(--color-surface);
-    border: 0;
+    border: 1rpx solid var(--color-border);
     border-radius: var(--radius-card);
-    box-shadow: none;
+    box-shadow: var(--shadow-card);
     overflow: hidden;
     color: var(--color-text-primary);
     font-size: var(--font-body);

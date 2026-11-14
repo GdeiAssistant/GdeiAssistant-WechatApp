@@ -79,7 +79,21 @@
     "settingsSection": "功能設定",
     "logoutTitle": "登出賬號",
     "logoutContent": "你確定要登出而家呢個賬號嗎？",
-    "unreadFailed": "獲取未讀消息失敗"
+    "unreadFailed": "獲取未讀消息失敗",
+    "campusTagline": "廣東第二師範學院 · 校園服務通",
+    "campusCardTitle": "校園一卡通 · Campus Pass",
+    "cardBalanceLabel": "現時餘額 (元)",
+    "cardStatusNormal": "卡狀態正常",
+    "cardStatusAbnormal": "卡狀態異常",
+    "cardDetailBtn": "校園卡詳情",
+    "weekBadge": "第 {{week}} 週",
+    "todayAgendaTitle": "今日課表",
+    "todayClassCount": "{{count}} 堂課",
+    "noAgendaToday": "今日暫無排課，可去自修或查看整週課表",
+    "viewFullSchedule": "整週課表",
+    "noticeLabel": "公告",
+    "inboxLabel": "消息",
+    "footerNote": "廣東第二師範學院 · 嶺南書院校園助手"
   },
   "grade": {
     "navTitle": "成績查詢",
@@ -336,6 +350,13 @@
       "system": "跟隨系統",
       "light": "淺色模式",
       "dark": "深色模式"
+    },
+    "accent": {
+      "label": "主題色",
+      "banyan": "榕蔭翠",
+      "kapok": "木棉丹",
+      "haizhu": "海珠藍",
+      "bauhinia": "紫荊紫"
     },
     "font": {
       "label": "字體大小",

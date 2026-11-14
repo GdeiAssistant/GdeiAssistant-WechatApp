@@ -1,53 +1,58 @@
 /*
- * GdeiAssistant brand tokens (v2), shared with Web / Android / iOS.
- * Light is the default on `page`; `.theme-dark` is applied by utils/theme.js on each page root.
+ * GdeiAssistant editorial brand tokens (Scheme A - Lingnan Academy),
+ * shared with Web / Android / iOS.
+ * Light ("岭南晨纸") is the default on `page` / `.theme-light`;
+ * `.theme-dark` ("珠江夜读") and `.accent-*` are applied by utils/theme.js on each page root.
  * Text-on-white uses --color-primary-ink so small text keeps WCAG AA contrast.
  */
 
-page {
-  --color-primary: #0E8F6E;
-  --color-primary-hover: #0A7559;
-  --color-primary-pressed: #085E48;
-  --color-primary-ink: #0A7559;
-  --color-primary-soft: #E3F3EE;
+page,
+.theme-light {
+  --color-primary: #0E7C61;
+  --color-primary-hover: #0A654E;
+  --color-primary-pressed: #07503E;
+  --color-primary-ink: #0A654E;
+  --color-primary-soft: #E4F3EE;
   --color-on-primary: #FFFFFF;
-  --color-fill-primary: #0A7559;
+  --color-fill-primary: #0E7C61;
+  --color-fill-primary-pressed: #07503E;
+  --color-on-fill-primary: #FFFFFF;
 
-  --color-band: #0A7559;
+  --color-band: #0E5E49;
   --color-on-band: #FFFFFF;
-  --color-on-band-muted: #CFE9E0;
+  --color-on-band-muted: #C9E7DD;
   --color-band-chip: rgba(255, 255, 255, 0.14);
 
-  --color-bg-primary: #F4F7F6;
-  --color-bg-secondary: #EAF0EE;
-  --color-bg-tertiary: #E1E9E6;
+  --color-bg-primary: #F7F6F2;
+  --color-bg-secondary: #EFECE6;
+  --color-bg-tertiary: #E5E1D8;
   --color-surface: #FFFFFF;
   --color-surface-raised: #FFFFFF;
-  --color-surface-sunken: #EEF3F1;
+  --color-surface-sunken: #F0EEE8;
 
-  --color-text-primary: #11201C;
-  --color-text-secondary: #4E5F5A;
-  --color-text-tertiary: #63736E;
-  --color-border: #DDE6E3;
-  --color-divider: #E9EFED;
+  --color-text-primary: #14231F;
+  --color-text-secondary: #5C6662;
+  --color-text-tertiary: #78827E;
+  --color-border: #E5E2DC;
+  --color-divider: #ECE9E2;
 
-  --color-danger: #D14343;
-  --color-danger-ink: #B83636;
-  --color-danger-soft: #FBEAEA;
-  --color-warning: #B7791F;
-  --color-warning-ink: #8F5E14;
-  --color-warning-soft: #F8EEDC;
-  --color-link: #0A7559;
-  --color-overlay: rgba(17, 32, 28, 0.5);
+  --color-danger: #C93B3B;
+  --color-danger-ink: #AE2E2E;
+  --color-danger-soft: #FCECEC;
+  --color-warning: #B5731B;
+  --color-warning-ink: #8B5712;
+  --color-warning-soft: #F9EFE0;
+  --color-link: #0A654E;
+  --color-overlay: rgba(20, 35, 31, 0.48);
 
-  --color-segment-track: #E1E9E6;
+  --color-segment-track: #E5E1D8;
   --color-segment-active: #FFFFFF;
-  --shadow-segment: 0 2rpx 6rpx rgba(17, 54, 44, 0.08);
+  --shadow-segment: 0 2rpx 6rpx rgba(20, 35, 31, 0.06);
 
-  --radius-card: 28rpx;
+  --radius-card: 20rpx;
   --radius-control: 20rpx;
   --radius-compact: 12rpx;
-  --radius-sheet: 40rpx;
+  --radius-sheet: 36rpx;
   --radius-full: 999rpx;
   --space-1: 8rpx;
   --space-2: 16rpx;
@@ -57,8 +62,10 @@ page {
   --space-6: 48rpx;
   --space-7: 64rpx;
   --gutter: 32rpx;
-  --shadow-card: 0 2rpx 6rpx rgba(17, 54, 44, 0.04), 0 8rpx 24rpx rgba(17, 54, 44, 0.05);
-  --shadow-raised: 0 12rpx 40rpx rgba(17, 54, 44, 0.14);
+  --shadow-card: 0 2rpx 6rpx rgba(20, 35, 31, 0.04), 0 8rpx 20rpx rgba(20, 35, 31, 0.04);
+  --shadow-raised: 0 12rpx 32rpx rgba(20, 35, 31, 0.12);
+  --font-serif: 'Songti SC', 'STSong', 'Noto Serif CJK SC', Georgia, serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
 
   --duration-press: 0.12s;
   --scale-press: 0.98;
@@ -70,32 +77,103 @@ page {
   --font-caption: 22rpx;
 }
 
+/* Light theme campus accents (explicit classes before .theme-dark). */
+.accent-banyan {
+  --color-primary: #0E7C61;
+  --color-primary-hover: #0A654E;
+  --color-primary-pressed: #07503E;
+  --color-primary-ink: #0A654E;
+  --color-primary-soft: #E4F3EE;
+  --color-on-primary: #FFFFFF;
+  --color-fill-primary: #0E7C61;
+  --color-fill-primary-pressed: #07503E;
+  --color-on-fill-primary: #FFFFFF;
+  --color-band: #0E5E49;
+  --color-on-band: #FFFFFF;
+  --color-on-band-muted: #C9E7DD;
+  --color-band-chip: rgba(255, 255, 255, 0.14);
+  --color-link: #0A654E;
+}
+
+.accent-kapok {
+  --color-primary: #C85A32;
+  --color-primary-hover: #AD4925;
+  --color-primary-pressed: #923B1C;
+  --color-primary-ink: #A84521;
+  --color-primary-soft: #FBECE6;
+  --color-on-primary: #FFFFFF;
+  --color-fill-primary: #B54B24;
+  --color-fill-primary-pressed: #8F3818;
+  --color-on-fill-primary: #FFFFFF;
+  --color-band: #9C3E1C;
+  --color-on-band: #FFFFFF;
+  --color-on-band-muted: #F7D3C5;
+  --color-band-chip: rgba(255, 255, 255, 0.16);
+  --color-link: #A84521;
+}
+
+.accent-haizhu {
+  --color-primary: #1D4ED8;
+  --color-primary-hover: #1942B8;
+  --color-primary-pressed: #143699;
+  --color-primary-ink: #1D4ED8;
+  --color-primary-soft: #E8EFFD;
+  --color-on-primary: #FFFFFF;
+  --color-fill-primary: #1D4ED8;
+  --color-fill-primary-pressed: #143699;
+  --color-on-fill-primary: #FFFFFF;
+  --color-band: #1A3F9E;
+  --color-on-band: #FFFFFF;
+  --color-on-band-muted: #C8D9FB;
+  --color-band-chip: rgba(255, 255, 255, 0.15);
+  --color-link: #1D4ED8;
+}
+
+.accent-bauhinia {
+  --color-primary: #6D28D9;
+  --color-primary-hover: #5B20BA;
+  --color-primary-pressed: #4A189B;
+  --color-primary-ink: #6D28D9;
+  --color-primary-soft: #F1EAFF;
+  --color-on-primary: #FFFFFF;
+  --color-fill-primary: #6D28D9;
+  --color-fill-primary-pressed: #4A189B;
+  --color-on-fill-primary: #FFFFFF;
+  --color-band: #521FA3;
+  --color-on-band: #FFFFFF;
+  --color-on-band-muted: #DCCDFB;
+  --color-band-chip: rgba(255, 255, 255, 0.15);
+  --color-link: #6D28D9;
+}
+
 .theme-dark {
-  --color-primary: #34C79A;
-  --color-primary-hover: #5AD6AE;
-  --color-primary-pressed: #2BA984;
-  --color-primary-ink: #34C79A;
+  --color-primary: #2DD4BF;
+  --color-primary-hover: #4BE2CF;
+  --color-primary-pressed: #1AB7A3;
+  --color-primary-ink: #2DD4BF;
   --color-primary-soft: #12332A;
-  --color-on-primary: #0E1513;
-  --color-fill-primary: #34C79A;
+  --color-on-primary: #07221B;
+  --color-fill-primary: #147B65;
+  --color-fill-primary-pressed: #0E5E49;
+  --color-on-fill-primary: #FFFFFF;
 
-  --color-band: #12332A;
-  --color-on-band: #E6EEEB;
-  --color-on-band-muted: #A3C9BC;
-  --color-band-chip: rgba(52, 199, 154, 0.16);
+  --color-band: #112A24;
+  --color-on-band: #F1EFEA;
+  --color-on-band-muted: #9DC8BA;
+  --color-band-chip: rgba(45, 212, 191, 0.14);
 
-  --color-bg-primary: #0E1513;
-  --color-bg-secondary: #1C2724;
-  --color-bg-tertiary: #222D2A;
+  --color-bg-primary: #0D1311;
+  --color-bg-secondary: #151E1B;
+  --color-bg-tertiary: #1C2724;
   --color-surface: #151E1B;
   --color-surface-raised: #1C2724;
   --color-surface-sunken: #111916;
 
-  --color-text-primary: #E6EEEB;
-  --color-text-secondary: #A3B3AE;
-  --color-text-tertiary: #84948F;
-  --color-border: #2A3733;
-  --color-divider: #222D2A;
+  --color-text-primary: #F1EFEA;
+  --color-text-secondary: #8D9B95;
+  --color-text-tertiary: #6E7D78;
+  --color-border: #22302B;
+  --color-divider: #1D2925;
 
   --color-danger: #F07171;
   --color-danger-ink: #F07171;
@@ -103,19 +181,88 @@ page {
   --color-warning: #E0A54A;
   --color-warning-ink: #E0A54A;
   --color-warning-soft: #352915;
-  --color-link: #34C79A;
-  --color-overlay: rgba(0, 0, 0, 0.6);
+  --color-link: #2DD4BF;
+  --color-overlay: rgba(0, 0, 0, 0.62);
 
   --color-segment-track: #151E1B;
-  --color-segment-active: #2A3733;
+  --color-segment-active: #22302B;
   --shadow-segment: none;
 
-  --shadow-card: 0 2rpx 6rpx rgba(0, 0, 0, 0.2), 0 8rpx 24rpx rgba(0, 0, 0, 0.18);
-  --shadow-raised: 0 12rpx 40rpx rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 2rpx 6rpx rgba(0, 0, 0, 0.2), 0 8rpx 20rpx rgba(0, 0, 0, 0.18);
+  --shadow-raised: 0 12rpx 32rpx rgba(0, 0, 0, 0.45);
 
   /* Contain child margins so the light `page` background never shows above the root. */
   display: flow-root;
   min-height: 100vh;
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
+}
+
+/* Dark theme campus accents (higher specificity than .theme-dark and .accent-*). */
+.theme-dark.accent-banyan {
+  --color-primary: #2DD4BF;
+  --color-primary-hover: #4BE2CF;
+  --color-primary-pressed: #1AB7A3;
+  --color-primary-ink: #2DD4BF;
+  --color-primary-soft: #12332A;
+  --color-on-primary: #07221B;
+  --color-fill-primary: #147B65;
+  --color-fill-primary-pressed: #0E5E49;
+  --color-on-fill-primary: #FFFFFF;
+  --color-band: #112A24;
+  --color-on-band: #F1EFEA;
+  --color-on-band-muted: #9DC8BA;
+  --color-band-chip: rgba(45, 212, 191, 0.14);
+  --color-link: #2DD4BF;
+}
+
+.theme-dark.accent-kapok {
+  --color-primary: #FB923C;
+  --color-primary-hover: #FCA860;
+  --color-primary-pressed: #E57822;
+  --color-primary-ink: #FB923C;
+  --color-primary-soft: #361F14;
+  --color-on-primary: #261209;
+  --color-fill-primary: #9C3E1C;
+  --color-fill-primary-pressed: #7C2F14;
+  --color-on-fill-primary: #FFFFFF;
+  --color-band: #311C13;
+  --color-on-band: #F1EFEA;
+  --color-on-band-muted: #E3B398;
+  --color-band-chip: rgba(251, 146, 60, 0.14);
+  --color-link: #FB923C;
+}
+
+.theme-dark.accent-haizhu {
+  --color-primary: #60A5FA;
+  --color-primary-hover: #81B9FB;
+  --color-primary-pressed: #3B8AF7;
+  --color-primary-ink: #60A5FA;
+  --color-primary-soft: #142642;
+  --color-on-primary: #09172B;
+  --color-fill-primary: #1D4ED8;
+  --color-fill-primary-pressed: #153AA6;
+  --color-on-fill-primary: #FFFFFF;
+  --color-band: #14233C;
+  --color-on-band: #F1EFEA;
+  --color-on-band-muted: #A4C3EC;
+  --color-band-chip: rgba(96, 165, 250, 0.14);
+  --color-link: #60A5FA;
+}
+
+.theme-dark.accent-bauhinia {
+  --color-primary: #A78BFA;
+  --color-primary-hover: #BBA5FC;
+  --color-primary-pressed: #8E6CF7;
+  --color-primary-ink: #A78BFA;
+  --color-primary-soft: #24183D;
+  --color-on-primary: #170D2B;
+  --color-fill-primary: #5B20BA;
+  --color-fill-primary-pressed: #451691;
+  --color-on-fill-primary: #FFFFFF;
+  --color-band: #221739;
+  --color-on-band: #F1EFEA;
+  --color-on-band-muted: #C5B3EF;
+  --color-band-chip: rgba(167, 139, 250, 0.14);
+  --color-link: #A78BFA;
 }

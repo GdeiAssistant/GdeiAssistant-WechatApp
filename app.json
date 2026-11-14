@@ -38,16 +38,16 @@
   "darkmode": true,
   "themeLocation": "theme.json",
   "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#F7F6F2",
     "navigationBarTitleText": "广东二师助手",
     "navigationBarTextStyle": "black"
   },
   "tabBar": {
     "custom": true,
-    "color": "#4E5F5A",
-    "selectedColor": "#0E8F6E",
-    "backgroundColor": "#FFFFFF",
+    "color": "#5C6662",
+    "selectedColor": "#0E7C61",
+    "backgroundColor": "#F7F6F2",
     "borderStyle": "black",
     "list": [
       {

@@ -1,14 +1,14 @@
 if (!Promise.prototype.finally) {
-  Promise.prototype.finally = function(callback) {
+  Promise.prototype.finally = function (callback) {
     const PromiseConstructor = this.constructor
     return this.then(
-      function(value) {
-        return PromiseConstructor.resolve(callback()).then(function() {
+      function (value) {
+        return PromiseConstructor.resolve(callback()).then(function () {
           return value
         })
       },
-      function(reason) {
-        return PromiseConstructor.resolve(callback()).then(function() {
+      function (reason) {
+        return PromiseConstructor.resolve(callback()).then(function () {
           throw reason
         })
       }
@@ -17,26 +17,30 @@ if (!Promise.prototype.finally) {
 }
 
 if (!Promise.allSettled) {
-  Promise.allSettled = function(promises) {
+  Promise.allSettled = function (promises) {
     const list = Array.isArray(promises) ? promises : []
-    return Promise.all(list.map(function(item) {
-      return Promise.resolve(item).then(function(value) {
-        return {
-          status: 'fulfilled',
-          value: value
-        }
-      }).catch(function(reason) {
-        return {
-          status: 'rejected',
-          reason: reason
-        }
+    return Promise.all(
+      list.map(function (item) {
+        return Promise.resolve(item)
+          .then(function (value) {
+            return {
+              status: 'fulfilled',
+              value: value
+            }
+          })
+          .catch(function (reason) {
+            return {
+              status: 'rejected',
+              reason: reason
+            }
+          })
       })
-    }))
+    )
   }
 }
 
 if (!String.prototype.padStart) {
-  String.prototype.padStart = function(targetLength, padString) {
+  String.prototype.padStart = function (targetLength, padString) {
     const source = String(this)
     const length = Number(targetLength) || 0
     const padding = String(padString === undefined ? ' ' : padString)
@@ -65,8 +69,9 @@ App({
     var savedLocale = i18n.getCurrentLocale()
     this.globalData.locale = savedLocale
 
-    // Restore theme and font settings
+    // Restore theme, accent and font settings
     this.globalData.theme = themeUtil.getEffectiveTheme()
+    this.globalData.themeAccent = themeUtil.getThemeAccent()
     this.globalData.fontScaleStep = themeUtil.getFontScaleStep()
     themeUtil.initThemeListener()
   },
@@ -82,6 +87,7 @@ App({
     userInfo: null,
     locale: 'zh-CN',
     theme: 'light',
+    themeAccent: 'banyan',
     fontScaleStep: 1
   }
 })

@@ -3,116 +3,339 @@
 .container {
   background: var(--color-bg-primary);
   justify-content: flex-start;
+  min-height: 100vh;
 }
 
-/* Brand band: the one loud element of the app. Solid emerald, no gradient. */
-.home_band {
-  background: var(--color-band);
-  padding: 24rpx var(--gutter) 48rpx;
-  border-radius: 0 0 var(--radius-card) var(--radius-card);
+/* Capsule-safe editorial masthead directly on warm paper / dark ink canvas. */
+.editorial_header {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20rpx var(--gutter) 12rpx;
 }
 
-.userinfo_card {
-  display: flex;
-  flex-direction: column;
-}
-
-.home_band_top {
+.editorial_brand_row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 20rpx;
 }
 
-.home_logo {
-  width: 64rpx;
-  height: 64rpx;
-  border-radius: 16rpx;
-}
-
-.userinfo_notice {
-  position: relative;
+.editorial_profile_trigger {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 88rpx;
-  height: 88rpx;
-  border-radius: var(--radius-full);
-  background: var(--color-band-chip);
-}
-
-.userinfo_notice_icon {
-  width: 44rpx;
-  height: 44rpx;
-  filter: brightness(0) invert(1);
-  opacity: 0.92;
-}
-
-.userinfo_notice_badge {
-  position: absolute;
-  top: 4rpx;
-  right: 0;
-  min-width: 32rpx;
-  padding: 2rpx 10rpx;
-  box-sizing: border-box;
-  border-radius: var(--radius-full);
-  border: 3rpx solid var(--color-band);
-  background: var(--color-danger);
-  color: var(--color-on-band);
-  font-size: 20rpx;
-  font-weight: 700;
-  text-align: center;
-  line-height: 1.3;
-  font-variant-numeric: tabular-nums;
-}
-
-.userinfo {
-  display: flex;
-  align-items: center;
-  margin-top: 40rpx;
+  gap: 20rpx;
   min-width: 0;
+  flex: 1;
 }
 
-.userinfo-avatar {
-  width: 120rpx;
-  height: 120rpx;
-  margin-right: 28rpx;
+.editorial_avatar {
+  width: 80rpx;
+  height: 80rpx;
   border-radius: 50%;
-  border: 4rpx solid var(--color-band-chip);
-  background: var(--color-band-chip);
+  border: 2rpx solid var(--color-border);
+  background: var(--color-surface);
   flex-shrink: 0;
 }
 
-.userinfo_meta {
+.editorial_title_block {
   display: flex;
   flex-direction: column;
   min-width: 0;
   flex: 1;
 }
 
-.userinfo-nickname {
-  color: var(--color-on-band);
-  font-size: var(--font-display);
+.editorial_app_name {
+  color: var(--color-text-primary);
+  font-size: 40rpx;
   font-weight: 700;
-  line-height: 1.2;
-  word-break: break-word;
+  line-height: 1.25;
 }
 
-.userinfo-entry {
-  align-self: flex-start;
-  margin-top: 32rpx;
-  padding: 0 32rpx;
-  min-height: 72rpx;
-  line-height: 72rpx;
+.editorial_tagline {
+  margin-top: 4rpx;
+  color: var(--color-text-secondary);
+  font-size: var(--font-caption);
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.editorial_inbox_btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: var(--radius-card);
+  border: 1rpx solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  flex-shrink: 0;
+}
+
+.editorial_inbox_icon {
+  width: 38rpx;
+  height: 38rpx;
+  opacity: 0.85;
+}
+
+.theme-dark .editorial_inbox_icon {
+  filter: brightness(0) invert(1);
+}
+
+.editorial_inbox_badge {
+  position: absolute;
+  top: -8rpx;
+  right: -8rpx;
+  min-width: 32rpx;
+  padding: 2rpx 8rpx;
+  box-sizing: border-box;
+  border-radius: var(--radius-full);
+  border: 2rpx solid var(--color-bg-primary);
+  background: var(--color-danger);
+  color: #ffffff;
+  font-size: 18rpx;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Slim notice ticker strip */
+.notice_ticker {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  margin-top: 22rpx;
+  padding: 16rpx 22rpx;
+  border-radius: var(--radius-card);
+  border: 1rpx solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.notice_tag {
+  padding: 2rpx 12rpx;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-ink);
+  font-size: 20rpx;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.notice_title {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-text-primary);
+  font-size: var(--font-caption);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notice_arrow {
+  color: var(--color-text-tertiary);
+  font-size: 28rpx;
+  line-height: 1;
+}
+
+/* Single tactile Campus Pass / Today Status focal card */
+.pass_wrap {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14rpx var(--gutter) 8rpx;
+}
+
+.pass_card {
+  padding: 28rpx 30rpx 22rpx;
+  border-radius: var(--radius-card);
+  background: var(--color-band);
+  color: var(--color-on-band);
+  box-shadow: var(--shadow-raised);
+}
+
+.theme-dark .pass_card {
+  border: 1rpx solid var(--color-border);
+}
+
+.pass_top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.pass_label {
+  color: var(--color-on-band-muted);
+  font-size: var(--font-caption);
+  font-weight: 600;
+  letter-spacing: 0.4rpx;
+}
+
+.pass_status {
+  padding: 4rpx 16rpx;
   border-radius: var(--radius-full);
   background: var(--color-band-chip);
   color: var(--color-on-band);
-  font-size: var(--font-meta);
+  font-size: 20rpx;
   font-weight: 600;
 }
 
-/* Service sections sit on the canvas below the band. */
+.pass_status--alert {
+  background: var(--color-danger);
+  color: #ffffff;
+}
+
+.pass_main {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20rpx;
+  margin-top: 22rpx;
+}
+
+.pass_balance_col {
+  display: flex;
+  flex-direction: column;
+}
+
+.pass_balance_label {
+  color: var(--color-on-band-muted);
+  font-size: var(--font-caption);
+}
+
+.pass_balance_row {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+  margin-top: 4rpx;
+}
+
+.pass_currency {
+  color: var(--color-on-band);
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.pass_balance {
+  color: var(--color-on-band);
+  font-size: 56rpx;
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.5rpx;
+}
+
+.pass_cta {
+  padding: 14rpx 28rpx;
+  border-radius: var(--radius-full);
+  background: var(--color-on-band);
+  color: var(--color-band);
+  font-size: var(--font-caption);
+  font-weight: 700;
+  line-height: 1.3;
+  flex-shrink: 0;
+  transition: transform var(--duration-press) ease, opacity var(--duration-press) ease;
+}
+
+.theme-dark .pass_cta {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.pass_cta_hover {
+  transform: scale(var(--scale-press));
+  opacity: 0.9;
+}
+
+.pass_footer {
+  display: flex;
+  align-items: center;
+  margin-top: 26rpx;
+  padding-top: 18rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.16);
+}
+
+.pass_footer_item {
+  flex: 1;
+  text-align: center;
+  padding: 4rpx 0;
+}
+
+.pass_footer_text {
+  color: var(--color-on-band-muted);
+  font-size: var(--font-caption);
+  font-weight: 500;
+}
+
+.pass_footer_divider {
+  width: 1rpx;
+  height: 22rpx;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Hairlined Today Agenda directly on warm canvas */
+.agenda_section {
+  width: 100%;
+}
+
+.agenda_list,
+.agenda_empty {
+  margin: 0 var(--gutter);
+}
+
+.agenda_row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 20rpx 4rpx;
+}
+
+.agenda_lesson {
+  padding: 6rpx 14rpx;
+  border-radius: var(--radius-compact);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-ink);
+  font-size: 22rpx;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.agenda_meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.agenda_name {
+  color: var(--color-text-primary);
+  font-size: var(--font-meta);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.agenda_sub {
+  margin-top: 4rpx;
+  color: var(--color-text-secondary);
+  font-size: var(--font-caption);
+  line-height: 1.35;
+}
+
+.agenda_empty {
+  padding: 20rpx 4rpx;
+}
+
+.agenda_empty_text {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-caption);
+  line-height: 1.5;
+}
+
+/* Anti-cardification borderless quick-access grid on canvas */
 .page-body {
-  padding-top: 8rpx;
+  padding-top: 0;
 }
 
 .page__bd {
@@ -120,25 +343,97 @@
   background: transparent;
 }
 
-.section_title {
-  margin: 48rpx 0 0;
-  padding: 0 calc(var(--gutter) + 8rpx) 16rpx;
-  color: var(--color-text-secondary);
-  font-size: var(--font-meta);
-  font-weight: 600;
-  line-height: 1.4;
+.editorial_grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20rpx 12rpx;
+  margin: 0 var(--gutter);
+  padding: 4rpx 0 8rpx;
 }
 
-.weui-grids + .section_title {
-  margin-top: 40rpx;
+.editorial_grid_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8rpx 4rpx;
+  border-radius: var(--radius-control);
+  transition: transform var(--duration-press) ease, opacity var(--duration-press) ease;
 }
 
-.weui-grid__label {
+.editorial_grid_item_active {
+  transform: scale(var(--scale-press));
+  opacity: 0.78;
+}
+
+.editorial_grid_icon_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: var(--radius-card);
+  border: 1rpx solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.editorial_grid_icon {
+  width: 44rpx;
+  height: 44rpx;
+}
+
+.editorial_grid_label {
+  margin-top: 12rpx;
   color: var(--color-text-primary);
+  font-size: 24rpx;
+  line-height: 1.35;
+  text-align: center;
+  word-break: break-word;
+}
+
+/* Hairlined system actions directly on canvas */
+.editorial_action_list {
+  margin: 0 var(--gutter);
+}
+
+.editorial_action_row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  min-height: 96rpx;
+  padding: 18rpx 6rpx;
+  box-sizing: border-box;
+  transition: background-color var(--duration-press) ease;
+}
+
+.editorial_action_row_active {
+  background-color: var(--color-bg-secondary);
+}
+
+.editorial_action_icon {
+  width: 40rpx;
+  height: 40rpx;
+  flex-shrink: 0;
+}
+
+.editorial_action_title {
+  flex: 1;
+  color: var(--color-text-primary);
+  font-size: var(--font-body);
+  font-weight: 500;
+}
+
+.editorial_action_chevron {
+  color: var(--color-text-tertiary);
+  font-size: 32rpx;
+  line-height: 1;
 }
 
 .copyright_info {
-  margin: 56rpx var(--gutter) 48rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  margin: 48rpx var(--gutter) 48rpx;
   color: var(--color-text-tertiary);
   font-size: var(--font-caption);
   line-height: 1.6;

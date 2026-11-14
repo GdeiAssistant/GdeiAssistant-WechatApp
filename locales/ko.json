@@ -79,7 +79,21 @@
     "settingsSection": "설정",
     "logoutTitle": "로그아웃",
     "logoutContent": "정말 로그아웃하시겠습니까?",
-    "unreadFailed": "읽지 않은 메시지를 가져오지 못했습니다"
+    "unreadFailed": "읽지 않은 메시지를 가져오지 못했습니다",
+    "campusTagline": "광둥제2사범학원 · 캠퍼스 패스",
+    "campusCardTitle": "캠퍼스 카드 · Campus Pass",
+    "cardBalanceLabel": "현재 잔액 (위안)",
+    "cardStatusNormal": "정상",
+    "cardStatusAbnormal": "상태 이상",
+    "cardDetailBtn": "카드 상세",
+    "weekBadge": "{{week}}주차",
+    "todayAgendaTitle": "오늘의 시간표",
+    "todayClassCount": "{{count}}개 강의",
+    "noAgendaToday": "오늘 예정된 강의가 없습니다. 전체 시간표를 확인해 보세요.",
+    "viewFullSchedule": "전체 시간표",
+    "noticeLabel": "공지",
+    "inboxLabel": "알림",
+    "footerNote": "광둥제2사범학원 · 캠퍼스 도우미"
   },
   "grade": {
     "navTitle": "성적 조회",
@@ -336,6 +350,13 @@
       "system": "시스템 설정 따르기",
       "light": "라이트 모드",
       "dark": "다크 모드"
+    },
+    "accent": {
+      "label": "테마 색상",
+      "banyan": "반얀 그린",
+      "kapok": "카폭 레드",
+      "haizhu": "하이주 블루",
+      "bauhinia": "바우히니아 퍼플"
     },
     "font": {
       "label": "글꼴 크기",

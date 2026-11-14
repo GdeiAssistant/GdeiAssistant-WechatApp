@@ -41,7 +41,17 @@ function runWithNavigationLoading(page, task, options) {
     })
 }
 
+const themeUtil = require('./theme')
+
+function applyTheme(pageInstance) {
+  if (pageInstance && typeof themeUtil.applyTheme === 'function') {
+    themeUtil.applyTheme(pageInstance)
+  }
+}
+
 module.exports = {
   showTopTips,
-  runWithNavigationLoading
+  runWithNavigationLoading,
+  applyTheme,
+  syncTheme: applyTheme
 }

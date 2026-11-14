@@ -81,7 +81,21 @@ module.exports = {
       "settingsSection": "功能设置",
       "logoutTitle": "退出账号",
       "logoutContent": "你确定要退出当前账号吗？",
-      "unreadFailed": "获取未读消息失败"
+      "unreadFailed": "获取未读消息失败",
+      "campusTagline": "广东第二师范学院 · 校园服务通",
+      "campusCardTitle": "校园一卡通 · Campus Pass",
+      "cardBalanceLabel": "当前余额 (元)",
+      "cardStatusNormal": "卡状态正常",
+      "cardStatusAbnormal": "卡状态异常",
+      "cardDetailBtn": "校园卡详情",
+      "weekBadge": "第 {{week}} 周",
+      "todayAgendaTitle": "今日课表",
+      "todayClassCount": "{{count}} 节课程",
+      "noAgendaToday": "今日暂无排课，可前往自习或查看周课表",
+      "viewFullSchedule": "整周课表",
+      "noticeLabel": "公告",
+      "inboxLabel": "消息",
+      "footerNote": "广东第二师范学院 · 岭南书院校园助手"
     },
     "grade": {
       "navTitle": "成绩查询",
@@ -338,6 +352,13 @@ module.exports = {
         "system": "跟随系统",
         "light": "浅色模式",
         "dark": "深色模式"
+      },
+      "accent": {
+        "label": "主题色",
+        "banyan": "榕荫翠",
+        "kapok": "木棉丹",
+        "haizhu": "海珠蓝",
+        "bauhinia": "紫荆紫"
       },
       "font": {
         "label": "字体大小",
@@ -1306,7 +1327,21 @@ module.exports = {
       "settingsSection": "功能設定",
       "logoutTitle": "登出賬號",
       "logoutContent": "你確定要登出而家呢個賬號嗎？",
-      "unreadFailed": "獲取未讀消息失敗"
+      "unreadFailed": "獲取未讀消息失敗",
+      "campusTagline": "廣東第二師範學院 · 校園服務通",
+      "campusCardTitle": "校園一卡通 · Campus Pass",
+      "cardBalanceLabel": "現時餘額 (元)",
+      "cardStatusNormal": "卡狀態正常",
+      "cardStatusAbnormal": "卡狀態異常",
+      "cardDetailBtn": "校園卡詳情",
+      "weekBadge": "第 {{week}} 週",
+      "todayAgendaTitle": "今日課表",
+      "todayClassCount": "{{count}} 堂課",
+      "noAgendaToday": "今日暫無排課，可去自修或查看整週課表",
+      "viewFullSchedule": "整週課表",
+      "noticeLabel": "公告",
+      "inboxLabel": "消息",
+      "footerNote": "廣東第二師範學院 · 嶺南書院校園助手"
     },
     "grade": {
       "navTitle": "成績查詢",
@@ -1563,6 +1598,13 @@ module.exports = {
         "system": "跟隨系統",
         "light": "淺色模式",
         "dark": "深色模式"
+      },
+      "accent": {
+        "label": "主題色",
+        "banyan": "榕蔭翠",
+        "kapok": "木棉丹",
+        "haizhu": "海珠藍",
+        "bauhinia": "紫荊紫"
       },
       "font": {
         "label": "字體大小",
@@ -2531,7 +2573,21 @@ module.exports = {
       "settingsSection": "功能設定",
       "logoutTitle": "登出帳號",
       "logoutContent": "你確定要登出目前帳號嗎？",
-      "unreadFailed": "取得未讀訊息失敗"
+      "unreadFailed": "取得未讀訊息失敗",
+      "campusTagline": "廣東第二師範學院 · 校園服務通",
+      "campusCardTitle": "校園一卡通 · Campus Pass",
+      "cardBalanceLabel": "目前餘額 (元)",
+      "cardStatusNormal": "卡狀態正常",
+      "cardStatusAbnormal": "卡狀態異常",
+      "cardDetailBtn": "校園卡詳情",
+      "weekBadge": "第 {{week}} 週",
+      "todayAgendaTitle": "今日課表",
+      "todayClassCount": "{{count}} 堂課程",
+      "noAgendaToday": "今日暫無排課，可前往自習或查看整週課表",
+      "viewFullSchedule": "整週課表",
+      "noticeLabel": "公告",
+      "inboxLabel": "訊息",
+      "footerNote": "廣東第二師範學院 · 嶺南書院校園助手"
     },
     "grade": {
       "navTitle": "成績查詢",
@@ -2788,6 +2844,13 @@ module.exports = {
         "system": "跟隨系統",
         "light": "淺色模式",
         "dark": "深色模式"
+      },
+      "accent": {
+        "label": "主題色",
+        "banyan": "榕蔭翠",
+        "kapok": "木棉丹",
+        "haizhu": "海珠藍",
+        "bauhinia": "紫荊紫"
       },
       "font": {
         "label": "字體大小",
@@ -3756,7 +3819,21 @@ module.exports = {
       "settingsSection": "Settings",
       "logoutTitle": "Logout",
       "logoutContent": "Are you sure you want to logout?",
-      "unreadFailed": "Failed to fetch unread messages"
+      "unreadFailed": "Failed to fetch unread messages",
+      "campusTagline": "GDEI · Lingnan Campus Pass",
+      "campusCardTitle": "Campus Card · Campus Pass",
+      "cardBalanceLabel": "Current Balance (CNY)",
+      "cardStatusNormal": "Active",
+      "cardStatusAbnormal": "Frozen / Alert",
+      "cardDetailBtn": "Card Details",
+      "weekBadge": "Week {{week}}",
+      "todayAgendaTitle": "Today's Classes",
+      "todayClassCount": "{{count}} classes",
+      "noAgendaToday": "No classes scheduled today. Open full schedule for the week.",
+      "viewFullSchedule": "Full Schedule",
+      "noticeLabel": "Notice",
+      "inboxLabel": "Inbox",
+      "footerNote": "Guangdong University of Education · Campus Helper"
     },
     "grade": {
       "navTitle": "Grades",
@@ -4013,6 +4090,13 @@ module.exports = {
         "system": "Follow System",
         "light": "Light Mode",
         "dark": "Dark Mode"
+      },
+      "accent": {
+        "label": "Theme Accent",
+        "banyan": "Banyan Green",
+        "kapok": "Kapok Red",
+        "haizhu": "Haizhu Blue",
+        "bauhinia": "Bauhinia Violet"
       },
       "font": {
         "label": "Font Size",
@@ -4981,7 +5065,21 @@ module.exports = {
       "settingsSection": "設定",
       "logoutTitle": "ログアウト",
       "logoutContent": "ログアウトしてもよろしいですか？",
-      "unreadFailed": "未読メッセージの取得に失敗しました"
+      "unreadFailed": "未読メッセージの取得に失敗しました",
+      "campusTagline": "広東第二師範学院 · キャンパスパス",
+      "campusCardTitle": "キャンパスカード · Campus Pass",
+      "cardBalanceLabel": "残高 (元)",
+      "cardStatusNormal": "利用可能",
+      "cardStatusAbnormal": "状態異常",
+      "cardDetailBtn": "カード詳細",
+      "weekBadge": "第 {{week}} 週",
+      "todayAgendaTitle": "今日の時間割",
+      "todayClassCount": "{{count}} コマ",
+      "noAgendaToday": "本日の予定はありません。週間時間割を確認できます。",
+      "viewFullSchedule": "週間時間割",
+      "noticeLabel": "お知らせ",
+      "inboxLabel": "通知",
+      "footerNote": "広東第二師範学院 · キャンパスアシスタント"
     },
     "grade": {
       "navTitle": "成績照会",
@@ -5238,6 +5336,13 @@ module.exports = {
         "system": "システムに従う",
         "light": "ライトモード",
         "dark": "ダークモード"
+      },
+      "accent": {
+        "label": "テーマカラー",
+        "banyan": "ガジュマル翠",
+        "kapok": "キワタ朱",
+        "haizhu": "海珠ブルー",
+        "bauhinia": "ソシンカ紫"
       },
       "font": {
         "label": "フォントサイズ",
@@ -6206,7 +6311,21 @@ module.exports = {
       "settingsSection": "설정",
       "logoutTitle": "로그아웃",
       "logoutContent": "정말 로그아웃하시겠습니까?",
-      "unreadFailed": "읽지 않은 메시지를 가져오지 못했습니다"
+      "unreadFailed": "읽지 않은 메시지를 가져오지 못했습니다",
+      "campusTagline": "광둥제2사범학원 · 캠퍼스 패스",
+      "campusCardTitle": "캠퍼스 카드 · Campus Pass",
+      "cardBalanceLabel": "현재 잔액 (위안)",
+      "cardStatusNormal": "정상",
+      "cardStatusAbnormal": "상태 이상",
+      "cardDetailBtn": "카드 상세",
+      "weekBadge": "{{week}}주차",
+      "todayAgendaTitle": "오늘의 시간표",
+      "todayClassCount": "{{count}}개 강의",
+      "noAgendaToday": "오늘 예정된 강의가 없습니다. 전체 시간표를 확인해 보세요.",
+      "viewFullSchedule": "전체 시간표",
+      "noticeLabel": "공지",
+      "inboxLabel": "알림",
+      "footerNote": "광둥제2사범학원 · 캠퍼스 도우미"
     },
     "grade": {
       "navTitle": "성적 조회",
@@ -6463,6 +6582,13 @@ module.exports = {
         "system": "시스템 설정 따르기",
         "light": "라이트 모드",
         "dark": "다크 모드"
+      },
+      "accent": {
+        "label": "테마 색상",
+        "banyan": "반얀 그린",
+        "kapok": "카폭 레드",
+        "haizhu": "하이주 블루",
+        "bauhinia": "바우히니아 퍼플"
       },
       "font": {
         "label": "글꼴 크기",

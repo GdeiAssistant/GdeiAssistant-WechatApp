@@ -4,11 +4,77 @@
   position: relative;
 }
 
+/* Focal Campus Card pass summary */
+.card_hero {
+  margin: 24rpx var(--gutter) 0;
+  padding: 28rpx 32rpx;
+  border-radius: var(--radius-card);
+  background: var(--color-band);
+  color: var(--color-on-band);
+  box-shadow: var(--shadow-raised);
+}
+
+.theme-dark .card_hero {
+  border: 1rpx solid var(--color-border);
+}
+
+.card_hero_top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.card_hero_name {
+  font-family: var(--font-serif);
+  font-size: var(--font-title);
+  font-weight: 700;
+  color: var(--color-on-band);
+}
+
+.card_hero_state {
+  padding: 4rpx 16rpx;
+  border-radius: var(--radius-full);
+  background: var(--color-band-chip);
+  color: var(--color-on-band);
+  font-size: var(--font-caption);
+  font-weight: 600;
+}
+
+.card_hero_balance_row {
+  display: flex;
+  flex-direction: column;
+  margin-top: 22rpx;
+}
+
+.card_hero_label {
+  color: var(--color-on-band-muted);
+  font-size: var(--font-caption);
+}
+
+.card_hero_balance {
+  margin-top: 4rpx;
+  color: var(--color-on-band);
+  font-size: 56rpx;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.card_hero_meta {
+  margin-top: 20rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid rgba(255, 255, 255, 0.16);
+  color: var(--color-on-band-muted);
+  font-size: var(--font-caption);
+}
+
 /* Module shortcuts read as one grouped list of linked rows, not tinted tiles. */
 .module_shortcuts {
   margin: 24rpx var(--gutter) 0;
+  border: 1rpx solid var(--color-border);
   border-radius: var(--radius-card);
   background: var(--color-surface);
+  box-shadow: var(--shadow-card);
   overflow: hidden;
 }
 

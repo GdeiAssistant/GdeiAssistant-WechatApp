@@ -7,14 +7,14 @@
 .tabbar {
   display: flex;
   padding-bottom: env(safe-area-inset-bottom);
-  background-color: var(--color-surface);
+  background-color: var(--color-bg-primary);
   border-top: 1rpx solid var(--color-divider);
 }
 
 /* theme.wxss sets a full-viewport .theme-dark root; the bar only needs vars. */
 .tabbar.theme-dark {
   min-height: 0;
-  background-color: var(--color-surface);
+  background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
 }
 

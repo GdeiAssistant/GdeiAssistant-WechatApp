@@ -33,6 +33,7 @@
 
 .hero_title {
   color: var(--color-text-primary);
+  font-family: var(--font-serif);
   font-size: var(--font-display);
   font-weight: 700;
   line-height: 1.25;
@@ -52,7 +53,9 @@
   margin: 32rpx var(--gutter) 0;
   padding: 28rpx;
   background: var(--color-surface);
+  border: 1rpx solid var(--color-border);
   border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
 }
 
 .summary_avatar {
@@ -111,7 +114,7 @@
 
 .tab_item_active {
   background: var(--color-fill-primary);
-  color: var(--color-on-primary);
+  color: var(--color-on-fill-primary);
 }
 
 /* States */
@@ -156,7 +159,9 @@
 .center_card {
   margin-bottom: 20rpx;
   background: var(--color-surface);
+  border: 1rpx solid var(--color-border);
   border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
   overflow: hidden;
 }
 

@@ -2,6 +2,7 @@ module.exports = [
   {
     files: [
       'app.js',
+      'custom-tab-bar/**/*.js',
       'config/**/*.js',
       'constants/**/*.js',
       'mock/**/*.js',

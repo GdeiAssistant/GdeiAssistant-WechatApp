@@ -71,7 +71,21 @@
     "settingsSection": "Settings",
     "logoutTitle": "Logout",
     "logoutContent": "Are you sure you want to logout?",
-    "unreadFailed": "Failed to fetch unread messages"
+    "unreadFailed": "Failed to fetch unread messages",
+    "campusTagline": "GDEI · Lingnan Campus Pass",
+    "campusCardTitle": "Campus Card · Campus Pass",
+    "cardBalanceLabel": "Current Balance (CNY)",
+    "cardStatusNormal": "Active",
+    "cardStatusAbnormal": "Frozen / Alert",
+    "cardDetailBtn": "Card Details",
+    "weekBadge": "Week {{week}}",
+    "todayAgendaTitle": "Today's Classes",
+    "todayClassCount": "{{count}} classes",
+    "noAgendaToday": "No classes scheduled today. Open full schedule for the week.",
+    "viewFullSchedule": "Full Schedule",
+    "noticeLabel": "Notice",
+    "inboxLabel": "Inbox",
+    "footerNote": "Guangdong University of Education · Campus Helper"
   },
   "grade": {
     "navTitle": "Grades",
@@ -311,6 +325,13 @@
       "system": "Follow System",
       "light": "Light Mode",
       "dark": "Dark Mode"
+    },
+    "accent": {
+      "label": "Theme Accent",
+      "banyan": "Banyan Green",
+      "kapok": "Kapok Red",
+      "haizhu": "Haizhu Blue",
+      "bauhinia": "Bauhinia Violet"
     },
     "font": {
       "label": "Font Size",
