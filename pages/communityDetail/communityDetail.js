@@ -229,7 +229,7 @@ Page({
       return
     }
     wx.navigateTo({
-      url: '/pages/userProfile/userProfile?id=' + encodeURIComponent(authorId)
+      url: '/subpackages/social/userProfile/userProfile?id=' + encodeURIComponent(authorId)
     })
   },
 

@@ -903,7 +903,7 @@
       "search": "搜索",
       "clear": "清空",
       "loading": "正在載入",
-"loadMore": "載入更多",
+      "loadMore": "載入更多",
       "noMore": "沒有更多數據了",
       "emptyTitle": "暫無內容",
       "emptySummary": "換個篩選條件試試，或者發佈一條新的內容。",
@@ -1242,5 +1242,12 @@
       "invalidImage": "圖片格式無效",
       "imageMessagingDisabled": "圖片私訊暫時未開通"
     }
+  },
+  "privacyPopup": {
+    "title": "用戶私隱保護指引",
+    "desc": "喺你使用相關功能（例如上載圖片、語音或複製資料）前，請仔細閱讀並同意",
+    "contractFallback": "《小程式私隱保護指引》",
+    "disagree": "拒絕",
+    "agree": "同意並繼續"
   }
 }

@@ -23,7 +23,7 @@ const FEATURE_DEFS = [
     titleKey: 'features.cet.title',
     descKey: 'features.cet.desc',
     icon: '/image/mono/cet.png',
-    page: '/pages/cet/cet',
+    page: '/subpackages/campus/cet/cet',
     section: 'campus'
   },
   {
@@ -31,7 +31,7 @@ const FEATURE_DEFS = [
     titleKey: 'features.graduateExam.title',
     descKey: 'features.graduateExam.desc',
     icon: '/image/mono/kaoyan.png',
-    page: '/pages/graduateExam/graduateExam',
+    page: '/subpackages/campus/graduateExam/graduateExam',
     section: 'campus'
   },
   {
@@ -47,7 +47,7 @@ const FEATURE_DEFS = [
     titleKey: 'features.bill.title',
     descKey: 'features.bill.desc',
     icon: '/image/mono/bill.png',
-    page: '/pages/bill/bill',
+    page: '/subpackages/campus/bill/bill',
     section: 'campus'
   },
   {
@@ -63,7 +63,7 @@ const FEATURE_DEFS = [
     titleKey: 'features.cardLost.title',
     descKey: 'features.cardLost.desc',
     icon: '/image/mono/cardLost.png',
-    page: '/pages/cardLost/cardLost',
+    page: '/subpackages/campus/cardLost/cardLost',
     section: 'campus'
   },
   {
@@ -71,7 +71,7 @@ const FEATURE_DEFS = [
     titleKey: 'features.evaluate.title',
     descKey: 'features.evaluate.desc',
     icon: '/image/mono/evaluate.png',
-    page: '/pages/evaluate/evaluate',
+    page: '/subpackages/campus/evaluate/evaluate',
     section: 'campus'
   },
   {
@@ -79,7 +79,7 @@ const FEATURE_DEFS = [
     titleKey: 'features.collection.title',
     descKey: 'features.collection.desc',
     icon: '/image/mono/collection.png',
-    page: '/pages/collection/collection',
+    page: '/subpackages/campus/collection/collection',
     section: 'campus'
   },
   {
@@ -87,7 +87,7 @@ const FEATURE_DEFS = [
     titleKey: 'features.book.title',
     descKey: 'features.book.desc',
     icon: '/image/mono/book.png',
-    page: '/pages/book/book',
+    page: '/subpackages/campus/book/book',
     section: 'campus'
   },
   {
@@ -95,7 +95,7 @@ const FEATURE_DEFS = [
     titleKey: 'features.data.title',
     descKey: 'features.data.desc',
     icon: '/image/mono/data.png',
-    page: '/pages/data/data',
+    page: '/subpackages/campus/data/data',
     section: 'campus'
   },
   {

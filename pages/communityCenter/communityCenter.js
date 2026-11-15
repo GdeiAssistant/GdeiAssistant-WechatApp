@@ -272,6 +272,10 @@ Page({
   },
 
   openPublish: function() {
+    if (!this.data.moduleConfig || this.data.moduleConfig.publishEnabled === false) {
+      pageUtils.showTopTips(this, i18n.t('community.publish.v.moduleNotSupported'))
+      return
+    }
     wx.navigateTo({
       url: '/pages/communityPublish/communityPublish?module=' + this.data.moduleId
     })

@@ -1244,6 +1244,13 @@ module.exports = {
         "invalidImage": "图片格式无效",
         "imageMessagingDisabled": "图片私信暂未启用"
       }
+    },
+    "privacyPopup": {
+      "title": "用户隐私保护指引",
+      "desc": "在你使用相关功能（如上传图片、语音或复制信息）前，请仔细阅读并同意",
+      "contractFallback": "《小程序隐私保护指引》",
+      "disagree": "拒绝",
+      "agree": "同意并继续"
     }
   },
   "zh-HK": {
@@ -2490,6 +2497,13 @@ module.exports = {
         "invalidImage": "圖片格式無效",
         "imageMessagingDisabled": "圖片私訊暫時未開通"
       }
+    },
+    "privacyPopup": {
+      "title": "用戶私隱保護指引",
+      "desc": "喺你使用相關功能（例如上載圖片、語音或複製資料）前，請仔細閱讀並同意",
+      "contractFallback": "《小程式私隱保護指引》",
+      "disagree": "拒絕",
+      "agree": "同意並繼續"
     }
   },
   "zh-TW": {
@@ -3736,6 +3750,13 @@ module.exports = {
         "invalidImage": "圖片格式無效",
         "imageMessagingDisabled": "圖片私訊暫未啟用"
       }
+    },
+    "privacyPopup": {
+      "title": "使用者隱私保護指引",
+      "desc": "在你使用相關功能（如上傳圖片、語音或複製資訊）前，請仔細閱讀並同意",
+      "contractFallback": "《小程式隱私保護指引》",
+      "disagree": "拒絕",
+      "agree": "同意並繼續"
     }
   },
   "en": {
@@ -4982,6 +5003,13 @@ module.exports = {
         "invalidImage": "Invalid image format",
         "imageMessagingDisabled": "Image messaging is not enabled"
       }
+    },
+    "privacyPopup": {
+      "title": "Privacy Protection Notice",
+      "desc": "Before using features such as image upload, voice recording, or clipboard access, please read and agree to the",
+      "contractFallback": "Mini Program Privacy Protection Guidelines",
+      "disagree": "Decline",
+      "agree": "Agree & Continue"
     }
   },
   "ja": {
@@ -6228,6 +6256,13 @@ module.exports = {
         "invalidImage": "画像形式が無効です",
         "imageMessagingDisabled": "画像メッセージは未対応です"
       }
+    },
+    "privacyPopup": {
+      "title": "プライバシー保護ガイド",
+      "desc": "画像アップロード、音声録音、クリップボード機能をご利用になる前に、以下をお読みのうえ同意してください：",
+      "contractFallback": "ミニプログラムプライバシー保護ガイド",
+      "disagree": "同意しない",
+      "agree": "同意して続行"
     }
   },
   "ko": {
@@ -7474,6 +7509,13 @@ module.exports = {
         "invalidImage": "이미지 형식이 올바르지 않습니다",
         "imageMessagingDisabled": "이미지 쪽지가 아직 켜져 있지 않습니다"
       }
+    },
+    "privacyPopup": {
+      "title": "개인정보 보호 안내",
+      "desc": "이미지 업로드, 음성 녹음, 클립보드 복사 기능을 사용하기 전에 다음 내용을 읽고 동의해 주세요:",
+      "contractFallback": "미니프로그램 개인정보 보호 지침",
+      "disagree": "거부",
+      "agree": "동의 후 계속"
     }
   }
 }

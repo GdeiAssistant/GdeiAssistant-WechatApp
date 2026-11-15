@@ -138,4 +138,5 @@
       >{{savingField === 'introduction' ? t.savingIntroduction : t.saveIntroduction}}</button>
     </view>
   </block>
+  <privacy-popup />
 </view>

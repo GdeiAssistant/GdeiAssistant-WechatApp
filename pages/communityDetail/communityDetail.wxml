@@ -154,4 +154,5 @@
       <button type="primary" bindtap="submitComment">{{t.submitComment}}</button>
     </view>
   </view>
+  <privacy-popup />
 </view>

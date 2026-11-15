@@ -200,4 +200,5 @@
   <view class="submit_area">
     <button type="primary" loading="{{submitting}}" disabled="{{pageLoading}}" bindtap="submitPublish">{{isEditMode ? t.saveChanges : t.submitPublish}}</button>
   </view>
+  <privacy-popup />
 </view>

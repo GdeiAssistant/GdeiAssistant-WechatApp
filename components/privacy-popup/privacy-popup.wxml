@@ -1,0 +1,19 @@
+<view class="privacy_mask" wx:if="{{visible}}" catchtouchmove="true">
+  <view class="privacy_dialog">
+    <view class="privacy_title">{{t.title}}</view>
+    <view class="privacy_desc">
+      <text>{{t.desc}}</text>
+      <text class="privacy_link" bindtap="openContract">{{contractName || t.contractFallback}}</text>
+    </view>
+    <view class="privacy_actions">
+      <button class="privacy_btn privacy_btn_decline" bindtap="handleDisagree">{{t.disagree}}</button>
+      <button
+        id="agree-btn"
+        class="privacy_btn privacy_btn_agree"
+        type="primary"
+        open-type="agreePrivacyAuthorization"
+        bindagreeprivacyauthorization="handleAgree"
+      >{{t.agree}}</button>
+    </view>
+  </view>
+</view>

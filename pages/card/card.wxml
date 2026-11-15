@@ -15,11 +15,11 @@
     </view>
 
     <view class="module_shortcuts">
-      <navigator url="/pages/bill/bill" class="shortcut_card" hover-class="shortcut_card_active">
+      <navigator url="/subpackages/campus/bill/bill" class="shortcut_card" hover-class="shortcut_card_active">
         <view class="shortcut_title">{{t.transactionHistory}}</view>
         <view class="shortcut_desc">{{t.transactionHistoryDesc}}</view>
       </navigator>
-      <navigator url="/pages/cardLost/cardLost" class="shortcut_card shortcut_card_warn" hover-class="shortcut_card_active">
+      <navigator url="/subpackages/campus/cardLost/cardLost" class="shortcut_card shortcut_card_warn" hover-class="shortcut_card_active">
         <view class="shortcut_title">{{t.reportLost}}</view>
         <view class="shortcut_desc">{{t.reportLostDesc}}</view>
       </navigator>

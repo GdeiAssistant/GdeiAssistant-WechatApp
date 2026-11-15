@@ -450,3 +450,17 @@ test('request accepts created responses and no-content success', async function 
     assert.deepEqual(result.data, statusCode === 204 ? null : { id: 1 })
   }
 })
+
+test('request strips duplicate slashes when joining resourceDomain and path', async function () {
+  let capturedUrl = null
+  const { request } = setup(function (opts) {
+    capturedUrl = opts.url
+    opts.success({ statusCode: 200, data: { code: 200, data: null } })
+  })
+
+  await request({ url: '/api/test' })
+  assert.equal(capturedUrl, 'https://test.example.com/api/test')
+
+  await request({ url: 'api/test2' })
+  assert.equal(capturedUrl, 'https://test.example.com/api/test2')
+})
