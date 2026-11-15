@@ -1,6 +1,6 @@
 # PR governance
 
-门禁实现位于组织治理仓库 `GdeiAssistant/.github` 的 `pr-governance/`，本仓库只保留
+门禁实现位于共享治理仓库 `Pigbibi/PrGovernance` 的 `pr-governance/`，本仓库只保留
 `policy.json` 和调用方工作流。门禁不检出、不执行 PR 代码，只读取 PR 元数据并在 PR head
 上写入提交状态；合并约束仍由分支保护承担。
 

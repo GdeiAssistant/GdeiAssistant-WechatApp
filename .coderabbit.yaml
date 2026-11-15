@@ -16,7 +16,7 @@ reviews:
   path_instructions:
     - path: '**/*'
       instructions: >-
-        遵守 AGENTS.md 和 .github/engineering.md。独立审查正确性、安全和数据完整性，
+        遵守 AGENTS.md。独立审查正确性、安全和数据完整性，
         用中文说明发现。按 .github/governance/README.md 保留真实审查范围和限制。
         不代替 Pigbibi 批准或发布治理指令，不添加 owner-approved，不声称部署或权限授权。
     - path: '.github/**'
