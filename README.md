@@ -27,7 +27,23 @@
 - **双模式画布**：通过 `theme.json` 与 `styles/theme.wxss` 支持浅色「岭南晨纸」（`#F7F6F2`）、深色「珠江夜读」（`#0D1311`）及跟随系统。
 - **4 套校园主题色**：支持 **榕荫翠**（`banyan`）、**木棉丹**（`kapok`）、**海珠蓝**（`haizhu`）、**紫荆紫**（`bauhinia`），由 `utils/theme.js` 管理并与自定义 TabBar 实时同步。
 - **多语言同步**：界面词条存放于 `locales/*.json`，通过脚本编译至 `locales/messages.generated.js`；修改文案后需重新生成并校验。
-- 多端界面预览见 [主仓 README 预览](https://github.com/GdeiAssistant/GdeiAssistant#界面预览)。
+- 多端设计令牌规范见 [主仓说明](https://github.com/GdeiAssistant/GdeiAssistant#设计系统)，小程序端效果见下方 [界面预览](#界面预览)。
+
+## 界面预览
+
+以下为微信小程序端基于《岭南书院人文风》（Lingnan Editorial）设计系统的 6 张统一尺寸移动端矢量界面预览，展示首页、课表、社区广场、个人主页与外观设置，涵盖浅色「岭南晨纸」、深色「珠江夜读」及四套校园主题色：
+
+<p align="center">
+  <img src="assets/screenshots/wechat-home-light.svg" alt="微信小程序首页浅色（榕荫翠）" width="260" />
+  <img src="assets/screenshots/wechat-home-dark.svg" alt="微信小程序首页深色（榕荫翠）" width="260" />
+  <img src="assets/screenshots/wechat-schedule-light.svg" alt="微信小程序课表浅色（木棉丹）" width="260" />
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/wechat-community-dark.svg" alt="微信小程序社区广场深色（紫荆紫）" width="260" />
+  <img src="assets/screenshots/wechat-profile-light.svg" alt="微信小程序个人主页浅色（海珠蓝）" width="260" />
+  <img src="assets/screenshots/wechat-appearance-dark.svg" alt="微信小程序外观设置深色（木棉丹）" width="260" />
+</p>
 
 ## 工程目录
 
