@@ -224,7 +224,7 @@ Page({
   },
 
   openUserSearch: function () {
-    wx.navigateTo({ url: '/pages/userSearch/userSearch' })
+    wx.navigateTo({ url: '/subpackages/social/userSearch/userSearch' })
   },
 
   loadAnnouncementList: function (pageNumber, reset) {

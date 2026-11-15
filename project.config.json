@@ -36,7 +36,24 @@
   "qqappid": "",
   "condition": {},
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      { "type": "folder", "value": "tests" },
+      { "type": "folder", "value": "scripts" },
+      { "type": "folder", "value": "docs" },
+      { "type": "folder", "value": "assets" },
+      { "type": "folder", "value": ".github" },
+      { "type": "glob", "value": "locales/*.json" },
+      { "type": "glob", "value": "*.md" },
+      { "type": "file", "value": "package.json" },
+      { "type": "file", "value": "package-lock.json" },
+      { "type": "file", "value": "eslint.config.js" },
+      { "type": "file", "value": ".coderabbit.yaml" },
+      { "type": "file", "value": ".pre-commit-config.yaml" },
+      { "type": "file", "value": ".prettierrc.json" },
+      { "type": "file", "value": ".prettierignore" },
+      { "type": "file", "value": ".nvmrc" },
+      { "type": "file", "value": ".gitignore" }
+    ],
     "include": []
   },
   "editorSetting": {

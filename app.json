@@ -6,35 +6,51 @@
     "pages/settings/settings",
     "pages/grade/grade",
     "pages/schedule/schedule",
-    "pages/cet/cet",
-    "pages/graduateExam/graduateExam",
     "pages/spare/spare",
     "pages/card/card",
-    "pages/bill/bill",
-    "pages/evaluate/evaluate",
-    "pages/cardLost/cardLost",
-    "pages/collection/collection",
-    "pages/collectionDetail/collectionDetail",
-    "pages/book/book",
-    "pages/data/data",
     "pages/electricity/electricity",
-    "pages/yellowPage/yellowPage",
     "pages/news/news",
     "pages/newsDetail/newsDetail",
     "pages/inbox/inbox",
-    "pages/userSearch/userSearch",
-    "pages/userProfile/userProfile",
-    "pages/relationshipList/relationshipList",
     "pages/conversationList/conversationList",
     "pages/chat/chat",
-    "pages/dmPrivacy/dmPrivacy",
-    "pages/blockList/blockList",
     "pages/communityList/communityList",
     "pages/communityDetail/communityDetail",
     "pages/communityPublish/communityPublish",
     "pages/communityCenter/communityCenter",
     "pages/appearance/appearance"
   ],
+  "subpackages": [
+    {
+      "root": "subpackages/campus",
+      "pages": [
+        "cet/cet",
+        "graduateExam/graduateExam",
+        "bill/bill",
+        "evaluate/evaluate",
+        "cardLost/cardLost",
+        "collection/collection",
+        "collectionDetail/collectionDetail",
+        "book/book",
+        "data/data",
+        "yellowPage/yellowPage"
+      ]
+    },
+    {
+      "root": "subpackages/social",
+      "pages": [
+        "userSearch/userSearch",
+        "userProfile/userProfile",
+        "relationshipList/relationshipList",
+        "dmPrivacy/dmPrivacy",
+        "blockList/blockList"
+      ]
+    }
+  ],
+  "lazyCodeLoading": "requiredComponents",
+  "usingComponents": {
+    "privacy-popup": "/components/privacy-popup/privacy-popup"
+  },
   "darkmode": true,
   "themeLocation": "theme.json",
   "window": {

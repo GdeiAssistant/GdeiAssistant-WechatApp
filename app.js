@@ -62,9 +62,11 @@ var i18n = require('./utils/i18n')
 var themeUtil = require('./utils/theme')
 var auth = require('./services/auth')
 var socialRealtime = require('./services/social-realtime')
+var privacyUtil = require('./utils/privacy')
 
 App({
   onLaunch: function () {
+    privacyUtil.initPrivacyListener()
     // Restore locale from storage so all pages pick it up
     var savedLocale = i18n.getCurrentLocale()
     this.globalData.locale = savedLocale

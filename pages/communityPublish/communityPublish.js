@@ -550,6 +550,19 @@ Page({
     }
 
     const isEditMode = options && options.mode === 'edit' && !!options.id && isEditSupported(moduleId)
+    if (!isEditMode && moduleConfig.publishEnabled === false) {
+      wx.showModal({
+        title: i18n.t('community.common.notice'),
+        content: i18n.t('community.publish.v.moduleNotSupported'),
+        showCancel: false,
+        success: function() {
+          if (getCurrentPages().length > 1) {
+            wx.navigateBack({ delta: 1 })
+          }
+        }
+      })
+      return
+    }
 
     wx.setNavigationBarTitle({
       title: getCommunityPageTitle(moduleId, isEditMode ? 'edit' : 'publish', moduleConfig.title)

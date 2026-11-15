@@ -166,7 +166,7 @@ function openUserProfile(userId) {
     return
   }
   wx.navigateTo({
-    url: '/pages/userProfile/userProfile?id=' + encodeURIComponent(userId)
+    url: '/subpackages/social/userProfile/userProfile?id=' + encodeURIComponent(userId)
   })
 }
 

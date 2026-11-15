@@ -159,8 +159,8 @@
     <view class="empty_summary">{{t.emptySummary}}</view>
   </view>
 
-  <view class="bottom_bar" wx:if="{{moduleConfig}}">
-    <button class="bottom_button" type="primary" bindtap="openPublish">{{t.publishBtn}}</button>
+  <view class="bottom_bar" wx:if="{{moduleConfig && (moduleConfig.publishEnabled !== false || moduleConfig.centerEnabled)}}">
+    <button class="bottom_button" type="primary" wx:if="{{moduleConfig.publishEnabled !== false}}" bindtap="openPublish">{{t.publishBtn}}</button>
     <button class="bottom_button bottom_button_secondary" wx:if="{{moduleConfig.centerEnabled}}" bindtap="openCenter">{{t.myBtn}}</button>
   </view>
 </view>

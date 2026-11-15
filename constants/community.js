@@ -225,7 +225,7 @@ const COMMUNITY_MODULE_DEFS = [
     heroStyle: '',
     page: '/pages/communityList/communityList?module=secret',
     centerEnabled: true,
-    publishEnabled: true
+    publishEnabled: false
   },
   {
     id: 'express',
@@ -237,7 +237,7 @@ const COMMUNITY_MODULE_DEFS = [
     supportsSearch: true,
     searchPlaceholderKey: 'community.modules.express.searchPlaceholder',
     centerEnabled: true,
-    publishEnabled: true
+    publishEnabled: false
   },
   {
     id: 'topic',

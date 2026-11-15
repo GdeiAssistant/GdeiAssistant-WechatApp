@@ -287,7 +287,7 @@ Page({
     }
     wx.navigateTo({
       url:
-        '/pages/relationshipList/relationshipList?id=' +
+        '/subpackages/social/relationshipList/relationshipList?id=' +
         encodeURIComponent(this.data.socialMe.id) +
         '&kind=' +
         encodeURIComponent(target)

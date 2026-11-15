@@ -903,7 +903,7 @@
       "search": "검색",
       "clear": "초기화",
       "loading": "로딩 중",
-"loadMore": "더 불러오기",
+      "loadMore": "더 불러오기",
       "noMore": "더 이상 데이터 없음",
       "emptyTitle": "콘텐츠 없음",
       "emptySummary": "필터를 변경하거나 새로 게시해 보세요.",
@@ -1242,5 +1242,12 @@
       "invalidImage": "이미지 형식이 올바르지 않습니다",
       "imageMessagingDisabled": "이미지 쪽지가 아직 켜져 있지 않습니다"
     }
+  },
+  "privacyPopup": {
+    "title": "개인정보 보호 안내",
+    "desc": "이미지 업로드, 음성 녹음, 클립보드 복사 기능을 사용하기 전에 다음 내용을 읽고 동의해 주세요:",
+    "contractFallback": "미니프로그램 개인정보 보호 지침",
+    "disagree": "거부",
+    "agree": "동의 후 계속"
   }
 }

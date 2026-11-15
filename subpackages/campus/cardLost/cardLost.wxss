@@ -1,0 +1,18 @@
+@import "../../../common/lib/weui.wxss";
+
+.weui-navbar {
+  position: relative;
+}
+
+/* Irreversible action note: a tinted warning strip, left aligned, inside the gutter. */
+.lost_warning {
+  display: block;
+  margin: 32rpx var(--gutter) 0;
+  padding: 24rpx 28rpx;
+  border-radius: var(--radius-control);
+  background-color: var(--color-warning-soft);
+  color: var(--color-warning-ink);
+  font-size: var(--font-meta);
+  line-height: 1.6;
+  text-align: left;
+}

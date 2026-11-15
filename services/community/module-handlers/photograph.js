@@ -15,8 +15,10 @@ module.exports = {
     var start = Number(config.start || 0)
     var size = Number(config.size || 10)
 
+    var type = config.type !== undefined ? Number(config.type) : 1
+
     return request({
-      url: endpoints.community.photograph.list(Number(config.type || 1), start, size),
+      url: endpoints.community.photograph.list(type, start, size),
       method: 'GET',
       authRequired: true
     })

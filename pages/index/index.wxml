@@ -159,4 +159,5 @@
     <text>{{t.footerNote}}</text>
     <text>{{t.copyright}} {{t.rightsReserved}}</text>
   </view>
+  <privacy-popup />
 </view>

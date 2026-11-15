@@ -235,11 +235,11 @@ Page({
   },
 
   openDmPrivacy: function() {
-    wx.navigateTo({ url: '/pages/dmPrivacy/dmPrivacy' })
+    wx.navigateTo({ url: '/subpackages/social/dmPrivacy/dmPrivacy' })
   },
 
   openBlockList: function() {
-    wx.navigateTo({ url: '/pages/blockList/blockList' })
+    wx.navigateTo({ url: '/subpackages/social/blockList/blockList' })
   },
 
   handleQuickAuthSwitch: function(event) {

@@ -2,11 +2,13 @@ module.exports = [
   {
     files: [
       'app.js',
+      'components/**/*.js',
       'custom-tab-bar/**/*.js',
       'config/**/*.js',
       'constants/**/*.js',
       'mock/**/*.js',
       'pages/**/*.js',
+      'subpackages/**/*.js',
       'services/**/*.js',
       'utils/**/*.js',
       'tests/**/*.js',
