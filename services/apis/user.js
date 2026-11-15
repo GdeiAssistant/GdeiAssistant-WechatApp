@@ -1,5 +1,7 @@
 const endpoints = require('../endpoints.js')
 const { request } = require('../request.js')
+const { requestForm } = require('../request-form.js')
+const { encodeForm } = require('../../utils/form.js')
 
 function getAvatar() {
   return request({
@@ -116,14 +118,14 @@ function getProfileOptions() {
 }
 
 function updateAvatar(avatarKey, avatarHdKey) {
-  return request({
+  return requestForm({
     url: endpoints.user.avatar,
     method: 'POST',
     authRequired: true,
-    data: {
+    data: encodeForm({
       avatarKey: avatarKey,
       avatarHdKey: avatarHdKey
-    }
+    })
   })
 }
 

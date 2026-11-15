@@ -121,7 +121,7 @@ function request(options) {
       }
 
       wx.request({
-        url: /^https?:\/\//.test(url) ? url : config.resourceDomain + url,
+        url: /^https?:\/\//.test(url) ? url : config.resourceDomain.replace(/\/$/, '') + '/' + url.replace(/^\//, ''),
         method,
         header,
         timeout: config.requestTimeout,
