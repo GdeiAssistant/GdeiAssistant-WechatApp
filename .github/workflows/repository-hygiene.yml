@@ -16,4 +16,4 @@ jobs:
           persist-credentials: false
       - uses: GdeiAssistant/.github/actions/repository-hygiene@de373c6fc4ead5872cf9cef16e55110ed292e41c
       - name: Verify dependency policy regressions
-        run: node --test .github/scripts/test-dependabot-policy.cjs
+        run: node --test .github/scripts/test-dependabot-policy.cjs .github/scripts/test-maintainer-only.cjs

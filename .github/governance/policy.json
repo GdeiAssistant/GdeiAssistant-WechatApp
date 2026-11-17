@@ -28,6 +28,6 @@
     "subpackages/social/",
     "scripts/"
   ],
-  "dependabot_template_exemption": true,
+  "dependabot_template_exemption": false,
   "max_evidence_age_hours": 168
 }
