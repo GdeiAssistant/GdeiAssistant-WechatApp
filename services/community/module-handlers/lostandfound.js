@@ -185,89 +185,55 @@ module.exports = {
     var wechat = trimValue(form.wechat)
     var phone = trimValue(form.phone)
 
-    if (!name) return i18n.t('community.publish.v.itemNameRequired')
-    if (
-      getMaxLengthMessage(
-        name,
-        LOST_FOUND_NAME_MAX_LENGTH,
-        i18n.tReplace('community.publish.v.itemNameTooLong', { max: LOST_FOUND_NAME_MAX_LENGTH })
+    var lengthChecks = [
+      {
+        value: name,
+        requiredKey: 'community.publish.v.itemNameRequired',
+        max: LOST_FOUND_NAME_MAX_LENGTH,
+        tooLongKey: 'community.publish.v.itemNameTooLong'
+      },
+      {
+        value: description,
+        requiredKey: 'community.publish.v.itemDescRequired',
+        max: LOST_FOUND_DESCRIPTION_MAX_LENGTH,
+        tooLongKey: 'community.publish.v.itemDescTooLong'
+      },
+      {
+        value: location,
+        requiredKey: 'community.publish.v.locationRequired2',
+        max: LOST_FOUND_LOCATION_MAX_LENGTH,
+        tooLongKey: 'community.publish.v.locationTooLong2'
+      },
+      {
+        value: qq,
+        max: LOST_FOUND_QQ_MAX_LENGTH,
+        tooLongKey: 'community.publish.v.qqTooLong2'
+      },
+      {
+        value: wechat,
+        max: LOST_FOUND_WECHAT_MAX_LENGTH,
+        tooLongKey: 'community.publish.v.wechatTooLong'
+      },
+      {
+        value: phone,
+        max: CONTACT_PHONE_MAX_LENGTH,
+        tooLongKey: 'community.publish.v.phoneTooLong2'
+      }
+    ]
+    for (var i = 0; i < lengthChecks.length; i += 1) {
+      var check = lengthChecks[i]
+      if (check.requiredKey && !check.value) {
+        return i18n.t(check.requiredKey)
+      }
+      var maxMessage = getMaxLengthMessage(
+        check.value,
+        check.max,
+        i18n.tReplace(check.tooLongKey, { max: check.max })
       )
-    )
-      return getMaxLengthMessage(
-        name,
-        LOST_FOUND_NAME_MAX_LENGTH,
-        i18n.tReplace('community.publish.v.itemNameTooLong', { max: LOST_FOUND_NAME_MAX_LENGTH })
-      )
-    if (!description) return i18n.t('community.publish.v.itemDescRequired')
-    if (
-      getMaxLengthMessage(
-        description,
-        LOST_FOUND_DESCRIPTION_MAX_LENGTH,
-        i18n.tReplace('community.publish.v.itemDescTooLong', {
-          max: LOST_FOUND_DESCRIPTION_MAX_LENGTH
-        })
-      )
-    )
-      return getMaxLengthMessage(
-        description,
-        LOST_FOUND_DESCRIPTION_MAX_LENGTH,
-        i18n.tReplace('community.publish.v.itemDescTooLong', {
-          max: LOST_FOUND_DESCRIPTION_MAX_LENGTH
-        })
-      )
-    if (!location) return i18n.t('community.publish.v.locationRequired2')
-    if (
-      getMaxLengthMessage(
-        location,
-        LOST_FOUND_LOCATION_MAX_LENGTH,
-        i18n.tReplace('community.publish.v.locationTooLong2', {
-          max: LOST_FOUND_LOCATION_MAX_LENGTH
-        })
-      )
-    )
-      return getMaxLengthMessage(
-        location,
-        LOST_FOUND_LOCATION_MAX_LENGTH,
-        i18n.tReplace('community.publish.v.locationTooLong2', {
-          max: LOST_FOUND_LOCATION_MAX_LENGTH
-        })
-      )
-    if (
-      getMaxLengthMessage(
-        qq,
-        LOST_FOUND_QQ_MAX_LENGTH,
-        i18n.tReplace('community.publish.v.qqTooLong2', { max: LOST_FOUND_QQ_MAX_LENGTH })
-      )
-    )
-      return getMaxLengthMessage(
-        qq,
-        LOST_FOUND_QQ_MAX_LENGTH,
-        i18n.tReplace('community.publish.v.qqTooLong2', { max: LOST_FOUND_QQ_MAX_LENGTH })
-      )
-    if (
-      getMaxLengthMessage(
-        wechat,
-        LOST_FOUND_WECHAT_MAX_LENGTH,
-        i18n.tReplace('community.publish.v.wechatTooLong', { max: LOST_FOUND_WECHAT_MAX_LENGTH })
-      )
-    )
-      return getMaxLengthMessage(
-        wechat,
-        LOST_FOUND_WECHAT_MAX_LENGTH,
-        i18n.tReplace('community.publish.v.wechatTooLong', { max: LOST_FOUND_WECHAT_MAX_LENGTH })
-      )
-    if (
-      getMaxLengthMessage(
-        phone,
-        CONTACT_PHONE_MAX_LENGTH,
-        i18n.tReplace('community.publish.v.phoneTooLong2', { max: CONTACT_PHONE_MAX_LENGTH })
-      )
-    )
-      return getMaxLengthMessage(
-        phone,
-        CONTACT_PHONE_MAX_LENGTH,
-        i18n.tReplace('community.publish.v.phoneTooLong2', { max: CONTACT_PHONE_MAX_LENGTH })
-      )
+      if (maxMessage) {
+        return maxMessage
+      }
+    }
     if (!qq && !wechat && !phone) {
       return i18n.t('community.publish.v.contactRequired')
     }

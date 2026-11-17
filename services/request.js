@@ -1,10 +1,21 @@
 const config = require('../config/index.js')
 const auth = require('./auth.js')
 const dataSource = require('./data-source.js')
-const mock = require('../mock/index.js')
 const { normalizePayload, pickMessage } = require('./response.js')
 const { generateRequestId } = require('./request-id.js')
 const i18n = require('../utils/i18n.js')
+
+const loadNodeModule =
+  typeof module !== 'undefined' && typeof module.require === 'function'
+    ? module.require.bind(module)
+    : null
+
+function loadMock() {
+  if (typeof require.async === 'function') {
+    return require.async('../mock/index.js')
+  }
+  return Promise.resolve(loadNodeModule ? loadNodeModule('../mock/index.js') : null)
+}
 
 const DEVICE_ID_STORAGE_KEY = '__gdei_device_id'
 
@@ -105,14 +116,16 @@ function request(options) {
       const startTime = Date.now()
 
       if (dataSource.isMockMode()) {
-        mock
-          .handleRequest({
-            url,
-            path: url,
-            method,
-            data,
-            header,
-            sessionToken
+        loadMock()
+          .then(function (mock) {
+            return mock.handleRequest({
+              url,
+              path: url,
+              method,
+              data,
+              header,
+              sessionToken
+            })
           })
           .then(resolvePayload)
           .catch(rejectPayload)

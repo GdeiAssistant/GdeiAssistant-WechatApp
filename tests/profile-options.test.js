@@ -38,8 +38,15 @@ test('remote profile options drive faculty and community dictionaries together',
       success: true,
       data: {
         faculties: [
-          { code: 0, label: '未选择', majors: ['未选择'] },
-          { code: 3, label: '中文系', majors: ['未选择', '汉语言文学'] }
+          { code: 0, label: '未选择', majors: [{ code: 'unselected', label: '未选择' }] },
+          {
+            code: 3,
+            label: '中文系',
+            majors: [
+              { code: 'unselected', label: '未选择' },
+              { code: 'chinese_language_literature', label: '汉语言文学' }
+            ]
+          }
         ],
         marketplaceItemTypes: [
           { code: 0, label: '校园代步' },
@@ -191,6 +198,23 @@ test('code-only remote profile options resolve labels from catalog', async funct
     { code: 11, label: '其他' }
   ])
   assert.equal(profile.getMajorCodeByLabel('计算机科学系', '软件工程'), 'software_engineering')
+})
+
+test('string majors are treated as codes without 6-locale label reverse lookup', async function () {
+  const { profile } = loadProfileModules(function () {
+    return Promise.resolve({
+      success: true,
+      data: {
+        faculties: [
+          { code: 0, label: '未选择', majors: ['unselected'] },
+          { code: 3, label: '中文系', majors: ['unselected', '汉语言文学'] }
+        ]
+      }
+    })
+  })
+
+  const options = await profile.fetchProfileOptions(true)
+  assert.equal(options.faculties[1].majors[1].code, '汉语言文学')
 })
 
 test('cached remote profile options are re-localized when locale changes', async function () {

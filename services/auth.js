@@ -2,10 +2,21 @@ const config = require('../config/index.js')
 const storageKeys = require('../constants/storage.js')
 const endpoints = require('./endpoints.js')
 const dataSource = require('./data-source.js')
-const mock = require('../mock/index.js')
 const { normalizePayload } = require('./response.js')
 const { generateRequestId } = require('./request-id.js')
 const i18n = require('../utils/i18n.js')
+
+const loadNodeModule =
+  typeof module !== 'undefined' && typeof module.require === 'function'
+    ? module.require.bind(module)
+    : null
+
+function loadMock() {
+  if (typeof require.async === 'function') {
+    return require.async('../mock/index.js')
+  }
+  return Promise.resolve(loadNodeModule ? loadNodeModule('../mock/index.js') : null)
+}
 let reLaunching = false
 const SESSION_STORAGE_KEYS = [
   storageKeys.sessionToken,
@@ -102,7 +113,9 @@ function logout() {
   }
 
   if (dataSource.isMockMode()) {
-    return mock.handleLogout(token)
+    return loadMock().then(function (mock) {
+      return mock.handleLogout(token)
+    })
   }
 
   var requestId = generateRequestId()
@@ -145,7 +158,13 @@ function validateSessionToken() {
   }
 
   if (dataSource.isMockMode()) {
-    return Promise.resolve(mock.isSessionTokenValid(token))
+    return loadMock()
+      .then(function (mock) {
+        return mock.isSessionTokenValid(token)
+      })
+      .catch(function () {
+        return false
+      })
   }
 
   var requestId = generateRequestId()

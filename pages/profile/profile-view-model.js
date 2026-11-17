@@ -1,12 +1,25 @@
 const { maskAccount } = require('../../utils/mask.js')
 const i18n = require('../../utils/i18n')
 const {
-  NOT_SELECTED, getEnrollmentYearOptions, getFacultyOptions, getFacultyDictionaryOptions,
-  getMajorLabelByCode, getMajorOptions, canSelectMajor,
-  formatLocationDisplay, getLocationNodeName, getLocationDisplay, localizeIpArea
+  NOT_SELECTED,
+  getEnrollmentYearOptions,
+  getFacultyDictionaryOptions,
+  getFacultyByCode,
+  getFacultyLabelByCode,
+  getMajorDictionaryOptionsByFacultyCode,
+  getMajorLabelByFacultyCode,
+  canSelectMajorByCode,
+  formatLocationDisplay,
+  getLocationNodeName,
+  getLocationDisplay,
+  localizeIpArea
 } = require('../../constants/profile.js')
 const NICKNAME_MAX_LENGTH = 32
 const INTRODUCTION_MAX_LENGTH = 80
+
+function isUnselectedMajorCode(majorCode) {
+  return !majorCode || majorCode === 'unselected'
+}
 
 function buildLocationDisplay(region, state, city, locale) {
   return formatLocationDisplay(
@@ -23,6 +36,23 @@ function getSafeIndex(options, value) {
   return matchedIndex === -1 ? 0 : matchedIndex
 }
 
+function getCodeIndex(options, code, fallbackCode) {
+  if (!Array.isArray(options) || !options.length) {
+    return 0
+  }
+  const idx = options.indexOf(code)
+  if (idx !== -1) {
+    return idx
+  }
+  if (fallbackCode !== undefined) {
+    const fallbackIdx = options.indexOf(fallbackCode)
+    if (fallbackIdx !== -1) {
+      return fallbackIdx
+    }
+  }
+  return 0
+}
+
 function clampLocationIndices(locationTree, sourceIndices) {
   if (!Array.isArray(locationTree) || !locationTree.length) {
     return [0, 0, 0]
@@ -32,10 +62,16 @@ function clampLocationIndices(locationTree, sourceIndices) {
   const regionIndex = Math.min(Math.max(Number(inputIndices[0]) || 0, 0), locationTree.length - 1)
   const region = locationTree[regionIndex]
   const states = region.states || []
-  const stateIndex = Math.min(Math.max(Number(inputIndices[1]) || 0, 0), Math.max(states.length - 1, 0))
+  const stateIndex = Math.min(
+    Math.max(Number(inputIndices[1]) || 0, 0),
+    Math.max(states.length - 1, 0)
+  )
   const state = states[stateIndex] || { cities: [] }
   const cities = state.cities || []
-  const cityIndex = Math.min(Math.max(Number(inputIndices[2]) || 0, 0), Math.max(cities.length - 1, 0))
+  const cityIndex = Math.min(
+    Math.max(Number(inputIndices[2]) || 0, 0),
+    Math.max(cities.length - 1, 0)
+  )
 
   return [regionIndex, stateIndex, cityIndex]
 }
@@ -55,9 +91,15 @@ function buildLocationRanges(locationTree, sourceIndices) {
   return {
     indices: safeIndices,
     ranges: [
-      locationTree.map(function(item) { return getLocationNodeName(item) }),
-      (region.states || []).map(function(item) { return getLocationNodeName(item) }),
-      (state.cities || []).map(function(item) { return getLocationNodeName(item) })
+      locationTree.map(function(item) {
+        return getLocationNodeName(item)
+      }),
+      (region.states || []).map(function(item) {
+        return getLocationNodeName(item)
+      }),
+      (state.cities || []).map(function(item) {
+        return getLocationNodeName(item)
+      })
     ]
   }
 }
@@ -77,7 +119,12 @@ function buildLocationSelection(locationTree, sourceIndices) {
   }
 
   return {
-    display: buildLocationDisplay(region, state, city, typeof i18n.getCurrentLocale === 'function' ? i18n.getCurrentLocale() : 'zh-CN'),
+    display: buildLocationDisplay(
+      region,
+      state,
+      city,
+      typeof i18n.getCurrentLocale === 'function' ? i18n.getCurrentLocale() : 'zh-CN'
+    ),
     codes: {
       region: region.code,
       state: state ? state.code : '',
@@ -132,29 +179,25 @@ function findLocationIndices(locationTree, codes) {
   return null
 }
 
-function normalizeProfile(profile, avatar) {
+function normalizeProfile(profile, avatar, locationTree) {
   const safeProfile = profile || {}
-  const faculty = typeof safeProfile.faculty === 'string'
-    ? { label: safeProfile.faculty, code: safeProfile.facultyCode }
-    : (safeProfile.faculty || {})
-  const major = typeof safeProfile.major === 'string'
-    ? { label: safeProfile.major, code: safeProfile.majorCode }
-    : (safeProfile.major || {})
-  const facultyOption = getFacultyDictionaryOptions().find(function(option) { return option.code === faculty.code })
-  const facultyLabel = facultyOption ? facultyOption.label : (faculty.label || NOT_SELECTED)
-  const majorLabel = getMajorLabelByCode(facultyLabel, major.code) || major.label || NOT_SELECTED
-  const location = typeof safeProfile.location === 'string' ? {
-    displayName: safeProfile.location,
-    region: safeProfile.locationRegion,
-    state: safeProfile.locationState,
-    city: safeProfile.locationCity
-  } : (safeProfile.location || {})
-  const hometown = typeof safeProfile.hometown === 'string' ? {
-    displayName: safeProfile.hometown,
-    region: safeProfile.hometownRegion,
-    state: safeProfile.hometownState,
-    city: safeProfile.hometownCity
-  } : (safeProfile.hometown || {})
+  const facultyObj = safeProfile.faculty || {}
+  const majorObj = safeProfile.major || {}
+  const facultyCode =
+    typeof safeProfile.facultyCode === 'number'
+      ? safeProfile.facultyCode
+      : typeof facultyObj.code === 'number'
+        ? facultyObj.code
+        : null
+  const majorCode = String(safeProfile.majorCode || majorObj.code || '').trim()
+  const facultyOption = getFacultyByCode(facultyCode)
+  const facultyLabel = facultyOption ? facultyOption.label : facultyObj.label || NOT_SELECTED
+  const majorLabel =
+    getMajorLabelByFacultyCode(facultyCode, majorCode) || majorObj.label || NOT_SELECTED
+  const location = safeProfile.location || {}
+  const hometown = safeProfile.hometown || {}
+  const locale = typeof i18n.getCurrentLocale === 'function' ? i18n.getCurrentLocale() : 'zh-CN'
+
   return {
     username: safeProfile.username || '',
     maskedUsername: maskAccount(safeProfile.username || ''),
@@ -162,38 +205,118 @@ function normalizeProfile(profile, avatar) {
     avatar: avatar || safeProfile.avatar || '/image/default.png',
     birthday: safeProfile.birthday || '',
     faculty: facultyLabel,
-    facultyCode: typeof faculty.code === 'number' ? faculty.code : null,
+    facultyCode: facultyCode,
     major: majorLabel,
-    majorCode: major.code || '',
+    majorCode: majorCode,
     enrollment: safeProfile.enrollment ? String(safeProfile.enrollment) : '',
-    location: location.displayName || '',
+    location: getLocationDisplay(location, location.displayName || '', locale, locationTree),
     locationRegion: location.region || '',
     locationState: location.state || '',
     locationCity: location.city || '',
-    hometown: hometown.displayName || '',
+    hometown: getLocationDisplay(hometown, hometown.displayName || '', locale, locationTree),
     hometownRegion: hometown.region || '',
     hometownState: hometown.state || '',
     hometownCity: hometown.city || '',
     introduction: safeProfile.introduction || '',
     ipArea: safeProfile.ipArea || '',
-    displayIpArea: localizeIpArea(safeProfile.ipArea || '')
+    displayIpArea: localizeIpArea(safeProfile.ipArea || '', locale, locationTree)
   }
 }
 
-function createEmptyProfile(avatar) {
-  return normalizeProfile({}, avatar)
+function createEmptyProfile(avatar, locationTree) {
+  return normalizeProfile({}, avatar, locationTree)
 }
 
 function syncProfileLocationDisplay(profile, locationTree) {
   const nextProfile = Object.assign({}, profile || {})
+  const locale = typeof i18n.getCurrentLocale === 'function' ? i18n.getCurrentLocale() : 'zh-CN'
+  if (getFacultyByCode(nextProfile.facultyCode)) {
+    nextProfile.faculty = getFacultyLabelByCode(nextProfile.facultyCode)
+  }
+  const localizedMajor = getMajorLabelByFacultyCode(nextProfile.facultyCode, nextProfile.majorCode)
+  if (localizedMajor) {
+    nextProfile.major = localizedMajor
+  }
   ;['location', 'hometown'].forEach(function(field) {
-    nextProfile[field] = getLocationDisplay({
-      region: nextProfile[field + 'Region'],
-      state: nextProfile[field + 'State'],
-      city: nextProfile[field + 'City']
-    }, nextProfile[field], i18n.getCurrentLocale(), locationTree)
+    nextProfile[field] = getLocationDisplay(
+      {
+        region: nextProfile[field + 'Region'],
+        state: nextProfile[field + 'State'],
+        city: nextProfile[field + 'City']
+      },
+      nextProfile[field],
+      locale,
+      locationTree
+    )
   })
-  nextProfile.displayIpArea = localizeIpArea(nextProfile.ipArea || '')
+  nextProfile.displayIpArea = localizeIpArea(nextProfile.ipArea || '', locale, locationTree)
+  return nextProfile
+}
+
+function applyProfilePatchToProfile(profile, patch, locationTree) {
+  const baseProfile = profile || createEmptyProfile('', locationTree)
+  const safePatch = patch || {}
+  const nextProfile = Object.assign({}, baseProfile)
+  const locale = typeof i18n.getCurrentLocale === 'function' ? i18n.getCurrentLocale() : 'zh-CN'
+
+  if (Object.prototype.hasOwnProperty.call(safePatch, 'avatar')) {
+    nextProfile.avatar = safePatch.avatar || '/image/default.png'
+  }
+  if (Object.prototype.hasOwnProperty.call(safePatch, 'nickname')) {
+    nextProfile.nickname = safePatch.nickname || ''
+  }
+  if (Object.prototype.hasOwnProperty.call(safePatch, 'introduction')) {
+    nextProfile.introduction = safePatch.introduction || ''
+  }
+  if (Object.prototype.hasOwnProperty.call(safePatch, 'birthday')) {
+    nextProfile.birthday = safePatch.birthday || ''
+  }
+  if (Object.prototype.hasOwnProperty.call(safePatch, 'enrollment')) {
+    nextProfile.enrollment = safePatch.enrollment ? String(safePatch.enrollment) : ''
+  }
+  if (
+    Object.prototype.hasOwnProperty.call(safePatch, 'facultyCode') ||
+    Object.prototype.hasOwnProperty.call(safePatch, 'majorCode')
+  ) {
+    if (Object.prototype.hasOwnProperty.call(safePatch, 'facultyCode')) {
+      nextProfile.facultyCode =
+        typeof safePatch.facultyCode === 'number' ? safePatch.facultyCode : null
+    }
+    if (Object.prototype.hasOwnProperty.call(safePatch, 'majorCode')) {
+      nextProfile.majorCode = String(safePatch.majorCode || '').trim()
+    }
+    const facultyOption = getFacultyByCode(nextProfile.facultyCode)
+    nextProfile.faculty = facultyOption ? facultyOption.label : NOT_SELECTED
+    nextProfile.major =
+      getMajorLabelByFacultyCode(nextProfile.facultyCode, nextProfile.majorCode) || NOT_SELECTED
+  }
+
+  ;['location', 'hometown'].forEach(function(field) {
+    const codesKey = field + 'Codes'
+    const hasCodes = Object.prototype.hasOwnProperty.call(safePatch, codesKey)
+    const hasObject =
+      Object.prototype.hasOwnProperty.call(safePatch, field) &&
+      safePatch[field] &&
+      typeof safePatch[field] === 'object'
+    if (!hasCodes && !hasObject) {
+      return
+    }
+    const source = hasCodes ? safePatch[codesKey] || {} : safePatch[field] || {}
+    nextProfile[field + 'Region'] = source.region || ''
+    nextProfile[field + 'State'] = source.state || ''
+    nextProfile[field + 'City'] = source.city || ''
+    nextProfile[field] = getLocationDisplay(
+      {
+        region: nextProfile[field + 'Region'],
+        state: nextProfile[field + 'State'],
+        city: nextProfile[field + 'City']
+      },
+      hasObject ? source.displayName || '' : safePatch[field] || '',
+      locale,
+      locationTree
+    )
+  })
+
   return nextProfile
 }
 
@@ -207,76 +330,89 @@ function toDisplayOptions(options) {
   })
 }
 
-function buildEditableState(profile, locationTree) {
-  const normalizedProfile = normalizeProfile(profile, profile.avatar)
-  const facultyOptions = getFacultyOptions()
-  const majorOptions = getMajorOptions(normalizedProfile.faculty)
+function buildEditableState(normalizedProfile, locationTree) {
+  const safeProfile = normalizedProfile || createEmptyProfile('', locationTree)
+  const tree = Array.isArray(locationTree) ? locationTree : []
+  const facultyDict = getFacultyDictionaryOptions()
+  const facultyOptions = facultyDict.map(function(option) {
+    return option.code
+  })
+  const facultyLabels = facultyDict.map(function(option) {
+    return option.label
+  })
+  const majorDict = getMajorDictionaryOptionsByFacultyCode(safeProfile.facultyCode)
+  const majorOptions = majorDict.map(function(option) {
+    return option.code
+  })
+  const majorLabels = majorDict.map(function(option) {
+    return option.label
+  })
   const enrollmentOptions = getEnrollmentYearOptions()
-  const locationIndices = findLocationIndices(locationTree, {
-    region: normalizedProfile.locationRegion,
-    state: normalizedProfile.locationState,
-    city: normalizedProfile.locationCity
+  const locationIndices = findLocationIndices(tree, {
+    region: safeProfile.locationRegion,
+    state: safeProfile.locationState,
+    city: safeProfile.locationCity
   }) || [0, 0, 0]
-  const hometownIndices = findLocationIndices(locationTree, {
-    region: normalizedProfile.hometownRegion,
-    state: normalizedProfile.hometownState,
-    city: normalizedProfile.hometownCity
+  const hometownIndices = findLocationIndices(tree, {
+    region: safeProfile.hometownRegion,
+    state: safeProfile.hometownState,
+    city: safeProfile.hometownCity
   }) || [0, 0, 0]
-  const locationPickerState = buildLocationRanges(locationTree, locationIndices)
-  const hometownPickerState = buildLocationRanges(locationTree, hometownIndices)
+  const locationPickerState = buildLocationRanges(tree, locationIndices)
+  const hometownPickerState = buildLocationRanges(tree, hometownIndices)
+  const facultyOption = getFacultyByCode(safeProfile.facultyCode)
+  const facultyLabel = facultyOption ? facultyOption.label : safeProfile.faculty || NOT_SELECTED
+  const majorLabel =
+    getMajorLabelByFacultyCode(safeProfile.facultyCode, safeProfile.majorCode) ||
+    safeProfile.major ||
+    NOT_SELECTED
 
   return {
     form: {
-      nickname: normalizedProfile.nickname,
-      birthday: normalizedProfile.birthday,
-      faculty: normalizedProfile.faculty,
-      facultyCode: normalizedProfile.facultyCode,
-      major: normalizedProfile.major,
-      majorCode: normalizedProfile.majorCode,
-      enrollment: normalizedProfile.enrollment,
-      location: normalizedProfile.location,
+      nickname: safeProfile.nickname,
+      birthday: safeProfile.birthday,
+      facultyCode: safeProfile.facultyCode,
+      majorCode: safeProfile.majorCode,
+      enrollment: safeProfile.enrollment,
+      location: safeProfile.location,
       locationCodes: {
-        region: normalizedProfile.locationRegion,
-        state: normalizedProfile.locationState,
-        city: normalizedProfile.locationCity
+        region: safeProfile.locationRegion,
+        state: safeProfile.locationState,
+        city: safeProfile.locationCity
       },
-      hometown: normalizedProfile.hometown,
+      hometown: safeProfile.hometown,
       hometownCodes: {
-        region: normalizedProfile.hometownRegion,
-        state: normalizedProfile.hometownState,
-        city: normalizedProfile.hometownCity
+        region: safeProfile.hometownRegion,
+        state: safeProfile.hometownState,
+        city: safeProfile.hometownCity
       },
-      introduction: normalizedProfile.introduction
+      introduction: safeProfile.introduction
     },
-    displayFaculty: displayValue(normalizedProfile.faculty),
-    displayMajor: displayValue(normalizedProfile.major),
+    displayFaculty: displayValue(facultyLabel),
+    displayMajor: displayValue(majorLabel),
     majorOptions: majorOptions,
     facultyOptions: facultyOptions,
-    facultyDisplayOptions: toDisplayOptions(facultyOptions),
-    majorDisplayOptions: toDisplayOptions(majorOptions),
-    facultyIndex: getSafeIndex(facultyOptions, normalizedProfile.faculty),
-    majorIndex: getSafeIndex(majorOptions, normalizedProfile.major),
+    facultyDisplayOptions: toDisplayOptions(facultyLabels),
+    majorDisplayOptions: toDisplayOptions(majorLabels),
+    facultyIndex: getCodeIndex(facultyOptions, safeProfile.facultyCode, 0),
+    majorIndex: getCodeIndex(majorOptions, safeProfile.majorCode || 'unselected', 'unselected'),
     enrollmentOptions: enrollmentOptions,
     enrollmentDisplayOptions: toDisplayOptions(enrollmentOptions),
-    enrollmentIndex: getSafeIndex(enrollmentOptions, normalizedProfile.enrollment || NOT_SELECTED),
-    majorDisabled: !canSelectMajor(normalizedProfile.faculty),
+    enrollmentIndex: getSafeIndex(enrollmentOptions, safeProfile.enrollment || NOT_SELECTED),
+    majorDisabled: !canSelectMajorByCode(safeProfile.facultyCode),
     locationRanges: locationPickerState.ranges,
     locationPickerIndex: locationPickerState.indices,
     hometownRanges: hometownPickerState.ranges,
     hometownPickerIndex: hometownPickerState.indices,
-    locationPickerDisabled: !locationTree.length,
-    hometownPickerDisabled: !locationTree.length
+    locationPickerDisabled: !tree.length,
+    hometownPickerDisabled: !tree.length
   }
 }
 
 function parseBirthdayPayload(dateText) {
   const matched = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(dateText || '').trim())
   if (!matched) {
-    return {
-      year: null,
-      month: null,
-      date: null
-    }
+    return null
   }
 
   return {
@@ -338,4 +474,27 @@ function validateIntroduction(introduction) {
   return ''
 }
 
-module.exports = { buildLocationDisplay, getSafeIndex, clampLocationIndices, buildLocationRanges, buildLocationSelection, findLocationIndices, normalizeProfile, createEmptyProfile, syncProfileLocationDisplay, displayValue, toDisplayOptions, buildEditableState, parseBirthdayPayload, buildInteractionPromise, buildTodayDate, buildAvatarFile, buildAvatarFileName, validateNickname, validateIntroduction }
+module.exports = {
+  isUnselectedMajorCode,
+  buildLocationDisplay,
+  getSafeIndex,
+  getCodeIndex,
+  clampLocationIndices,
+  buildLocationRanges,
+  buildLocationSelection,
+  findLocationIndices,
+  normalizeProfile,
+  createEmptyProfile,
+  syncProfileLocationDisplay,
+  applyProfilePatchToProfile,
+  displayValue,
+  toDisplayOptions,
+  buildEditableState,
+  parseBirthdayPayload,
+  buildInteractionPromise,
+  buildTodayDate,
+  buildAvatarFile,
+  buildAvatarFileName,
+  validateNickname,
+  validateIntroduction
+}

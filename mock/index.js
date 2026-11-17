@@ -249,6 +249,10 @@ function handleRequest(options) {
     return profileHandlers.handleProfile(token, utils)
   }
 
+  if (path === '/api/profile' && (method === 'PATCH' || method === 'POST')) {
+    return profileHandlers.handleProfilePatch(token, payload, utils)
+  }
+
   if (path === '/api/profile/locations' && method === 'GET') {
     return profileHandlers.handleLocationList(token, utils)
   }

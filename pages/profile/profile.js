@@ -2,40 +2,65 @@ const userApi = require('../../services/apis/user.js')
 const socialApi = require('../../services/apis/social.js')
 const uploadService = require('../../services/upload.js')
 const pageUtils = require('../../utils/page.js')
-const { maskAccount } = require('../../utils/mask.js')
-const LOCATION_REGIONS = require('../../constants/location-regions.js')
 var themeUtil = require('../../utils/theme')
 var tabBarUtil = require('../../utils/tab-bar')
 var i18n = require('../../utils/i18n')
 const {
   NOT_SELECTED,
+  loadLocationRegions,
+  getLocationRegionsSync,
   fetchProfileOptions,
-  getFacultyCodeByLabel,
   getFacultyOptions,
   getFacultyDictionaryOptions,
+  getFacultyByCode,
   getEnrollmentYearOptions,
-  getMajorCodeByLabel,
-  getMajorOptions,
-  getMajorLabelByCode,
-  canSelectMajor,
-  formatLocationDisplay,
-  getLocationNodeName,
-  getLocationDisplay,
-  localizeIpArea
+  getMajorDictionaryOptionsByFacultyCode,
+  canSelectMajorByCode,
+  getLocationDisplay
 } = require('../../constants/profile.js')
 
-const NICKNAME_MAX_LENGTH = 32
-const INTRODUCTION_MAX_LENGTH = 80
+const {
+  isUnselectedMajorCode,
+  getCodeIndex,
+  buildLocationRanges,
+  buildLocationSelection,
+  normalizeProfile,
+  createEmptyProfile,
+  syncProfileLocationDisplay,
+  applyProfilePatchToProfile,
+  displayValue,
+  toDisplayOptions,
+  buildEditableState,
+  parseBirthdayPayload,
+  buildInteractionPromise,
+  buildTodayDate,
+  buildAvatarFile,
+  buildAvatarFileName,
+  validateNickname,
+  validateIntroduction
+} = require('./profile-view-model.js')
 
-const { getSafeIndex, buildLocationRanges, buildLocationSelection, normalizeProfile, createEmptyProfile, syncProfileLocationDisplay, displayValue, toDisplayOptions, buildEditableState, parseBirthdayPayload, buildInteractionPromise, buildTodayDate, buildAvatarFile, buildAvatarFileName, validateNickname, validateIntroduction } = require('./profile-view-model.js')
+function getFacultyPickerState() {
+  const facultyDict = getFacultyDictionaryOptions()
+  return {
+    facultyOptions: facultyDict.map(function(option) {
+      return option.code
+    }),
+    facultyDisplayOptions: toDisplayOptions(
+      facultyDict.map(function(option) {
+        return option.label
+      })
+    )
+  }
+}
 
 Page({
-  onShow: function () {
+  onShow: function() {
     themeUtil.applyTheme(this)
     tabBarUtil.syncTabBar(this, 2)
     this.refreshI18n()
   },
-  refreshI18n: function () {
+  refreshI18n: function() {
     this.setData({
       t: {
         navTitle: i18n.t('profilePage.navTitle'),
@@ -69,33 +94,59 @@ Page({
       }
     })
     wx.setNavigationBarTitle({ title: this.data.t.navTitle })
-    // Refresh display options and display values after locale change
+
+    const facultyPicker = getFacultyPickerState()
     var updateData = {
-      facultyOptions: getFacultyOptions(),
-      facultyDisplayOptions: toDisplayOptions(getFacultyOptions()),
-      enrollmentDisplayOptions: toDisplayOptions(this.data.enrollmentOptions || getEnrollmentYearOptions())
+      facultyOptions: facultyPicker.facultyOptions,
+      facultyDisplayOptions: facultyPicker.facultyDisplayOptions,
+      enrollmentDisplayOptions: toDisplayOptions(
+        this.data.enrollmentOptions || getEnrollmentYearOptions()
+      )
     }
     if (this.data.form) {
       const tree = this.getLocationTree()
       const form = this.data.form
-      const faculty = getFacultyDictionaryOptions().find(function(option) { return option.code === form.facultyCode })
-      const facultyLabel = faculty ? faculty.label : form.faculty
-      const majorLabel = getMajorLabelByCode(facultyLabel, form.majorCode) || form.major
-      updateData['form.faculty'] = facultyLabel
-      updateData['form.major'] = majorLabel
+      const faculty = getFacultyByCode(form.facultyCode)
+      const facultyLabel = faculty ? faculty.label : NOT_SELECTED
+      const majorDict = getMajorDictionaryOptionsByFacultyCode(form.facultyCode)
+      const majorOption = majorDict.find(function(option) {
+        return option.code === (form.majorCode || 'unselected')
+      })
+      const majorLabel = majorOption ? majorOption.label : NOT_SELECTED
+      const majorOptions = majorDict.map(function(option) {
+        return option.code
+      })
       updateData.displayFaculty = displayValue(facultyLabel)
       updateData.displayMajor = displayValue(majorLabel)
-      updateData.majorOptions = getMajorOptions(facultyLabel)
-      updateData.majorDisplayOptions = toDisplayOptions(updateData.majorOptions)
-      updateData.facultyIndex = getSafeIndex(updateData.facultyOptions, facultyLabel)
-      updateData.majorIndex = getSafeIndex(updateData.majorOptions, majorLabel)
-      updateData['form.location'] = getLocationDisplay(form.locationCodes, form.location, i18n.getCurrentLocale(), tree)
-      updateData['form.hometown'] = getLocationDisplay(form.hometownCodes, form.hometown, i18n.getCurrentLocale(), tree)
+      updateData.majorOptions = majorOptions
+      updateData.majorDisplayOptions = toDisplayOptions(
+        majorDict.map(function(option) {
+          return option.label
+        })
+      )
+      updateData.facultyIndex = getCodeIndex(facultyPicker.facultyOptions, form.facultyCode, 0)
+      updateData.majorIndex = getCodeIndex(
+        majorOptions,
+        form.majorCode || 'unselected',
+        'unselected'
+      )
+      updateData['form.location'] = getLocationDisplay(
+        form.locationCodes,
+        form.location,
+        i18n.getCurrentLocale(),
+        tree
+      )
+      updateData['form.hometown'] = getLocationDisplay(
+        form.hometownCodes,
+        form.hometown,
+        i18n.getCurrentLocale(),
+        tree
+      )
       updateData.locationRanges = buildLocationRanges(tree, this.data.locationPickerIndex).ranges
       updateData.hometownRanges = buildLocationRanges(tree, this.data.hometownPickerIndex).ranges
     }
     if (this.data.profile) {
-      updateData.profile = syncProfileLocationDisplay(normalizeProfile(this.data.profile), this.getLocationTree())
+      updateData.profile = syncProfileLocationDisplay(this.data.profile, this.getLocationTree())
     }
     this.setData(updateData)
   },
@@ -108,9 +159,11 @@ Page({
     profile: null,
     socialMe: null,
     form: null,
-    facultyOptions: getFacultyOptions(),
+    facultyOptions: getFacultyDictionaryOptions().map(function(option) {
+      return option.code
+    }),
     facultyDisplayOptions: toDisplayOptions(getFacultyOptions()),
-    majorOptions: [NOT_SELECTED],
+    majorOptions: ['unselected'],
     majorDisplayOptions: [i18n.t('profilePage.notSelected')],
     enrollmentOptions: getEnrollmentYearOptions(),
     enrollmentDisplayOptions: toDisplayOptions(getEnrollmentYearOptions()),
@@ -137,7 +190,7 @@ Page({
   },
 
   getLocationTree: function() {
-    return this.locationTree || LOCATION_REGIONS
+    return this.locationTree || getLocationRegionsSync()
   },
 
   setSaveStatus: function(text) {
@@ -165,20 +218,19 @@ Page({
   applyProfilePatch: function(patch) {
     const introductionDraft = this.data.form && this.data.form.introduction
     const hasIntroductionPatch = Object.prototype.hasOwnProperty.call(patch || {}, 'introduction')
-    const preserveIntroductionDraft = typeof introductionDraft === 'string'
-      && introductionDraft !== String((this.data.profile || {}).introduction || '')
-      && (!hasIntroductionPatch || introductionDraft.trim() !== String(patch.introduction || '').trim())
-    const nextProfile = syncProfileLocationDisplay(
-      normalizeProfile(Object.assign({}, this.data.profile || {}, patch || {})),
-      this.getLocationTree()
-    )
-    this.setData({
-      profile: nextProfile
-    })
-    this.setEditableState(nextProfile)
+    const preserveIntroductionDraft =
+      typeof introductionDraft === 'string' &&
+      introductionDraft !== String((this.data.profile || {}).introduction || '') &&
+      (!hasIntroductionPatch || introductionDraft.trim() !== String(patch.introduction || '').trim())
+    const tree = this.getLocationTree()
+    const nextProfile = applyProfilePatchToProfile(this.data.profile, patch, tree)
+    const nextState = Object.assign({ profile: nextProfile }, buildEditableState(nextProfile, tree))
     if (preserveIntroductionDraft) {
-      this.setData({ 'form.introduction': introductionDraft })
+      nextState.form = Object.assign({}, nextState.form, {
+        introduction: introductionDraft
+      })
     }
+    this.setData(nextState)
   },
 
   queueProfileSave: function(fieldKey, promiseFactory, patch) {
@@ -192,85 +244,112 @@ Page({
       })
       this.setSaveStatus('')
 
-      return buildInteractionPromise(promiseFactory).then(() => {
-        this.applyProfilePatch(patch)
-        this.setSaveStatus(i18n.t('profilePage.saved'))
-      }).catch((error) => {
-        const introductionDraft = this.data.form && this.data.form.introduction
-        if (this.data.profile) {
-          this.setEditableState(this.data.profile)
-          if (typeof introductionDraft === 'string') {
-            this.setData({ 'form.introduction': introductionDraft })
-          }
-        }
-        pageUtils.showTopTips(this, error.message)
-      }).finally(() => {
-        this.setData({
-          savingField: ''
+      return buildInteractionPromise(promiseFactory)
+        .then(() => {
+          this.applyProfilePatch(patch)
+          this.setSaveStatus(i18n.t('profilePage.saved'))
         })
-      })
+        .catch((error) => {
+          const introductionDraft = this.data.form && this.data.form.introduction
+          if (this.data.profile) {
+            this.setEditableState(this.data.profile)
+            if (typeof introductionDraft === 'string') {
+              this.setData({ 'form.introduction': introductionDraft })
+            }
+          }
+          pageUtils.showTopTips(this, error.message)
+        })
+        .finally(() => {
+          this.setData({
+            savingField: ''
+          })
+        })
     })
 
     return this._saveQueue
   },
 
   loadProfilePage: function() {
-    return pageUtils.runWithNavigationLoading(this, function() {
-      return Promise.allSettled([
-        userApi.getAvatar(),
-        userApi.getProfile(),
-        fetchProfileOptions(),
-        socialApi.getMe()
-      ])
-    }).then((results) => {
-      const avatarResult = results[0] && results[0].status === 'fulfilled' ? results[0].value : null
-      const profileResult = results[1] && results[1].status === 'fulfilled' ? results[1].value : null
-      const profileOptionsResult = results[2] && results[2].status === 'fulfilled' ? results[2].value : null
-      const socialResult = results[3] && results[3].status === 'fulfilled' ? results[3].value : null
-
-      const locationTree = this.getLocationTree()
-      const avatarValue = avatarResult && avatarResult.success ? avatarResult.data : ''
-      const profileErrorMessage = profileResult && !profileResult.success
-        ? profileResult.message
-        : i18n.t('profilePage.loadProfileFailed')
-      const normalizedProfile = syncProfileLocationDisplay(
-        profileResult && profileResult.success
-          ? normalizeProfile(profileResult.data, avatarValue)
-          : createEmptyProfile(avatarValue),
-        locationTree
-      )
-
-      this.setData({
-        profile: normalizedProfile,
-        socialMe: socialResult && socialResult.success ? socialResult.data : null,
-        todayDate: buildTodayDate(),
-        facultyOptions: getFacultyOptions(),
-        facultyDisplayOptions: toDisplayOptions(getFacultyOptions())
+    return pageUtils
+      .runWithNavigationLoading(this, function() {
+        return Promise.allSettled([
+          userApi.getAvatar(),
+          userApi.getProfile(),
+          fetchProfileOptions(),
+          socialApi.getMe(),
+          loadLocationRegions()
+        ])
       })
-      this.setEditableState(normalizedProfile)
+      .then((results) => {
+        const avatarResult = results[0] && results[0].status === 'fulfilled' ? results[0].value : null
+        const profileResult =
+          results[1] && results[1].status === 'fulfilled' ? results[1].value : null
+        const profileOptionsResult =
+          results[2] && results[2].status === 'fulfilled' ? results[2].value : null
+        const socialResult = results[3] && results[3].status === 'fulfilled' ? results[3].value : null
+        const locationRegionsResult =
+          results[4] && results[4].status === 'fulfilled' && Array.isArray(results[4].value)
+            ? results[4].value
+            : null
 
-      if (!profileResult || !profileResult.success) {
-        pageUtils.showTopTips(this, profileErrorMessage)
-      }
+        if (locationRegionsResult) {
+          this.locationTree = locationRegionsResult
+        }
+        const locationTree = this.getLocationTree()
+        const avatarValue = avatarResult && avatarResult.success ? avatarResult.data : ''
+        const profileErrorMessage =
+          profileResult && !profileResult.success
+            ? profileResult.message
+            : i18n.t('profilePage.loadProfileFailed')
+        const normalizedProfile =
+          profileResult && profileResult.success
+            ? normalizeProfile(profileResult.data, avatarValue, locationTree)
+            : createEmptyProfile(avatarValue, locationTree)
+        const facultyPicker = getFacultyPickerState()
 
-      if (!profileOptionsResult) {
-        pageUtils.showTopTips(this, i18n.t('profilePage.optionsFallback'))
-      }
-    }).catch((error) => {
-      const fallbackProfile = syncProfileLocationDisplay(createEmptyProfile(''), this.getLocationTree())
-      this.setData({
-        profile: fallbackProfile,
-        todayDate: buildTodayDate(),
-        facultyOptions: getFacultyOptions(),
-        facultyDisplayOptions: toDisplayOptions(getFacultyOptions())
+        this.setData(
+          Object.assign(
+            {
+              profile: normalizedProfile,
+              socialMe: socialResult && socialResult.success ? socialResult.data : null,
+              todayDate: buildTodayDate(),
+              facultyOptions: facultyPicker.facultyOptions,
+              facultyDisplayOptions: facultyPicker.facultyDisplayOptions
+            },
+            buildEditableState(normalizedProfile, locationTree)
+          )
+        )
+
+        if (!profileResult || !profileResult.success) {
+          pageUtils.showTopTips(this, profileErrorMessage)
+        }
+
+        if (!profileOptionsResult) {
+          pageUtils.showTopTips(this, i18n.t('profilePage.optionsFallback'))
+        }
       })
-      this.setEditableState(fallbackProfile)
-      pageUtils.showTopTips(this, error.message)
-    }).finally(() => {
-      this.setData({
-        loading: false
+      .catch((error) => {
+        const locationTree = this.getLocationTree()
+        const fallbackProfile = createEmptyProfile('', locationTree)
+        const facultyPicker = getFacultyPickerState()
+        this.setData(
+          Object.assign(
+            {
+              profile: fallbackProfile,
+              todayDate: buildTodayDate(),
+              facultyOptions: facultyPicker.facultyOptions,
+              facultyDisplayOptions: facultyPicker.facultyDisplayOptions
+            },
+            buildEditableState(fallbackProfile, locationTree)
+          )
+        )
+        pageUtils.showTopTips(this, error.message)
       })
-    })
+      .finally(() => {
+        this.setData({
+          loading: false
+        })
+      })
   },
 
   openSocialEntry: function(event) {
@@ -311,11 +390,15 @@ Page({
       return
     }
 
-    this.queueProfileSave('introduction', function() {
-      return userApi.updateIntroduction(introduction)
-    }, {
-      introduction: introduction
-    })
+    this.queueProfileSave(
+      'introduction',
+      function() {
+        return userApi.updateProfile({ introduction: introduction })
+      },
+      {
+        introduction: introduction
+      }
+    )
   },
 
   refreshAvatar: function(successText) {
@@ -332,8 +415,14 @@ Page({
   },
 
   handleAvatarTap: function() {
-    const hasCustomAvatar = !!(this.data.profile && this.data.profile.avatar && this.data.profile.avatar !== '/image/default.png')
-    const itemList = hasCustomAvatar ? [i18n.t('profilePage.changeAvatarAction'), i18n.t('profilePage.resetAvatarAction')] : [i18n.t('profilePage.changeAvatarAction')]
+    const hasCustomAvatar = !!(
+      this.data.profile &&
+      this.data.profile.avatar &&
+      this.data.profile.avatar !== '/image/default.png'
+    )
+    const itemList = hasCustomAvatar
+      ? [i18n.t('profilePage.changeAvatarAction'), i18n.t('profilePage.resetAvatarAction')]
+      : [i18n.t('profilePage.changeAvatarAction')]
 
     wx.showActionSheet({
       itemList: itemList,
@@ -378,32 +467,40 @@ Page({
     })
     this.setSaveStatus('')
 
-    pageUtils.runWithNavigationLoading(this, () => {
-      return Promise.all([
-        uploadService.uploadLocalFileByPresignedUrl(avatarFile, {
-          fileName: buildAvatarFileName(filePath, 'avatar')
-        }),
-        uploadService.uploadLocalFileByPresignedUrl(avatarFile, {
-          fileName: buildAvatarFileName(filePath, 'avatar-hd')
-        })
-      ]).then((result) => {
-        return userApi.updateAvatar(result[0], result[1])
-      })
-    }, {
-      loadingKey: ''
-    }).then((result) => {
-      if (!result.success) {
-        throw new Error(result.message || i18n.t('profilePage.avatarUploadFailed'))
-      }
+    pageUtils
+      .runWithNavigationLoading(
+        this,
+        () => {
+          return Promise.all([
+            uploadService.uploadLocalFileByPresignedUrl(avatarFile, {
+              fileName: buildAvatarFileName(filePath, 'avatar')
+            }),
+            uploadService.uploadLocalFileByPresignedUrl(avatarFile, {
+              fileName: buildAvatarFileName(filePath, 'avatar-hd')
+            })
+          ]).then((result) => {
+            return userApi.updateAvatar(result[0], result[1])
+          })
+        },
+        {
+          loadingKey: ''
+        }
+      )
+      .then((result) => {
+        if (!result.success) {
+          throw new Error(result.message || i18n.t('profilePage.avatarUploadFailed'))
+        }
 
-      return this.refreshAvatar(i18n.t('profilePage.avatarUpdated'))
-    }).catch((error) => {
-      pageUtils.showTopTips(this, error.message)
-    }).finally(() => {
-      this.setData({
-        avatarUploading: false
+        return this.refreshAvatar(i18n.t('profilePage.avatarUpdated'))
       })
-    })
+      .catch((error) => {
+        pageUtils.showTopTips(this, error.message)
+      })
+      .finally(() => {
+        this.setData({
+          avatarUploading: false
+        })
+      })
   },
 
   confirmDeleteAvatar: function() {
@@ -424,23 +521,31 @@ Page({
         })
         this.setSaveStatus('')
 
-        pageUtils.runWithNavigationLoading(this, () => {
-          return userApi.deleteAvatar()
-        }, {
-          loadingKey: ''
-        }).then((response) => {
-          if (!response.success) {
-            throw new Error(response.message || i18n.t('profilePage.resetAvatarFailed'))
-          }
+        pageUtils
+          .runWithNavigationLoading(
+            this,
+            () => {
+              return userApi.deleteAvatar()
+            },
+            {
+              loadingKey: ''
+            }
+          )
+          .then((response) => {
+            if (!response.success) {
+              throw new Error(response.message || i18n.t('profilePage.resetAvatarFailed'))
+            }
 
-          return this.refreshAvatar(i18n.t('profilePage.avatarReset'))
-        }).catch((error) => {
-          pageUtils.showTopTips(this, error.message)
-        }).finally(() => {
-          this.setData({
-            avatarUploading: false
+            return this.refreshAvatar(i18n.t('profilePage.avatarReset'))
           })
-        })
+          .catch((error) => {
+            pageUtils.showTopTips(this, error.message)
+          })
+          .finally(() => {
+            this.setData({
+              avatarUploading: false
+            })
+          })
       }
     })
   },
@@ -482,7 +587,9 @@ Page({
       return
     }
 
-    const currentNickname = String(this.data.form.nickname || this.data.profile.nickname || '').trim()
+    const currentNickname = String(
+      this.data.form.nickname || this.data.profile.nickname || ''
+    ).trim()
     wx.showModal({
       title: i18n.t('profilePage.editNicknameTitle'),
       editable: true,
@@ -514,11 +621,15 @@ Page({
           'form.nickname': nickname
         })
 
-        this.queueProfileSave('nickname', function() {
-          return userApi.updateNickname(nickname)
-        }, {
-          nickname: nickname
-        })
+        this.queueProfileSave(
+          'nickname',
+          function() {
+            return userApi.updateProfile({ nickname: nickname })
+          },
+          {
+            nickname: nickname
+          }
+        )
       }
     })
   },
@@ -534,37 +645,55 @@ Page({
     }
 
     const birthdayPayload = parseBirthdayPayload(birthday)
-    this.queueProfileSave('birthday', function() {
-      return userApi.updateBirthday(birthdayPayload)
-    }, {
-      birthday: birthday
-    })
+    this.queueProfileSave(
+      'birthday',
+      function() {
+        return userApi.updateProfile({ birthday: birthdayPayload })
+      },
+      {
+        birthday: birthday
+      }
+    )
   },
 
   handleFacultyChange: function(event) {
     const facultyIndex = Number(event.detail.value)
-    const facultyOptions = this.data.facultyOptions || getFacultyOptions()
-    const faculty = facultyOptions[facultyIndex] || facultyOptions[0] || NOT_SELECTED
-    const facultyCode = getFacultyCodeByLabel(faculty)
-    const majorOptions = getMajorOptions(faculty)
+    const facultyDict = getFacultyDictionaryOptions()
+    const selectedFaculty = facultyDict[facultyIndex] || facultyDict[0] || null
+    const facultyCode = selectedFaculty ? selectedFaculty.code : null
+    const majorDict = getMajorDictionaryOptionsByFacultyCode(facultyCode)
     const profile = this.data.profile || {}
-    const currentMajor = String((this.data.form && this.data.form.major) || profile.major || '')
-    const nextMajor = String(profile.faculty || '') === faculty && majorOptions.indexOf(currentMajor) !== -1
-      ? currentMajor
-      : (majorOptions[0] || NOT_SELECTED)
+    const currentMajorCode =
+      (this.data.form && this.data.form.majorCode) || profile.majorCode || 'unselected'
+    const matchedCurrentMajor =
+      profile.facultyCode === facultyCode
+        ? majorDict.find(function(option) {
+            return option.code === currentMajorCode
+          })
+        : null
+    const nextMajor = matchedCurrentMajor || majorDict[0] || {
+      code: 'unselected',
+      label: NOT_SELECTED
+    }
+    const nextMajorCode = nextMajor.code || 'unselected'
+    const majorOptions = majorDict.map(function(option) {
+      return option.code
+    })
 
     this.setData({
       facultyIndex: facultyIndex,
       majorOptions: majorOptions,
-      majorDisplayOptions: toDisplayOptions(majorOptions),
-      majorIndex: getSafeIndex(majorOptions, nextMajor),
-      majorDisabled: !canSelectMajor(faculty),
-      'form.faculty': faculty,
+      majorDisplayOptions: toDisplayOptions(
+        majorDict.map(function(option) {
+          return option.label
+        })
+      ),
+      majorIndex: getCodeIndex(majorOptions, nextMajorCode, 'unselected'),
+      majorDisabled: !canSelectMajorByCode(facultyCode),
       'form.facultyCode': facultyCode,
-      'form.major': nextMajor,
-      'form.majorCode': getMajorCodeByLabel(faculty, nextMajor) || '',
-      displayFaculty: displayValue(faculty),
-      displayMajor: displayValue(nextMajor)
+      'form.majorCode': nextMajorCode,
+      displayFaculty: displayValue(selectedFaculty ? selectedFaculty.label : NOT_SELECTED),
+      displayMajor: displayValue(nextMajor.label)
     })
 
     if (facultyCode === null) {
@@ -572,57 +701,65 @@ Page({
       return
     }
 
-    if (faculty === String(profile.faculty || '') && nextMajor === String(profile.major || '')) {
+    if (
+      facultyCode === profile.facultyCode &&
+      (isUnselectedMajorCode(nextMajorCode)
+        ? isUnselectedMajorCode(profile.majorCode)
+        : nextMajorCode === profile.majorCode)
+    ) {
       return
     }
 
-    this.queueProfileSave('faculty', function() {
-      return buildInteractionPromise(function() {
-        return userApi.updateFaculty(facultyCode)
-      }).then(function() {
-        if (nextMajor && nextMajor !== NOT_SELECTED) {
-          return buildInteractionPromise(function() {
-            return userApi.updateMajor(getMajorCodeByLabel(faculty, nextMajor) || '')
-          })
-        }
-      })
-    }, {
-      faculty: {
-        code: facultyCode,
-        label: faculty
+    const patchPayload = {
+      faculty: facultyCode,
+      major: isUnselectedMajorCode(nextMajorCode) ? null : nextMajorCode
+    }
+    this.queueProfileSave(
+      'faculty',
+      function() {
+        return userApi.updateProfile(patchPayload)
       },
-      major: {
-        code: getMajorCodeByLabel(faculty, nextMajor) || 'unselected',
-        label: nextMajor
+      {
+        facultyCode: facultyCode,
+        majorCode: nextMajorCode
       }
-    })
+    )
   },
 
   handleMajorChange: function(event) {
     const majorIndex = Number(event.detail.value)
-    const major = (this.data.majorOptions || [])[majorIndex] || NOT_SELECTED
-    const faculty = String((this.data.form && this.data.form.faculty) || '')
-    const majorCode = getMajorCodeByLabel(faculty, major) || ''
+    const facultyCode = this.data.form ? this.data.form.facultyCode : null
+    const majorDict = getMajorDictionaryOptionsByFacultyCode(facultyCode)
+    const selectedMajor = majorDict[majorIndex] ||
+      majorDict[0] || { code: 'unselected', label: NOT_SELECTED }
+    const majorCode = selectedMajor.code || 'unselected'
 
     this.setData({
       majorIndex: majorIndex,
-      'form.major': major,
       'form.majorCode': majorCode,
-      displayMajor: displayValue(major)
+      displayMajor: displayValue(selectedMajor.label)
     })
 
-    if (major === String((this.data.profile && this.data.profile.major) || '')) {
+    const profileMajorCode = (this.data.profile && this.data.profile.majorCode) || ''
+    if (
+      isUnselectedMajorCode(majorCode)
+        ? isUnselectedMajorCode(profileMajorCode)
+        : majorCode === profileMajorCode
+    ) {
       return
     }
 
-    this.queueProfileSave('major', function() {
-      return userApi.updateMajor(majorCode)
-    }, {
-      major: {
-        code: majorCode || 'unselected',
-        label: major
+    this.queueProfileSave(
+      'major',
+      function() {
+        return userApi.updateProfile({
+          major: isUnselectedMajorCode(majorCode) ? null : majorCode
+        })
+      },
+      {
+        majorCode: majorCode
       }
-    })
+    )
   },
 
   handleEnrollmentChange: function(event) {
@@ -639,11 +776,17 @@ Page({
       return
     }
 
-    this.queueProfileSave('enrollment', function() {
-      return userApi.updateEnrollment(nextEnrollment ? Number(nextEnrollment) : null)
-    }, {
-      enrollment: nextEnrollment
-    })
+    this.queueProfileSave(
+      'enrollment',
+      function() {
+        return userApi.updateProfile({
+          enrollment: nextEnrollment ? Number(nextEnrollment) : null
+        })
+      },
+      {
+        enrollment: nextEnrollment
+      }
+    )
   },
 
   handleLocationColumnChange: function(event) {
@@ -702,29 +845,23 @@ Page({
       return
     }
 
-    this.queueProfileSave(fieldKey, function() {
-      return target === 'hometown'
-        ? userApi.updateHometown(selection.codes)
-        : userApi.updateLocation(selection.codes)
-    }, target === 'hometown' ? {
-      hometown: {
-        region: selection.codes.region,
-        state: selection.codes.state,
-        city: selection.codes.city,
-        displayName: selection.display
-      }
-    } : {
-      location: {
-        region: selection.codes.region,
-        state: selection.codes.state,
-        city: selection.codes.city,
-        displayName: selection.display
-      }
-    })
+    const patchPayload =
+      target === 'hometown' ? { hometown: selection.codes } : { location: selection.codes }
+    const profilePatch =
+      target === 'hometown'
+        ? { hometownCodes: selection.codes, hometown: selection.display }
+        : { locationCodes: selection.codes, location: selection.display }
+
+    this.queueProfileSave(
+      fieldKey,
+      function() {
+        return userApi.updateProfile(patchPayload)
+      },
+      profilePatch
+    )
   },
 
   onLoad: function() {
-    this.locationTree = LOCATION_REGIONS
     this.loadProfilePage()
   },
 
