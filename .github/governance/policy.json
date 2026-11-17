@@ -9,7 +9,7 @@
   },
   "r0_paths": [
     "README.md",
-    "docs/prose/"
+    "docs/"
   ],
   "r2_paths": [
     "app.js",
@@ -20,10 +20,14 @@
     "utils/mask.js",
     "pages/login/",
     "pages/profile/",
-    "pages/messages/",
-    "pages/privacy/",
+    "pages/settings/",
+    "pages/inbox/",
+    "pages/conversationList/",
+    "pages/chat/",
+    "subpackages/campus/cardLost/",
+    "subpackages/social/",
     "scripts/"
   ],
-  "dependabot_template_exemption": false,
+  "dependabot_template_exemption": true,
   "max_evidence_age_hours": 168
 }

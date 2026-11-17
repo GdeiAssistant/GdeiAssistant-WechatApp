@@ -39,7 +39,7 @@ npm run smoke
 ## 不要提交的内容
 
 - 真实用户数据、真实校园账号、密码、验证码、Cookie、Token
-- `project.private.config.json`、上传密钥、AppID 相关私有配置
+- `project.private.config.json`、上传私钥
 - 未脱敏的日志、抓包、截图
 - 第三方 API Key
 
@@ -55,7 +55,7 @@ docs: 补充部署步骤
 
 ## 许可
 
-向本仓库提交的代码和文档，默认按 [Apache License 2.0](LICENSE.md) 授权。提交前请确认你有权提交这些内容。
+向本仓库提交的代码和文档，默认按 [Apache License 2.0](LICENSE) 授权。提交前请确认你有权提交这些内容。
 
 ## AI 辅助维护
 

@@ -4,7 +4,9 @@
 
 ## Reporting a vulnerability
 
-Report security vulnerabilities through [GitHub private vulnerability reporting](https://github.com/GdeiAssistant/GdeiAssistant-WechatApp/security/advisories/new). Do not post exploit details, credentials, private sessions or personal data in public issues or PRs. Include the affected version, impact and minimal redacted reproduction. The maintainer handles reports on a best-effort basis; no bounty or response-time guarantee is implied.
+Report security vulnerabilities through [GitHub private vulnerability reporting](https://github.com/GdeiAssistant/GdeiAssistant-WechatApp/security/advisories/new) or contact `private@gdeiassistant.cn`.
+
+Do not post exploit details, credentials, private sessions or personal data in public issues or PRs. Include the affected version, impact and minimal redacted reproduction. The maintainer handles reports on a best-effort basis; no bounty or response-time guarantee is implied.
 
 ## 小程序特有的风险面
 
