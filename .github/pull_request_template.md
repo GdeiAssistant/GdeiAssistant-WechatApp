@@ -19,7 +19,7 @@ npm ci && npm run lint && npm test
 - [ ] 上面列出的检查已通过，或有说明为什么没跑
 - [ ] 改动涉及的行为变化，已在同一次 PR 里更新对应文档
 - [ ] 没有提交真实账号、密码、验证码、Token、Cookie 或他人个人信息
-- [ ] 没有提交密钥、证书、`local.properties` 或环境配置文件
+- [ ] 没有提交密钥、证书、`project.private.config.json`、上传私钥或环境配置文件
 
 ## 涉及隐私、权限或数据流的改动
 
@@ -39,7 +39,4 @@ npm ci && npm run lint && npm test
 
 ## 风险
 
-<!-- 填写 R0/R1/R2、受影响文件及兼容性或运行影响。
-附可信 gate 和 reviewer App 的当前 SHA 审查记录链接；常规 R2 无需人工或 Grok approve 评论；本人例外附 Pigbibi 的 override 链接。
-缺失证据写明待完成，不把 AI 自述或 owner-approved 标签作为批准。
-契约见 .github/governance/README.md。 -->
+<!-- 说明风险等级、受影响的文件，以及兼容性或运行方面的影响。 -->

@@ -51,7 +51,8 @@
 ├── app.js / app.json / app.wxss   全局入口、路由与基础样式
 ├── styles/theme.wxss              明暗主题与 4 套校园主题色 CSS 变量
 ├── custom-tab-bar/                自定义底部导航栏
-├── pages/                         34 个功能与设置页面
+├── pages/                         19 个主包页面
+├── subpackages/                   15 个校园与社交分包页面
 ├── services/                      业务数据请求与 Mock 适配层
 ├── utils/                         主题切换、页面基类、格式化等工具
 ├── locales/                       6 种语言字典及生成产物
@@ -82,14 +83,13 @@ npm run lint
 npm run format:check
 npm test
 npm run smoke
-python3 scripts/check_hygiene.py
 ```
 
 `npm test` 会先校验 `locales/` 与生成的 `locales/messages.generated.js` 是否一致；更新 `locales/*.json` 后请运行 `npm run locales:generate`。
 
 ## 部署说明
 
-微信小程序发布与上传配置详见 [`docs/deployment.md`](docs/deployment.md)，社交与私信实现细节见 [`docs/social-messaging-implementation.zh-CN.md`](docs/social-messaging-implementation.zh-CN.md)。
+微信小程序发布与上传配置详见 [`docs/deployment.md`](docs/deployment.md)，社交与私信共享契约见 [GdeiAssistant 社交架构契约](https://github.com/GdeiAssistant/GdeiAssistant/blob/master/docs/social-messaging.md)。
 
 ## 相关仓库
 
@@ -99,14 +99,14 @@ python3 scripts/check_hygiene.py
 
 ## 参与贡献
 
-见 [CONTRIBUTING.md](CONTRIBUTING.md)。安全问题请按 [SECURITY.md](SECURITY.md) 处理，不要在公开 Issue 里贴真实账号、验证码或密钥。
-
-## 许可
-
-[Apache License 2.0](LICENSE.md)。
+见 [CONTRIBUTING.md](CONTRIBUTING.md) 与组织行为准则 [CODE_OF_CONDUCT.md](https://github.com/GdeiAssistant/.github/blob/main/CODE_OF_CONDUCT.md)。安全问题请按 [SECURITY.md](SECURITY.md) 处理，不要在公开 Issue 里贴真实账号、验证码或密钥。
 
 ## 免责声明
 
 本项目不代表学校官方服务。面向用户的协议、隐私政策和功能风险提示，以小程序内「关于」「隐私」「校园凭证」「二手」「跑腿」「失物招领」等页面展示的内容为准，本 README 不替代这些正文。
 
 生产部署前，请自行确认校园凭证处理、第三方服务启用情况、日志脱敏、密钥管理、传输加密和商标使用边界。校园凭证相关的授权、撤回、删除和快速认证依赖后端支持，部署衍生版本前先确认后端的加密、授权持久化和删除行为已正确配置。
+
+## 许可证
+
+[Apache License 2.0](LICENSE) · [NOTICE](NOTICE) · [TRADEMARK.md](TRADEMARK.md)。

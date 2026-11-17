@@ -52,7 +52,9 @@
       { "type": "file", "value": ".prettierrc.json" },
       { "type": "file", "value": ".prettierignore" },
       { "type": "file", "value": ".nvmrc" },
-      { "type": "file", "value": ".gitignore" }
+      { "type": "file", "value": ".gitignore" },
+      { "type": "file", "value": "LICENSE" },
+      { "type": "file", "value": "NOTICE" }
     ],
     "include": []
   },
