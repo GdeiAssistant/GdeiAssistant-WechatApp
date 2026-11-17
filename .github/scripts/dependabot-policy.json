@@ -1,0 +1,6 @@
+{
+  "repo": "GdeiAssistant/GdeiAssistant-WechatApp",
+  "branch": "master",
+  "files": ["package.json", "package-lock.json"],
+  "directories": ["/"]
+}
