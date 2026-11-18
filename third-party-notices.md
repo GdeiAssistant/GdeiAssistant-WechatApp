@@ -5,7 +5,11 @@ This project is licensed under the Apache License, Version 2.0 (see [LICENSE](LI
 ## Mini Program Runtime
 
 No third-party npm packages are bundled into the WeChat Mini Program runtime.
-The client relies on standard WeChat Mini Program APIs and custom WXSS styles (`app.wxss`, `styles/theme.wxss`) inspired by WeUI design conventions.
+The runtime bundles the following vendored third-party stylesheet:
+
+| Component | Version | Copyright | License | Source |
+| --- | --- | --- | --- | --- |
+| WeUI (`common/lib/weui.wxss`) | v1.1.1 | Copyright 2017 Tencent, Inc. | MIT | `https://github.com/weui/weui-wxss` |
 
 ## Development Tooling
 
