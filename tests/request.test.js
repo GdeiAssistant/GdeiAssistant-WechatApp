@@ -52,6 +52,10 @@ function setup(wxRequestImpl) {
     setSessionToken: function (t) {
       storage.sessionToken = t
     },
+    buildAuthHeader: function (token) {
+      const resolved = token === undefined ? storage.sessionToken || '' : token
+      return resolved ? { Authorization: `Bearer ${resolved}` } : {}
+    },
     clearSession: function () {
       delete storage.sessionToken
     },
@@ -131,6 +135,10 @@ test('request injects Authorization header when authRequired', async function ()
     getSessionToken: function () {
       return 'my-jwt-token'
     },
+    buildAuthHeader: function (token) {
+      const resolved = token === undefined ? 'my-jwt-token' : token
+      return resolved ? { Authorization: `Bearer ${resolved}` } : {}
+    },
     clearSession: function () {},
     reLaunchToLogin: function () {},
     ensureSessionToken: function () {
@@ -185,6 +193,10 @@ function setupAuth401(options) {
   stubModule(AUTH_MODULE, {
     getSessionToken: function () {
       return currentToken
+    },
+    buildAuthHeader: function (token) {
+      const resolved = token === undefined ? currentToken : token
+      return resolved ? { Authorization: `Bearer ${resolved}` } : {}
     },
     clearSession: function () {
       sessionCleared += 1

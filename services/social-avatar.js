@@ -131,10 +131,7 @@ function resolve(avatarUrl) {
   }
 
   return new Promise(function (resolvePath) {
-    const header = {}
-    if (withBearer) {
-      header.Authorization = 'Bearer ' + currentToken()
-    }
+    const header = withBearer ? auth.buildAuthHeader(currentToken()) : {}
     wx.downloadFile({
       url: absoluteUrl,
       header: header,

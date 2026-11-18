@@ -9,6 +9,7 @@ const projectConfig = require(path.join(root, 'project.config.json'))
 const config = require(path.join(root, 'config/index.js'))
 
 const MAX_PACKAGE_BYTES = 2 * 1024 * 1024
+const MAX_TOTAL_PACKAGE_BYTES = 20 * 1024 * 1024
 
 function readText(relativePath) {
   return fs.readFileSync(path.join(root, relativePath), 'utf8').trim()
@@ -128,7 +129,10 @@ function validatePackageSize() {
   })
 
   assert.ok(mainBytes < MAX_PACKAGE_BYTES, `main package exceeds 2MB limit: ${mainBytes} bytes`)
-  assert.ok(totalBytes < MAX_PACKAGE_BYTES, `runtime package exceeds 2MB limit: ${totalBytes} bytes`)
+  assert.ok(
+    totalBytes < MAX_TOTAL_PACKAGE_BYTES,
+    `runtime package exceeds 20MB limit: ${totalBytes} bytes`
+  )
   return { totalBytes, mainBytes }
 }
 

@@ -33,6 +33,11 @@ function setSessionToken(token) {
   wx.setStorageSync(storageKeys.sessionToken, token)
 }
 
+function buildAuthHeader(token) {
+  const resolvedToken = token === undefined ? getSessionToken() : token
+  return resolvedToken ? { Authorization: `Bearer ${resolvedToken}` } : {}
+}
+
 function clearSession() {
   SESSION_STORAGE_KEYS.forEach(function (key) {
     try {
@@ -125,11 +130,10 @@ function logout() {
     wx.request({
       url: config.resourceDomain + endpoints.auth.logout,
       method: 'POST',
-      header: {
-        Authorization: `Bearer ${token}`,
+      header: Object.assign(buildAuthHeader(token), {
         'Content-Type': 'application/json',
         'X-Request-ID': requestId
-      },
+      }),
       timeout: config.requestTimeout,
       complete: function (res) {
         var elapsed = Date.now() - startTime
@@ -174,10 +178,9 @@ function validateSessionToken() {
     wx.request({
       url: config.resourceDomain + endpoints.auth.validate,
       method: 'GET',
-      header: {
-        Authorization: `Bearer ${token}`,
+      header: Object.assign(buildAuthHeader(token), {
         'X-Request-ID': requestId
-      },
+      }),
       timeout: config.requestTimeout,
       success: function (result) {
         var elapsed = Date.now() - startTime
@@ -215,6 +218,7 @@ function validateSessionToken() {
 module.exports = {
   getSessionToken,
   setSessionToken,
+  buildAuthHeader,
   clearSession,
   reLaunchToLogin,
   ensureSessionToken,

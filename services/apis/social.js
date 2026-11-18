@@ -283,13 +283,12 @@ function sendImageMessage(id, clientMessageId, filePath) {
     }
 
     const app = typeof getApp === 'function' ? getApp() : null
-    const header = {
-      Authorization: 'Bearer ' + token,
+    const header = Object.assign(auth.buildAuthHeader(token), {
       'Accept-Language': i18n.normalizeLocale(
         (app && app.globalData && app.globalData.locale) || 'zh-CN'
       ),
       'X-Request-ID': generateRequestId()
-    }
+    })
 
     return new Promise(function (resolve, reject) {
       wx.uploadFile({

@@ -209,9 +209,7 @@ function resolveMessageImage(message) {
   return new Promise(function (resolvePath) {
     wx.downloadFile({
       url: absoluteUrl,
-      header: {
-        Authorization: 'Bearer ' + token
-      },
+      header: auth.buildAuthHeader(token),
       success: function (result) {
         const path = result && result.tempFilePath
         if (path) rememberFile(path, token)
