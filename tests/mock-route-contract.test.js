@@ -97,6 +97,12 @@ function buildRouteContracts(endpoints) {
     }),
     routeContract('user.avatar.delete', 'DELETE', endpoints.user.avatar),
     routeContract('user.profile', 'GET', endpoints.user.profile),
+    routeContract('user.patch.patch', 'PATCH', endpoints.user.patch, {
+      data: { nickname: '契约PATCH', faculty: 11, major: 'software_engineering', enrollment: 2023 }
+    }),
+    routeContract('user.patch.post', 'POST', endpoints.user.patch, {
+      data: { nickname: '契约POST' }
+    }),
     routeContract('user.locations', 'GET', endpoints.user.locations),
     routeContract('user.options', 'GET', endpoints.user.options),
     routeContract('user.nickname', 'POST', endpoints.user.nickname, {

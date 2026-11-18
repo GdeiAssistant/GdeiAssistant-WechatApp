@@ -14,6 +14,7 @@ module.exports = {
   user: {
     avatar: '/api/profile/avatar',
     profile: '/api/user/profile',
+    patch: '/api/profile',
     introduction: '/api/introduction',
     birthday: '/api/profile/birthday',
     faculty: '/api/profile/faculty',

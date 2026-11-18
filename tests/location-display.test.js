@@ -8,7 +8,7 @@ const ROOT = path.resolve(__dirname, '..')
 const PROFILE = path.join(ROOT, 'constants/profile.js')
 const PAGE = path.join(ROOT, 'pages/profile/profile.js')
 const HANDLERS = path.join(ROOT, 'mock/profile-handlers.js')
-const TREE = require('../constants/location-regions.js')
+const TREE = require('../subpackages/location/location-regions.js')
 const EXPECTED = {
   'zh-CN': ['中国 广东 广州', '中国 广东 汕头', '广东', ['中国', '广东', '广州']],
   'zh-HK': ['中國 廣東 廣州', '中國 廣東 汕頭', '廣東', ['中國', '廣東', '廣州']],
@@ -71,16 +71,8 @@ function setup(locale, options) {
     getProfileOptions() {
       return Promise.resolve({ success: true, data: options || {} })
     },
-    updateLocation(codes) {
-      requests.push(['location', clone(codes)])
-      return Promise.resolve({ success: true })
-    },
-    updateHometown(codes) {
-      requests.push(['hometown', clone(codes)])
-      return Promise.resolve({ success: true })
-    },
-    updateIntroduction(introduction) {
-      requests.push(['introduction', introduction])
+    updateProfile(patch) {
+      requests.push(clone(patch))
       return Promise.resolve({ success: true })
     }
   })
@@ -175,7 +167,7 @@ test('introduction saves explicitly and other profile updates preserve its draft
   assert.equal(page.data.form.introduction, draft)
   page.saveIntroduction()
   await page._saveQueue
-  assert.deepEqual(requests, [['introduction', draft]])
+  assert.deepEqual(requests, [{ introduction: draft }])
   assert.equal(page.data.profile.introduction, draft)
   assert.equal(page.data.form.introduction, draft)
   page.onUnload()
@@ -201,7 +193,7 @@ test('localized picker saves original codes and an unrelated patch preserves loc
     detail: { value: indices }
   })
   await page._saveQueue
-  assert.deepEqual(requests, [['location', { region: 'CN', state: '44', city: '6' }]])
+  assert.deepEqual(requests, [{ location: { region: 'CN', state: '44', city: '6' } }])
   assert.equal(page.data.form.location, '仏山, 広東, 中国')
   assert.deepEqual(page.data.form.locationCodes, { region: 'CN', state: '44', city: '6' })
   page.applyProfilePatch({ nickname: '广东新昵称' })
@@ -452,8 +444,8 @@ test('labeled remote dictionaries and faculty/major page codes survive six local
     const expected = catalog.buildDefaultProfileOptionsPayload(locale)
     const faculty = expected.faculties.find((node) => node.code === 11)
     const major = faculty.majors.find((node) => node.code === 'software_engineering')
-    assert.equal(page.data.form.faculty, faculty.label, locale)
-    assert.equal(page.data.form.major, major.label, locale)
+    assert.equal(page.data.form.faculty, undefined, locale)
+    assert.equal(page.data.form.major, undefined, locale)
     assert.equal(page.data.displayFaculty, faculty.label, locale)
     assert.equal(page.data.displayMajor, major.label, locale)
     assert.equal(page.data.form.facultyCode, 11)
@@ -662,4 +654,53 @@ test('profile catalog first import avoids the real API/mock circular dependency'
   assert.equal(result.status, 0, result.stderr)
   assert.equal(result.stderr, '')
   assert.equal(result.stdout.trim(), 'ok')
+})
+
+test('profile form uses stable codes, avoids redundant normalizeProfile calls, and submits atomic patches', async function () {
+  const { page, raw, requests } = setup('zh-CN')
+  raw.faculty = undefined
+  raw.major = undefined
+  raw.facultyCode = 11
+  raw.majorCode = 'software_engineering'
+  raw.enrollment = '2023'
+  await page.loadProfilePage()
+
+  assert.equal(page.data.form.faculty, undefined)
+  assert.equal(page.data.form.major, undefined)
+  assert.equal(page.data.form.facultyCode, 11)
+  assert.equal(page.data.form.majorCode, 'software_engineering')
+  assert.equal(page.data.form.enrollment, '2023')
+  assert.equal(page.data.displayFaculty, '计算机科学系')
+  assert.equal(page.data.displayMajor, '软件工程')
+
+  const facultyIdx = page.data.facultyOptions.indexOf(3)
+  page.handleFacultyChange({ detail: { value: facultyIdx } })
+  await page._saveQueue
+  assert.deepEqual(requests[0], { faculty: 3, major: null })
+  assert.equal(page.data.form.facultyCode, 3)
+  assert.equal(page.data.form.majorCode, 'unselected')
+
+  const majorIdx = page.data.majorOptions.indexOf('chinese_language_literature')
+  page.handleMajorChange({ detail: { value: majorIdx } })
+  await page._saveQueue
+  assert.deepEqual(requests[1], { major: 'chinese_language_literature' })
+  assert.equal(page.data.form.majorCode, 'chinese_language_literature')
+
+  const enrollmentIdx = page.data.enrollmentOptions.indexOf('2024')
+  page.handleEnrollmentChange({ detail: { value: enrollmentIdx } })
+  await page._saveQueue
+  assert.deepEqual(requests[2], { enrollment: 2024 })
+  assert.equal(page.data.form.enrollment, '2024')
+
+  page.handleBirthdayChange({ detail: { value: '2005-03-09' } })
+  await page._saveQueue
+  assert.deepEqual(requests[3], { birthday: { year: 2005, month: 3, date: 9 } })
+
+  const viewModel = require('../pages/profile/profile-view-model.js')
+  const editable = viewModel.buildEditableState(page.data.profile, TREE)
+  assert.equal(editable.form.facultyCode, 3)
+  assert.equal(editable.form.majorCode, 'chinese_language_literature')
+  assert.equal(editable.form.faculty, undefined)
+  assert.equal(editable.form.major, undefined)
+  page.onUnload()
 })

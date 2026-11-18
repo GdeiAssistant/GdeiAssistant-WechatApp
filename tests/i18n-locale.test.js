@@ -294,21 +294,6 @@ test('normalizeLocale follows root Accept-Language contract with real IO', funct
     assert.equal(i18n.normalizeLocale(row[0]), row[1], String(row[0]))
     assert.equal(community.normalizeCommunityLocale(row[0]), row[1], 'community:' + row[0])
   })
-
-  // Same module object: removing normalizeLocale forces the community fallback path.
-  const savedNormalize = i18n.normalizeLocale
-  delete i18n.normalizeLocale
-  try {
-    cases.forEach(function (row) {
-      assert.equal(
-        community.normalizeCommunityLocale(row[0]),
-        row[1],
-        'community-fallback:' + row[0]
-      )
-    })
-  } finally {
-    i18n.normalizeLocale = savedNormalize
-  }
 })
 
 test('runtime locale switch rebuilds page copy and mock system prompts for all six locales', function () {

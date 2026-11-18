@@ -105,6 +105,25 @@ test('mock smoke covers auth and profile flows', async function () {
   const updatedProfile = await request(router, '/api/user/profile', { token })
   assert.equal(updatedProfile.data.nickname, '测试昵称')
   assert.equal(updatedProfile.data.introduction, 'mock smoke intro')
+
+  await request(router, '/api/profile', {
+    method: 'PATCH',
+    token,
+    data: {
+      nickname: '原子更新',
+      faculty: 3,
+      major: 'chinese_language_literature',
+      enrollment: 2024,
+      location: { region: 'CN', state: '44', city: '6' }
+    }
+  })
+
+  const patchedProfile = await request(router, '/api/user/profile', { token })
+  assert.equal(patchedProfile.data.nickname, '原子更新')
+  assert.equal(patchedProfile.data.faculty.code, 3)
+  assert.equal(patchedProfile.data.major.code, 'chinese_language_literature')
+  assert.equal(patchedProfile.data.enrollment, '2024')
+  assert.equal(patchedProfile.data.location.city, '6')
 })
 
 test('mock smoke covers academic, campus, info and message flows', async function () {

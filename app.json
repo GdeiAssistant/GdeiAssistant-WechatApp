@@ -45,6 +45,18 @@
         "dmPrivacy/dmPrivacy",
         "blockList/blockList"
       ]
+    },
+    {
+      "root": "mock",
+      "pages": [
+        "entry/entry"
+      ]
+    },
+    {
+      "root": "subpackages/location",
+      "pages": [
+        "entry/entry"
+      ]
     }
   ],
   "lazyCodeLoading": "requiredComponents",
