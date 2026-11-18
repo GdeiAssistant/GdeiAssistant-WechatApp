@@ -54,7 +54,7 @@ function request(options) {
         header['Content-Type'] = contentType
       }
       if (sessionToken) {
-        header.Authorization = `Bearer ${sessionToken}`
+        Object.assign(header, auth.buildAuthHeader(sessionToken))
       }
       const app = getApp()
       header['Accept-Language'] = i18n.normalizeLocale(

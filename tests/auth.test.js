@@ -314,3 +314,20 @@ test('logout resolves immediately when no token stored', async function () {
   await auth.logout()
   // no error = pass
 })
+
+test('buildAuthHeader builds Bearer header from explicit or stored token', function () {
+  const { auth } = setup({
+    getStorageSync: function (key) {
+      if (key === 'sessionToken') return 'stored-jwt'
+      return ''
+    }
+  })
+
+  assert.deepEqual(auth.buildAuthHeader('explicit-jwt'), {
+    Authorization: 'Bearer explicit-jwt'
+  })
+  assert.deepEqual(auth.buildAuthHeader(), {
+    Authorization: 'Bearer stored-jwt'
+  })
+  assert.deepEqual(auth.buildAuthHeader(''), {})
+})
