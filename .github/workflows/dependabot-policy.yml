@@ -26,10 +26,12 @@ jobs:
           github-token: ${{ github.token }}
       - name: Check dependency policy against the current PR
         id: policy
-        env:
-          GH_TOKEN: ${{ github.token }}
-          DEPENDABOT_DEPENDENCIES: ${{ steps.metadata.outputs.updated-dependencies-json }}
-        run: node .github/scripts/dependabot-policy.cjs metadata
+        uses: GdeiAssistant/.github/actions/dependabot-policy@6d342d39a5a3c8aa74120c51911d0461aa8fc747
+        with:
+          mode: metadata
+          config-path: .github/scripts/dependabot-policy.json
+          dependencies: ${{ steps.metadata.outputs.updated-dependencies-json }}
+          github-token: ${{ github.token }}
   safe:
     name: Safe dependency update
     needs: metadata
